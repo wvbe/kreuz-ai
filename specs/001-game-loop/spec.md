@@ -116,10 +116,15 @@ All game time state (current elapsed time, pause status, speed multiplier) must 
 - **SC-006**: Game loop operates at a fixed simulation rate independent of rendering; game time advances correctly whether renderer is present, absent, or throttled.
 - **SC-007**: 100% of game time state fields (elapsed time, pause flag, speed multiplier) are successfully serialized and deserialized without loss.
 
+## Clarifications
+
+### Session 2026-05-02
+
+- Q: What is the canonical game time delta per tick at 1x speed? → A: Each tick at 1x speed advances 5 game minutes (1/288 of a game day). At 1x speed, one game day passes every 30 real-world minutes of play.
+
 ## Assumptions
 
-- **Time Granularity**: 1x game speed corresponds to 48x real-world time passage (e.g., 1 real second = 48 game seconds). This ratio is a game design constant, not configurable per-save.
-    - Edit by user: Game design can be modified, but from a game entity's point of view a day passes every 30 minutes that the user plays.
+- **Time Granularity**: At 1x speed, one game day passes every 30 real-world minutes. Each tick at 1x speed advances exactly 5 game minutes (1/288 of a game day). This ratio is a game design constant, not configurable per-save. Speed multiplier scales this delta linearly (2x = 10 game minutes per tick).
 - **Speed Multiplier Ranges**: Reasonable speed multiplier range is 0.25x to 4x (can be adjusted). Speeds outside this range require explicit approval. Multiplier 0 is treated as equivalent to pause.
 - **Tick-Based Simulation**: Game advances in discrete ticks (not continuous time), allowing deterministic state tracking. Tick interval is a game engine constant (e.g., 100ms real-world per tick).
 - **No Real-World Time Dependencies**: The game loop never calls system time functions (Date.now(), performance.now(), etc.) for simulation purposes. All time advancement is controlled via tick deltas and the speed multiplier.

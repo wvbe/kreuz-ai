@@ -42,6 +42,7 @@ Game systems—Citizens, Jobs, Economy, Factions, Politics, Research, Trading—
 All code changes MUST maintain strict compliance with Engine-Renderer Decoupling and Deterministic State principles—these are non-negotiable architectural cornerstones. Departures require explicit consensus and constitution amendment.
 
 Constitution changes (amendments) require:
+
 - Clear rationale documenting why the change strengthens the project
 - Migration plan for any affected code or tests
 - Updated version per semantic versioning (MAJOR for principle removals, MINOR for additions, PATCH for clarifications)
