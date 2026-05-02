@@ -81,36 +81,37 @@ All game time state (current elapsed time, pause status, speed multiplier) must 
 - What happens if speed multiplier is set to a negative value or a value not in {0.25, 0.5, 1.0, 2.0, 4.0}? → System rejects the command with an error; current multiplier is unchanged.
 - What happens if game loop receives a tick command while paused? → Should not advance time; pause takes precedence.
 - What happens if game is loaded from save at time T, then reloaded from a different save at time T-100? → Each should track independently; no shared time state.
-- What happens if a game runs for many ticks (e.g., 1 million ticks)? → `elapsedHours` uses a floating-point number (IEEE 754 double); safe up to ~9×10¹⁵ hours — no overflow risk for sandbox play.
-- What happens when a save file contains invalid time state (negative hours, unrecognized speed, missing fields)? → System throws an error and refuses to load. No silent fallback to defaults.
+- What happens if a game runs for many ticks (e.g., 1 million ticks)? → `tickCount` is a 64-bit integer; safe up to ~9×10¹⁸ ticks — no overflow risk for sandbox play.
+- What happens when a save file contains invalid time state (negative ticks, unrecognized speed, missing fields)? → System throws an error and refuses to load. No silent fallback to defaults.
 
 ## Requirements _(mandatory)_
 
 ### Functional Requirements
 
-- **FR-001**: System MUST maintain an internal game time offset representing elapsed game hours from the start of simulation.
+- **FR-001**: System MUST maintain an internal game time counter as an integer tick count representing elapsed game ticks from the start of simulation. Game hours are derived: `gameHours = tickCount / ticksPerHour` (where `ticksPerHour` is a game design constant, e.g., 12). No floating-point time values are stored.
 - **FR-002**: System MUST accept pause commands that suspend game time progression; paused state MUST be persisted in game state.
 - **FR-003**: System MUST accept resume commands that restore game time progression from paused state.
 - **FR-004**: System MUST accept speed multiplier commands from the fixed set: 0.25x, 0.5x, 1x, 2x, 4x. Any value outside this set MUST be rejected with an error; partial or free-form multipliers are not accepted.
-- **FR-005**: System MUST apply speed multipliers to game time deltas such that each tick advances time by (delta_seconds × speed_multiplier).
+- **FR-005**: System MUST apply speed multipliers to tick frequency such that higher speed multipliers cause more game ticks per real-world second. Each tick always advances exactly 1 game tick (5 game minutes at 1x); speed multiplier controls how many ticks occur per real-world interval. The engine itself is manually ticked (`engine.tick()`); an optional `AutoRunner` helper wraps the engine and calls `tick()` at a configurable real-world interval divided by the speed multiplier.
 - **FR-006**: System MUST provide a query interface to retrieve current elapsed game time, pause status, and active speed multiplier.
-- **FR-007**: System MUST operate game loop ticks independently of any rendering loop; game simulation advances on regular intervals regardless of renderer state. The real-world tick interval MUST be runtime-configurable; changes take effect on the next tick without restarting the loop.
-- **FR-008**: System MUST serialize game time state (elapsed time, pause flag, speed multiplier, tick interval) to JSON format without precision loss.
+- **FR-007**: System MUST operate game loop ticks independently of any rendering loop; game simulation advances regardless of renderer state. The engine exposes `engine.tick()` as the primitive (manual ticking); an optional `AutoRunner` provides configurable-interval auto-ticking for real-time gameplay. The real-world tick interval MUST be runtime-configurable; changes take effect on the next tick.
+- **FR-008**: System MUST serialize game time state (tick count, pause flag, speed multiplier, tick interval) to JSON format as integers without precision loss.
 - **FR-009**: System MUST deserialize game time state from JSON and resume simulation at the saved time offset and state. If the loaded state contains invalid values (negative elapsed time, unrecognized speed multiplier, missing required fields, NaN), the system MUST throw an error and refuse to load rather than silently falling back to defaults.
-- **FR-011**: System MUST expose derived calendar helpers (e.g., toDay(), toWeek(), toYear()) computed from elapsedHours. These are read-only computations — calendar fields are never stored as independent state.
+- **FR-011**: System MUST expose derived calendar helpers (e.g., toDay(), toWeek(), toYear()) computed from tickCount and ticksPerHour. These are read-only computations — calendar fields are never stored as independent state.
 - **FR-010**: System MUST support deterministic time progression such that identical seeds and identical sequence of commands produce identical game time states.
 
 ### Key Entities
 
-- **GameTime**: Represents the internal time tracking system. Attributes: `elapsedHours` (number), `paused` (boolean), `speedMultiplier` (one of: 0.25, 0.5, 1.0, 2.0, 4.0), `tickCount` (integer). Exposes derived read-only helpers: `toDay()`, `toWeek()`, `toYear()` computed from `elapsedHours`. Calendar values are never stored independently. No public mutable state; all changes via commands.
-- **GameLoop**: The core simulation loop that ticks at a configurable real-world interval. Attributes: reference to GameTime, current tick count, tick interval (runtime-configurable milliseconds). Must not hold renderer state.
+- **GameTime**: Represents the internal time tracking system. Attributes: `tickCount` (integer, canonical game time), `paused` (boolean), `speedMultiplier` (one of: 0.25, 0.5, 1.0, 2.0, 4.0), `ticksPerHour` (integer constant, e.g., 12). Exposes derived read-only helpers: `toGameHours()`, `toDay()`, `toWeek()`, `toYear()` computed from `tickCount / ticksPerHour`. Calendar values are never stored independently. No public mutable state; all changes via commands.
+- **GameLoop / engine.tick()**: The primitive tick method. Calling `engine.tick()` advances the simulation by exactly one game tick. Does NOT auto-run; caller controls when and how often `tick()` is called. This is the foundation used by both headless tests and the AutoRunner.
+- **AutoRunner**: Optional convenience wrapper that calls `engine.tick()` at a configurable real-world interval. Interval is adjusted by speed multiplier (e.g., base 100ms at 1x becomes 50ms at 2x, 25ms at 4x). Provides start/stop/pause. Used for real-time browser gameplay. Not required for headless operation or tests.
 - **GameState**: The central game state object that includes GameTime as a nested property. GameState must be serializable to JSON with all time fields preserved.
 
 ## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
-- **SC-001**: A game loop can run indefinitely in a headless environment (no renderer) for at least 1 million ticks without time overflow, precision loss, or memory leaks.
+- **SC-001**: A game loop can run indefinitely in a headless environment (no renderer) for at least 1 million ticks without integer overflow, precision loss, or memory leaks.
 - **SC-002**: Pause/resume commands respond with zero delay; game time does not drift when paused.
 - **SC-003**: Speed adjustments take effect within one tick cycle (< 100ms real-world delay).
 - **SC-004**: Game time serialized to JSON and deserialized produces identical time state (bit-for-bit equality for numeric fields).
@@ -125,18 +126,24 @@ All game time state (current elapsed time, pause status, speed multiplier) must 
 - Q: What is the canonical game time delta per tick at 1x speed? → A: Each tick at 1x speed advances 5 game minutes (1/288 of a game day). At 1x speed, one game day passes every 30 real-world minutes of play.
 - Q: What are the valid speed multiplier values and rejection behavior? → A: Fixed step set only — {0.25, 0.5, 1.0, 2.0, 4.0}. Any other value is rejected with an error; current multiplier unchanged.
 - Q: Is the real-world tick interval fixed or configurable? → A: Runtime-configurable. Changes take effect on the next tick. Included in serialized state.
-- Q: Should the game loop expose structured calendar time or raw hours? → A: Derived helpers only (toDay(), toWeek(), toYear()) computed from elapsedHours. Calendar is never stored as independent state.
+- Q: Should the game loop expose structured calendar time or raw hours? → A: Derived helpers only (toDay(), toWeek(), toYear()) computed from tickCount / ticksPerHour. Calendar is never stored as independent state.
 - Q: What happens when a save file has invalid time state? → A: Hard error — system throws and refuses to load. No silent fallback to defaults.
-- Q: What is the maximum supported game time span? → A: Indefinite/sandbox. elapsedHours is IEEE 754 double; precision sufficient for any practical play duration.
+- Q: What is the maximum supported game time span? → A: Indefinite/sandbox. tickCount is a 64-bit integer; safe to ~9×10¹⁸ ticks — effectively limitless for gameplay purposes.
+
+### Cross-Cutting Session 2026-05-02
+
+- Q: What is the canonical game time representation across all specs? → A: Integer ticks everywhere. `tickCount` (integer) is the single canonical time value. Game hours are a derived display value: `gameHours = tickCount / ticksPerHour` (constant = 12). No floating-point time values exist in serialized state. All specs (001, 005, 006) use ticks. This eliminates floating-point drift, ensures deterministic save/load, and makes PRNG-seeded replay exactly reproducible.
+- Q: How should the game loop execution model work (auto-tick vs manual-tick conflict between specs 001 and 007)? → A: Manual tick is the primitive; optional AutoRunner is a wrapper. `engine.tick()` advances exactly one game tick. An optional `AutoRunner` helper calls `tick()` at a configurable real-world interval (adjusted by speed multiplier). Headless tests use manual ticking; browser runtime uses AutoRunner. Both specs are reconciled: 007's manual-tick design is the engine primitive; 001's auto-ticking behavior is the AutoRunner convenience layer.
 
 ## Assumptions
 
-- **Time Granularity**: At 1x speed, one game day passes every 30 real-world minutes. Each tick at 1x speed advances exactly 5 game minutes (1/288 of a game day). This ratio is a game design constant, not configurable per-save. Speed multiplier scales this delta linearly (2x = 10 game minutes per tick).
+- **Time Granularity**: At 1x speed, one game day passes every 30 real-world minutes. Each tick at 1x speed advances exactly 1 tick (= 5 game minutes = 1/288 of a game day). This ratio is a game design constant (`ticksPerHour = 12`), not configurable per-save. Speed multiplier controls how many ticks occur per real-world interval (2x = 2 ticks per interval), NOT the time delta per tick.
 - **Speed Multiplier Ranges**: Accepted speed multiplier values are the fixed set {0.25, 0.5, 1.0, 2.0, 4.0}. No other values are valid. Multiplier 0 is treated as equivalent to pause. The set is a game design constant and cannot be changed without a spec revision.
-- **Tick-Based Simulation**: Game advances in discrete ticks (not continuous time), allowing deterministic state tracking. The real-world tick interval is runtime-configurable (default 100ms); changing it takes effect on the next tick. Tick interval is included in serialized state.
+- **Tick-Based Simulation**: Game advances in discrete ticks (not continuous time), allowing deterministic state tracking. `engine.tick()` is the primitive; AutoRunner provides optional auto-ticking. The real-world tick interval (for AutoRunner) is runtime-configurable (default 100ms); changing it takes effect on the next tick. Tick interval is included in serialized state.
 - **No Real-World Time Dependencies**: The game loop never calls system time functions (Date.now(), performance.now(), etc.) for simulation purposes. All time advancement is controlled via tick deltas and the speed multiplier.
 - **Save Game Compatibility**: Game time state is versioned with the game. Minor version updates maintain backward compatibility; major version updates may require migration logic for time fields. Invalid or corrupt time state on load causes a hard error — no silent defaults.
-- **Calendar Derivation**: Day/week/year values are always derived from `elapsedHours` at read time. They are never stored as independent fields. This keeps state minimal and avoids desync between raw time and calendar display.
-- **Indefinite Sandbox Duration**: The simulation has no designed end point. `elapsedHours` is stored as a floating-point number (IEEE 754 double), safe to ~9×10¹⁵ hours — effectively limitless for gameplay purposes.
+- **Calendar Derivation**: Day/week/year values are always derived from `tickCount / ticksPerHour` at read time. They are never stored as independent fields. This keeps state minimal and avoids desync between raw time and calendar display.
+- **Indefinite Sandbox Duration**: The simulation has no designed end point. `tickCount` is a 64-bit integer, safe to ~9×10¹⁸ ticks — effectively limitless for gameplay purposes.
+- **Integer Ticks as Canonical Time**: All game time is canonically represented as integer ticks. Game hours, days, weeks are derived values (`gameHours = tickCount / ticksPerHour`). No floating-point time values exist in serialized state. This ensures deterministic save/load and eliminates floating-point drift.
 - **Single Global Time**: The game maintains a single authoritative elapsed time value. No parallel time tracks or localized time zones.
 - **Headless Priority**: Headless game loop is the primary implementation; browser renderer is a consumer layer that queries game state, not a prerequisite for simulation.

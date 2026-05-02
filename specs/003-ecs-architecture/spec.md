@@ -139,11 +139,11 @@ All entity state, including active tasks, component state, and async operation s
 - **FR-014**: System MUST serialize all entity state (prototype, components, task queue, async operation state) to JSON without loss of information.
 - **FR-015**: System MUST deserialize entity state from JSON and resume async operations at correct game time.
 - **FR-016**: System MUST work identically in headless environments (no renderer) as in browser environments.
-- **FR-017**: System MUST support dynamic entity component composition: components can be added to or removed from entities after instantiation. Entity version increments with each composition change to track evolution.
+- **FR-017**: System MUST support dynamic entity component composition: components can be added to or removed from entities after instantiation. Entity version increments with each composition change to track evolution. Version is runtime-only (not serialized); reset to 0 on load.
 
 ### Key Entities
 
-- **Entity**: Instance of an entity prototype with instantiated components, task queue, and properties. Has entity ID, component instances, version (incremented when composition changes), and state.
+- **Entity**: Instance of an entity prototype with instantiated components, task queue, and properties. Has entity ID, component instances, version (runtime-only; incremented when composition changes; reset to 0 on load), and state.
 - **EntityPrototype**: Declarative definition of entity composition: ID, component list, default values. Reusable template for creating entities. Prototypes define initial composition; actual entities may evolve composition at runtime.
 - **Component**: Typed container for entity behavior and data. Provides methods callable on entity. Examples: Inventory, Position, Job, TaskQueue.
 - **TaskQueue**: Special component providing priority-based task management. Stores pending tasks, current task, and execution history.
@@ -176,11 +176,15 @@ All entity state, including active tasks, component state, and async operation s
 - Q: How are component-specific methods accessed on entities? → A: Delegate pattern — component instances are direct properties on the entity (e.g., `entity.inventory`, `entity.job`). Methods are called on the component directly (`entity.inventory.balance()`), not proxied through the entity itself. No method forwarding or delegation via entity.
 - Q: What happens when an async entity operation is provably unachievable? → A: Promise rejects immediately with a descriptive error (e.g., `InsufficientFundsError`). Fail-fast semantics; caller is responsible for catching and handling.
 - Q: How do task queue tasks execute relative to game ticks? → A: Tasks run to their first await within a tick. Tasks can resolve, reject, or be cancelled externally via CancellationToken. Cancellation has two categories: graceful (entity performs quit-animations or cleanup before stopping) and ungraceful (entity stops immediately). Entity code inspects the cancellation type to decide cleanup behavior.
-- Q: What is the JSON serialization structure for entities? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "version": 1, "components": { "Inventory": {...}, "Position": {...}, "TaskQueue": {...} } }`. Each component is a named key under `components`. Version field tracks entity composition evolution.
+- Q: What is the JSON serialization structure for entities? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "components": { "Inventory": {...}, "Position": {...}, "TaskQueue": {...} } }`. Each component is a named key under `components`. Version is NOT serialized (runtime-only, reset to 0 on load; used for cache invalidation and reactive queries).
 - Q: What happens when an entity with pending async operations is deleted? → A: Deletion issues a CancellationToken with category "ungraceful". Entity's pending tasks are cancelled immediately; each task receives the token and skips cleanup (since entity is being destroyed anyway). All external awaits on the entity's operations receive a rejection once cancellation completes.
-- Q: Can entity component composition change after instantiation? → A: Yes. Components can be added to or removed from entities at runtime (e.g., Citizen gains SkillComponent, Faction loses LeadershipComponent). Entity version increments each time composition changes. Version is serialized so save/load tracks evolution history.
+- Q: Can entity component composition change after instantiation? → A: Yes. Components can be added to or removed from entities at runtime (e.g., Citizen gains SkillComponent, Faction loses LeadershipComponent). Entity version increments each time composition changes. Version is runtime-only (NOT serialized); reset to 0 on load. Used for cache invalidation and stale-query detection at runtime.
 - Q: How do pending async operations get notified when their conditions are met? → A: Reactive — Promise registers once with the game loop (or relevant subsystem); game loop only evaluates the promise when relevant game events occur (entity moved, item acquired, time milestone reached). No polling all promises every tick; only active checks on relevant events.
 - Q: How do multiple nested awaits compose? → A: Sequential via task queue. Each `await` in sequence is queued as a separate task. Task queue enforces strict ordering: first await completes before second begins. Multiple awaits on same entity never execute concurrently.
+
+### Cross-Cutting Session 2026-05-02
+
+- Q: Should entity version field be serialized or runtime-only? → A: Runtime-only. Version is NOT serialized; reset to 0 on load. Entity JSON is `{ id, prototype, components }` (no version field). Version is used for cache invalidation and stale-query detection during gameplay. All caches are invalidated on load anyway, so persisting version adds no value. This aligns with save format spec (006) which mandates `{ id, prototype, components }`.
 
 ## Assumptions
 
@@ -190,6 +194,6 @@ All entity state, including active tasks, component state, and async operation s
 - **Component Method Access via Instance**: Component methods are accessed directly on component instances (e.g., `entity.inventory.balance()`), not forwarded via entity-level dispatch. No Proxy or reflection-based method routing.
 - **Task Execution Model**: Task queue runs each task to its first `await` per game tick. Multiple tasks do not execute concurrently per entity; concurrency is across multiple entities. Multiple awaits on same entity execute sequentially via task queue.
 - **Cancellation Categories**: CancellationToken has two categories: graceful (entity may perform cleanup/animations) and ungraceful (entity stops immediately). Task handlers inspect the category to decide cleanup behavior.
-- **Component Composition Mutable**: Entity's component list can change after instantiation (add/remove components at runtime). Entity version increments with each composition change and is serialized.
+- **Component Composition Mutable**: Entity's component list can change after instantiation (add/remove components at runtime). Entity version increments with each composition change. Version is runtime-only (NOT serialized); reset to 0 on load.
 - **Async Promise Resolution Reactive**: Promises register once; game loop evaluates only when relevant events occur (not polled every tick). No overhead for promises awaiting distant conditions.
-- **Entity Versioning**: Each time an entity's component composition changes (add/remove component), entity version increments. Version is immutable once incremented; no rollback.
+- **Entity Versioning**: Each time an entity's component composition changes (add/remove component), entity version increments. Version is runtime-only: used for cache invalidation and stale-query detection. NOT persisted in saves (all caches are invalidated on load anyway). No rollback.

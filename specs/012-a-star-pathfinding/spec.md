@@ -86,7 +86,7 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ### Functional Requirements
 
-- **FR-001**: System MUST implement A\* algorithm for pathfinding with heuristic function (Manhattan distance minimum)
+- **FR-001**: System MUST implement A* algorithm for pathfinding with admissible heuristic function (Octile distance for 8-way movement with diagonal cost √2)
 - **FR-002**: System MUST find shortest path from start to target in single map, avoiding obstacles (terrain/entities)
 - **FR-003**: System MUST support 8-way movement (orthogonal + diagonal) with diagonal movement costing 1.414x orthogonal
 - **FR-004**: System MUST return "no path exists" when target is unreachable from start position
@@ -100,10 +100,10 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ### Key Entities
 
-- **PathNode**: Represents a position in A\* search (position, cost, heuristic, parent)
-- **Path**: Sequence of positions from start to target, or empty if no path exists
-- **Map**: Grid-based world with terrain types and entities
-- **MapConnection**: Defines exit/entrance between two maps
+- **PathNode**: Represents a discrete cell/region in A* search (cellX/cellY or regionId, cost, heuristic, parent)
+- **Path**: Sequence of discrete cells/regions from start to target, or empty if no path exists
+- **Map**: World region with terrain grid and entities (see spec 004). Grid type determines coordinate semantics.
+- **Transition**: Entity with Position and Transition components defining passage between maps (replaces MapConnection)
 - **MovementCost**: Defines travel cost for different terrain types or entity states
 
 ## Success Criteria _(mandatory)_
@@ -120,13 +120,13 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ## Assumptions
 
-- **Map Structure**: Maps are grid-based with discrete x/y coordinates (matches existing Map implementation)
+- **Map Structure**: Maps are grid-based with discrete cell coordinates. Square maps use `{ cellX, cellY }` integers; Voronoi maps use `{ regionId }` integers. Pathfinding operates on these discrete positions only (no sub-cell precision needed). Sub-cell offsets (used for rendering) are in a separate `PreciseOffset` component and are ignored by pathfinding.
 - **Terrain Types**: Map terrain is stored as simple type identifiers (e.g., "empty", "wall", "water"). Different terrain types can have different movement costs
 - **Entity Obstacles**: Other entities are treated as obstacles; their positions block movement
 - **Diagonal Movement**: Movement is allowed diagonally; diagonal movement costs 1.414x orthogonal (√2)
 - **No Flying**: Entities cannot fly over obstacles unless explicitly marked as flying type
-- **Map Connections**: Inter-map connections are defined explicitly via MapConnection objects with exit/entrance coordinates
+- **Map Connections**: Inter-map connections are defined as Transition entities (per spec 006) with Position and Transition components; pathfinding resolves cross-map routes via these entities
 - **Static Costs**: Terrain costs are static within a game tick; paths don't need to account for probabilities
-- **Heuristic**: Manhattan distance is sufficient heuristic; A\* will be used with Manhattan heuristic
+- **Heuristic**: Octile distance (max(dx, dy) + (√2 - 1) * min(dx, dy)) is the admissible heuristic for 8-way movement with diagonal cost √2. Manhattan distance is NOT admissible for diagonal movement and would produce suboptimal paths.
 - **Memory**: Pathfinding can maintain open/closed sets in memory; no disk-based search needed
 - **No Multiplayer Sync**: Pathfinding is client-side/server-side deterministic; no real-time multiplayer synchronization issues

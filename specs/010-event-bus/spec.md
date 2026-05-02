@@ -9,7 +9,7 @@
 
 ### User Story 1 - Emit and Subscribe to Events (Priority: P1)
 
-An event bus allows systems and entities to broadcast events (e.g., "inventory.changed", "entity.died") and other systems to subscribe and react to those events. The event bus provides `emit(eventName, payload)` and `subscribe(eventName, callback)` methods. When an event is emitted, all subscribers to that event are called with the payload. Event names are hierarchical strings (e.g., "game.inventory.item-added").
+An event bus allows systems and entities to broadcast events (e.g., "inventory.item.stored", "entity.deleted") and other systems to subscribe and react to those events. The event bus provides `emit(eventName, payload)` and `subscribe(eventName, callback)` methods. When an event is emitted, all subscribers to that event are called with the payload. Event names are dot-separated hierarchical strings using lowercase kebab-case (e.g., "inventory.item.stored").
 
 **Why this priority**: Core infrastructure. Without an event bus, systems must be tightly coupled (entity directly calls inventory handler). Event bus enables loose coupling and composition. Blocking for game extensibility.
 
@@ -17,17 +17,17 @@ An event bus allows systems and entities to broadcast events (e.g., "inventory.c
 
 **Acceptance Scenarios**:
 
-1. **Given** an event bus, **When** `emit("inventory.item-added", { entityId: 1, item: "Wood", count: 5 })` is called, **Then** all subscribers to "inventory.item-added" are called with the payload.
+1. **Given** an event bus, **When** `emit("inventory.item.stored", { entityId: 1, materialId: 5, quantity: 5 })` is called, **Then** all subscribers to "inventory.item.stored" are called with the payload.
 2. **Given** two entities subscribed to the same event, **When** that event is emitted, **Then** both entities receive the payload and can react independently.
 3. **Given** an event emitted during a tick, **When** the tick completes, **Then** all subscribers have been called and their reactions completed before the tick boundary.
-4. **Given** multiple events emitted in sequence (e.g., "entity.spawned", "inventory.changed"), **When** the tick ends, **Then** events are processed in FIFO order (first emitted, first processed).
+4. **Given** multiple events emitted in sequence (e.g., "entity.spawned", "inventory.item.stored"), **When** the tick ends, **Then** events are processed in FIFO order (first emitted, first processed).
 5. **Given** an event with a complex payload (entity ID, item data, quantities), **When** serialized and deserialized, **Then** the payload is identical and can be used by subscribers after load (feature 006).
 
 ---
 
 ### User Story 2 - Support Hierarchical Events and Wildcard Subscriptions (Priority: P1)
 
-Event names follow a hierarchical pattern (e.g., "game.state.started", "inventory.item.added", "entity.movement.completed"). Subscribers can listen to exact events or use wildcards to listen to categories (e.g., subscribe to "game.state.\*" to receive all game state events). Hierarchical naming and wildcard subscriptions enable systems to aggregate related events.
+Event names follow a hierarchical pattern (e.g., "game.state.started", "inventory.item.stored", "entity.movement.completed"). Subscribers can listen to exact events or use wildcards to listen to categories (e.g., subscribe to "inventory.**" to receive all inventory events). Hierarchical naming and wildcard subscriptions enable systems to aggregate related events.
 
 **Why this priority**: Enables elegant event aggregation. A trade system can listen to all "inventory.\*" events rather than subscribing to ten specific events. Blocking for game architecture elegance.
 
@@ -35,11 +35,11 @@ Event names follow a hierarchical pattern (e.g., "game.state.started", "inventor
 
 **Acceptance Scenarios**:
 
-1. **Given** events "inventory.item.added", "inventory.item.removed", "inventory.item.expired", **When** a subscriber listens to "inventory.item.\*", **Then** all three events trigger that subscriber.
-2. **Given** a wildcard subscriber listening to "game.\*", **When** events "game.started", "game.paused", "game.saved" are emitted, **Then** the subscriber receives all three.
-3. **Given** an exact event subscription to "inventory.changed" and a wildcard subscription to "inventory.\*", **When** "inventory.changed" is emitted, **Then** both subscribers are called.
-4. **Given** a wildcard pattern "entity._", **When** events like "entity.spawned", "entity.movement.started", "entity.health.changed" are emitted, **Then** only "entity.spawned" matches (wildcard does not match nested dots beyond one level; for "entity.movement._" needs explicit subscription).
-5. **Given** a subscriber to "game.\*", **When** the game is saved with pending events in the queue, **Then** the subscription persists (subscriber relationships are not serialized; they're re-established on game load by systems).
+1. **Given** events "inventory.item.stored", "inventory.item.retrieved", "inventory.item.expired", **When** a subscriber listens to "inventory.item.*", **Then** all three events trigger that subscriber.
+2. **Given** a wildcard subscriber listening to "game.*", **When** events "game.started", "game.paused", "game.saved" are emitted, **Then** the subscriber receives all three.
+3. **Given** an exact event subscription to "inventory.item.stored" and a wildcard subscription to "inventory.**", **When** "inventory.item.stored" is emitted, **Then** both subscribers are called.
+4. **Given** a wildcard pattern "entity.*", **When** events like "entity.spawned", "entity.movement.started", "entity.health.changed" are emitted, **Then** only "entity.spawned" matches (single-level wildcard `*` does not match nested dots; use `entity.**` for all entity events).
+5. **Given** a subscriber to "game.*", **When** the game is saved with pending events in the queue, **Then** the subscription persists (subscriber relationships are not serialized; they're re-established on game load by systems).
 
 ---
 
@@ -53,7 +53,7 @@ Subscribers can be permanent (remain active until explicitly unsubscribed) or on
 
 **Acceptance Scenarios**:
 
-1. **Given** a permanent subscription to "inventory.changed", **When** the event is emitted three times, **Then** the subscriber is called three times.
+1. **Given** a permanent subscription to "inventory.item.stored", **When** the event is emitted three times, **Then** the subscriber is called three times.
 2. **Given** a one-time subscription to "entity.spawned", **When** the event is emitted twice, **Then** the subscriber is called only on the first emit; the second emit does not trigger it (subscriber was auto-unsubscribed).
 3. **Given** an entity with multiple permanent subscriptions, **When** the entity is deleted, **Then** the entity unsubscribes from all events (no leaked listeners).
 4. **Given** a subscriber that is explicitly unsubscribed via `unsubscribe()`, **When** that event is emitted, **Then** the subscriber is not called.
@@ -91,7 +91,7 @@ All events pending in the queue during a game save (feature 006) are serialized 
 
 1. **Given** three events in the queue (not yet processed), **When** the game is saved, **Then** the GameState JSON includes all three events with their payloads.
 2. **Given** a saved game with events in the queue, **When** the game is loaded and the tick boundary is reached, **Then** the events are processed in the same order and with the same payloads.
-3. **Given** an event "inventory.changed" with payload `{ entityId: 5, item: "Gold", count: 100 }` in the queue, **When** serialized to JSON, **Then** the payload is JSON-serializable (no function references, no circular structures).
+3. **Given** an event "inventory.item.stored" with payload `{ entityId: 5, materialId: 3, quantity: 100 }` in the queue, **When** serialized to JSON, **Then** the payload is JSON-serializable (no function references, no circular structures).
 4. **Given** a game saved with events in the queue, **When** loaded and a new event is emitted, **Then** the new event is added to the queue and processed after the loaded events (queue ordering is preserved).
 5. **Given** a loaded game with restored events, **When** a subscriber is registered for one of those events, **Then** the subscriber is called when the event is processed (no events are "missed" due to load).
 
@@ -107,9 +107,9 @@ The system defines standard event types organized into categories (e.g., "game._
 
 **Acceptance Scenarios**:
 
-1. **Given** standard events documented (e.g., "entity.spawned", "entity.deleted", "inventory.item-added"), **When** systems emit those events, **Then** documentation describes the payload schema and all possible fields.
+1. **Given** standard events documented (e.g., "entity.spawned", "entity.deleted", "inventory.item.stored"), **When** systems emit those events, **Then** documentation describes the payload schema and all possible fields.
 2. **Given** a system that listens to "entity.\*", **When** an entity spawns, moves, and dies, **Then** the system receives all three standard events.
-3. **Given** custom events defined by a specific system (e.g., "trade.offer-made"), **When** that event is emitted, **Then** subscribers can listen to it like any other event.
+3. **Given** custom events defined by a specific system (e.g., \"trade.offer.made\"), **When** that event is emitted, **Then** subscribers can listen to it like any other event.
 4. **Given** standard event "tick.begin" emitted at tick start, **When** a system subscribes to it, **Then** the system can perform setup work before other events are processed.
 5. **Given** standard event "error.system-failed" emitted when a system throws, **When** an error handler subscribes to it, **Then** the handler can log/monitor system failures.
 
@@ -130,10 +130,10 @@ The system defines standard event types organized into categories (e.g., "game._
 ### Functional Requirements
 
 - **FR-001**: EventBus MUST expose `emit(eventName, payload)` to broadcast events and `subscribe(eventName, callback)` to register subscribers.
-- **FR-002**: Event names MUST be hierarchical strings (e.g., "game.state.started", "inventory.item.added") using dot notation to separate levels.
+- **FR-002**: Event names MUST be dot-separated hierarchical strings using lowercase kebab-case segments (e.g., `inventory.item.stored`, `entity.spawned`, `game.state.started`). Each dot separates one hierarchy level.
 - **FR-003**: Subscribers MUST be called with the event payload (data object containing relevant fields for that event type).
-- **FR-004**: Subscribers MUST be able to subscribe to exact events (e.g., "inventory.item.added") or wildcard patterns (e.g., "inventory.item.*", "inventory.*").
-- **FR-005**: Wildcard subscriptions MUST match events that start with the prefix up to the last wildcard (e.g., "game.*" matches "game.started" and "game.paused", but not "game.state.changed").
+- **FR-004**: Subscribers MUST be able to subscribe to exact events (e.g., `inventory.item.stored`) or wildcard patterns: `*` matches exactly one segment (e.g., `inventory.item.*` matches `inventory.item.stored` but NOT `inventory.item.stack.merged`); `**` matches any depth (e.g., `inventory.**` matches all events starting with `inventory.`).
+- **FR-005**: Single-level wildcard `*` MUST match exactly one segment. Multi-level wildcard `**` MUST match one or more segments at any depth. Both wildcards can only appear as the last segment of a pattern.
 - **FR-006**: EventBus MUST support both permanent subscriptions (active until unsubscribed) and one-time subscriptions (auto-unsubscribed after first emit).
 - **FR-007**: When `subscribe(eventName, callback, { once: true })` is used, the subscriber is called once, then automatically unsubscribed.
 - **FR-008**: EventBus MUST provide an `unsubscribe(eventName, callback)` method to remove a specific subscriber. Subscription cleanup is the caller's responsibility; entities track their own handles and call `unsubscribe` during deletion.
@@ -146,8 +146,8 @@ The system defines standard event types organized into categories (e.g., "game._
 - **FR-015**: All events in the queue at save time (feature 006) MUST serialize to JSON in the GameState, including event name and payload.
 - **FR-016**: When a game is loaded from a save file, the event queue MUST be restored with the same events in the same order.
 - **FR-017**: If a subscriber throws an error, the error MUST be caught and logged; processing of remaining subscribers for that event MUST continue (isolation).
-- **FR-018**: EventBus MUST define standard event types and document their payload schemas (e.g., "entity.spawned: { entityId, prototype }", "inventory.item-added: { entityId, item, count }").
-- **FR-019**: Custom events (not standard) MUST be supported; systems can emit any event name and subscribers can listen to it.
+- **FR-018**: EventBus MUST define standard event types with consistent naming (dot-separated, lowercase kebab-case) and document their payload schemas. Examples: `entity.spawned: { entityId, prototype }`, `inventory.item.stored: { entityId, materialId, quantity }`, `inventory.item.expired: { entityId, materialId, quantity }`.
+- **FR-019**: Custom events (not standard) MUST be supported; systems can emit any valid event name and subscribers can listen to it.
 
 ### Key Entities
 
@@ -155,7 +155,7 @@ The system defines standard event types organized into categories (e.g., "game._
 - **Event**: A queued event with name and payload. Contains all information needed to call subscribers and resolve `waitFor` promises.
 - **Subscriber**: A callback function registered to listen to one or more event names. Can be permanent or one-time. Called in registration order (FIFO) relative to other subscribers for the same event. Subscription cleanup is caller's responsibility.
 - **WaitForPromise**: A Promise returned by `waitFor(eventName, predicate?)` that resolves when the next matching event is processed at tick boundary. Enables `await eventBus.waitFor(...)` patterns in entity async tasks.
-- **StandardEvents**: Documented catalog of built-in event types (e.g., "game.started", "entity.spawned", "inventory.item-added").
+- **StandardEvents**: Documented catalog of built-in event types using dot-separated, lowercase kebab-case naming (e.g., `game.started`, `entity.spawned`, `entity.deleted`, `inventory.item.stored`, `inventory.item.retrieved`, `inventory.item.expired`, `inventory.item.transferred`).
 
 ## Success Criteria _(mandatory)_
 
@@ -179,10 +179,10 @@ The system defines standard event types organized into categories (e.g., "game._
 - **Self-managed subscription cleanup**: Subscription cleanup is the caller's (entity's) responsibility. Each entity tracks its own subscription handles (return values of `subscribe()`). On deletion, the entity calls `unsubscribe()` for each handle. No ownership tagging built into EventBus.
 - **Subscribers are functions or methods**: Event callbacks are assumed to be functions/methods in JavaScript or equivalent in the target language. Complex subscriber objects (e.g., with state) are not built-in; subscribers manage their own state.
 - **Events are immutable during processing**: While the tick boundary processes events, the queue is treated as immutable. Events emitted during processing are queued for the next tick.
-- **Standard events are documented**: Standard event types (game.*, entity.*, inventory.*, etc.) are assumed to be documented (as part of specification or implementation). New systems discover standard events by reading documentation.
+- **Standard events are documented**: Standard event types (game._, entity._, inventory.\*, etc.) are assumed to be documented (as part of specification or implementation). New systems discover standard events by reading documentation.
 - **Memory is available for queue**: The event queue is assumed to fit in memory; very large simulations with thousands of events may require optimization (out of scope for POC).
 - **Subscriber registration is not thread-safe**: For POC, thread safety is not required. Single-threaded game loop assumed; concurrent subscriber registration is not handled.
-- **Event names follow conventions**: Event names are assumed to follow the hierarchical pattern. No enforcement mechanism prevents "random-event" or "MyEvent"; reliance on code review and documentation.
+- **Event names follow conventions**: Event names MUST follow dot-separated, lowercase kebab-case pattern. `*` wildcard matches exactly one segment; `**` matches any depth. Examples: `inventory.item.stored` (not `inventory.item-stored`), `entity.spawned` (not `entity_spawned`). No enforcement mechanism beyond documentation and code review.
 - **Errors in subscribers are not fatal**: When a subscriber throws an error, the game continues; errors are logged but do not stop the game or event processing.
 - **waitFor Promises and save/load**: Pending `waitFor` Promises are not serialized to GameState. On load, callers must re-register their `waitFor` calls. This mirrors how subscriptions are re-established post-load.
 
@@ -190,9 +190,9 @@ The system defines standard event types organized into categories (e.g., "game._
 
 ### Session 2026-05-02 (Original Scope)
 
-- Q: Does "game.*" match "game.state.started" or only "game.started"? → A: Only "game.started". Wildcards match up to the next dot. To match "game.state.*", subscribe to "game.state.*". Hierarchies can be nested, but wildcards match one level.
+- Q: Does "game.*" match "game.state.started" or only "game.started"? → A: Only "game.started". Single-level wildcard `*` matches exactly one segment. To match all game events at any depth, use `game.**`. Hierarchies can be nested; `*` = one level, `**` = any depth.
 - Q: If event A's subscribers are processing and one throws, does event B wait? → A: Event A processing completes (all subscribers called, errors caught and logged), then event B starts. Errors do not affect ordering.
-- Q: If a subscriber is one-time and subscribed to "inventory.*", is it unsubscribed after any matching event or a specific one? → A: After any matching event. One-time + wildcard means "call me once when any event matching this pattern is emitted, then unsubscribe."
+- Q: If a subscriber is one-time and subscribed to "inventory.\*", is it unsubscribed after any matching event or a specific one? → A: After any matching event. One-time + wildcard means "call me once when any event matching this pattern is emitted, then unsubscribe."
 - Q: Should `getQueue()` return a copy or a live reference? → A: A copy (immutable snapshot). Returning a live reference allows callers to modify the queue, which breaks assumptions.
 - Q: Where are standard event schemas defined? → A: In documentation (spec or README). No built-in schema validation; reliance on code conventions and documentation.
 
@@ -203,3 +203,7 @@ The system defines standard event types organized into categories (e.g., "game._
 - Q: Does a subscriber registered mid-tick receive events already queued that tick? → A: No. Future-only delivery. A subscriber registered during tick N does not receive events queued before its registration in that tick. It receives only events emitted after subscription.
 - Q: How does entity deletion clean up its event subscriptions? → A: Self-managed. Each entity tracks its own subscription handles. On deletion, the entity calls `unsubscribe()` for each handle it holds. No owner-tagging or bulk-unsubscribe built into EventBus.
 - Q: Should EventBus expose a Promise-based API for async/await integration? → A: Yes, typed async queries. EventBus exposes `waitFor<T>(eventName, predicate?)` returning a Promise that resolves at tick boundary when the next matching event fires. Optional predicate allows filtering (e.g., `e => e.entityId === 5`). Integrates naturally with entity async tasks (feature 003). Pending `waitFor` Promises are NOT serialized; callers re-register on load.
+
+### Cross-Cutting Session 2026-05-02
+
+- Q: What event naming convention should be used across all specs? → A: Dot-separated hierarchical, lowercase kebab-case segments. `*` matches exactly one segment; `**` matches any depth. Examples: `inventory.item.stored`, `entity.spawned`, `game.state.started`. This replaces inconsistent naming (`inventory.item-added`, `materialExpired`, `inventory.changed`) with a single canonical pattern. All specs (005, 010, 013) use this convention.

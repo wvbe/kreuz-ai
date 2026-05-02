@@ -118,7 +118,7 @@ The bootstrap process supports pure headless operation: no renderer, no UI, no w
 - **FR-006**: `loadGame()` MUST reject with a typed error if the file does not exist, is not valid JSON, or has an incompatible version.
 - **FR-007**: Bootstrap MUST accept initialization parameters as an options object, including: `difficulty` (string: "peaceful" | "normal" | "hard"), `mapSize` (string: "small" | "medium" | "large"), `seed` (optional integer for PRNG), and other game-specific parameters.
 - **FR-008**: If no PRNG seed is provided, bootstrap MUST generate one automatically and store it for reproducibility.
-- **FR-009**: Bootstrap MUST pass the PRNG seed to the game engine's PRNG system (feature A2) before starting the game loop.
+- **FR-009**: Bootstrap MUST pass the PRNG seed to the game engine's PRNG system (feature 011) before starting the game loop.
 - **FR-010**: Bootstrap MUST validate all initialization parameters against a schema (using Zod or equivalent) and reject invalid parameters with clear error messages before creating the game.
 - **FR-011**: Bootstrap MUST support headless operation: no window, no renderer, no UI initialization required. Game loop and entity state must work in any environment (Node.js, test runner, CLI).
 - **FR-012**: Initialization parameters MUST be serializable to JSON and stored in GameState (feature 006) so that a resumed game can be queried for its initialization context.
@@ -151,11 +151,11 @@ The bootstrap process supports pure headless operation: no renderer, no UI, no w
 ## Assumptions
 
 - **Prototypes and materials registry are pre-registered**: Bootstrap assumes that entity prototypes (Citizen, Tree, Building, etc.) and the materials registry are already loaded and registered before `newGame()` is called. Bootstrap does NOT validate that required prototypes exist; it starts the game and fails at runtime if code attempts to instantiate a missing prototype. This is out of scope for bootstrap; it's a separate dependency.
-- **PRNG system exists and is injectable**: Bootstrap assumes the PRNG system (feature A2) exists and can accept a seed at initialization time. Bootstrap will pass the seed but does not implement PRNG itself.
+- **PRNG system exists and is injectable**: Bootstrap assumes the PRNG system (feature 011) exists and can accept a seed at initialization time. Bootstrap will pass the seed but does not implement PRNG itself.
 - **Map generation is separate**: Procedural map generation is a separate feature (out of scope per user clarification). Bootstrap initializes the engine; map generation happens in a downstream system (called after bootstrap).
 - **Synchronous initialization**: Bootstrap completes synchronously and returns a running engine immediately. Async initialization (e.g., loading large config files) is not in scope for POC; all data is assumed to be in-memory.
 - **Game loop infrastructure is ready, but not ticking**: Bootstrap does NOT start the game loop automatically. After `newGame()` returns, the caller must explicitly call `engine.tick()` to advance simulation. This allows precise control over timing and integration with host event loops.
-- **Event system exists**: Bootstrap assumes an event system (feature A4) is available to emit "game started" and "game loaded" events; bootstrap calls into the event system but does not implement it.
+- **Event system exists**: Bootstrap assumes an event system (feature 010) is available to emit `game.started` and `game.loaded` events; bootstrap calls into the event system but does not implement it.
 - **Single active game at a time**: For POC, bootstrap assumes only one game can run at a time. Support for multiple concurrent game instances is not in scope.
 - **Zod validation library available**: Validation uses Zod (or equivalent schema validation library). If not available, a minimal custom validator is acceptable.
 - **Bare-minimum defaults**: When `newGame()` is called with no options or minimal options, bootstrap creates an empty game state with no map, no entities, and all systems uninitialized. Caller/systems are responsible for populating the world post-bootstrap.

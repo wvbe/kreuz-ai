@@ -162,7 +162,7 @@ The feature must include benchmarking tests that measure query performance under
 - **Query Result Format**: Queries return arrays of entity objects (or ID lists); lazy evaluation not required (queries are eager).
 - **Performance Baseline**: Reference hardware for benchmarks is modern consumer-grade CPU; specific hardware specified in benchmark documentation.
 - **No Built-In Indexing**: The query framework performs full scans on every query call. No internal caches or indexes are maintained. Performance targets are designed to be met by raw scan speed at expected entity counts. Callers that require higher-frequency querying may implement their own caching layer on top.
-- **Immutable Query Results**: Query results are snapshots; modifying result array doesn't affect game state (copy semantics).
+- **Immutable Query Results Array**: The result array returned by queries is a new array (modifying it via push/pop/splice doesn't affect the game's entity collection). However, the entity objects within the array are live references — modifying entity properties directly affects game state. Callers MUST NOT add/remove entities to the game collection during iteration of the result array.
 - **Single Authoritative Query API**: Game code uses these helper methods; alternative query mechanisms (raw loops, external libraries) are discouraged.
 - **Headless Priority**: Query helpers prioritize headless performance; browser rendering consuming queries doesn't add performance burden.
 - **Insertion-Order Determinism**: Query results are returned in entity insertion order (the order each entity was added to the game state). This is the canonical sort; callers needing a different order must sort results themselves.

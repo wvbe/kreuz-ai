@@ -146,7 +146,7 @@ The terrain API and multi-map architecture are designed to support procedural ge
 
 ### Functional Requirements
 
-- **FR-001**: System MUST implement a hybrid spatial representation: discrete regions (grid cells for square maps, Voronoi regions for Voronoi maps) for coarse pathfinding and traversability, continuous sub-cell coordinates for precise entity placement and collision volumes.
+- **FR-001**: System MUST implement a hybrid spatial representation: discrete regions (grid cells for square maps, Voronoi regions for Voronoi maps) for coarse pathfinding and traversability. Sub-cell precision is provided via an optional `PreciseOffset` component storing fixed-point integer offsets (thousandths of a cell/region) for rendering and collision. Pathfinding operates exclusively on discrete cells/regions.
 - **FR-002**: System MUST apply hybrid spatial representation consistently across all terrain types and maps. Each map has a declared grid type (square, Voronoi, or hexagonal); multiple maps may use different grid types.
 - **FR-003**: System MUST provide API for placing entities on terrain at specified locations with optional hitbox specification.
 - **FR-004**: System MUST prevent entity movement into non-traversable terrain (walls, obstacles, locked doors, etc.).
@@ -174,7 +174,7 @@ The terrain API and multi-map architecture are designed to support procedural ge
 - **GridType**: Enumeration of supported spatial representations (square, Voronoi, hexagonal, etc.). Grid type is baked into map and immutable; determines coordinate semantics and pathfinding algorithm.
 - **Hitbox**: Collision volume for entity. Rectangular, circular, or custom shape. Blocks movement and collision detection. Works identically on all grid types.
 - **Path**: Sequence of regions/cells from start to goal, computed by pathfinding algorithm. Algorithm is chosen transparently based on grid type.
-- **Location**: Coordinate in a map. Semantics depend on grid type: square maps use (cell_x, cell_y, offset_x, offset_y); Voronoi maps use (region_id, offset_x, offset_y).
+- **Location**: Coordinate in a map. Discrete position depends on grid type: square maps use `{ cellX: int, cellY: int }`; Voronoi maps use `{ regionId: int }`. Sub-cell precision is stored in a separate optional `PreciseOffset` component: `{ offsetX: int, offsetY: int }` (fixed-point integers, thousandths of a cell). Pathfinding operates on discrete Location; rendering uses PreciseOffset for visual interpolation.
 
 ## Success Criteria _(mandatory)_
 
@@ -200,13 +200,20 @@ The terrain API and multi-map architecture are designed to support procedural ge
 
 - Q: Should terrain support just one grid type or multiple grid types? → A: Per-map flexibility. GameEngine defines a default grid type (typically square); individual maps can independently choose their grid type (square, Voronoi, hexagonal, etc.) at creation. Grid type is immutable once map exists.
 - Q: What coordinate system should Voronoi maps use? → A: Hybrid for both. Voronoi maps use hybrid representation just like square grids: Voronoi regions (discrete) + continuous sub-region offsets. A Voronoi location is (region_id, offset_x, offset_y). Maintains semantic parallelism with square grids.
+
+### Cross-Cutting Session 2026-05-02
+
+- Q: How should entity positions be represented and serialized across specs? → A: Discrete cells only for Position component: `{ mapId, cellX, cellY }` (square) or `{ mapId, regionId }` (Voronoi). Sub-cell offsets in optional `PreciseOffset` component as fixed-point integers (thousandths of a cell). Pathfinding operates on discrete cells/regions only. This satisfies save format integer-only constraint (FR-014) while supporting visual precision via separate component.
+
+### Session 2026-05-02 (continued)
+
 - Q: How should pathfinding adapt to different grid types? → A: Transparent adaptation. Pathfinding API is unified; the system automatically chooses appropriate algorithm based on grid type (A\* for square grids, Delaunay-graph search for Voronoi). Caller does not specify algorithm; it's an implementation detail.
 - Q: Should grid types be immutable once a map is created? → A: Yes, immutable. Grid type is baked into map saves. On load, if the save specifies `gridType: voronoi` but the map was created as `square`, load is rejected with clear error. No automatic conversion between grid types.
 - Q: Should procedural generators be grid-type-agnostic or specialized? → A: Specialized generators recommended. Square-grid generators for building interiors (rectilinear patterns). Voronoi generators for organic environments (forests, caves, irregular dungeons). Both use the same terrain alteration API but leverage grid-specific optimizations.
 
 ## Assumptions
 
-- **Spatial Representation: Hybrid & Grid-Type-Flexible** — Grid cells/regions define coarse traversability and pathfinding; continuous coordinates within cells/regions define precise entity placement and collision volumes. Multiple grid types (square, Voronoi, hexagonal) are supported; each map chooses its grid type at creation. Grid type is immutable once map exists.
+- **Spatial Representation: Discrete + Optional Precision** — Grid cells/regions define coarse traversability and pathfinding; sub-cell precision is provided via an optional `PreciseOffset` component (fixed-point integers, thousandths of a cell) for rendering and collision. Pathfinding operates exclusively on discrete cells/regions. Multiple grid types (square, Voronoi, hexagonal) are supported; each map chooses its grid type at creation. Grid type is immutable once map exists.
 - **Per-Map Grid Type Selection** — GameEngine defines a default grid type (typically square); individual maps can override at creation time. All entities and pathfinding adapt transparently to the map's grid type.
 - **Voronoi Coordinate Semantics** — Voronoi maps use hybrid representation: Voronoi regions (determined by Poisson-disk sampling or Delaunay triangulation) serve as discrete regions; entities within a region have continuous sub-region offsets. Semantically parallel to square grid.
 - **Pathfinding Abstraction** — Pathfinding API is unified across grid types. Internally, A\* is used for square grids and Delaunay-graph search for Voronoi. Caller does not specify algorithm; it's chosen transparently based on map's grid type. Determinism is maintained via PRNG tie-breaking.
