@@ -131,23 +131,24 @@ All entity state, including active tasks, component state, and async operation s
 - **FR-006**: System MUST provide `TaskQueue` component for high-reuse priority-based task management with enqueue, dequeue, prioritize, and interrupt operations.
 - **FR-007**: System MUST execute tasks in priority order (highest priority first) each game tick.
 - **FR-008**: System MUST support task interruption that cancels remaining tasks and leaves entity in consistent state.
-- **FR-009**: System MUST enable entity methods to be declared as async and return Promises that resolve based on game time, not real-world time.
+- **FR-009**: System MUST enable entity methods to be declared as async and return Promises that resolve based on game time, not real-world time. Task execution proceeds to the first `await` statement per game tick; execution resumes after await resolves.
 - **FR-010**: System MUST coordinate async entity interactions: `await entity.haveOrGrabOwnedMoney(amount)` resolves when entity acquires money (immediately or after travel).
 - **FR-011**: System MUST coordinate complex interactions: `await entity.goPurchaseFromMerchant(seller, item, count, price)` resolves after entity walks to seller and exchanges inventory/money.
-- **FR-012**: System MUST support sequential async chains without explicit state machines or callbacks (e.g., `await a(); await b(); await c();`).
+- **FR-012**: System MUST support sequential async chains without explicit state machines or callbacks (e.g., `await a(); await b(); await c();`). Multiple awaits on the same entity execute sequentially; task queue enforces ordering.
 - **FR-013**: System MUST provide high-reuse component families (Merchant, Citizen, Faction) with ergonomic, chainable methods.
 - **FR-014**: System MUST serialize all entity state (prototype, components, task queue, async operation state) to JSON without loss of information.
 - **FR-015**: System MUST deserialize entity state from JSON and resume async operations at correct game time.
 - **FR-016**: System MUST work identically in headless environments (no renderer) as in browser environments.
+- **FR-017**: System MUST support dynamic entity component composition: components can be added to or removed from entities after instantiation. Entity version increments with each composition change to track evolution.
 
 ### Key Entities
 
-- **Entity**: Instance of an entity prototype with instantiated components, task queue, and properties. Has entity ID, component instances, and state.
-- **EntityPrototype**: Declarative definition of entity composition: ID, component list, default values. Reusable template for creating entities.
+- **Entity**: Instance of an entity prototype with instantiated components, task queue, and properties. Has entity ID, component instances, version (incremented when composition changes), and state.
+- **EntityPrototype**: Declarative definition of entity composition: ID, component list, default values. Reusable template for creating entities. Prototypes define initial composition; actual entities may evolve composition at runtime.
 - **Component**: Typed container for entity behavior and data. Provides methods callable on entity. Examples: Inventory, Position, Job, TaskQueue.
 - **TaskQueue**: Special component providing priority-based task management. Stores pending tasks, current task, and execution history.
 - **Task**: Unit of work in entity's task queue. Has ID, priority, status (pending/executing/completed), and associated promise for async coordination.
-- **AsyncOperation**: Pending promise awaiting game time progression. Resolves when game time condition is met (travel complete, item acquired, exchange finished).
+- **AsyncOperation**: Pending promise awaiting game time progression. Resolves when game time condition is met (travel complete, item acquired, exchange finished). Promise registers once; game loop invokes evaluation only when relevant game events occur (entity moved, inventory changed, etc.).
 
 ## Success Criteria _(mandatory)_
 
@@ -165,16 +166,21 @@ All entity state, including active tasks, component state, and async operation s
 - **SC-010**: 100% of entity behavior works identically in headless environments as in browser with renderer.
 - **SC-011**: High-reuse component methods are discoverable (IDEs can provide autocomplete; methods are documented).
 - **SC-012**: Complex entity interactions (trade sequences, multi-step travel + work) can be expressed in <50 lines of clear, async/await code.
+- **SC-013**: Multiple nested awaits on an entity execute sequentially via task queue; each await completes before next begins. Sequential ordering is deterministic.
 
 ## Clarifications
 
 ### Session 2026-05-02
 
+- Q: What exactly is an 'async boundary'? → A: First await. Task executes until it hits an `await` statement, then yields control. Execution resumes after await resolves on subsequent game tick(s).
 - Q: How are component-specific methods accessed on entities? → A: Delegate pattern — component instances are direct properties on the entity (e.g., `entity.inventory`, `entity.job`). Methods are called on the component directly (`entity.inventory.balance()`), not proxied through the entity itself. No method forwarding or delegation via entity.
 - Q: What happens when an async entity operation is provably unachievable? → A: Promise rejects immediately with a descriptive error (e.g., `InsufficientFundsError`). Fail-fast semantics; caller is responsible for catching and handling.
-- Q: How do task queue tasks execute relative to game ticks? → A: Option C — tasks run to their first async boundary (await) within a tick. Tasks can resolve, reject, or be cancelled externally. External cancellation uses a CancellationToken that carries contextual information (e.g., reason = "entity_deleted" vs. "higher_priority_task") so the entity can decide whether to perform cleanup steps (e.g., drop carried items) or skip them. The cleanup itself may involve a small async timeout resolved by game time.
-- Q: What is the JSON serialization structure for entities? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "components": { "Inventory": {...}, "Position": {...}, "TaskQueue": {...} } }`. Each component is a named key under `components`.
-- Q: What happens when an entity with pending async operations is deleted? → A: Deletion issues a CancellationToken with reason "entity_deleted". Entity's pending tasks are cancelled in dependency order; each task receives the token and may perform a brief async cleanup (game-time governed) before the task promise rejects. All external awaits on the entity's operations receive a rejection once cleanup completes.
+- Q: How do task queue tasks execute relative to game ticks? → A: Tasks run to their first await within a tick. Tasks can resolve, reject, or be cancelled externally via CancellationToken. Cancellation has two categories: graceful (entity performs quit-animations or cleanup before stopping) and ungraceful (entity stops immediately). Entity code inspects the cancellation type to decide cleanup behavior.
+- Q: What is the JSON serialization structure for entities? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "version": 1, "components": { "Inventory": {...}, "Position": {...}, "TaskQueue": {...} } }`. Each component is a named key under `components`. Version field tracks entity composition evolution.
+- Q: What happens when an entity with pending async operations is deleted? → A: Deletion issues a CancellationToken with category "ungraceful". Entity's pending tasks are cancelled immediately; each task receives the token and skips cleanup (since entity is being destroyed anyway). All external awaits on the entity's operations receive a rejection once cancellation completes.
+- Q: Can entity component composition change after instantiation? → A: Yes. Components can be added to or removed from entities at runtime (e.g., Citizen gains SkillComponent, Faction loses LeadershipComponent). Entity version increments each time composition changes. Version is serialized so save/load tracks evolution history.
+- Q: How do pending async operations get notified when their conditions are met? → A: Reactive — Promise registers once with the game loop (or relevant subsystem); game loop only evaluates the promise when relevant game events occur (entity moved, item acquired, time milestone reached). No polling all promises every tick; only active checks on relevant events.
+- Q: How do multiple nested awaits compose? → A: Sequential via task queue. Each `await` in sequence is queued as a separate task. Task queue enforces strict ordering: first await completes before second begins. Multiple awaits on same entity never execute concurrently.
 
 ## Assumptions
 
@@ -182,13 +188,8 @@ All entity state, including active tasks, component state, and async operation s
 - **Single Entity Ownership**: Each entity instance belongs to one game state; no shared entity objects across multiple games. Loading a new game fully unloads all current entities.
 - **Promise Resolution Driven by Game Ticks**: Async operations don't use system time; game loop ticks drive all time-based promise resolutions.
 - **Component Method Access via Instance**: Component methods are accessed directly on component instances (e.g., `entity.inventory.balance()`), not forwarded via entity-level dispatch. No Proxy or reflection-based method routing.
-- **Task Execution Model**: Task queue runs each task to its first async boundary per tick. Multiple tasks do not execute concurrently per entity; concurrency is across multiple entities.
-- **Cancellation Token Contextual**: CancellationToken carries a reason describing the nature of cancellation (e.g., "entity_deleted", "interrupted_by_higher_priority", "goal_unreachable"). Task handlers may inspect the reason to decide which cleanup steps to perform or skip.
-- **Component Composition Immutable**: Entity's component list doesn't change after instantiation. Adding/removing components would require entity recreation.
-- **Async Sequences Deterministic**: Identical entity state + identical game tick sequence produces identical async operation resolutions.
-- **Headless Parity**: Headless execution has full parity with browser execution; no features exclusive to one or the other.
-- **Async Failure Semantics**: Async operation failures (goal provably unachievable, entity deleted, etc.) propagate as Promise rejections with descriptive typed errors, not silent failures.
-- **Global Entity IDs**: Entity IDs are unique game-wide. IDs are stable across serialization. Loading a new game unloads all entities and their IDs.
-- **Task Queue is Per-Entity**: Each entity has independent task queue; no global task scheduler.
-- **Prototype Registry**: Entity prototypes are registered at game startup; not dynamically created during gameplay.
-- **No Hot Reload**: Component definitions and prototype definitions are fixed after game initialization (reloading during gameplay is out of scope).
+- **Task Execution Model**: Task queue runs each task to its first `await` per game tick. Multiple tasks do not execute concurrently per entity; concurrency is across multiple entities. Multiple awaits on same entity execute sequentially via task queue.
+- **Cancellation Categories**: CancellationToken has two categories: graceful (entity may perform cleanup/animations) and ungraceful (entity stops immediately). Task handlers inspect the category to decide cleanup behavior.
+- **Component Composition Mutable**: Entity's component list can change after instantiation (add/remove components at runtime). Entity version increments with each composition change and is serialized.
+- **Async Promise Resolution Reactive**: Promises register once; game loop evaluates only when relevant events occur (not polled every tick). No overhead for promises awaiting distant conditions.
+- **Entity Versioning**: Each time an entity's component composition changes (add/remove component), entity version increments. Version is immutable once incremented; no rollback.

@@ -34,9 +34,9 @@ Game systems need to find entities matching specific property criteria (e.g., "a
 
 **Acceptance Scenarios**:
 
-1. **Given** 200 citizens with varied job types, **When** query `getEntitiesByProperty("jobType", "farmer")` is called, **Then** all entities with jobType = "farmer" are returned, no others.
-2. **Given** entities with numeric properties (e.g., alignment, wealth), **When** query with range filter `getEntitiesByProperty("alignment", { min: -50, max: 0 })` is called, **Then** only entities within that range are returned.
-3. **Given** a query combining multiple properties, **When** query `getEntitiesByProperties({ faction: "red", status: "active" })` is called, **Then** only entities matching ALL properties are returned (AND logic).
+1. **Given** 200 citizens with varied job types, **When** query `getEntitiesByProperty('Citizen.jobType', 'farmer')` is called, **Then** all entities with jobType = "farmer" are returned, no others.
+2. **Given** entities with numeric component fields (e.g., `Faction.alignment`, `Citizen.wealth`), **When** query with range filter `getEntitiesByProperty('Faction.alignment', { min: -50, max: 0 })` is called, **Then** only entities within that range are returned.
+3. **Given** a query combining multiple component fields, **When** query `getEntitiesByProperties({ 'Citizen.faction': 'red', 'Citizen.status': 'active' })` is called, **Then** only entities matching ALL fields are returned (AND logic).
 4. **Given** saved game state with specific property values, **When** game is loaded and queries execute, **Then** queries return identical results (deterministic).
 
 ---
@@ -96,34 +96,35 @@ The feature must include benchmarking tests that measure query performance under
 
 - What happens if a query is performed on empty entity collection? → Should return empty result gracefully, not error.
 - What happens if a query specifies a component type that no entity has? → Should return empty result.
-- What happens if relationship target entities are deleted while relationship queries execute? → Should handle gracefully (skip missing targets or include in results depending on design).
+- What happens if relationship target entities are deleted while relationship queries execute? → System throws an error. Dangling relationships are treated as data integrity violations, not gracefully skipped.
 - What happens if property filter value doesn't match any entity? → Should return empty result.
 - What happens if multiple related entities exist for a query expecting single entity? → Should either return first match or error with clear message (design choice).
-- What happens during high-frequency queries (e.g., 1000+ queries per tick)? → Should maintain performance; caching may be needed.
-- What happens if entity state is modified during query iteration? → Iterator behavior must be well-defined (snapshot vs. live, etc.).
+- What happens during high-frequency queries (e.g., 1000+ queries per tick)? → The framework performs full scans; no built-in caching. Callers that require cache behavior must implement it themselves.
+- What happens if entity state is modified during query iteration? → Queries return a live view; callers are responsible for not modifying the entity collection mid-iteration. Behavior is undefined if violated. No snapshot is taken.
 
 ## Requirements _(mandatory)_
 
 ### Functional Requirements
 
 - **FR-001**: System MUST provide `getEntitiesByComponent(componentType)` method that returns all entities possessing the specified component type.
-- **FR-002**: System MUST provide `getEntitiesByProperty(propertyName, value)` method that returns all entities where the property equals the given value.
+- **FR-002**: System MUST provide `getEntitiesByProperty('Component.field', value)` method that returns all entities where the named component field equals the given value. Property paths use dot notation: `'Citizen.jobType'` targets field `jobType` inside the `Citizen` component.
 - **FR-003**: System MUST support property filtering with range operators (min/max for numeric properties, e.g., `{ min: 0, max: 100 }`).
-- **FR-004**: System MUST provide `getEntitiesByProperties(filterObject)` method that returns entities matching ALL specified property filters (AND logic).
-- **FR-005**: System MUST provide `getRelatedEntities(entity, relationshipName)` method that returns all entities related to a given entity by a defined relationship.
-- **FR-006**: System MUST provide `getRelatedEntity(entity, relationshipName)` method that returns a single related entity (or null if no relationship exists).
-- **FR-007**: Query results MUST be deterministic: identical query on identical game state returns identical results in identical order.
+- **FR-004**: System MUST provide `getEntitiesByProperties(filterObject)` method that returns entities matching ALL specified property filters (AND logic). Filters use the same component-scoped path syntax.
+- **FR-005**: System MUST provide `getRelatedEntities(entity, relationshipName)` method that returns all entities related to a given entity by a defined relationship. If a relationship references a deleted entity, the method MUST throw an error (dangling relationship is a data integrity violation).
+- **FR-006**: System MUST provide `getRelatedEntity(entity, relationshipName)` method that returns a single related entity (or null if no relationship exists). If the referenced entity has been deleted, the method MUST throw an error.
+- **FR-007**: Query results MUST be deterministic: identical query on identical game state returns identical results in insertion order (the order entities were added to the game state). Insertion order is the canonical sort for all queries.
 - **FR-008**: All query operations MUST be serialization-safe: queries work identically on live game state and on deserialized game state from JSON save files.
 - **FR-009**: System MUST provide reusable helper classes (e.g., `CitizenQueries`, `FactionQueries`, `ResourceQueries`) that encapsulate common query patterns.
 - **FR-010**: System MUST include comprehensive benchmark tests that measure query performance with varying entity counts (100–10000+).
 - **FR-011**: Query operations MUST NOT depend on rendering layer or UI state; queries work identically in headless environments.
 - **FR-012**: Query helper classes MUST be composable and chainable where applicable (e.g., `queries.getActiveCitizens().filter(...)`).
+- **FR-013**: Query results are live views over the entity collection; callers MUST NOT add or remove entities while iterating a query result. Behavior is undefined if the collection is mutated mid-iteration. The system does NOT provide internal indexing or caches; callers may implement their own caching if needed.
 
 ### Key Entities
 
-- **Entity**: An object with an ID, a collection of components, and properties. Queryable by component type, property values, and relationships.
-- **Component**: A typed container for entity data (e.g., `Citizen` component, `Position` component). Components enable ECS paradigm queries.
-- **Relationship**: A named link between entities (e.g., "faction members", "assigned job"). Can be stored as properties or inferred from component presence.
+- **Entity**: An object with an ID, a collection of named components. Queryable by component type, component-field values (via dot-path), and relationships.
+- **Component**: A typed container for entity data (e.g., `Citizen` component, `Position` component). Component fields are queryable using `'ComponentName.fieldName'` path syntax.
+- **Relationship**: A named link between entities (e.g., "faction members", "assigned job"). Stored as a component field referencing one or more entity IDs. A dangling relationship (target entity deleted) is a data integrity error.
 - **QueryHelper**: A reusable class providing encapsulated query methods for a specific domain (e.g., `CitizenQueries` for citizen-related queries).
 - **BenchmarkResult**: Captures query performance metrics: entity count, query type, execution time (ms), memory usage (optional).
 
@@ -148,6 +149,11 @@ The feature must include benchmarking tests that measure query performance under
 
 - Q: Are entity IDs unique globally (game-wide) or locally (per-map)? → A: Global game-wide IDs. Each entity has a unique ID across the entire loaded game world. Loading a new game fully unloads all current entities and IDs; the new game's entities have their own independent IDs.
 - Q: What is the JSON serialization structure for entities with components? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "components": { "Inventory": {...}, "Position": {...} } }`. Each component is a named key under `components`.
+- Q: Where do queryable properties live — on the entity or inside a component? → A: Inside components. Property queries use dot-path syntax: `'Citizen.jobType'` targets `jobType` inside the `Citizen` component. Top-level entity fields (id, prototype) are not queryable via property queries.
+- Q: What happens if entities are added/removed during query iteration? → A: Queries return a live view; caller must not mutate the collection mid-iteration. Behavior is undefined if violated. No snapshot semantics.
+- Q: When a relationship points to a deleted entity, what should the query return? → A: Throw an error. Dangling relationships are a data integrity violation, not a graceful-skip case.
+- Q: What ordering should query results use for determinism (FR-007)? → A: Insertion order — the order entities were added to the game state. Canonical for all queries.
+- Q: Should the query system maintain internal indexes or caches? → A: No. Full scans only. Callers may implement their own caching if needed; it is not a framework concern.
 
 ## Assumptions
 
@@ -155,9 +161,11 @@ The feature must include benchmarking tests that measure query performance under
 - **Relationship Semantics**: Relationships are either stored as properties on entities or can be inferred from component presence; complex relationship models are not required for v1.
 - **Query Result Format**: Queries return arrays of entity objects (or ID lists); lazy evaluation not required (queries are eager).
 - **Performance Baseline**: Reference hardware for benchmarks is modern consumer-grade CPU; specific hardware specified in benchmark documentation.
-- **No Real-Time Search**: Queries do not need to index continuously; performance measured as cold queries (no caching advantage).
+- **No Built-In Indexing**: The query framework performs full scans on every query call. No internal caches or indexes are maintained. Performance targets are designed to be met by raw scan speed at expected entity counts. Callers that require higher-frequency querying may implement their own caching layer on top.
 - **Immutable Query Results**: Query results are snapshots; modifying result array doesn't affect game state (copy semantics).
 - **Single Authoritative Query API**: Game code uses these helper methods; alternative query mechanisms (raw loops, external libraries) are discouraged.
 - **Headless Priority**: Query helpers prioritize headless performance; browser rendering consuming queries doesn't add performance burden.
+- **Insertion-Order Determinism**: Query results are returned in entity insertion order (the order each entity was added to the game state). This is the canonical sort; callers needing a different order must sort results themselves.
+- **Component-Scoped Property Paths**: All property queries use dot-notation paths (`'ComponentName.fieldName'`) to target fields inside components. Querying a top-level entity field (e.g., `id`, `prototype`) is not supported via property queries.
 - **Serialization Coverage**: All query-relevant state (entity properties, relationships, component presence) is included in JSON serialization (no hidden state).
 - **Entity ID Uniqueness**: Entities are uniquely identified by ID within a game state; ID collisions don't occur; IDs remain stable across serialization.

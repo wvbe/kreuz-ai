@@ -206,8 +206,10 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 ### Functional Requirements
 
 - **FR-001**: System MUST provide an `Inventory` component attachable to any entity (person, vehicle, furniture, chest, etc.).
+- **FR-001a**: All inventory operations (`store`, `retrieve`, `transfer`, `equip`, `unequip`) execute synchronously within a single game tick and return results immediately; they are NOT awaitable.
 - **FR-002**: System MUST support configurable slot count per inventory instance (e.g., a chest has 20 slots; a citizen has 8 slots).
 - **FR-003**: System MUST support per-material configurable stack limits (e.g., `Coin` stacks to 10000; `Wood` stacks to 50; `Cheese` stacks to 20).
+- **FR-003a**: Materials MUST be identified by a stable integer ID (assigned at startup). Material names are metadata; all inventory slot storage and internal queries use material IDs, not names. Public API accepts material names as ergonomic aliases.
 - **FR-004**: System MUST fill existing partial stacks of the same material before consuming a new slot.
 - **FR-005**: System MUST reclaim (free) a slot when its stack quantity reaches zero.
 - **FR-006**: System MUST provide `store(material, quantity)` that places items into inventory, respecting stack limits and slot availability.
@@ -225,29 +227,36 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 - **FR-018**: System MUST provide `availableWeight()` query returning remaining weight capacity for weight-limited inventories.
 - **FR-019**: System MUST support per-material optional perishability: a game-time duration after which a stored stack expires.
 - **FR-020**: System MUST track per-stack expiry timestamps (game time at storage + duration); each stack expires independently.
-- **FR-021**: System MUST automatically remove or reduce expired stacks when game time advances past their expiry, and emit a `MaterialExpiredEvent`.
+- **FR-020a**: When a store operation adds items of a perishable material that already has a partial stack, the stacks MUST merge. The merged stack's new expiry timestamp is calculated as a weighted average: `newExpiry = (oldQuantity × oldExpiry + newQuantity × newExpiry) / (oldQuantity + newQuantity)`, rounded down to nearest integer game time tick.
+- **FR-021**: System MUST automatically remove or reduce expired stacks when game time advances past their expiry, and emit a `MaterialExpiredEvent` via the event bus at the tick boundary.
+- **FR-021a**: System MUST emit inventory-change events via the event bus (`inventory.stored`, `inventory.retrieved`, `inventory.transferred`) at the tick boundary after the operation completes, allowing other systems to subscribe via `waitFor`.
 - **FR-022**: System MUST support named equipment slots per entity (e.g., `mainHand`, `chest`), each holding exactly one item (not a stack).
 - **FR-023**: System MUST support equipment slot type restrictions; equipping an incompatible item rejects with `EquipmentSlotIncompatibleError`.
 - **FR-024**: System MUST support equip/unequip operations that move items between general inventory and equipment slots atomically.
-- **FR-025**: System MUST support ownership and access restrictions; unauthorized access rejects with `AccessDeniedError`.
-- **FR-026**: System MUST serialize full inventory state (slots, materials, quantities, stack limits, expiry timestamps, weight, equipment slots, ownership, access rules) to JSON without loss.
+- **FR-025**: System MUST support ownership (owner entity ID) and permission rules for access restrictions. Permission rules are defined as `{ type: "grant" | "deny", targetEntityId | faction | role, operation: "store" | "retrieve" | "transfer" | "equip" }`. Unauthorized access rejects with `AccessDeniedError`.
+- **FR-025a**: Permission checks occur at call time (not cached). Inventories default to open-access (no restrictions) unless explicitly configured. Permission evaluation is deterministic: first matching rule (in order) determines access; no caching allows dynamic permission updates.
+- **FR-026**: System MUST serialize full inventory state (slots, material IDs, quantities, stack limits, expiry timestamps, weight, equipment slots, ownership, access rules) to JSON without loss.
+- **FR-026a**: Material slots in JSON MUST store material ID (integer), not name, to ensure deterministic saves and future-proof material rebalancing.
 - **FR-027**: System MUST deserialize inventory state from JSON and produce identical inventory state.
 - **FR-028**: System MUST operate identically in headless environments (no renderer).
+- **FR-029**: System MUST make inventory state changes immediately visible to synchronous queries (`canStore`, `getTotal`, etc.) within the same tick that the operation completes. State consistency is maintained: all queries see the post-operation state immediately.
 
 ### Key Entities
 
-- **Inventory**: Component attachable to any entity. Has a slot count, a collection of `InventorySlot`s, an owner entity ID, and optional access restriction rules.
+- **Inventory**: Component attachable to any entity. Has a slot count, a collection of `InventorySlot`s, an owner entity ID, and optional `PermissionRule` list for access restrictions.
 - **InventorySlot**: A single slot in an inventory. Contains a material type and a quantity (0 means empty/reclaimed). Quantity cannot exceed the material's stack limit.
-- **Material**: A typed, registered game resource (e.g., `Wood`, `Cheese`, `Coin`, `Iron`). Has a name, a stack limit, an optional weight per unit (non-negative integer), and an optional perishability duration (in game hours).
-- **InventorySlot**: A single general-storage slot. Contains a material type, an integer quantity, and — for perishable materials — an expiry timestamp in game hours.
+- **Material**: A typed, registered game resource with a stable integer ID assigned at startup. Has an ID, a human-readable name (metadata), a stack limit, an optional weight per unit (non-negative integer), and an optional perishability duration (in game hours). Identified by ID internally; name is ergonomic alias for public API.
+- **InventorySlot**: A single general-storage slot. Contains a material ID (integer), an integer quantity, and — for perishable materials — an expiry timestamp in game hours.
 - **EquipmentSlot**: A named slot for a single worn/wielded item. Has a name (e.g., `mainHand`), a type restriction (e.g., `weapon`), and holds at most one item.
+- **PermissionRule**: Defines access control for inventory operations. Structure: `{ type: "grant" | "deny", target: EntityId | FactionId | RoleType, operation: "store" | "retrieve" | "transfer" | "equip" }`. Rules are evaluated in order at call time; first match determines access. Deny rules take precedence over grant rules when explicitly ordered.
 - **InventoryTransaction**: Represents a store, retrieve, transfer, equip, or unequip operation. Used for atomicity guarantees and serialization of in-progress operations.
 
 ## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
-- **SC-001**: Store and retrieve operations on inventories with up to 100 slots and 10,000 items complete in under 1ms.
+- **SC-001**: Store and retrieve operations on inventories with up to 100 slots and 10,000 items complete synchronously in under 1ms within a single tick.
+- **SC-001a**: Inventory operations return synchronous results (no Promises); event-bus notifications fire at tick boundary (after operation completes).
 - **SC-002**: Capacity and availability queries (`canStore`, `canRetrieve`) return correct results 100% of the time on any inventory state.
 - **SC-003**: All failed operations (full, insufficient, access denied) leave inventory in exactly the pre-operation state (zero side effects).
 - **SC-004**: Money balance is conserved across all transfer operations; total money in game never increases or decreases through inventory operations alone.
@@ -258,14 +267,19 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 - **SC-009**: `storeUpTo` always returns `stored + remainder == quantity` (integer conservation).
 - **SC-010**: Perishable stack expiry events fire at the correct game time tick; no expiry fires early or late by more than one tick.
 - **SC-011**: Weight accounting is exact; total weight of all items in inventory matches sum of (material weight × quantity) for all slots.
+- **SC-012**: After an inventory operation completes synchronously, subsequent queries in the same tick return the new state immediately (no deferred visibility). Event subscriptions via `event.waitFor()` receive notifications at tick boundary.
 
 ## Assumptions
 
+- **Within-Tick State Visibility**: Inventory operations complete synchronously and new state is immediately visible to synchronous queries within the same tick. Event-bus notifications fire at tick boundary for async subscribers. This prevents state inconsistency (queries don't see stale data) while allowing asynchronous reactions between ticks.
+- **Permission Rules & Call-Time Checking**: Inventories support optional permission rules (`{ type, target, operation }`) that are checked at call time (not cached). Evaluations are deterministic (first matching rule wins); no caching allows dynamic permission changes via event-driven faction/role updates. Default is open-access. This enables fine-grained faction politics, theft prevention, trade authorization, and locked containers.
+- **Material Identity by Integer ID**: Materials are identified by a stable integer ID assigned at startup. Material names are human-readable metadata; all inventory slot storage, serialization, and internal queries use material IDs. The public API accepts both material names (resolved to IDs at call time) and IDs directly for ergonomics. This ensures deterministic saves, efficient storage, and allows future material rebalancing without breaking existing saves.
+- **Synchronous Operations & Event-Bus Integration**: Inventory store/retrieve/transfer/equip/unequip operations complete synchronously within a tick. Event-bus events (`inventory.stored`, `inventory.retrieved`, `inventory.transferred`, `inventory.equipped`, `inventory.unequipped`, `inventory.materialExpired`) fire at tick boundary; other systems subscribe via `event.waitFor()` to react asynchronously to inventory changes. This decouples inventory from downstream systems and simplifies atomicity guarantees.
 - **Money as Material**: Money is a registered material type (`Coin` or equivalent) with a very high or effectively unlimited stack limit. All money interactions go through the same inventory slot mechanism as other materials; `balance()`, `credit()`, `debit()` are convenience wrappers.
 - **Single Currency**: The game has one primary money type at this stage. Multiple currencies are out of scope.
 - **Integer Quantities Only**: All item quantities are integers. There are no fractional items. Partial stacks (e.g., 64 out of 100 max) are valid as long as the quantity is a whole number.
 - **Weight as Integer**: Item weight per unit is expressed as a non-negative integer (e.g., in tenths of a unit for precision). No floating-point weight values.
-- **Per-Stack Expiry**: Perishability is tracked per stack, not per individual item. Each stack's expiry timestamp is set when the stack is created; merging stacks uses the earlier expiry.
+- **Per-Stack Expiry & Merging**: Perishability is tracked per stack, not per individual item. When storing items of a material with an existing partial stack, the stacks merge and the new expiry is calculated as a weighted average of remaining game time (by stack quantity). This prevents spoilage hoarding and creates realistic "batch mixing" semantics: older small stacks mixed with fresh large stacks result in an intermediate expiry.
 - **Full-Stack Expiry Only**: At expiry, the entire stack is removed at once. Partial decay within a stack is out of scope.
 - **Equipment Slots Are Entity-Level**: Equipment slot definitions (which slots exist, type restrictions) are part of the entity prototype, not the inventory itself.
 - **`store()` Is All-or-Nothing**: `store(material, quantity)` rejects if the full amount doesn't fit. `storeUpTo(material, quantity)` is the explicit partial variant.
@@ -276,4 +290,10 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 
 ## Clarifications
 
-_(None pending — all design decisions resolved through constitution and session clarifications.)_
+### Session 2026-05-02
+
+- Q: How should inventory operations integrate with ECS async/await patterns? → A: Inventory operations execute synchronously (complete immediately within a tick), returning results synchronously. All state changes emit event-bus events that fire at tick boundary; downstream systems subscribe via `event.waitFor()` to react asynchronously. This ensures atomicity and allows other systems to compose inventory operations into larger async workflows.
+- Q: How should materials be identified and stored in inventory slots? → A: Materials identified by integer ID (assigned at startup). Names are metadata. Inventory slots store material ID (integer). Public API accepts both names and IDs for ergonomics. This enables deterministic saves and allows future material rebalancing without breaking saves.
+- Q: How should inventory access control be modeled? → A: Permission rules list with structure `{ type: "grant" | "deny", target (entity/faction/role), operation }`. Checked at call time (not cached). Default open-access. This enables faction politics, theft prevention, locked containers, and dynamic permission changes.
+- Q: How should perishable stacks be handled when storing items of the same material? → A: Merge on store, but calculate new expiry as weighted average of both stacks' remaining game time (weighted by quantity). Formula: `newExpiry = (oldQty × oldExpiry + newQty × newExpiry) / (oldQty + newQty)` rounded down. This creates realistic batch mixing semantics and prevents spoilage hoarding.
+- Q: When can other systems observe the new inventory state after a store operation? → A: New state is immediately visible to synchronous queries within the same tick. Event-bus events fire at tick boundary. This prevents state inconsistency (queries see current state immediately) while allowing asynchronous reactions between ticks.

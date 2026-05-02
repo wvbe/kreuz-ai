@@ -92,26 +92,28 @@ After save and load, the game state must be deterministic: advancing the loaded 
 
 - **FR-001**: GameState MUST be a JSON object with a `version` field (integer) at the root, indicating the save format schema version.
 - **FR-002**: GameState root MUST include an `entities` array, where each entity is a JSON object with `id`, `prototype`, and `components` (nested by component name).
-- **FR-003**: GameState root MUST include a `maps` array, where each map contains map ID, terrain data (grid), entity positions, and transition state.
+- **FR-003**: GameState root MUST include a `maps` array, where each map contains map ID, terrain data as a 2D array of tile objects `[[{type: int, variant: int}, ...], ...]` where each tile is an object with `type` (integer ID from startup registry) and optional `variant` (integer for tile sub-type). Transition objects (doors, portals) serialize as full entity-like objects within the map's entity collection. Entity positions are NOT stored in map data; they are sourced from `entity.components.Position` on load.
 - **FR-004**: GameState root MUST include a `gameTime` field (integer) representing elapsed game ticks since game start.
-- **FR-005**: Each entity in `entities` MUST serialize all component state (inventory contents, position, health, etc.) as properties under `components.{ComponentName}`.
+- **FR-005**: Each entity in `entities` MUST serialize all component state (inventory contents, position, health, etc.) as properties under `components.{ComponentName}`. Position component MUST include `mapId` and `coordinates` [x, y].
+- **FR-006**: Entity position is the single source of truth; map terrain grid does not store entity locations. On load, entities are placed according to their Position components.
 - **FR-006**: GameState MUST include a `timestamp` field (ISO 8601 string) indicating when the save was created (UTC).
-- **FR-007**: In-flight async tasks (promises, pending actions) MUST serialize their state, including: task ID, task type, associated entity ID, cancellation token state, and pending promise resolution condition.
-- **FR-008**: Serialized cancellation tokens MUST include the reason (e.g., "entity_deleted", "interrupted_by_priority") so that resumed tasks are aware of context.
-- **FR-009**: The `save(filePath)` method MUST atomically write the JSON to disk (write to temporary file, then atomic rename, preventing partial writes on failure).
-- **FR-010**: The `load(filePath)` method MUST parse the JSON and return a GameState object, or reject with a typed error if the file does not exist, is not valid JSON, or has an incompatible version.
-- **FR-011**: GameState JSON MUST be valid UTF-8 and formatted as plain JSON (no custom serialization markers, allowing debugging with standard JSON tools).
-- **FR-012**: All numeric values (tick counts, entity IDs, positions, quantities) MUST serialize as JSON integers (no floating-point approximations).
-- **FR-013**: After deserialization, entity ID sequences, component instances, and entity-to-component relationships MUST match the serialized state exactly.
-- **FR-014**: GameState MUST support schema versioning; loading a save with a different version than the engine's current version MUST either reject with a clear error or invoke a migration pathway.
+- **FR-007**: Terrain tiles can be mutated during gameplay (e.g., building foundations, digging). Mutated terrain is serialized in the 2D grid at its current state; mutations are not recorded as delta, only the final state is saved.
+- **FR-008**: Transition objects (doors, portals) are full entities that serialize within the map's entity collection. They have Position components that define their location and transition data components (e.g., `{targetMap, targetCoord, isOpen}`) that define their behavior.
+- **FR-009**: In-flight async tasks (promises, pending actions) MUST serialize their state, including: task ID, task type, associated entity ID, cancellation token state, and pending promise resolution condition.
+- **FR-010**: Serialized cancellation tokens MUST include the reason (e.g., "entity_deleted", "interrupted_by_priority") so that resumed tasks are aware of context.
+- **FR-011**: The `save(filePath)` method MUST atomically write the JSON to disk (write to temporary file, then atomic rename, preventing partial writes on failure).
+- **FR-012**: The `load(filePath)` method MUST parse the JSON and return a GameState object, or reject with a typed error if the file does not exist, is not valid JSON, or has an incompatible version.
+- **FR-013**: GameState JSON MUST be valid UTF-8 and formatted as plain JSON (no custom serialization markers, allowing debugging with standard JSON tools).
+- **FR-014**: All numeric values (tick counts, entity IDs, positions, quantities) MUST serialize as JSON integers (no floating-point approximations).
+- **FR-015**: After deserialization, entity ID sequences, component instances, and entity-to-component relationships MUST match the serialized state exactly. Entity positions are reconstructed from Position components; no position data is stored in the map grid.
 
 ### Key Entities
 
 - **GameState**: Root container for a saved game. Contains version, timestamp, entities array, maps array, gameTime, and task queue state. Serializes to JSON.
-- **Entity**: In-game object (citizen, resource, furniture). Serializes as `{ id, prototype, components }`. Each entity ID is unique across the game lifetime.
-- **Component**: State container attached to an entity (Inventory, Position, Health, Job). Serializes as a named object under `entity.components.{Name}`.
-- **AsyncTask**: In-flight task (trade, travel, work). Serializes task ID, type, entity ID, cancellation token, and promise state.
-- **CancellationToken**: Context object that may cancel a task. Serializes reason and state.
+- **Entity**: In-game object (citizen, resource, furniture, or transition object like door/portal). Serializes as `{ id, prototype, components }`. Each entity ID is unique across the game lifetime.
+- **Map**: World region with immutable base terrain and mutable entities. Serializes terrain as 2D array of tile objects. Transition objects (doors, portals) are full entities stored in the map's entity collection.
+- **Tile**: Single grid cell in a map. Serializes as `{type: int, variant: int}`. Type is an integer ID from the tile registry (loaded at startup). Variant allows per-tile sub-type variations.
+- **Transition**: A passage between maps or within a map. Implemented as an entity with a Transition component that specifies target map/coordinates. Serializes as a full entity.
 
 ## Success Criteria _(mandatory)_
 
@@ -123,6 +125,7 @@ After save and load, the game state must be deterministic: advancing the loaded 
 - **SC-004**: A corrupted or invalid save file (truncated JSON, missing required fields) is rejected with a descriptive error message within 10ms, without corrupting the current game instance.
 - **SC-005**: The save file format remains compatible across all feature releases within a major version (no breaking schema changes without versioning and migration support).
 - **SC-006**: PRNG state is preserved through save/load; resuming a game produces the same sequence of random values as if never saved.
+- **SC-007**: Entity positions are always reconstructed from `entity.components.Position` on load; no position discrepancy between component state and map data.
 
 ## Assumptions
 
@@ -130,18 +133,21 @@ After save and load, the game state must be deterministic: advancing the loaded 
 - **Component serialization contract**: All components on an entity are assumed to be JSON-serializable (no function references, no circular object graphs; relationships are by ID, not direct object inclusion).
 - **Entity ID stability**: Entity IDs are assumed to be stable across the save/load cycle (no ID reassignment, no garbage collection of deleted entities).
 - **Game time as ticks**: Game time is represented as a single integer (elapsed ticks since game start), not as wall-clock time. This simplifies serialization and determinism.
+- **Tile type registry loaded at startup**: Tile types are referenced by integer ID in saved terrain data. The full tile registry (ID-to-type mapping, rendering sprites, properties) is loaded at engine startup, not stored in saves. Tiles in grid store only `{type: int, variant: int}`.
 - **Materials registry and prototypes are loaded separately**: The GameState save does not include the materials registry or entity prototypes. These are assumed to be loaded from startup configuration (out of scope for this feature).
 - **Single save slot**: The spec assumes one active game world at a time. Multiple save files or autosave slots are out of scope (implementation detail, not a game design feature).
 - **No streaming serialization**: For POC, assumes the entire game state fits in memory and is serialized in a single pass. Streaming or incremental saves are not required.
 - **UTF-8 file encoding**: Save files are assumed to be stored as UTF-8 encoded plain JSON. No binary encoding, compression, or encryption is required for POC.
+- **Entity positions: single source of truth**: Entity.components.Position is the authoritative location of every entity. Map terrain grid does NOT store entity positions. Queries that need entity positions reconstruct them from Position components. This eliminates consistency risks from position duplication.
+- **Terrain mutability**: Terrain tiles can be modified in-game (e.g., building foundations). Mutated terrain is saved as the final state in the 2D grid; no delta encoding or mutation history is stored. After load, terrain is at exactly the state it was at save time.
+- **Transitions as entities**: Passage objects (doors, portals, map exits) are full entities with Transition components. They serialize exactly like other entities and appear in the entities array. This unifies the data model and allows transitions to have Position, Health, or other properties.
 
 ## Clarifications
 
-**Q1 - Entity lifecycle during save**: What happens if an entity is created or deleted in parallel with a save operation?
-**Answer**: Save must block concurrent entity mutations (use a read lock or pause the game loop). On load, the entity list is exact; no concurrent mutations are replayed.
+### Session 2026-05-02
 
-**Q2 - Partial map state**: Do all maps serialize in full, even unvisited maps?
-**Answer**: Yes, all maps serialize fully (terrain, pre-placed entities). This ensures the world is deterministic even if the player hasn't visited all areas yet.
-
-**Q3 - Task queue ordering**: Are in-flight async tasks ordered in the save, or is order inferred on load?
-**Answer**: Tasks are serialized with their queue position and priority so that resumption respects the original order.
+- Q: What is the exact JSON structure for terrain data (the grid)? → A: 2D array of objects: `[[{type: 1, variant: 0}, ...], ...]`. Each tile is an object with `type` (integer ID from startup registry) and `variant` (integer for sub-type variation). This allows future per-tile metadata without changing the structure.
+- Q: Where is the source of truth for entity positions: entity components, map data, or both? → A: Only in `entity.components.Position`. Map data does NOT store entity locations. On load, entity positions are reconstructed from Position components. This eliminates consistency issues and ensures single source of truth.
+- Q: What exactly is 'transition state' and how should it be serialized? → A: Transition objects (doors, portals, map exits) are full entities that serialize like other entities. They have Position components defining their location and Transition components defining their behavior (targetMap, targetCoord, isOpen, etc.). Transitions appear in the entities array and serialize/deserialize identically to other entities.
+- Q: Can terrain be modified during gameplay, or is it immutable? → A: Mutable. Terrain tiles can change in-game (e.g., building foundation changes dirt to foundation). Mutated terrain is saved as the final state in the 2D grid; no delta encoding. After load, terrain is exactly as it was at save time.
+- Q: How are tile types defined and referenced in the save format? → A: Tile types are integer IDs. The tile registry (ID ↔ name, sprites, properties) is loaded at engine startup, not stored in saves. Terrain grids store only `{type: int, variant: int}`. This keeps saves compact and allows the registry to be updated without invalidating existing saves.

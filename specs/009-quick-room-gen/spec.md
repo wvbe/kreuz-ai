@@ -9,7 +9,7 @@
 
 ### User Story 1 - Generate a Simple Test Room with Entities and Objects (Priority: P1)
 
-A room generator can quickly create a single grid-based room populated with 10–20 entities and objects (furniture, containers, resources) suitable for POC testing. The generator is called as a standalone utility after game bootstrap and returns a populated game world ready for tick simulation. The room layout is randomized but deterministic (given a seed), allowing reproducible test scenarios.
+A room generator can quickly create a single **square grid** room populated with 10–20 entities and objects (furniture, containers, resources) suitable for POC testing. The generator is called as a standalone utility after game bootstrap and returns a populated game world ready for tick simulation. The room layout is randomized but deterministic (given a seed), allowing reproducible test scenarios. The generator always produces square grid maps; a separate generator is required for Voronoi or other grid types.
 
 **Why this priority**: Core utility for testing. Without a fast room generator, every POC test must manually populate entities and objects, which is tedious and error-prone. This enables rapid scenario testing and validation.
 
@@ -111,7 +111,7 @@ Each entity spawned in the room has a starter inventory with currency and basic 
 ### Functional Requirements
 
 - **FR-001**: RoomGenerator MUST expose a `generate(options?)` method that returns a fully populated room with entities, objects, and terrain.
-- **FR-002**: Generated rooms MUST be grid-based single maps with walls and floor tiles, dimensions based on the `size` parameter (small: ~15x15, medium: ~25x25, large: ~40x40).
+- **FR-002**: Generated rooms MUST be **square grid** maps with walls and floor tiles, dimensions based on the `size` parameter (small: ~15x15, medium: ~25x25, large: ~40x40). The quick room generator does NOT support Voronoi or hexagonal grid types; those require a dedicated generator.
 - **FR-003**: Each generated room MUST contain 10–20 entities (citizens, NPCs) with randomized positions on walkable tiles; no two entities on the same tile.
 - **FR-004**: Each generated room MUST contain 5–10 objects (furniture, containers, resources) placed on walkable tiles and reachable by pathfinding.
 - **FR-005**: Entity and object placement MUST be deterministic given a seed; the same seed always produces the same room layout.
@@ -147,7 +147,7 @@ Each entity spawned in the room has a starter inventory with currency and basic 
 
 - **Entity prototypes exist and are registered**: The generator assumes entity prototypes (Citizen, Merchant, Worker, etc.) are pre-registered before `generate()` is called. The generator does not define prototypes.
 - **Materials registry exists**: The generator assumes the materials registry (food, wood, currency, tools, etc.) is pre-loaded. It uses the registry to populate inventories but does not define materials.
-- **Map tiles support terrain types**: The generator assumes the map system (feature 004) supports tile terrain types (wall, floor) and pathfinding. Generator specifies which tiles are walls; the map system implements pathfinding.
+- **Map tiles support terrain types**: The generator assumes the map system (feature 004) supports tile terrain types (wall, floor) and pathfinding on square grids. Generator specifies which tiles are walls; the map system implements pathfinding. The generator does not need to interact with Voronoi or hexagonal map infrastructure.
 - **PRNG is available**: The generator uses the PRNG system (feature A2) for randomization. If no seed is provided, the PRNG generates one; the generator assumes the PRNG is already initialized with a seed by bootstrap.
 - **GameState and serialization work**: Generated rooms are assumed to be serializable to GameState (feature 006) without modification. The generator returns data compatible with GameState JSON.
 - **Single scenario per call**: Each `generate()` call creates one room of one scenario type. The generator does not create multiple rooms or rooms with mixed scenarios in a single call.
@@ -156,17 +156,18 @@ Each entity spawned in the room has a starter inventory with currency and basic 
 
 ## Clarifications
 
-**Q1 - Room definition**: Is a room a single map, or a bounded region within a larger map?
-**Answer**: A single map. Each `generate()` call creates one standalone map/room. Multiple rooms can be created by calling `generate()` multiple times.
+### Session 2026-05-02 (Original Scope Decisions)
 
-**Q2 - Entity roles**: Should entities have role traits (merchant, worker, citizen) or are they generic?
-**Answer**: Entities have roles based on scenario type. Trade scenarios spawn merchants and customers; interaction scenarios spawn workers. Role is determined by entity prototype/components.
+- Q: Is a room a single map, or a bounded region within a larger map? → A: A single map. Each `generate()` call creates one standalone map/room. Multiple rooms can be created by calling `generate()` multiple times.
+- Q: Should entities have role traits (merchant, worker, citizen) or are they generic? → A: Entities have roles based on scenario type. Trade scenarios spawn merchants and customers; interaction scenarios spawn workers. Role is determined by entity prototype/components.
+- Q: Does the same seed produce identical layouts across different scenario types? → A: No. Same seed + same scenario type = same layout. Different scenario types produce different populations (e.g., seed 42 + "trade" ≠ seed 42 + "navigation").
+- Q: Can a generated room be re-generated from saved parameters? → A: Yes. Room generation parameters are stored in GameState; a room can be regenerated from the same parameters, producing an identical layout.
+- Q: If a room is invalid (e.g., collision detected), should generation retry or fail? → A: Retry up to N times with minor layout adjustments (e.g., shift entities slightly). If still invalid after retries, fail with a clear error. Retries are transparent to the caller.
 
-**Q3 - Determinism with scenarios**: Does the same seed produce identical layouts across different scenario types?
-**Answer**: No. Same seed + same scenario type = same layout. Different scenario types use the same seed but generate different entity/object populations (e.g., seed 42 with "trade" != seed 42 with "navigation").
+### Session 2026-05-02 (Grid Type Scope & Multi-Pattern Context)
 
-**Q4 - Room persistence**: Can a generated room be re-generated from saved parameters?
-**Answer**: Yes. Room generation parameters are stored in GameState; a room can be regenerated from the same parameters, producing an identical layout.
-
-**Q5 - Validation retry**: If a room is invalid (e.g., collision detected), should generation retry or fail?
-**Answer**: Retry up to N times with minor layout adjustments (e.g., shift entities slightly). If still invalid after retries, fail with a clear error. Keep retries transparent to the caller.
+- Q: Should the quick room generator support multiple grid types (square, Voronoi)? → A: Square-only. The quick room generator is a deliberately minimal POC utility; it always produces square grid rooms. Voronoi or hexagonal rooms require a dedicated generator. This keeps the API simple and the scope focused.
+- Q: How should room size be expressed for non-square grid types? → A: Type-specific (for future Voronoi generator). Square grids use grid dimensions (NxN cells, e.g., 15×15). Voronoi grids would use region count (small: ~100 regions, medium: ~300, large: ~600). Each generator handles its own size semantics; the terrain API abstracts the underlying topology.
+- Q: How should validity checks adapt for Voronoi's irregular regions? → A: Density-based (for future Voronoi generator). Max entities per region depends on region area; large regions allow more than one entity. No fixed one-entity-per-region rule. For square grids (this generator), the existing tile-based rule applies unchanged.
+- Q: How should walls/obstacles be placed in Voronoi rooms? → A: Region-type-based (for future Voronoi generator). Some regions are designated 'wall regions' (non-traversable); interior non-traversable regions act like obstacles. Square grid generator continues to use wall tiles at room boundaries and as interior obstacles.
+- Q: Should the 'navigation' scenario generate different patterns for different grid types? → A: Unified API. When a future Voronoi generator is implemented, the navigation scenario generates obstacles via the grid-type-agnostic terrain API regardless of grid type. For this generator, navigation on square grids uses wall tiles to create corridor-based obstacle layouts.

@@ -132,24 +132,29 @@ The system defines standard event types organized into categories (e.g., "game._
 - **FR-001**: EventBus MUST expose `emit(eventName, payload)` to broadcast events and `subscribe(eventName, callback)` to register subscribers.
 - **FR-002**: Event names MUST be hierarchical strings (e.g., "game.state.started", "inventory.item.added") using dot notation to separate levels.
 - **FR-003**: Subscribers MUST be called with the event payload (data object containing relevant fields for that event type).
-- **FR-004**: Subscribers MUST be able to subscribe to exact events (e.g., "inventory.item.added") or wildcard patterns (e.g., "inventory.item._", "inventory._").
-- **FR-005**: Wildcard subscriptions MUST match events that start with the prefix up to the last wildcard (e.g., "game.\*" matches "game.started" and "game.paused", but not "game.state.changed").
+- **FR-004**: Subscribers MUST be able to subscribe to exact events (e.g., "inventory.item.added") or wildcard patterns (e.g., "inventory.item.*", "inventory.*").
+- **FR-005**: Wildcard subscriptions MUST match events that start with the prefix up to the last wildcard (e.g., "game.*" matches "game.started" and "game.paused", but not "game.state.changed").
 - **FR-006**: EventBus MUST support both permanent subscriptions (active until unsubscribed) and one-time subscriptions (auto-unsubscribed after first emit).
 - **FR-007**: When `subscribe(eventName, callback, { once: true })` is used, the subscriber is called once, then automatically unsubscribed.
-- **FR-008**: EventBus MUST provide an `unsubscribe(eventName, callback)` method to remove a specific subscriber.
+- **FR-008**: EventBus MUST provide an `unsubscribe(eventName, callback)` method to remove a specific subscriber. Subscription cleanup is the caller's responsibility; entities track their own handles and call `unsubscribe` during deletion.
 - **FR-009**: Events emitted during a tick MUST be queued, not processed immediately. All queued events MUST be processed at the tick boundary in FIFO order.
-- **FR-010**: EventBus MUST expose an `getQueue()` method to inspect pending events (for debugging and serialization).
-- **FR-011**: All events in the queue at save time (feature 006) MUST serialize to JSON in the GameState, including event name and payload.
-- **FR-012**: When a game is loaded from a save file, the event queue MUST be restored with the same events in the same order.
-- **FR-013**: If a subscriber throws an error, the error MUST be caught and logged; processing of remaining subscribers for that event MUST continue (isolation).
-- **FR-014**: EventBus MUST define standard event types and document their payload schemas (e.g., "entity.spawned: { entityId, prototype }", "inventory.item-added: { entityId, item, count }").
-- **FR-015**: Custom events (not standard) MUST be supported; systems can emit any event name and subscribers can listen to it.
+- **FR-010**: Multiple subscribers to the same event MUST be called in registration order (FIFO): first subscriber registered = first called. This ordering is deterministic and stable across ticks and save/load cycles.
+- **FR-011**: A subscriber registered after an event has already been queued (same tick, before boundary) MUST NOT receive that queued event. Late subscribers receive only events emitted after their registration.
+- **FR-012**: EventBus MUST expose a `waitFor<T>(eventName, predicate?)` method returning a Promise that resolves at tick boundary when the next matching event fires. Optional predicate allows filtering (e.g., `e => e.entityId === 5`). Pending `waitFor` Promises are NOT serialized to GameState.
+- **FR-013**: EventBus MUST be a global singleton per game instance. All events from all maps flow through the single bus; subscribers receive events regardless of which map the emitter is on.
+- **FR-014**: EventBus MUST expose a `getQueue()` method to inspect pending events (for debugging and serialization).
+- **FR-015**: All events in the queue at save time (feature 006) MUST serialize to JSON in the GameState, including event name and payload.
+- **FR-016**: When a game is loaded from a save file, the event queue MUST be restored with the same events in the same order.
+- **FR-017**: If a subscriber throws an error, the error MUST be caught and logged; processing of remaining subscribers for that event MUST continue (isolation).
+- **FR-018**: EventBus MUST define standard event types and document their payload schemas (e.g., "entity.spawned: { entityId, prototype }", "inventory.item-added: { entityId, item, count }").
+- **FR-019**: Custom events (not standard) MUST be supported; systems can emit any event name and subscribers can listen to it.
 
 ### Key Entities
 
-- **EventBus**: Central hub for event dispatch. Maintains subscriber list and event queue. Exposes emit, subscribe, unsubscribe methods.
-- **Event**: A queued event with name and payload. Contains all information needed to call subscribers.
-- **Subscriber**: A callback function registered to listen to one or more event names. Can be permanent or one-time.
+- **EventBus**: Central hub for event dispatch. **Global singleton per game instance** — all maps share one bus. Maintains subscriber list, event queue, and pending `waitFor` promises. Exposes `emit`, `subscribe`, `unsubscribe`, `waitFor`, `getQueue` methods.
+- **Event**: A queued event with name and payload. Contains all information needed to call subscribers and resolve `waitFor` promises.
+- **Subscriber**: A callback function registered to listen to one or more event names. Can be permanent or one-time. Called in registration order (FIFO) relative to other subscribers for the same event. Subscription cleanup is caller's responsibility.
+- **WaitForPromise**: A Promise returned by `waitFor(eventName, predicate?)` that resolves when the next matching event is processed at tick boundary. Enables `await eventBus.waitFor(...)` patterns in entity async tasks.
 - **StandardEvents**: Documented catalog of built-in event types (e.g., "game.started", "entity.spawned", "inventory.item-added").
 
 ## Success Criteria _(mandatory)_
@@ -162,31 +167,39 @@ The system defines standard event types organized into categories (e.g., "game._
 - **SC-004**: A game with 100+ pending events can be saved and loaded in under 100ms (round-trip time).
 - **SC-005**: A system can subscribe to a wildcard pattern (e.g., "inventory.\*") and receive all matching events without missing any (100% delivery for matching subscriptions).
 - **SC-006**: When a subscriber throws an error, remaining subscribers are still called (error isolation verified by callback count).
+- **SC-007**: Multiple subscribers to the same event are called in registration order; order is stable across ticks and save/load cycles.
+- **SC-008**: `waitFor(eventName, predicate?)` returns a Promise resolving at tick boundary when the next matching event fires; usable with `await` inside entity async tasks (feature 003).
 
 ## Assumptions
 
-- **Game loop integration**: EventBus is assumed to be called by the game loop (feature 001) at tick boundaries. The game loop calls `eventBus.processQueue()` at each tick end to drain the queue.
+- **Game loop integration**: EventBus is assumed to be called by the game loop (feature 001) at tick boundaries. The game loop calls `eventBus.processQueue()` at each tick end to drain the queue and resolve pending `waitFor` promises.
+- **Global singleton per game instance**: There is exactly one EventBus per running game. All maps, entities, and systems share this bus. Events carry entity IDs and map IDs in their payloads; routing by map is not built into the bus — subscribers filter by payload if needed.
+- **Subscriber FIFO ordering**: Subscribers to the same event are called in registration order. First subscribed = first called. This ordering is deterministic and does not change across ticks or save/load cycles.
+- **Late subscriber delivery is future-only**: A subscriber registered during tick N does not receive events already queued in tick N before registration. It only receives events emitted after the subscription was registered.
+- **Self-managed subscription cleanup**: Subscription cleanup is the caller's (entity's) responsibility. Each entity tracks its own subscription handles (return values of `subscribe()`). On deletion, the entity calls `unsubscribe()` for each handle. No ownership tagging built into EventBus.
 - **Subscribers are functions or methods**: Event callbacks are assumed to be functions/methods in JavaScript or equivalent in the target language. Complex subscriber objects (e.g., with state) are not built-in; subscribers manage their own state.
-- **Events are immutable during processing**: While the tick boundary processes events, the queue is treated as immutable. Events emitted during processing are added for the next tick.
-- **Standard events are documented**: Standard event types (game._, entity._, inventory.\*, etc.) are assumed to be documented (as part of specification or implementation). New systems discover standard events by reading documentation.
+- **Events are immutable during processing**: While the tick boundary processes events, the queue is treated as immutable. Events emitted during processing are queued for the next tick.
+- **Standard events are documented**: Standard event types (game.*, entity.*, inventory.*, etc.) are assumed to be documented (as part of specification or implementation). New systems discover standard events by reading documentation.
 - **Memory is available for queue**: The event queue is assumed to fit in memory; very large simulations with thousands of events may require optimization (out of scope for POC).
 - **Subscriber registration is not thread-safe**: For POC, thread safety is not required. Single-threaded game loop assumed; concurrent subscriber registration is not handled.
 - **Event names follow conventions**: Event names are assumed to follow the hierarchical pattern. No enforcement mechanism prevents "random-event" or "MyEvent"; reliance on code review and documentation.
 - **Errors in subscribers are not fatal**: When a subscriber throws an error, the game continues; errors are logged but do not stop the game or event processing.
+- **waitFor Promises and save/load**: Pending `waitFor` Promises are not serialized to GameState. On load, callers must re-register their `waitFor` calls. This mirrors how subscriptions are re-established post-load.
 
 ## Clarifications
 
-**Q1 - Wildcard semantics**: Does "game._" match "game.state.started" or only "game.started"?
-**Answer**: Only "game.started". Wildcards match up to the next dot. To match "game.state._", subscribe to "game.state.\*". Hierarchies can be nested, but wildcards match one level.
+### Session 2026-05-02 (Original Scope)
 
-**Q2 - Event ordering with errors**: If event A's subscribers are processing and one throws an error, does event B wait or start immediately?
-**Answer**: Event A processing completes (all subscribers called, errors caught and logged), then event B starts. Errors do not affect ordering.
+- Q: Does "game.*" match "game.state.started" or only "game.started"? → A: Only "game.started". Wildcards match up to the next dot. To match "game.state.*", subscribe to "game.state.*". Hierarchies can be nested, but wildcards match one level.
+- Q: If event A's subscribers are processing and one throws, does event B wait? → A: Event A processing completes (all subscribers called, errors caught and logged), then event B starts. Errors do not affect ordering.
+- Q: If a subscriber is one-time and subscribed to "inventory.*", is it unsubscribed after any matching event or a specific one? → A: After any matching event. One-time + wildcard means "call me once when any event matching this pattern is emitted, then unsubscribe."
+- Q: Should `getQueue()` return a copy or a live reference? → A: A copy (immutable snapshot). Returning a live reference allows callers to modify the queue, which breaks assumptions.
+- Q: Where are standard event schemas defined? → A: In documentation (spec or README). No built-in schema validation; reliance on code conventions and documentation.
 
-**Q3 - One-time subscription and wildcards**: If a subscriber is one-time and subscribed to "inventory.\*", is it unsubscribed after any matching event or after a specific one?
-**Answer**: After any matching event. One-time + wildcard means "call me once when any event matching this pattern is emitted, then unsubscribe."
+### Session 2026-05-02 (Architecture Deep-Dive)
 
-**Q4 - Queue inspection**: Should `getQueue()` return a copy of the queue or a live reference?
-**Answer**: A copy (immutable snapshot). Returning a live reference allows callers to modify the queue, which breaks assumptions.
-
-**Q5 - Standard event schema**: Where are standard event schemas defined?
-**Answer**: In documentation (spec or README). No built-in schema validation; reliance on code conventions and documentation.
+- Q: Is the EventBus global (game-wide) or scoped per map? → A: Global singleton. One EventBus per game instance; all maps share it. Events carry entity IDs and map IDs in payloads. Subscribers filter by payload if they care about map context. No routing by map built into the bus.
+- Q: In what order are multiple subscribers to the same event called? → A: Registration order (FIFO). First subscribed = first called. Ordering is deterministic and stable across ticks and save/load cycles.
+- Q: Does a subscriber registered mid-tick receive events already queued that tick? → A: No. Future-only delivery. A subscriber registered during tick N does not receive events queued before its registration in that tick. It receives only events emitted after subscription.
+- Q: How does entity deletion clean up its event subscriptions? → A: Self-managed. Each entity tracks its own subscription handles. On deletion, the entity calls `unsubscribe()` for each handle it holds. No owner-tagging or bulk-unsubscribe built into EventBus.
+- Q: Should EventBus expose a Promise-based API for async/await integration? → A: Yes, typed async queries. EventBus exposes `waitFor<T>(eventName, predicate?)` returning a Promise that resolves at tick boundary when the next matching event fires. Optional predicate allows filtering (e.g., `e => e.entityId === 5`). Integrates naturally with entity async tasks (feature 003). Pending `waitFor` Promises are NOT serialized; callers re-register on load.

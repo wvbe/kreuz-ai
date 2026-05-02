@@ -78,10 +78,11 @@ All game time state (current elapsed time, pause status, speed multiplier) must 
 ### Edge Cases
 
 - What happens if a speed multiplier is set to 0 (pause equivalent)? → Should behave the same as explicit pause.
-- What happens if speed multiplier is set to a negative value? → Should reject or be treated as a pause; time must not run backwards.
+- What happens if speed multiplier is set to a negative value or a value not in {0.25, 0.5, 1.0, 2.0, 4.0}? → System rejects the command with an error; current multiplier is unchanged.
 - What happens if game loop receives a tick command while paused? → Should not advance time; pause takes precedence.
 - What happens if game is loaded from save at time T, then reloaded from a different save at time T-100? → Each should track independently; no shared time state.
-- What happens if a game runs for many ticks (e.g., 1 million ticks)? → Time must not overflow or lose precision; elapsed time must remain accurate.
+- What happens if a game runs for many ticks (e.g., 1 million ticks)? → `elapsedHours` uses a floating-point number (IEEE 754 double); safe up to ~9×10¹⁵ hours — no overflow risk for sandbox play.
+- What happens when a save file contains invalid time state (negative hours, unrecognized speed, missing fields)? → System throws an error and refuses to load. No silent fallback to defaults.
 
 ## Requirements _(mandatory)_
 
@@ -90,18 +91,19 @@ All game time state (current elapsed time, pause status, speed multiplier) must 
 - **FR-001**: System MUST maintain an internal game time offset representing elapsed game hours from the start of simulation.
 - **FR-002**: System MUST accept pause commands that suspend game time progression; paused state MUST be persisted in game state.
 - **FR-003**: System MUST accept resume commands that restore game time progression from paused state.
-- **FR-004**: System MUST accept speed multiplier commands that adjust the rate of game time advancement (e.g., 0.5x, 1x, 2x, 4x).
+- **FR-004**: System MUST accept speed multiplier commands from the fixed set: 0.25x, 0.5x, 1x, 2x, 4x. Any value outside this set MUST be rejected with an error; partial or free-form multipliers are not accepted.
 - **FR-005**: System MUST apply speed multipliers to game time deltas such that each tick advances time by (delta_seconds × speed_multiplier).
 - **FR-006**: System MUST provide a query interface to retrieve current elapsed game time, pause status, and active speed multiplier.
-- **FR-007**: System MUST operate game loop ticks independently of any rendering loop; game simulation advances on regular intervals regardless of renderer state.
-- **FR-008**: System MUST serialize game time state (elapsed time, pause flag, speed multiplier) to JSON format without precision loss.
-- **FR-009**: System MUST deserialize game time state from JSON and resume simulation at the saved time offset and state.
+- **FR-007**: System MUST operate game loop ticks independently of any rendering loop; game simulation advances on regular intervals regardless of renderer state. The real-world tick interval MUST be runtime-configurable; changes take effect on the next tick without restarting the loop.
+- **FR-008**: System MUST serialize game time state (elapsed time, pause flag, speed multiplier, tick interval) to JSON format without precision loss.
+- **FR-009**: System MUST deserialize game time state from JSON and resume simulation at the saved time offset and state. If the loaded state contains invalid values (negative elapsed time, unrecognized speed multiplier, missing required fields, NaN), the system MUST throw an error and refuse to load rather than silently falling back to defaults.
+- **FR-011**: System MUST expose derived calendar helpers (e.g., toDay(), toWeek(), toYear()) computed from elapsedHours. These are read-only computations — calendar fields are never stored as independent state.
 - **FR-010**: System MUST support deterministic time progression such that identical seeds and identical sequence of commands produce identical game time states.
 
 ### Key Entities
 
-- **GameTime**: Represents the internal time tracking system. Attributes: `elapsedHours` (number), `paused` (boolean), `speedMultiplier` (number), `tickCount` (integer). No public mutable state; all changes via commands.
-- **GameLoop**: The core simulation loop that ticks at regular intervals. Attributes: reference to GameTime, current tick count, tick delta (in real-world milliseconds or fixed units). Must not hold renderer state.
+- **GameTime**: Represents the internal time tracking system. Attributes: `elapsedHours` (number), `paused` (boolean), `speedMultiplier` (one of: 0.25, 0.5, 1.0, 2.0, 4.0), `tickCount` (integer). Exposes derived read-only helpers: `toDay()`, `toWeek()`, `toYear()` computed from `elapsedHours`. Calendar values are never stored independently. No public mutable state; all changes via commands.
+- **GameLoop**: The core simulation loop that ticks at a configurable real-world interval. Attributes: reference to GameTime, current tick count, tick interval (runtime-configurable milliseconds). Must not hold renderer state.
 - **GameState**: The central game state object that includes GameTime as a nested property. GameState must be serializable to JSON with all time fields preserved.
 
 ## Success Criteria _(mandatory)_
@@ -121,13 +123,20 @@ All game time state (current elapsed time, pause status, speed multiplier) must 
 ### Session 2026-05-02
 
 - Q: What is the canonical game time delta per tick at 1x speed? → A: Each tick at 1x speed advances 5 game minutes (1/288 of a game day). At 1x speed, one game day passes every 30 real-world minutes of play.
+- Q: What are the valid speed multiplier values and rejection behavior? → A: Fixed step set only — {0.25, 0.5, 1.0, 2.0, 4.0}. Any other value is rejected with an error; current multiplier unchanged.
+- Q: Is the real-world tick interval fixed or configurable? → A: Runtime-configurable. Changes take effect on the next tick. Included in serialized state.
+- Q: Should the game loop expose structured calendar time or raw hours? → A: Derived helpers only (toDay(), toWeek(), toYear()) computed from elapsedHours. Calendar is never stored as independent state.
+- Q: What happens when a save file has invalid time state? → A: Hard error — system throws and refuses to load. No silent fallback to defaults.
+- Q: What is the maximum supported game time span? → A: Indefinite/sandbox. elapsedHours is IEEE 754 double; precision sufficient for any practical play duration.
 
 ## Assumptions
 
 - **Time Granularity**: At 1x speed, one game day passes every 30 real-world minutes. Each tick at 1x speed advances exactly 5 game minutes (1/288 of a game day). This ratio is a game design constant, not configurable per-save. Speed multiplier scales this delta linearly (2x = 10 game minutes per tick).
-- **Speed Multiplier Ranges**: Reasonable speed multiplier range is 0.25x to 4x (can be adjusted). Speeds outside this range require explicit approval. Multiplier 0 is treated as equivalent to pause.
-- **Tick-Based Simulation**: Game advances in discrete ticks (not continuous time), allowing deterministic state tracking. Tick interval is a game engine constant (e.g., 100ms real-world per tick).
+- **Speed Multiplier Ranges**: Accepted speed multiplier values are the fixed set {0.25, 0.5, 1.0, 2.0, 4.0}. No other values are valid. Multiplier 0 is treated as equivalent to pause. The set is a game design constant and cannot be changed without a spec revision.
+- **Tick-Based Simulation**: Game advances in discrete ticks (not continuous time), allowing deterministic state tracking. The real-world tick interval is runtime-configurable (default 100ms); changing it takes effect on the next tick. Tick interval is included in serialized state.
 - **No Real-World Time Dependencies**: The game loop never calls system time functions (Date.now(), performance.now(), etc.) for simulation purposes. All time advancement is controlled via tick deltas and the speed multiplier.
-- **Save Game Compatibility**: Game time state is versioned with the game. Minor version updates maintain backward compatibility; major version updates may require migration logic for time fields.
+- **Save Game Compatibility**: Game time state is versioned with the game. Minor version updates maintain backward compatibility; major version updates may require migration logic for time fields. Invalid or corrupt time state on load causes a hard error — no silent defaults.
+- **Calendar Derivation**: Day/week/year values are always derived from `elapsedHours` at read time. They are never stored as independent fields. This keeps state minimal and avoids desync between raw time and calendar display.
+- **Indefinite Sandbox Duration**: The simulation has no designed end point. `elapsedHours` is stored as a floating-point number (IEEE 754 double), safe to ~9×10¹⁵ hours — effectively limitless for gameplay purposes.
 - **Single Global Time**: The game maintains a single authoritative elapsed time value. No parallel time tracks or localized time zones.
 - **Headless Priority**: Headless game loop is the primary implementation; browser renderer is a consumer layer that queries game state, not a prerequisite for simulation.

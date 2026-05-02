@@ -146,74 +146,81 @@ The terrain API and multi-map architecture are designed to support procedural ge
 
 ### Functional Requirements
 
-- **FR-001**: System MUST implement a hybrid spatial representation: grid cells for coarse pathfinding and traversability, continuous sub-cell coordinates for precise entity placement and collision volumes.
-- **FR-002**: System MUST apply hybrid spatial representation consistently across all terrain types and maps.
+- **FR-001**: System MUST implement a hybrid spatial representation: discrete regions (grid cells for square maps, Voronoi regions for Voronoi maps) for coarse pathfinding and traversability, continuous sub-cell coordinates for precise entity placement and collision volumes.
+- **FR-002**: System MUST apply hybrid spatial representation consistently across all terrain types and maps. Each map has a declared grid type (square, Voronoi, or hexagonal); multiple maps may use different grid types.
 - **FR-003**: System MUST provide API for placing entities on terrain at specified locations with optional hitbox specification.
 - **FR-004**: System MUST prevent entity movement into non-traversable terrain (walls, obstacles, locked doors, etc.).
 - **FR-005**: System MUST queryable non-traversable reasons (e.g., "wall", "water", "locked", "impassable_cliff") for game event triggers.
-- **FR-006**: System MUST provide deterministic pathfinding: identical input (start, goal, terrain) produces identical path every time.
-- **FR-007**: System MUST handle unreachable goals gracefully (return null or "no path" response).
-- **FR-008**: System MUST compute pathfinding for 100+ concurrent queries acceptably (<1s total).
-- **FR-009**: System MUST support multiple maps/rooms/dungeons in single game world.
-- **FR-010**: System MUST share global game time across all maps; entities on different maps progress simultaneously.
-- **FR-011**: System MUST handle entity movement between maps seamlessly; entity state transitions correctly.
-- **FR-012**: System MUST support diverse terrain types (open air, underground, buildings, etc.) with customizable properties.
-- **FR-013**: System MUST provide ergonomic API for terrain alteration (add/remove walls, place furniture, modify traversability).
-- **FR-014**: System MUST provide terrain query API to determine properties at locations (traversable, terrain type, obstacles, etc.).
-- **FR-015**: System MUST be extensible for procedural generation without hard-coding specific implementations.
-- **FR-016**: System MUST serialize all terrain state (layout, obstacles, traversability, entity locations) to JSON.
-- **FR-017**: System MUST deserialize terrain state from JSON identically to original state.
-- **FR-018**: System MUST work identically in headless environments (no rendering layer).
+- **FR-006**: System MUST support per-map grid type selection: GameEngine defines a default grid type (square); individual maps can override with Voronoi, hexagonal, or other supported types. Grid type is immutable once map is created.
+- **FR-007**: System MUST provide deterministic pathfinding with a unified API: identical input (start, goal, terrain) produces identical path every time. Pathfinding algorithm is selected transparently based on grid type (A\* for square, Delaunay-graph search for Voronoi); caller does not specify algorithm.
+- **FR-008**: System MUST handle unreachable goals gracefully (return null or "no path" response).
+- **FR-009**: System MUST compute pathfinding for 100+ concurrent queries acceptably (<1s total), regardless of grid type.
+- **FR-010**: System MUST support multiple maps/rooms/dungeons in single game world, each with independently-chosen grid types.
+- **FR-011**: System MUST share global game time across all maps (regardless of grid type); entities on different maps progress simultaneously.
+- **FR-012**: System MUST handle entity movement between maps seamlessly; entity state transitions correctly even when moving between maps with different grid types.
+- **FR-013**: System MUST support diverse terrain types (open air, underground, buildings, etc.) with customizable properties and grid-type-specific behaviors.
+- **FR-014**: System MUST provide ergonomic API for terrain alteration (add/remove walls, place furniture, modify traversability). API is grid-type-agnostic; operations work identically on square and Voronoi maps.
+- **FR-015**: System MUST provide terrain query API to determine properties at locations (traversable, terrain type, obstacles, etc.). Queries are grid-type-transparent.
+- **FR-016**: System MUST be extensible for procedural generation. Generators may be specialized for specific grid types (square grid generators for buildings; Voronoi generators for organic environments). Generators use terrain alteration API.
+- **FR-017**: System MUST serialize grid type explicitly: map JSON includes `"gridType": "square"` or `"gridType": "voronoi"`. Coordinates and region references are serialized in grid-type-specific format.
+- **FR-018**: System MUST deserialize terrain state from JSON identically to original state. Grid type from save is enforced; maps with mismatched grid type are rejected on load.
+- **FR-019**: System MUST work identically in headless environments (no rendering layer).
 
 ### Key Entities
 
-- **Terrain**: Represents spatial layout of a map/room/dungeon. Contains traversability data, obstacles, and entity positions. Queryable by location.
-- **TerrainType**: Definition of terrain category (building, forest, cave, etc.) with default properties and visual characteristics.
-- **Map**: A spatial region containing terrain and entities. Multiple maps coexist in same game world with unified time.
-- **Hitbox**: Collision volume for entity. Rectangular, circular, or custom shape. Blocks movement and collision detection.
-- **Path**: Sequence of locations from start to goal, computed by pathfinding algorithm. Determines entity movement.
-- **Location**: Specific coordinate in a map. Depends on spatial representation (grid cell, continuous coordinate, etc.).
+- **Terrain**: Represents spatial layout of a map/room/dungeon. Contains traversability data, obstacles, and entity positions. Grid type (square, Voronoi, etc.) is immutable and defined at map creation. Queryable by location.
+- **TerrainType**: Definition of terrain category (building, forest, cave, etc.) with default properties and visual characteristics. Terrain type can be used with any grid type.
+- **Map**: A spatial region containing terrain and entities. Multiple maps coexist in same game world with unified time. Each map has an immutable grid type chosen at creation.
+- **GridType**: Enumeration of supported spatial representations (square, Voronoi, hexagonal, etc.). Grid type is baked into map and immutable; determines coordinate semantics and pathfinding algorithm.
+- **Hitbox**: Collision volume for entity. Rectangular, circular, or custom shape. Blocks movement and collision detection. Works identically on all grid types.
+- **Path**: Sequence of regions/cells from start to goal, computed by pathfinding algorithm. Algorithm is chosen transparently based on grid type.
+- **Location**: Coordinate in a map. Semantics depend on grid type: square maps use (cell_x, cell_y, offset_x, offset_y); Voronoi maps use (region_id, offset_x, offset_y).
 
 ## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
-- **SC-001**: Hybrid spatial representation implemented; entities can be placed at sub-cell continuous positions and pathfinding runs at grid-cell level.
-- **SC-002**: Spatial representation supports entity placement at arbitrary sub-cell precision (continuous offset within grid cell).
-- **SC-003**: Collision detection on 100+ entities with hitboxes executes correctly each tick in acceptable time (<50ms per tick).
-- **SC-004**: Pathfinding for 100 concurrent queries completes in <1 second.
-- **SC-005**: Pathfinding results are deterministic: identical queries return identical paths.
-- **SC-006**: Multi-map architecture supports main map + 5+ sub-maps in single game world.
-- **SC-007**: Game time is synchronized across all maps; all entities progress at same rate.
-- **SC-008**: Entity travel between maps completes successfully; entity state and location updated correctly.
-- **SC-009**: Terrain API is sufficient for procedural generation scripts (validated by prototype script generating 2+ building types).
-- **SC-010**: Terrain and entity state serialization to JSON is complete; deserialization produces identical state.
-- **SC-011**: Terrain queries execute in <5ms on maps with 1000+ terrain cells.
-- **SC-012**: Terrain system operates identically in headless and browser environments.
-- **SC-013**: Terrain alterations (add/remove walls, place furniture) persist through save/load cycles.
+- **SC-001**: Hybrid spatial representation implemented for multiple grid types; entities can be placed at sub-cell continuous positions in square or Voronoi maps.
+- **SC-002**: Spatial representation supports entity placement at arbitrary sub-cell precision (continuous offset within grid cell or Voronoi region) for both square and Voronoi maps.
+- **SC-003**: Collision detection on 100+ entities with hitboxes executes correctly each tick in acceptable time (<50ms per tick), regardless of grid type.
+- **SC-004**: Pathfinding for 100 concurrent queries completes in <1 second on both square and Voronoi maps.
+- **SC-005**: Pathfinding results are deterministic: identical queries return identical paths on both square and Voronoi maps.
+- **SC-006**: Multi-map architecture supports main map + 5+ sub-maps in single game world. Maps can use mixed grid types (main map square, dungeons Voronoi, etc.).
+- **SC-007**: Game time is synchronized across all maps regardless of grid type; all entities progress at same rate.
+- **SC-008**: Entity travel between maps of different grid types succeeds correctly; entity location is re-expressed in target map's coordinate system.
+- **SC-009**: Terrain API is sufficient for both square-grid procedural generators (building layouts) and Voronoi generators (organic environments).
+- **SC-010**: Terrain and entity state serialization to JSON is complete and grid-type-aware; deserialization produces identical state.
+- **SC-011**: Terrain queries execute in <5ms on maps with 1000+ terrain cells/regions, regardless of grid type.
+- **SC-012**: Terrain system operates identically in headless and browser environments across all grid types.
+- **SC-013**: Terrain alterations (add/remove walls, place furniture) persist through save/load cycles. Grid type is preserved in save and enforced on load.
 
 ## Clarifications
 
-### Session 2026-05-02
+### Session 2026-05-02 (Grid Type & Multi-Pattern Support)
 
-- Q: Which spatial representation should be used: grid-based, continuous, or hybrid? → A: Hybrid (Option C) — grid cells for coarse pathfinding and traversability (deterministic, fast A\*), continuous coordinates within cells for precise entity placement and collision. Procedural generators work at the grid level.
-- Q: How is pathfinding determinism maintained when multiple entities query concurrently? → A: The game's seeded PRNG is used for tie-breaking when multiple equally-valid paths exist. All concurrent pathfinding queries use the same PRNG state, producing consistent tie-breaking results.
-- Q: What is the entity state during map-to-map transition? → A: Atomic transition (Option A) — entity is removed from the source map and added to the destination map in a single atomic operation. Entity is never in an inconsistent intermediate state.
-- Q: Do pending async operations on an entity pause or continue during map transition? → A: Continue (Option Y) — async operations progress normally through game ticks during map transition. Travel between maps is itself an async operation; other pending operations are not affected.
-- Q: Are entity IDs unique globally or per-map? → A: Global game-wide. Each entity has a unique ID across the entire loaded game world. Loading a new game fully unloads all current entities and IDs.
+- Q: Should terrain support just one grid type or multiple grid types? → A: Per-map flexibility. GameEngine defines a default grid type (typically square); individual maps can independently choose their grid type (square, Voronoi, hexagonal, etc.) at creation. Grid type is immutable once map exists.
+- Q: What coordinate system should Voronoi maps use? → A: Hybrid for both. Voronoi maps use hybrid representation just like square grids: Voronoi regions (discrete) + continuous sub-region offsets. A Voronoi location is (region_id, offset_x, offset_y). Maintains semantic parallelism with square grids.
+- Q: How should pathfinding adapt to different grid types? → A: Transparent adaptation. Pathfinding API is unified; the system automatically chooses appropriate algorithm based on grid type (A\* for square grids, Delaunay-graph search for Voronoi). Caller does not specify algorithm; it's an implementation detail.
+- Q: Should grid types be immutable once a map is created? → A: Yes, immutable. Grid type is baked into map saves. On load, if the save specifies `gridType: voronoi` but the map was created as `square`, load is rejected with clear error. No automatic conversion between grid types.
+- Q: Should procedural generators be grid-type-agnostic or specialized? → A: Specialized generators recommended. Square-grid generators for building interiors (rectilinear patterns). Voronoi generators for organic environments (forests, caves, irregular dungeons). Both use the same terrain alteration API but leverage grid-specific optimizations.
 
 ## Assumptions
 
-- **Spatial Representation: Hybrid** — Grid cells define coarse traversability and pathfinding; continuous coordinates within cells define precise entity placement and collision volumes. This is a resolved decision, not deferred to research.
-- **Pathfinding Tie-Breaking via PRNG**: When multiple equally-valid paths exist, the game's seeded PRNG determines tie-breaking. Ensures deterministic pathfinding without a path cache or serialized query queue.
-- **Atomic Map Transitions**: Entity map transitions are atomic operations — entity is removed from source and added to destination in one step; no transient "traveling" state.
-- **Async Continuity During Travel**: Map transitions do not interrupt or pause pending async operations. All entity operations continue advancing through game ticks while the entity is transitioning.
-- **Entity Hitbox Optional**: Not all entities need hitboxes; system supports both hitbox and non-hitbox entities.
-- **Maps Remain Loaded**: All maps in game world remain loaded and active simultaneously (no streaming/unloading). If streaming is needed later, architecture must support it.
-- **Single Authoritative Location**: Each entity exists at exactly one location on exactly one map at any point in time; no duplication or visibility layers.
-- **Global Entity IDs**: Entity IDs are unique game-wide and stable across serialization. Loading a new game unloads all entities; the new game has its own independent entity ID space.
-- **Terrain Alterations are Permanent**: Once terrain is altered (wall added), alteration persists until explicitly changed (no auto-revert).
-- **Procedural Generation Not Implemented**: Procedural generation scripts are out of scope; terrain API is designed to support them but they're not implemented in this feature.
-- **No Dynamic Terrain Streaming**: Terrain for all maps is loaded at game start; on-demand loading is out of scope.
-- **Entity Movement Discretized**: Entities move along grid-cell paths; continuous sub-cell interpolation for rendering is handled by the rendering layer, not the terrain system.
-- **Headless Parity**: Headless execution has full parity with browser execution; no features exclusive to one or the other.
+- **Spatial Representation: Hybrid & Grid-Type-Flexible** — Grid cells/regions define coarse traversability and pathfinding; continuous coordinates within cells/regions define precise entity placement and collision volumes. Multiple grid types (square, Voronoi, hexagonal) are supported; each map chooses its grid type at creation. Grid type is immutable once map exists.
+- **Per-Map Grid Type Selection** — GameEngine defines a default grid type (typically square); individual maps can override at creation time. All entities and pathfinding adapt transparently to the map's grid type.
+- **Voronoi Coordinate Semantics** — Voronoi maps use hybrid representation: Voronoi regions (determined by Poisson-disk sampling or Delaunay triangulation) serve as discrete regions; entities within a region have continuous sub-region offsets. Semantically parallel to square grid.
+- **Pathfinding Abstraction** — Pathfinding API is unified across grid types. Internally, A\* is used for square grids and Delaunay-graph search for Voronoi. Caller does not specify algorithm; it's chosen transparently based on map's grid type. Determinism is maintained via PRNG tie-breaking.
+- **Grid Type Immutability in Saves** — Map saves include explicit `gridType` field. On load, grid type is verified; saves from mismatched grid types are rejected with clear error. No automatic conversion between grid types (conversion is out of scope).
+- **Pathfinding Tie-Breaking via PRNG**: When multiple equally-valid paths exist, the game's seeded PRNG determines tie-breaking. Ensures deterministic pathfinding without a path cache or serialized query queue. Works identically on both square and Voronoi maps.
+- **Atomic Map Transitions**: Entity map transitions are atomic operations — entity is removed from source and added to destination in one step; no transient "traveling" state. Entity location is re-expressed in target map's coordinate system (e.g., square (3,5,0.4,0.7) → Voronoi (region_id=42, 0.3, 0.6)).
+- **Async Continuity During Travel**: Map transitions do not interrupt or pause pending async operations. All entity operations continue advancing through game ticks while the entity is transitioning, even when moving between grids of different types.
+- **Entity Hitbox Optional**: Not all entities need hitboxes; system supports both hitbox and non-hitbox entities on all grid types.
+- **Maps Remain Loaded**: All maps in game world remain loaded and active simultaneously (no streaming/unloading), regardless of grid type. If streaming is needed later, architecture must support it.
+- **Single Authoritative Location**: Each entity exists at exactly one location on exactly one map at any point in time; no duplication or visibility layers. Location semantics adapt to map's grid type.
+- **Global Entity IDs**: Entity IDs are unique game-wide and stable across serialization. Loading a new game unloads all entities; the new game has its own independent entity ID space. IDs are grid-type-agnostic.
+- **Terrain Alterations are Permanent**: Once terrain is altered (wall added), alteration persists until explicitly changed (no auto-revert). Alterations are preserved through save/load and grid-type compatibility is guaranteed.
+- **Specialized Procedural Generators**: Procedural generation may use specialized generators for specific grid types. Example: square-grid generators for building interiors, Voronoi generators for forests/caves. Generators use the grid-agnostic terrain alteration API but may leverage grid-specific optimization strategies.
+- **Procedural API Grid-Agnostic**: The terrain alteration and query APIs work identically on square and Voronoi maps. Generators can be written to be grid-type-agnostic by using abstract operations (placeWall, queryTerrain, etc.).
+- **No Dynamic Terrain Streaming**: Terrain for all maps is loaded at game start; on-demand loading is out of scope. All maps with all grid types are initialized before gameplay begins.
+- **Entity Movement Discretized**: Entities move along region/cell paths (not continuous curves); sub-cell interpolation for rendering is handled by the rendering layer, not the terrain system. Works identically for square and Voronoi.
+- **Headless Parity**: Headless execution has full parity with browser execution across all grid types; no features exclusive to one or the other.

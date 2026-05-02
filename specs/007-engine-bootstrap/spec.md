@@ -110,10 +110,10 @@ The bootstrap process supports pure headless operation: no renderer, no UI, no w
 
 ### Functional Requirements
 
-- **FR-001**: GameEngine MUST expose a `newGame(options?)` method that initializes and starts a fresh game with the provided parameters or sensible defaults.
-- **FR-002**: `newGame()` MUST initialize the game loop, set game time to 0, create an empty entity collection, and return a running engine instance.
+- **FR-001**: GameEngine MUST expose a `newGame(options?)` method that initializes and starts a fresh game with the provided parameters or sensible defaults. The method returns an idle engine instance ready to accept `tick()` calls; the game loop does NOT run automatically.
+- **FR-002**: `newGame()` MUST initialize the game loop infrastructure, set game time to 0, create an empty entity collection, and return the engine. Caller MUST explicitly call `engine.tick()` to advance the game loop; bootstrap does not start automatic ticking.
 - **FR-003**: `newGame()` MUST completely unload any previously running game before starting the new game (no state leakage).
-- **FR-004**: GameEngine MUST expose a `loadGame(filePath)` method that loads a saved game from a JSON file and resumes from that state.
+- **FR-004**: GameEngine MUST expose a `loadGame(filePath)` method that loads a saved game from a JSON file and resumes from that state. The engine returns idle; caller must call `engine.tick()` to resume gameplay.
 - **FR-005**: `loadGame()` MUST parse the GameState JSON (feature 006), deserialize all entities and components, restore game time, and restore async task state.
 - **FR-006**: `loadGame()` MUST reject with a typed error if the file does not exist, is not valid JSON, or has an incompatible version.
 - **FR-007**: Bootstrap MUST accept initialization parameters as an options object, including: `difficulty` (string: "peaceful" | "normal" | "hard"), `mapSize` (string: "small" | "medium" | "large"), `seed` (optional integer for PRNG), and other game-specific parameters.
@@ -124,48 +124,50 @@ The bootstrap process supports pure headless operation: no renderer, no UI, no w
 - **FR-012**: Initialization parameters MUST be serializable to JSON and stored in GameState (feature 006) so that a resumed game can be queried for its initialization context.
 - **FR-013**: Bootstrap MUST not require external systems to be pre-initialized; the engine MUST initialize only what is necessary for the game loop and entity/component system to function (prototypes/materials registry must be pre-registered separately, out of scope).
 - **FR-014**: Multiple `newGame()` or `loadGame()` calls in sequence MUST each cleanly transition from the previous game state without memory leaks or state residue.
+- **FR-015**: Bootstrap MUST expose a system initialization hook allowing systems to register initialization functions with dependency declarations. Bootstrap topologically sorts registered functions and executes them in dependency order. If a system declares a dependency that doesn't exist, bootstrap rejects with a clear error.
+- **FR-016**: After `newGame()` returns, GameEngine MUST expose query methods: `getEntities()`, `getState()`, `getTime()`, `getEntityAt(id)`, `getMap(id)`, `getComponents(entityId)` to allow systems and external code to query the initialized game state.
+- **FR-017**: If a required prototype (e.g., 'Citizen') is not registered before `newGame()` is called, bootstrap MUST start the game anyway (no validation); failure occurs at runtime when code attempts to instantiate the missing prototype.
 
 ### Key Entities
 
-- **GameEngine**: Main bootstrap and runtime orchestrator. Exposes `newGame()`, `loadGame()`, and accessor methods for querying game state. Maintains the running game instance and game loop.
+- **GameEngine**: Main bootstrap and runtime orchestrator. Exposes `newGame()`, `loadGame()`, `tick()`, and query methods (`getEntities()`, `getState()`, `getTime()`, `getEntityAt()`, `getMap()`, `getComponents()`). Maintains the current game instance, game state, and game loop infrastructure. Does NOT auto-tick; caller drives the loop via `tick()`.
 - **GameInitOptions**: Options object passed to `newGame()`, containing difficulty, map size, seed, and other parameters. Validated and stored in GameState.
 - **GameState**: Serializable root container (from feature 006) that includes initialization parameters so resumed games know their starting context.
+- **SystemRegistry**: Hook system allowing systems to register initialization functions with dependencies. Bootstrap topologically sorts and executes registered functions in dependency order.
 
 ## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
-- **SC-001**: A headless game can be bootstrapped and started in under 100ms (cold startup time).
+- **SC-001**: A headless game can be bootstrapped and returned idle in under 100ms (cold startup time, not including manual `tick()` calls).
 - **SC-002**: Invalid initialization parameters are detected and rejected with error messages within 50ms (validation performance).
 - **SC-003**: A game can be saved and loaded with identical initialization parameters (deterministic resume).
-- **SC-004**: After `newGame()`, the game loop is running and accepts tick commands immediately (no async initialization delays).
+- **SC-004**: After `newGame()`, the game loop infrastructure is ready and `engine.tick()` can be called immediately to start simulation (no async delays).
 - **SC-005**: Switching from one game to another via consecutive `newGame()` calls does not leak memory or leave orphaned state (verified by memory profiling across multiple transitions).
 - **SC-006**: Headless games run in any environment with standard file I/O (Node.js, Deno, browsers with FileAPI, etc.) without requiring native modules or OS-specific dependencies.
+- **SC-007**: Query methods (`getEntities()`, `getState()`, etc.) return results in under 5ms even with 1000+ entities (direct access, no iteration overhead).
+- **SC-008**: System initialization hooks can declare dependencies; bootstrap topologically sorts and executes in correct order. A cycle in dependencies is detected and rejected with clear error.
 
 ## Assumptions
 
-- **Prototypes and materials registry are pre-registered**: Bootstrap assumes that entity prototypes (Citizen, Tree, Building, etc.) and the materials registry are already loaded and registered before `newGame()` is called. This is out of scope for bootstrap; it's a separate dependency.
+- **Prototypes and materials registry are pre-registered**: Bootstrap assumes that entity prototypes (Citizen, Tree, Building, etc.) and the materials registry are already loaded and registered before `newGame()` is called. Bootstrap does NOT validate that required prototypes exist; it starts the game and fails at runtime if code attempts to instantiate a missing prototype. This is out of scope for bootstrap; it's a separate dependency.
 - **PRNG system exists and is injectable**: Bootstrap assumes the PRNG system (feature A2) exists and can accept a seed at initialization time. Bootstrap will pass the seed but does not implement PRNG itself.
 - **Map generation is separate**: Procedural map generation is a separate feature (out of scope per user clarification). Bootstrap initializes the engine; map generation happens in a downstream system (called after bootstrap).
 - **Synchronous initialization**: Bootstrap completes synchronously and returns a running engine immediately. Async initialization (e.g., loading large config files) is not in scope for POC; all data is assumed to be in-memory.
-- **Game loop is already implemented**: Bootstrap assumes the game loop (feature 001) is already implemented and can be started by bootstrap. Bootstrap calls into the game loop but does not implement it.
+- **Game loop infrastructure is ready, but not ticking**: Bootstrap does NOT start the game loop automatically. After `newGame()` returns, the caller must explicitly call `engine.tick()` to advance simulation. This allows precise control over timing and integration with host event loops.
 - **Event system exists**: Bootstrap assumes an event system (feature A4) is available to emit "game started" and "game loaded" events; bootstrap calls into the event system but does not implement it.
 - **Single active game at a time**: For POC, bootstrap assumes only one game can run at a time. Support for multiple concurrent game instances is not in scope.
 - **Zod validation library available**: Validation uses Zod (or equivalent schema validation library). If not available, a minimal custom validator is acceptable.
+- **Bare-minimum defaults**: When `newGame()` is called with no options or minimal options, bootstrap creates an empty game state with no map, no entities, and all systems uninitialized. Caller/systems are responsible for populating the world post-bootstrap.
+- **System initialization hooks**: Systems register init functions with a dependency system. Bootstrap builds a dependency graph, detects cycles, and executes in topological order. Init functions run synchronously before bootstrap returns.
+- **Manual ticking model**: The caller owns the game loop. Bootstrap returns an idle engine; caller controls when `tick()` is called and at what frequency. This enables integration with any event loop (browser, Node.js, game framework).
 
 ## Clarifications
 
-**Q1 - Registry pre-registration**: Are prototypes and materials assumed to be loaded before bootstrap, or should bootstrap attempt to load them?
-**Answer**: Pre-registered. Bootstrap is minimal and does not load external configs. Systems must register prototypes and materials before calling `newGame()`.
+### Session 2026-05-02
 
-**Q2 - Map generation timing**: Should bootstrap generate the initial map, or is that a separate step?
-**Answer**: Separate step. Map generation is out of scope for bootstrap. After `newGame()` completes, downstream systems (map generator) create the initial map.
-
-**Q3 - Initialization parameters**: Should parameters be validated at bootstrap time or lazily when systems use them?
-**Answer**: At bootstrap time. Validation is eager; invalid parameters are rejected immediately.
-
-**Q4 - Headless operation**: Does "headless" mean the engine must not import any rendering libraries, or just not use them?
-**Answer**: Must not import rendering libraries at all. Bootstrap is in core engine; rendering is in a separate module that is not imported by bootstrap.
-
-**Q5 - Previous game cleanup**: Should calling `newGame()` while a game is running trigger any events or callbacks?
-**Answer**: Yes, it should emit a "game unload" event before destroying the previous game. Systems can listen to clean up their state.
+- Q: How does the game loop execution model work after bootstrap? → A: Manual ticking. `newGame()` returns an idle engine instance; it does NOT start automatic ticking. The caller owns the game loop and must explicitly call `engine.tick()` in a loop. This enables precise control and integration with any host event loop (browser, Node.js timers, game framework).
+- Q: How should multiple systems coordinate during bootstrap initialization? → A: Dependency-aware system registry. Systems register initialization functions with dependency declarations. Bootstrap topologically sorts all registered init functions by their declared dependencies, detects cycles, and executes them in dependency order. If a dependency is not found, bootstrap rejects with a clear error before starting the game.
+- Q: Should bootstrap validate that required prototypes are registered? → A: No validation at bootstrap time. Bootstrap assumes prototypes are pre-registered and starts the game. If code later attempts to instantiate a missing prototype, it fails at runtime. No fail-fast check during bootstrap.
+- Q: What should default behavior be for `newGame()` with minimal parameters? → A: Bare minimum. No map, no entities, no systems initialized. Caller and downstream systems are responsible for populating the world (creating maps, spawning entities, etc.) after bootstrap returns.
+- Q: What should the GameEngine's public API surface be for accessing running game state? → A: Rich query API. GameEngine exposes `getEntities()`, `getState()`, `getTime()`, `getEntityAt(id)`, `getMap(id)`, `getComponents(entityId)` for direct state queries. Query methods return results quickly (<5ms) even with 1000+ entities, enabling systems and external code to efficiently inspect game state.
