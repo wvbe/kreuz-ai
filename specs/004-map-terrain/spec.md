@@ -9,16 +9,16 @@
 
 ### User Story 1 - Implement Hybrid Spatial Representation (Priority: P1)
 
-The game uses a **hybrid spatial representation**: a grid of discrete cells for coarse traversability, pathfinding, and procedural generation; and continuous coordinates within each grid cell for precise entity placement and collision volumes. This combines the determinism and performance of grid-based pathfinding (A*) with the precision of continuous placement. This story implements the foundational hybrid coordinate system and validates it across terrain types (building interiors, outdoor fields, caves).
+The game uses a **hybrid spatial representation**: a grid of discrete cells for coarse traversability, pathfinding, and procedural generation; and continuous coordinates within each grid cell for precise entity placement and collision volumes. This combines the determinism and performance of grid-based pathfinding (A\*) with the precision of continuous placement. This story implements the foundational hybrid coordinate system and validates it across terrain types (building interiors, outdoor fields, caves).
 
 **Why this priority**: Foundational architectural decision that affects all downstream terrain, pathfinding, and entity placement systems.
 
-**Independent Test**: Can be fully tested by: (a) placing entities at sub-cell continuous positions, (b) running A* pathfinding at grid level, (c) validating all terrain types (building, cave, field) are representable, (d) verifying serialization round-trips preserve both grid and sub-cell coordinates.
+**Independent Test**: Can be fully tested by: (a) placing entities at sub-cell continuous positions, (b) running A\* pathfinding at grid level, (c) validating all terrain types (building, cave, field) are representable, (d) verifying serialization round-trips preserve both grid and sub-cell coordinates.
 
 **Acceptance Scenarios**:
 
 1. **Given** a terrain using hybrid coordinates, **When** entity is placed at precise sub-cell position (e.g., cell (3,5) + offset (0.4, 0.7)), **Then** position is recorded with sub-cell precision and queryable.
-2. **Given** hybrid terrain, **When** A* pathfinding runs at grid cell level, **Then** path is returned as sequence of grid cells, deterministic, and avoids non-traversable cells.
+2. **Given** hybrid terrain, **When** A\* pathfinding runs at grid cell level, **Then** path is returned as sequence of grid cells, deterministic, and avoids non-traversable cells.
 3. **Given** hybrid terrain, **When** applied to all terrain types (open air, underground, buildings), **Then** all types are representable without special cases.
 4. **Given** hybrid coordinates (grid cell + sub-cell offset), **When** serialized to JSON and deserialized, **Then** both grid and sub-cell components are preserved without precision loss.
 5. **Given** procedural generator using terrain API, **When** generator operates at grid cell level, **Then** generated layouts are valid and entities can be placed at continuous positions within cells.
@@ -196,7 +196,7 @@ The terrain API and multi-map architecture are designed to support procedural ge
 
 ### Session 2026-05-02
 
-- Q: Which spatial representation should be used: grid-based, continuous, or hybrid? → A: Hybrid (Option C) — grid cells for coarse pathfinding and traversability (deterministic, fast A*), continuous coordinates within cells for precise entity placement and collision. Procedural generators work at the grid level.
+- Q: Which spatial representation should be used: grid-based, continuous, or hybrid? → A: Hybrid (Option C) — grid cells for coarse pathfinding and traversability (deterministic, fast A\*), continuous coordinates within cells for precise entity placement and collision. Procedural generators work at the grid level.
 - Q: How is pathfinding determinism maintained when multiple entities query concurrently? → A: The game's seeded PRNG is used for tie-breaking when multiple equally-valid paths exist. All concurrent pathfinding queries use the same PRNG state, producing consistent tie-breaking results.
 - Q: What is the entity state during map-to-map transition? → A: Atomic transition (Option A) — entity is removed from the source map and added to the destination map in a single atomic operation. Entity is never in an inconsistent intermediate state.
 - Q: Do pending async operations on an entity pause or continue during map transition? → A: Continue (Option Y) — async operations progress normally through game ticks during map transition. Travel between maps is itself an async operation; other pending operations are not affected.
