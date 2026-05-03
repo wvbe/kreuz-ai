@@ -27,7 +27,7 @@ An event bus allows systems and entities to broadcast events (e.g., "inventory.i
 
 ### User Story 2 - Support Hierarchical Events and Wildcard Subscriptions (Priority: P1)
 
-Event names follow a hierarchical pattern (e.g., "game.state.started", "inventory.item.stored", "entity.movement.completed"). Subscribers can listen to exact events or use wildcards to listen to categories (e.g., subscribe to "inventory.**" to receive all inventory events). Hierarchical naming and wildcard subscriptions enable systems to aggregate related events.
+Event names follow a hierarchical pattern (e.g., "game.state.started", "inventory.item.stored", "entity.movement.completed"). Subscribers can listen to exact events or use wildcards to listen to categories (e.g., subscribe to "inventory.\*\*" to receive all inventory events). Hierarchical naming and wildcard subscriptions enable systems to aggregate related events.
 
 **Why this priority**: Enables elegant event aggregation. A trade system can listen to all "inventory.\*" events rather than subscribing to ten specific events. Blocking for game architecture elegance.
 
@@ -35,11 +35,11 @@ Event names follow a hierarchical pattern (e.g., "game.state.started", "inventor
 
 **Acceptance Scenarios**:
 
-1. **Given** events "inventory.item.stored", "inventory.item.retrieved", "inventory.item.expired", **When** a subscriber listens to "inventory.item.*", **Then** all three events trigger that subscriber.
-2. **Given** a wildcard subscriber listening to "game.*", **When** events "game.started", "game.paused", "game.saved" are emitted, **Then** the subscriber receives all three.
-3. **Given** an exact event subscription to "inventory.item.stored" and a wildcard subscription to "inventory.**", **When** "inventory.item.stored" is emitted, **Then** both subscribers are called.
-4. **Given** a wildcard pattern "entity.*", **When** events like "entity.spawned", "entity.movement.started", "entity.health.changed" are emitted, **Then** only "entity.spawned" matches (single-level wildcard `*` does not match nested dots; use `entity.**` for all entity events).
-5. **Given** a subscriber to "game.*", **When** the game is saved with pending events in the queue, **Then** the subscription persists (subscriber relationships are not serialized; they're re-established on game load by systems).
+1. **Given** events "inventory.item.stored", "inventory.item.retrieved", "inventory.item.expired", **When** a subscriber listens to "inventory.item.\*", **Then** all three events trigger that subscriber.
+2. **Given** a wildcard subscriber listening to "game.\*", **When** events "game.started", "game.paused", "game.saved" are emitted, **Then** the subscriber receives all three.
+3. **Given** an exact event subscription to "inventory.item.stored" and a wildcard subscription to "inventory.**", **When** "inventory.item.stored" is emitted, **Then\*\* both subscribers are called.
+4. **Given** a wildcard pattern "entity._", **When** events like "entity.spawned", "entity.movement.started", "entity.health.changed" are emitted, **Then** only "entity.spawned" matches (single-level wildcard `_`does not match nested dots; use`entity.\*\*` for all entity events).
+5. **Given** a subscriber to "game.\*", **When** the game is saved with pending events in the queue, **Then** the subscription persists (subscriber relationships are not serialized; they're re-established on game load by systems).
 
 ---
 
@@ -190,7 +190,7 @@ The system defines standard event types organized into categories (e.g., "game._
 
 ### Session 2026-05-02 (Original Scope)
 
-- Q: Does "game.*" match "game.state.started" or only "game.started"? → A: Only "game.started". Single-level wildcard `*` matches exactly one segment. To match all game events at any depth, use `game.**`. Hierarchies can be nested; `*` = one level, `**` = any depth.
+- Q: Does "game._" match "game.state.started" or only "game.started"? → A: Only "game.started". Single-level wildcard `_`matches exactly one segment. To match all game events at any depth, use`game.**`. Hierarchies can be nested; `\*`= one level,`**` = any depth.
 - Q: If event A's subscribers are processing and one throws, does event B wait? → A: Event A processing completes (all subscribers called, errors caught and logged), then event B starts. Errors do not affect ordering.
 - Q: If a subscriber is one-time and subscribed to "inventory.\*", is it unsubscribed after any matching event or a specific one? → A: After any matching event. One-time + wildcard means "call me once when any event matching this pattern is emitted, then unsubscribe."
 - Q: Should `getQueue()` return a copy or a live reference? → A: A copy (immutable snapshot). Returning a live reference allows callers to modify the queue, which breaks assumptions.

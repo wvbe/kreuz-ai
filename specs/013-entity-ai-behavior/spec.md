@@ -213,3 +213,7 @@ The AI system uses a **Hybrid Architecture**: Behavior Trees provide structure a
 - **Q: What events should relationship history track?** → A: Conflicts (breaking contracts, stealing), Gifts/charity, Time since last interaction (decay factor), Family/faction membership.
 - **Q: How specific should need satisfaction be?** → A: Very specific. Hunger only satisfied by "Food" items in eating areas. Rest only satisfied in "Bed" locations. Safety satisfied by proximity to Guards/safe areas. Social satisfied through "conversation" or "socializing" actions with other entities.
 - **Q: When plugins define same behavior name, what happens?** → A: Error and refuse to load. System requires unique behavior names across all loaded plugins; duplicate names are a deployment error.
+
+### Session 2026-05-03 (Cross-cutting: Diplomacy & Factions)
+
+- Q: How does faction membership affect entity-to-entity relationship affinity? → A: Faction-to-faction standing acts as a baseline bias on individual affinity. When two entities interact, the effective starting affinity includes an offset derived from the standing between all faction pairs they share (averaged or summed, to be defined in the diplomacy spec). Individual relationship history (spec 013 User Story 3) is then applied on top of that baseline. A personal friendship can therefore survive a faction feud, and a faction alliance can warm a first meeting between strangers.

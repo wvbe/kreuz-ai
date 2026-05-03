@@ -155,6 +155,10 @@ The feature must include benchmarking tests that measure query performance under
 - Q: What ordering should query results use for determinism (FR-007)? → A: Insertion order — the order entities were added to the game state. Canonical for all queries.
 - Q: Should the query system maintain internal indexes or caches? → A: No. Full scans only. Callers may implement their own caching if needed; it is not a framework concern.
 
+### Session 2026-05-03 (Cross-cutting: Diplomacy & Factions)
+
+- Q: What is a Faction and how does entity membership work? → A: A Faction is a first-class ECS entity (consistent with spec 003). Entities may belong to multiple factions simultaneously (political, occupational, religious, etc.). The player's government is itself a faction. Faction membership is stored as a component on the individual entity (list of faction entity IDs). Queries like `getEntitiesByProperty('Citizen.factions', ...)` must support multi-value membership (entity belongs to faction X AND/OR faction Y).
+
 ## Assumptions
 
 - **ECS Architecture**: Game uses entity/component/system (ECS) paradigm; entities can be queried by component type and properties.

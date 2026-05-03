@@ -86,7 +86,7 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ### Functional Requirements
 
-- **FR-001**: System MUST implement A* algorithm for pathfinding with admissible heuristic function (Octile distance for 8-way movement with diagonal cost √2)
+- **FR-001**: System MUST implement A\* algorithm for pathfinding with admissible heuristic function (Octile distance for 8-way movement with diagonal cost √2)
 - **FR-002**: System MUST find shortest path from start to target in single map, avoiding obstacles (terrain/entities)
 - **FR-003**: System MUST support 8-way movement (orthogonal + diagonal) with diagonal movement costing 1.414x orthogonal
 - **FR-004**: System MUST return "no path exists" when target is unreachable from start position
@@ -100,7 +100,7 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ### Key Entities
 
-- **PathNode**: Represents a discrete cell/region in A* search (cellX/cellY or regionId, cost, heuristic, parent)
+- **PathNode**: Represents a discrete cell/region in A\* search (cellX/cellY or regionId, cost, heuristic, parent)
 - **Path**: Sequence of discrete cells/regions from start to target, or empty if no path exists
 - **Map**: World region with terrain grid and entities (see spec 004). Grid type determines coordinate semantics.
 - **Transition**: Entity with Position and Transition components defining passage between maps (replaces MapConnection)
@@ -127,6 +127,6 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 - **No Flying**: Entities cannot fly over obstacles unless explicitly marked as flying type
 - **Map Connections**: Inter-map connections are defined as Transition entities (per spec 006) with Position and Transition components; pathfinding resolves cross-map routes via these entities
 - **Static Costs**: Terrain costs are static within a game tick; paths don't need to account for probabilities
-- **Heuristic**: Octile distance (max(dx, dy) + (√2 - 1) * min(dx, dy)) is the admissible heuristic for 8-way movement with diagonal cost √2. Manhattan distance is NOT admissible for diagonal movement and would produce suboptimal paths.
+- **Heuristic**: Octile distance (max(dx, dy) + (√2 - 1) \* min(dx, dy)) is the admissible heuristic for 8-way movement with diagonal cost √2. Manhattan distance is NOT admissible for diagonal movement and would produce suboptimal paths.
 - **Memory**: Pathfinding can maintain open/closed sets in memory; no disk-based search needed
 - **No Multiplayer Sync**: Pathfinding is client-side/server-side deterministic; no real-time multiplayer synchronization issues
