@@ -220,11 +220,11 @@
 
 **Purpose**: Final quality pass — documentation, consistency, thematic review.
 
-- [ ] T092 [P] Verify all material IDs use snake_case, all JSON files use kebab-case naming per quickstart convention
-- [ ] T093 [P] Verify no anachronistic content (no gunpowder, printing press, New World crops) per FR-017
-- [ ] T094 [P] Verify at least 3 complete production chains of depth ≥ 3 exist (SC-002)
-- [ ] T095 [P] Verify ≥ 70% of materials participate in at least one recipe (SC-006)
-- [ ] T096 Run `loadAllContent()` and verify execution time < 100ms (Performance Goal)
+- [x] T092 [P] Verify all material IDs use snake_case, all JSON files use kebab-case naming per quickstart convention
+- [x] T093 [P] Verify no anachronistic content (no gunpowder, printing press, New World crops) per FR-017
+- [x] T094 [P] Verify at least 3 complete production chains of depth ≥ 3 exist (SC-002)
+- [x] T095 [P] Verify ≥ 70% of materials participate in at least one recipe (SC-006)
+- [x] T096 Run `loadAllContent()` and verify execution time < 100ms (Performance Goal)
 
 **🚧 QUALITY GATE 7 (FINAL)**: All tests pass. All success criteria SC-001 through SC-008 met. Content loads in < 100ms. Zero warnings. Feature is complete.
 

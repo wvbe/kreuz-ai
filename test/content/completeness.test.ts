@@ -85,4 +85,12 @@ describe('FR Completeness Tests', () => {
     // loaded via Registry pattern. No values hardcoded in source.
     expect(r!.materials.size).toBeGreaterThan(0);
   });
+
+  it('Performance: loadAllContent completes in < 100ms', () => {
+    const start = performance.now();
+    const freshLoader = new ContentLoader();
+    freshLoader.loadAllContent();
+    const elapsed = performance.now() - start;
+    expect(elapsed).toBeLessThan(100);
+  });
 });
