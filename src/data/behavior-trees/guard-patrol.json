@@ -1,0 +1,37 @@
+{
+  "id": "guard_patrol",
+  "name": "Guard Behavior",
+  "root": {
+    "type": "selector",
+    "name": "guard_root",
+    "children": [
+      {
+        "type": "sequence",
+        "name": "threat_response",
+        "children": [
+          { "type": "condition", "name": "hostile_detected", "check": "hostile_entity_within_range" },
+          { "type": "action", "name": "alert_guards", "action": "alert_nearby_guards" },
+          { "type": "action", "name": "engage", "action": "engage_threat" }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "patrol_route",
+        "children": [
+          { "type": "condition", "name": "patrol_active", "check": "patrol_job_active" },
+          { "type": "action", "name": "next_waypoint", "action": "travel_to_next_waypoint" },
+          { "type": "action", "name": "scan", "action": "scan_area" }
+        ]
+      },
+      {
+        "type": "sequence",
+        "name": "watch_duty",
+        "children": [
+          { "type": "condition", "name": "watch_active", "check": "watch_job_active" },
+          { "type": "action", "name": "stand_watch", "action": "stand_watch" }
+        ]
+      },
+      { "type": "action", "name": "fallback_routine", "action": "daily_routine_fallback" }
+    ]
+  }
+}

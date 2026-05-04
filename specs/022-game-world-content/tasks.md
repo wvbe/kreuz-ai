@@ -153,43 +153,43 @@
 
 ### Registry Modules
 
-- [ ] T063 [P] [US2] Implement RecipeRegistry loading from 9 JSON files in `src/registries/RecipeRegistry.ts`
-- [ ] T064 [P] [US14] Implement BehaviorTreeRegistry loading from 7 JSON files in `src/registries/BehaviorTreeRegistry.ts`
-- [ ] T065 [P] [US5/11] Implement EntityPrototypeRegistry loading from 3 JSON files in `src/registries/EntityPrototypeRegistry.ts`
+- [x] T063 [P] [US2] Implement RecipeRegistry loading from 9 JSON files in `src/registries/RecipeRegistry.ts`
+- [x] T064 [P] [US14] Implement BehaviorTreeRegistry loading from 7 JSON files in `src/registries/BehaviorTreeRegistry.ts`
+- [x] T065 [P] [US5/11] Implement EntityPrototypeRegistry loading from 3 JSON files in `src/registries/EntityPrototypeRegistry.ts`
 
 ### Data Files — Recipes (US2)
 
-- [ ] T066 [P] [US2] Create wood processing recipes (4 entries) in `src/data/recipes/wood-processing.json`
-- [ ] T067 [P] [US2] Create metal processing recipes (4 entries) in `src/data/recipes/metal-processing.json`
-- [ ] T068 [P] [US2] Create tools and equipment recipes (9 entries) in `src/data/recipes/tools-and-equipment.json`
-- [ ] T069 [P] [US2] Create weapons and armor recipes (8 entries) in `src/data/recipes/weapons-and-armor.json`
-- [ ] T070 [P] [US2] Create textile recipes (7 entries) in `src/data/recipes/textiles.json`
-- [ ] T071 [P] [US2] Create leather processing recipes (2 entries) in `src/data/recipes/leather-processing.json`
-- [ ] T072 [P] [US2] Create stonework recipes (5 entries) in `src/data/recipes/stonework.json`
-- [ ] T073 [P] [US2] Create food and drink recipes (17 entries) in `src/data/recipes/food-and-drink.json`
-- [ ] T074 [P] [US2] Create miscellaneous recipes (2 entries) in `src/data/recipes/miscellaneous.json`
+- [x] T066 [P] [US2] Create wood processing recipes (4 entries) in `src/data/recipes/wood-processing.json`
+- [x] T067 [P] [US2] Create metal processing recipes (4 entries) in `src/data/recipes/metal-processing.json`
+- [x] T068 [P] [US2] Create tools and equipment recipes (9 entries) in `src/data/recipes/tools-and-equipment.json`
+- [x] T069 [P] [US2] Create weapons and armor recipes (8 entries) in `src/data/recipes/weapons-and-armor.json`
+- [x] T070 [P] [US2] Create textile recipes (7 entries) in `src/data/recipes/textiles.json`
+- [x] T071 [P] [US2] Create leather processing recipes (2 entries) in `src/data/recipes/leather-processing.json`
+- [x] T072 [P] [US2] Create stonework recipes (5 entries) in `src/data/recipes/stonework.json`
+- [x] T073 [P] [US2] Create food and drink recipes (17 entries) in `src/data/recipes/food-and-drink.json`
+- [x] T074 [P] [US2] Create miscellaneous recipes (2 entries) in `src/data/recipes/miscellaneous.json`
 
 ### Data Files — Behavior Trees (US14)
 
-- [ ] T075 [P] [US14] Create daily routine behavior tree in `src/data/behavior-trees/daily-routine.json`
-- [ ] T076 [P] [US14] Create worker cycle behavior tree in `src/data/behavior-trees/worker-cycle.json`
-- [ ] T077 [P] [US14] Create guard patrol behavior tree in `src/data/behavior-trees/guard-patrol.json`
-- [ ] T078 [P] [US14] Create merchant routine behavior tree in `src/data/behavior-trees/merchant-routine.json`
-- [ ] T079 [P] [US14] Create priest routine behavior tree in `src/data/behavior-trees/priest-routine.json`
-- [ ] T080 [P] [US14] Create livestock behavior tree in `src/data/behavior-trees/livestock-behavior.json`
-- [ ] T081 [P] [US14] Create predator behavior tree in `src/data/behavior-trees/predator-behavior.json`
+- [x] T075 [P] [US14] Create daily routine behavior tree in `src/data/behavior-trees/daily-routine.json`
+- [x] T076 [P] [US14] Create worker cycle behavior tree in `src/data/behavior-trees/worker-cycle.json`
+- [x] T077 [P] [US14] Create guard patrol behavior tree in `src/data/behavior-trees/guard-patrol.json`
+- [x] T078 [P] [US14] Create merchant routine behavior tree in `src/data/behavior-trees/merchant-routine.json`
+- [x] T079 [P] [US14] Create priest routine behavior tree in `src/data/behavior-trees/priest-routine.json`
+- [x] T080 [P] [US14] Create livestock behavior tree in `src/data/behavior-trees/livestock-behavior.json`
+- [x] T081 [P] [US14] Create predator behavior tree in `src/data/behavior-trees/predator-behavior.json`
 
 ### Data Files — Entity Prototypes (US5, US11)
 
-- [ ] T082 [P] [US5] Create humanoid entity prototypes (23 entries) in `src/data/entities/humanoids.json`
-- [ ] T083 [P] [US11] Create livestock entity prototypes (7 entries) in `src/data/entities/livestock.json`
-- [ ] T084 [P] [US11] Create wild animal entity prototypes (6 entries) in `src/data/entities/wild-animals.json`
+- [x] T082 [P] [US5] Create humanoid entity prototypes (23 entries) in `src/data/entities/humanoids.json`
+- [x] T083 [P] [US11] Create livestock entity prototypes (7 entries) in `src/data/entities/livestock.json`
+- [x] T084 [P] [US11] Create wild animal entity prototypes (6 entries) in `src/data/entities/wild-animals.json`
 
 ### Tests
 
-- [ ] T085 [P] [US2] Write RecipeRegistry test: count ≥ 55, material/furniture/skill refs valid, no circular deps in `test/registries/RecipeRegistry.test.ts`
-- [ ] T086 [P] [US14] Write BehaviorTreeRegistry test: count ≥ 6, depth ≤ 5, valid node structure in `test/registries/BehaviorTreeRegistry.test.ts`
-- [ ] T087 [P] [US5/11] Write EntityPrototypeRegistry test: count ≥ 30, all refs valid in `test/registries/EntityPrototypeRegistry.test.ts`
+- [x] T085 [P] [US2] Write RecipeRegistry test: count ≥ 55, material/furniture/skill refs valid, no circular deps in `test/registries/RecipeRegistry.test.ts`
+- [x] T086 [P] [US14] Write BehaviorTreeRegistry test: count ≥ 6, depth ≤ 5, valid node structure in `test/registries/BehaviorTreeRegistry.test.ts`
+- [x] T087 [P] [US5/11] Write EntityPrototypeRegistry test: count ≥ 30, all refs valid in `test/registries/EntityPrototypeRegistry.test.ts`
 
 **🚧 QUALITY GATE 5**: `npx vitest run` — all tests through Phase 5 pass. Recipe count ≥ 55. Behavior tree count ≥ 6, all within depth limit. Entity prototype count ≥ 30. All cross-references valid across all tiers.
 

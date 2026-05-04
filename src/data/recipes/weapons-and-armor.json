@@ -1,0 +1,97 @@
+[
+  {
+    "id": "forge_sword",
+    "name": "Forge Sword",
+    "inputs": [
+      { "materialId": "iron_ingot", "quantity": 3 },
+      { "materialId": "leather", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "iron_sword", "quantity": 1 }],
+    "durationTicks": 60,
+    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "smithing", "amount": 5.0 }
+  },
+  {
+    "id": "forge_shield",
+    "name": "Forge Shield",
+    "inputs": [
+      { "materialId": "iron_ingot", "quantity": 2 },
+      { "materialId": "oak_plank", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "iron_shield", "quantity": 1 }],
+    "durationTicks": 40,
+    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "smithing", "amount": 4.0 }
+  },
+  {
+    "id": "forge_spear",
+    "name": "Forge Spear",
+    "inputs": [
+      { "materialId": "iron_ingot", "quantity": 1 },
+      { "materialId": "oak_plank", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "spear", "quantity": 1 }],
+    "durationTicks": 24,
+    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.5 }
+  },
+  {
+    "id": "craft_bow",
+    "name": "Craft Bow",
+    "inputs": [
+      { "materialId": "birch_plank", "quantity": 1 },
+      { "materialId": "linen_thread", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "bow", "quantity": 1 }],
+    "durationTicks": 30,
+    "restrictions": { "workstation": "workbench", "skill": { "skillId": "carpentry" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "carpentry", "amount": 3.0 }
+  },
+  {
+    "id": "fletch_arrows",
+    "name": "Fletch Arrows",
+    "inputs": [
+      { "materialId": "pine_plank", "quantity": 1 },
+      { "materialId": "iron_ingot", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "arrow", "quantity": 10 }],
+    "durationTicks": 20,
+    "restrictions": { "workstation": "workbench", "skill": { "skillId": "carpentry" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "carpentry", "amount": 2.0 }
+  },
+  {
+    "id": "craft_leather_armor",
+    "name": "Craft Leather Armor",
+    "inputs": [{ "materialId": "leather", "quantity": 4 }],
+    "outputs": [{ "materialId": "leather_armor", "quantity": 1 }],
+    "durationTicks": 50,
+    "restrictions": { "workstation": "workbench", "skill": { "skillId": "leatherworking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "leatherworking", "amount": 4.0 }
+  },
+  {
+    "id": "forge_chainmail",
+    "name": "Forge Chainmail",
+    "inputs": [{ "materialId": "iron_ingot", "quantity": 6 }],
+    "outputs": [{ "materialId": "iron_chainmail", "quantity": 1 }],
+    "durationTicks": 120,
+    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "smithing", "amount": 8.0 }
+  },
+  {
+    "id": "forge_helm",
+    "name": "Forge Helm",
+    "inputs": [{ "materialId": "iron_ingot", "quantity": 2 }],
+    "outputs": [{ "materialId": "iron_helm", "quantity": 1 }],
+    "durationTicks": 36,
+    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "smithing", "amount": 3.5 }
+  }
+]

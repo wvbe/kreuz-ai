@@ -1,0 +1,41 @@
+[
+  {
+    "id": "saw_oak_planks",
+    "name": "Saw Oak Planks",
+    "inputs": [{ "materialId": "oak_log", "quantity": 1 }],
+    "outputs": [{ "materialId": "oak_plank", "quantity": 4 }],
+    "durationTicks": 20,
+    "restrictions": { "workstation": "sawmill", "skill": { "skillId": "carpentry" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "carpentry", "amount": 3.0 }
+  },
+  {
+    "id": "saw_pine_planks",
+    "name": "Saw Pine Planks",
+    "inputs": [{ "materialId": "pine_log", "quantity": 1 }],
+    "outputs": [{ "materialId": "pine_plank", "quantity": 4 }],
+    "durationTicks": 16,
+    "restrictions": { "workstation": "sawmill", "skill": { "skillId": "carpentry" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "carpentry", "amount": 2.5 }
+  },
+  {
+    "id": "saw_birch_planks",
+    "name": "Saw Birch Planks",
+    "inputs": [{ "materialId": "birch_log", "quantity": 1 }],
+    "outputs": [{ "materialId": "birch_plank", "quantity": 4 }],
+    "durationTicks": 18,
+    "restrictions": { "workstation": "sawmill", "skill": { "skillId": "carpentry" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "carpentry", "amount": 2.8 }
+  },
+  {
+    "id": "burn_charcoal",
+    "name": "Burn Charcoal",
+    "inputs": [{ "materialId": "oak_log", "quantity": 3 }],
+    "outputs": [{ "materialId": "charcoal", "quantity": 2 }],
+    "durationTicks": 40,
+    "restrictions": { "workstation": "charcoal_kiln" },
+    "outputDestination": "workstation"
+  }
+]

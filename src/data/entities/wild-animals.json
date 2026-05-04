@@ -1,0 +1,84 @@
+[
+  {
+    "id": "deer",
+    "name": "Deer",
+    "entityType": "wild_animal",
+    "startingSkills": [],
+    "defaultEquipment": [],
+    "behaviorTree": "livestock_behavior",
+    "drops": [
+      { "materialId": "raw_meat", "quantity": 2 },
+      { "materialId": "raw_hide", "quantity": 1 }
+    ],
+    "habitat": ["forest_oak", "forest_pine", "forest_birch"],
+    "threatLevel": "none"
+  },
+  {
+    "id": "rabbit",
+    "name": "Rabbit",
+    "entityType": "wild_animal",
+    "startingSkills": [],
+    "defaultEquipment": [],
+    "behaviorTree": "livestock_behavior",
+    "drops": [
+      { "materialId": "raw_meat", "quantity": 1 }
+    ],
+    "habitat": ["grassland", "forest_oak", "forest_birch"],
+    "threatLevel": "none"
+  },
+  {
+    "id": "boar",
+    "name": "Boar",
+    "entityType": "wild_animal",
+    "startingSkills": [],
+    "defaultEquipment": [],
+    "behaviorTree": "predator_behavior",
+    "drops": [
+      { "materialId": "raw_meat", "quantity": 3 },
+      { "materialId": "raw_hide", "quantity": 1 },
+      { "materialId": "tallow", "quantity": 1 }
+    ],
+    "habitat": ["forest_oak", "forest_pine"],
+    "threatLevel": "medium"
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf",
+    "entityType": "wild_animal",
+    "startingSkills": [],
+    "defaultEquipment": [],
+    "behaviorTree": "predator_behavior",
+    "drops": [
+      { "materialId": "raw_hide", "quantity": 1 }
+    ],
+    "habitat": ["forest_oak", "forest_pine", "mountain"],
+    "threatLevel": "high"
+  },
+  {
+    "id": "bear",
+    "name": "Bear",
+    "entityType": "wild_animal",
+    "startingSkills": [],
+    "defaultEquipment": [],
+    "behaviorTree": "predator_behavior",
+    "drops": [
+      { "materialId": "raw_meat", "quantity": 4 },
+      { "materialId": "raw_hide", "quantity": 2 }
+    ],
+    "habitat": ["forest_oak", "forest_pine"],
+    "threatLevel": "very_high"
+  },
+  {
+    "id": "fox",
+    "name": "Fox",
+    "entityType": "wild_animal",
+    "startingSkills": [],
+    "defaultEquipment": [],
+    "behaviorTree": "predator_behavior",
+    "drops": [
+      { "materialId": "raw_hide", "quantity": 1 }
+    ],
+    "habitat": ["forest_oak", "forest_birch", "grassland"],
+    "threatLevel": "low"
+  }
+]

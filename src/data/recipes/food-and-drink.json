@@ -1,0 +1,185 @@
+[
+  {
+    "id": "grind_flour",
+    "name": "Grind Flour",
+    "inputs": [{ "materialId": "wheat", "quantity": 2 }],
+    "outputs": [{ "materialId": "flour", "quantity": 3 }],
+    "durationTicks": 12,
+    "restrictions": { "workstation": "grinding_mill" },
+    "outputDestination": "workstation"
+  },
+  {
+    "id": "grind_rye_flour",
+    "name": "Grind Rye Flour",
+    "inputs": [{ "materialId": "rye", "quantity": 2 }],
+    "outputs": [{ "materialId": "flour", "quantity": 3 }],
+    "durationTicks": 12,
+    "restrictions": { "workstation": "grinding_mill" },
+    "outputDestination": "workstation"
+  },
+  {
+    "id": "bake_bread",
+    "name": "Bake Bread",
+    "inputs": [{ "materialId": "flour", "quantity": 2 }],
+    "outputs": [{ "materialId": "bread", "quantity": 2 }],
+    "durationTicks": 20,
+    "restrictions": { "workstation": "oven", "skill": { "skillId": "baking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "baking", "amount": 3.0 }
+  },
+  {
+    "id": "bake_rye_bread",
+    "name": "Bake Rye Bread",
+    "inputs": [{ "materialId": "flour", "quantity": 2 }],
+    "outputs": [{ "materialId": "rye_bread", "quantity": 2 }],
+    "durationTicks": 20,
+    "restrictions": { "workstation": "oven", "skill": { "skillId": "baking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "baking", "amount": 3.0 }
+  },
+  {
+    "id": "malt_barley",
+    "name": "Malt Barley",
+    "inputs": [{ "materialId": "barley", "quantity": 3 }],
+    "outputs": [{ "materialId": "malt", "quantity": 2 }],
+    "durationTicks": 24,
+    "restrictions": { "workstation": "malting_floor", "skill": { "skillId": "brewing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "brewing", "amount": 2.5 }
+  },
+  {
+    "id": "brew_ale",
+    "name": "Brew Ale",
+    "inputs": [{ "materialId": "malt", "quantity": 3 }],
+    "outputs": [{ "materialId": "ale", "quantity": 2 }],
+    "durationTicks": 36,
+    "restrictions": { "workstation": "brewing_vat", "skill": { "skillId": "brewing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "brewing", "amount": 3.0 }
+  },
+  {
+    "id": "brew_mead",
+    "name": "Brew Mead",
+    "inputs": [{ "materialId": "honey", "quantity": 2 }],
+    "outputs": [{ "materialId": "mead", "quantity": 2 }],
+    "durationTicks": 40,
+    "restrictions": { "workstation": "brewing_vat", "skill": { "skillId": "brewing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "brewing", "amount": 3.5 }
+  },
+  {
+    "id": "press_cheese",
+    "name": "Press Cheese",
+    "inputs": [{ "materialId": "milk", "quantity": 3 }],
+    "outputs": [{ "materialId": "cheese", "quantity": 1 }],
+    "durationTicks": 30,
+    "restrictions": { "workstation": "cheese_press", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
+  },
+  {
+    "id": "churn_butter",
+    "name": "Churn Butter",
+    "inputs": [{ "materialId": "milk", "quantity": 2 }],
+    "outputs": [{ "materialId": "butter", "quantity": 1 }],
+    "durationTicks": 16,
+    "restrictions": { "workstation": "churn", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.0 }
+  },
+  {
+    "id": "dry_meat",
+    "name": "Dry Meat",
+    "inputs": [
+      { "materialId": "raw_meat", "quantity": 2 },
+      { "materialId": "salt", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "dried_meat", "quantity": 2 }],
+    "durationTicks": 48,
+    "restrictions": { "workstation": "drying_rack", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 3.0 }
+  },
+  {
+    "id": "salt_fish",
+    "name": "Salt Fish",
+    "inputs": [
+      { "materialId": "raw_fish", "quantity": 2 },
+      { "materialId": "salt", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "salted_fish", "quantity": 2 }],
+    "durationTicks": 36,
+    "restrictions": { "workstation": "salting_table", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
+  },
+  {
+    "id": "cook_pottage",
+    "name": "Cook Pottage",
+    "inputs": [
+      { "materialId": "vegetables", "quantity": 2 },
+      { "materialId": "barley", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "pottage", "quantity": 2 }],
+    "durationTicks": 20,
+    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.0 }
+  },
+  {
+    "id": "cook_stew",
+    "name": "Cook Stew",
+    "inputs": [
+      { "materialId": "raw_meat", "quantity": 1 },
+      { "materialId": "vegetables", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "stew", "quantity": 2 }],
+    "durationTicks": 24,
+    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
+  },
+  {
+    "id": "roast_meat",
+    "name": "Roast Meat",
+    "inputs": [{ "materialId": "raw_meat", "quantity": 1 }],
+    "outputs": [{ "materialId": "roast_meat", "quantity": 1 }],
+    "durationTicks": 16,
+    "restrictions": { "workstation": "oven", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.0 }
+  },
+  {
+    "id": "cook_porridge",
+    "name": "Cook Porridge",
+    "inputs": [{ "materialId": "barley", "quantity": 2 }],
+    "outputs": [{ "materialId": "porridge", "quantity": 2 }],
+    "durationTicks": 12,
+    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 1.5 }
+  },
+  {
+    "id": "make_preserves",
+    "name": "Make Preserves",
+    "inputs": [
+      { "materialId": "fruit", "quantity": 2 },
+      { "materialId": "honey", "quantity": 1 }
+    ],
+    "outputs": [{ "materialId": "fruit_preserves", "quantity": 2 }],
+    "durationTicks": 28,
+    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
+  },
+  {
+    "id": "press_wine",
+    "name": "Press Wine",
+    "inputs": [{ "materialId": "grapes", "quantity": 4 }],
+    "outputs": [{ "materialId": "wine", "quantity": 2 }],
+    "durationTicks": 40,
+    "restrictions": { "workstation": "wine_press", "skill": { "skillId": "brewing" } },
+    "outputDestination": "workstation",
+    "skillExperienceAwarded": { "skillId": "brewing", "amount": 3.5 }
+  }
+]
