@@ -105,7 +105,7 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 #### Types & Enums
 
 - **FR-004**: `type` aliases MUST be used instead of `interface` for standalone type declarations. `interface` is PROHIBITED except when declaration merging is explicitly required. This rule does not restrict `class` declarations — classes are permitted and appropriate for stateful abstractions. A `class` implicitly defines both a value and a type; that is distinct from an `interface` declaration.
-- **FR-005**: `enum` MUST be used instead of string literal unions (`type Foo = 'a' | 'b'`) whenever a set of named constants is intended. String literal unions are PROHIBITED for hand-written application code. Zod schemas MUST use `z.nativeEnum(MyEnum)` rather than `z.enum([...])` to remain consistent with this rule.
+- **FR-005**: `enum` MUST be used instead of string literal unions (`type Foo = 'a' | 'b'`) whenever a set of named constants is intended. String literal unions are PROHIBITED for hand-written application code. Zod schemas MUST use `z.nativeEnum(MyEnum)` rather than `z.enum([...])` to remain consistent with this rule. _Enforcement: code review only (no automated lint rule exists for this pattern)._
 - **FR-006**: `any` and `unknown` are PROHIBITED in production source code. Type parameters, explicit narrowing, or `satisfies` MUST be used instead. Exceptions require a `// eslint-disable-next-line` comment with a justification.
 
 #### Naming
@@ -118,11 +118,11 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 
 - **FR-010**: Every **exported** function, method, type alias, enum, and class MUST have a TSDoc block comment. The opening `/**` MUST appear on its own line, and the description MUST start on the following line. TSDoc on unexported symbols is encouraged but not required.
 - **FR-011**: TSDoc blocks MUST NOT be one-liners. The format is:
-  ```
-  /**
-   * Description here.
-   */
-  ```
+    ```
+    /**
+     * Description here.
+     */
+    ```
 - **FR-012**: Non-obvious parameters and return values SHOULD be documented with `@param` and `@returns` tags. Simple getters and trivially named parameters are exempt.
 
 #### Tests
@@ -135,12 +135,12 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 
 - **FR-016**: Every folder in `src/` MUST contain a `README.md` file that describes the folder's purpose, what it contains, and how it relates to other folders.
 - **FR-017**: The top-level source layout MUST follow this structure:
-  - `src/game/` — the headless game engine. All simulation logic, registries, schemas, and engine utilities live here.
-  - `src/renderers/` — all rendering targets. Each renderer is a subfolder (e.g. `src/renderers/react/`). Future renderers are siblings (e.g. `src/renderers/cli/`).
-  - Any utility code needed by both the engine and a renderer MUST live inside `src/game/` and be imported by renderers from there. No additional shared layer exists.
+    - `src/game/` — the headless game engine. All simulation logic, registries, schemas, and engine utilities live here.
+    - `src/renderers/` — all rendering targets. Each renderer is a subfolder (e.g. `src/renderers/react/`). Future renderers are siblings (e.g. `src/renderers/cli/`).
+    - Any utility code needed by both the engine and a renderer MUST live inside `src/game/` and be imported by renderers from there. No additional shared layer exists.
 - **FR-018**: The dependency direction is strictly one-way: code in `src/renderers/` MAY import from `src/game/`. Code in `src/game/` MUST NOT import from `src/renderers/` or any of its subfolders. This boundary MUST be enforced by both:
-  1. **TypeScript project references** — `src/game/` and `src/renderers/` each have their own `tsconfig.json`; the engine project does not reference the renderers project, making cross-direction imports a compile error.
-  2. **A linter rule** (e.g. ESLint `import/no-restricted-paths` or equivalent) — provides fast feedback during development before a full compile.
+    1. **TypeScript project references** — `src/game/` and `src/renderers/` each have their own `tsconfig.json`; the engine project does not reference the renderers project, making cross-direction imports a compile error.
+    2. **A linter rule** (e.g. ESLint `import/no-restricted-paths` or equivalent) — provides fast feedback during development before a full compile.
 
 ### Key Entities
 

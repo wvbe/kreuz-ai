@@ -29,14 +29,14 @@ specs/             → Feature specifications and plans
 
 ## Key Commands
 
-| Command | Purpose |
-|---------|---------|
-| `pnpm test` | Run all Vitest tests (engine + renderer) |
-| `pnpm test:watch` | Watch mode for TDD |
-| `pnpm dev` | Start Vite dev server (React app at localhost:5173) |
-| `pnpm build` | Production build |
-| `pnpm typecheck` | Run tsc --noEmit on all project references |
-| `pnpm lint` | ESLint check |
+| Command           | Purpose                                             |
+| ----------------- | --------------------------------------------------- |
+| `pnpm test`       | Run all Vitest tests (engine + renderer)            |
+| `pnpm test:watch` | Watch mode for TDD                                  |
+| `pnpm dev`        | Start Vite dev server (React app at localhost:5173) |
+| `pnpm build`      | Production build                                    |
+| `pnpm typecheck`  | Run tsc --noEmit on all project references          |
+| `pnpm lint`       | ESLint check                                        |
 
 ## Development Workflow
 
@@ -49,7 +49,7 @@ specs/             → Feature specifications and plans
 
 - Named exports only (no `export default`)
 - No barrel files (no `index.ts` re-exports)
-- `type` keyword for data shapes, `interface` only for implementable contracts
+- `type` keyword for type declarations (no `interface` unless declaration merging needed)
 - Native `enum` + `z.nativeEnum()` for Zod schemas
 - Co-located tests: `Foo.ts` → `Foo.test.ts` in same directory
 - `README.md` in every folder explaining its purpose
@@ -68,27 +68,27 @@ specs/             → Feature specifications and plans
 
 ```typescript
 // src/game/systems/MySystem.ts
-import type { GameState } from "../engine/GameState.ts"
+import type { GameState } from "../engine/GameState.ts";
 
 /** Process my system logic for one tick */
 export function tickMySystem(state: GameState): GameState {
-  // Pure function: takes state, returns new state
-  // No side effects, no browser APIs, no randomness outside PRNG
+    // Pure function: takes state, returns new state
+    // No side effects, no browser APIs, no randomness outside PRNG
 }
 ```
 
 ```typescript
 // src/game/systems/MySystem.test.ts
-import { describe, it, expect } from "vitest"
-import { tickMySystem } from "./MySystem.ts"
+import { describe, it, expect } from "vitest";
+import { tickMySystem } from "./MySystem.ts";
 
 describe("tickMySystem", () => {
-  it("does the thing", () => {
-    const state = createTestState()
-    const result = tickMySystem(state)
-    expect(result.something).toBe(expected)
-  })
-})
+    it("does the thing", () => {
+        const state = createTestState();
+        const result = tickMySystem(state);
+        expect(result.something).toBe(expected);
+    });
+});
 ```
 
 ## Map Generators
@@ -97,12 +97,13 @@ Each generator implements the `MapGenerator` interface:
 
 ```typescript
 export type MapGenerator = {
-  id: string
-  generate(options: MapGeneratorOptions, prng: Prng): TileMap
-}
+    id: string;
+    generate(options: MapGeneratorOptions, prng: Prng): TileMap;
+};
 ```
 
 Available generators:
+
 - `VoronoiOutdoorGenerator` — Main world (biomes, rivers, terrain)
 - `CaveGenerator` — Underground cellular automata caves
 - `CellarGenerator` — Small BSP room layouts

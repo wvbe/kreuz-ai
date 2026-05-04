@@ -13,7 +13,6 @@
 
 - Q: What language style should user-facing text use? → A: Option B — Mixed: modern English for core UI controls and system messages; pseudo-old English (thematic, stylized) for flavor text, lore, and non-critical immersion elements. Rationale: preserves usability and clarity while delivering historical atmosphere where it matters.
 
-
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 — Player explores the map and inspects entities (Priority: P1)

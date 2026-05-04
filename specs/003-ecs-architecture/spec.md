@@ -7,7 +7,6 @@
 
 > **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
 
-
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Define Entity Prototypes with Component Composition (Priority: P1)

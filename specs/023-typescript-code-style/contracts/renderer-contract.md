@@ -31,75 +31,75 @@ The React renderer (`src/renderers/react/`) consumes the engine API and provides
 
 ```typescript
 export function useGameLoop(): {
-  state: Readonly<GameState>
-  tick: number
-  isPaused: boolean
-  speed: number
-  play(): void
-  pause(): void
-  step(): void
-  setSpeed(multiplier: number): void
-}
+    state: Readonly<GameState>;
+    tick: number;
+    isPaused: boolean;
+    speed: number;
+    play(): void;
+    pause(): void;
+    step(): void;
+    setSpeed(multiplier: number): void;
+};
 ```
 
 ### useEntitySelection
 
 ```typescript
 export function useEntitySelection(): {
-  selectedId: string | null
-  selectedEntity: EntityView | null
-  selectedCell: CellView | null
-  select(entityId: string): void
-  selectCell(mapId: string, cellId: number): void
-  deselect(): void
-  history: string[]         // navigation history for back button
-  goBack(): void
-}
+    selectedId: string | null;
+    selectedEntity: EntityView | null;
+    selectedCell: CellView | null;
+    select(entityId: string): void;
+    selectCell(mapId: string, cellId: number): void;
+    deselect(): void;
+    history: string[]; // navigation history for back button
+    goBack(): void;
+};
 ```
 
 ### useContentSearch
 
 ```typescript
 export function useContentSearch(): {
-  query: string
-  setQuery(q: string): void
-  results: SearchResult[]
-  selectedRegistry: string | null
-  setRegistryFilter(registryId: string | null): void
-}
+    query: string;
+    setQuery(q: string): void;
+    results: SearchResult[];
+    selectedRegistry: string | null;
+    setRegistryFilter(registryId: string | null): void;
+};
 
 export type SearchResult = {
-  registryId: string
-  entryId: string
-  displayName: string
-  matchField: string
-}
+    registryId: string;
+    entryId: string;
+    displayName: string;
+    matchField: string;
+};
 ```
 
 ### useMapNavigation
 
 ```typescript
 export function useMapNavigation(): {
-  currentMapId: string
-  breadcrumb: MapInfo[]
-  navigateToSubMap(mapId: string): void
-  navigateUp(): void
-}
+    currentMapId: string;
+    breadcrumb: MapInfo[];
+    navigateToSubMap(mapId: string): void;
+    navigateUp(): void;
+};
 ```
 
 ### useBuildTool
 
 ```typescript
 export function useBuildTool(): {
-  activeTool: BuildToolType | null
-  selectedFurniture: string | null
-  validCells: number[]
-  activate(tool: BuildToolType, furnitureTypeId?: string): void
-  deactivate(): void
-  confirm(cellId: number): void
-}
+    activeTool: BuildToolType | null;
+    selectedFurniture: string | null;
+    validCells: number[];
+    activate(tool: BuildToolType, furnitureTypeId?: string): void;
+    deactivate(): void;
+    confirm(cellId: number): void;
+};
 
-export type BuildToolType = "furniture" | "zone" | "wall" | "door"
+export type BuildToolType = "furniture" | "zone" | "wall" | "door";
 ```
 
 ## State Flow
@@ -122,17 +122,17 @@ Next tick processes cmd     UI shows pending state
 
 The ThreeJS map renderer receives cell and entity data through the engine's MapQuery interface and renders:
 
-| Data | ThreeJS Representation |
-|------|----------------------|
-| VoronoiCell | ExtrudeGeometry from polygon vertices, colored by terrain |
-| SquareTile | PlaneGeometry 1×1, colored by terrain |
-| Colonist entity | Low-poly mesh or capsule geometry with color by faction |
-| Animal entity | Smaller mesh with type-specific shape |
-| Furniture entity | Box/cylinder geometry matching furniture type |
-| Wall segment | Thin box on tile edge |
-| Door | Thin box with pivot animation |
-| Zone highlight | Transparent overlay on zone cells |
-| Selection | Outline effect on selected entity/cell |
+| Data             | ThreeJS Representation                                    |
+| ---------------- | --------------------------------------------------------- |
+| VoronoiCell      | ExtrudeGeometry from polygon vertices, colored by terrain |
+| SquareTile       | PlaneGeometry 1×1, colored by terrain                     |
+| Colonist entity  | Low-poly mesh or capsule geometry with color by faction   |
+| Animal entity    | Smaller mesh with type-specific shape                     |
+| Furniture entity | Box/cylinder geometry matching furniture type             |
+| Wall segment     | Thin box on tile edge                                     |
+| Door             | Thin box with pivot animation                             |
+| Zone highlight   | Transparent overlay on zone cells                         |
+| Selection        | Outline effect on selected entity/cell                    |
 
 ## Performance Contracts
 

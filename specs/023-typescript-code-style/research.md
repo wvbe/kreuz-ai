@@ -1,141 +1,535 @@
-# Research: TypeScript Code Style + React Game Application
+# Research: TypeScript Code Style Tooling
 
-**Date**: 2026-05-04 | **Spec**: 023, 024
+**Spec**: 023-typescript-code-style | **Date**: 2026-05-04 | **Status**: Complete
 
-## R-001: Voronoi Map Generation for Games
+---
 
-**Decision**: Use Fortune's algorithm (via d3-delaunay) to generate voronoi tessellations from random seed points, then apply Lloyd relaxation (2–3 iterations) for organic-looking cells.
+## 1. ESLint 9 Flat Config with TypeScript
 
-**Rationale**: d3-delaunay is well-maintained, zero-dependency (operates on plain arrays), and produces both Voronoi and Delaunay dual graphs needed for neighbor lookups and pathfinding. The library works fully headlessly (no DOM required) which satisfies constitution principle III.
+### Decision
 
-**Alternatives considered**:
-- Custom Fortune's implementation → high effort, error-prone, no benefit
-- Poisson disc sampling → produces uniform point distributions but requires additional voronoi step regardless
-- Grid-based with noise → doesn't produce voronoi cells required by spec 024 FR-002
+Use ESLint 9 flat config (`eslint.config.ts`) with `typescript-eslint` v8+ using `parserOptions.projectService: true` for typed linting. Use `eslint-plugin-import-x` (the maintained fork) for `no-restricted-paths` to enforce the engine→renderer boundary.
 
-## R-002: Square-Tile Cave/Cellar Generation
+### Rationale
 
-**Decision**: Use cellular automata (4-5 rule) for cave maps and BSP (Binary Space Partitioning) for cellar/room-based sub-maps.
+- **Flat config** is the only format ESLint recommends going forward; legacy `.eslintrc` is deprecated.
+- **`projectService: true`** (new in typescript-eslint v8) eliminates manual `parserOptions.project` path configuration for monorepos entirely. It uses TypeScript's own project service to resolve type information per-file automatically — no globs, no `tsconfig.eslint.json` hacks.
+- **`eslint-plugin-import-x`** is the actively maintained ESM-native fork of `eslint-plugin-import`. It supports ESLint 9 flat config natively and includes the `no-restricted-paths` rule unchanged.
 
-**Rationale**: Cellular automata produces natural-looking cave networks with a simple implementation. BSP produces structured room layouts appropriate for cellars and buildings. Both are deterministic given the seeded PRNG.
+### Alternatives Considered
 
-**Alternatives considered**:
-- Drunkard's walk → produces narrow corridors, unsuitable for open caves
-- Wave Function Collapse → over-engineered for the simple tile types needed
-- Perlin noise thresholding → viable but cellular automata gives better connectivity control
+| Alternative                                         | Why Rejected                                                                                                       |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `parserOptions.project` with glob paths             | Requires manual path management; `projectService` is zero-config for monorepos                                     |
+| `eslint-plugin-import` (original)                   | Stale maintenance; poor ESLint 9 flat config support; `eslint-plugin-import-x` is the community-endorsed successor |
+| `@typescript-eslint/no-restricted-imports`          | Only restricts import specifiers (package names), not file paths/directories                                       |
+| Boundary enforcement via `eslint-plugin-boundaries` | Heavier abstraction; `no-restricted-paths` is simpler and sufficient for a two-project boundary                    |
 
-## R-003: Village Layout Generation
+### Key Configuration Pattern
 
-**Decision**: Implement a constraint-based zone placer that: (1) identifies flat terrain voronoi cells, (2) places roads along Delaunay edges, (3) assigns zone types to cell clusters based on terrain affinity (e.g., farms on fertile, mines near rock).
+```typescript
+// eslint.config.ts
+import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
+import tseslint from "typescript-eslint";
+import importX from "eslint-plugin-import-x";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 
-**Rationale**: This produces coherent village layouts that respect terrain without requiring hand-placement. Using the dual Delaunay graph for roads gives natural-looking path networks between zones.
+export default defineConfig(
+    globalIgnores(["dist/", "node_modules/", "coverage/"]),
 
-**Alternatives considered**:
-- Random zone scattering → produces incoherent villages
-- Template-based layouts → doesn't adapt to voronoi geography
-- L-system growth → visually interesting but unpredictable for gameplay
+    js.configs.recommended,
+    tseslint.configs.strictTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
 
-## R-004: Terrain Painting Strategy
+    {
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+            },
+        },
+    },
 
-**Decision**: Multi-pass terrain assignment: (1) elevation from 2D simplex noise, (2) moisture from separate noise octave, (3) terrain type from elevation×moisture lookup table, (4) river carving along low-elevation paths, (5) resource spawning per terrain affinity.
+    // Engine→renderer boundary enforcement
+    {
+        files: ["src/game/**/*.ts"],
+        plugins: { "import-x": importX },
+        rules: {
+            "import-x/no-restricted-paths": [
+                "error",
+                {
+                    zones: [
+                        {
+                            target: "./src/game",
+                            from: "./src/renderers",
+                            message:
+                                "Engine MUST NOT import from renderers (Constitution I).",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
 
-**Rationale**: This Whittaker-diagram approach produces biome diversity from minimal configuration. Each pass is deterministic and independently testable. Rivers follow natural drainage paths rather than arbitrary placement.
+    eslintConfigPrettier,
+);
+```
 
-**Alternatives considered**:
-- Pure random per-cell → no spatial coherence
-- Voronoi-plate tectonics simulation → too expensive for startup time budget
-- Hand-authored biome maps → violates procedural generation requirement
+### Notes
 
-## R-005: React + ThreeJS Integration
+- ESLint 9 requires `jiti` (>=2.2.0) as a devDependency to load `.ts` config files on Node.js <22.13.
+- The `defineConfig()` helper provides type safety for the config array.
+- `tseslint.configs.strictTypeChecked` includes rules like `no-explicit-any`, `no-unsafe-*`, and strict type-checked variants.
 
-**Decision**: Use @react-three/fiber (R3F) as the React-ThreeJS bridge. The isometric camera is a custom `OrthographicCamera` positioned at a 45° azimuth and ~35° elevation (true isometric). Raycasting uses R3F's built-in `useThree` hooks.
+---
 
-**Rationale**: R3F is the de-facto standard for React+Three integration. It provides declarative scene graph composition, automatic disposal, and integrates with React's lifecycle. The built-in pointer event system handles raycasting without custom code.
+## 2. TypeScript Project References for Monorepo
 
-**Alternatives considered**:
-- Raw Three.js with React refs → manual lifecycle management, brittle
-- Babylon.js → different paradigm, less React ecosystem support
-- 2D Canvas (as in demo.html) → doesn't meet spec 024's "3D" and "isometric camera with rotate" requirements
+### Decision
 
-## R-006: Engine-to-Renderer State Bridge
+Use a three-layer tsconfig structure: `tsconfig.base.json` (shared options) → per-project `tsconfig.json` files (engine, renderer) → root `tsconfig.json` (solution file with `references`). Use relative imports between files within the same project. The renderer references the engine project via `references`.
 
-**Decision**: The engine exposes a `GameState` readonly snapshot after each tick. The React renderer subscribes via a `useGameLoop` hook that triggers React re-render on tick completion. Selection state lives in the renderer; game mutations go through a `CommandDispatcher` interface that the engine processes on the next tick.
+### Rationale
 
-**Rationale**: This maintains strict one-way data flow (engine → renderer) per constitution principle I, while allowing the renderer to issue commands without coupling. The hook-based subscription uses React's useSyncExternalStore for tear-free reads.
+- **`composite: true`** on each sub-project enables incremental builds and enforces that all files are included. The engine project's `.d.ts` output is what the renderer sees, making cross-boundary violations a compile error.
+- **Solution-style root tsconfig** (empty `files: []` + `references`) gives a single entry point for `tsc -b` to build everything in dependency order.
+- **Relative imports** (not `paths` aliases) are simpler, require no extra build tooling, work with `NodeNext` module resolution, and make dependency direction visible in the import path.
 
-**Alternatives considered**:
-- Direct engine mutation from UI → violates decoupling principle
-- Redux/Zustand intermediate store → unnecessary layer when engine IS the store
-- Web Workers → adds serialization overhead; defer to optimization phase
+### Alternatives Considered
 
-## R-007: TypeScript Project References Layout
+| Alternative                                           | Why Rejected                                                                                              |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `paths` aliases (e.g., `@game/*`)                     | Requires runtime path mapping (e.g., `tsconfig-paths`), breaks NodeNext resolution, adds bundler coupling |
+| Single `tsconfig.json` with `include` globs           | No compile-time boundary enforcement; no incremental build benefits                                       |
+| Separate npm packages (true monorepo with workspaces) | Overkill for two tightly-coupled projects in a single repo; adds package management overhead              |
 
-**Decision**: Two tsconfig project references:
-1. `src/game/tsconfig.json` — composite, emits declarations
-2. `src/renderers/tsconfig.json` — references `src/game/`, cannot be referenced by game
+### Key Configuration Pattern
 
-Root `tsconfig.json` is references-only (no own files). ESLint `import/no-restricted-paths` additionally enforces that `src/game/**` cannot import from `src/renderers/**`.
+```jsonc
+// tsconfig.base.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true
+  }
+}
 
-**Rationale**: TypeScript project references provide compile-time boundary enforcement. The ESLint rule provides IDE-time feedback. Together they make it impossible to accidentally couple engine to renderer.
+// src/game/tsconfig.json
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "outDir": "../../dist/game"
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.test.ts"]
+}
 
-**Alternatives considered**:
-- Monorepo with workspaces (npm/pnpm) → overhead for 2 packages; project references are lighter
-- Single tsconfig with path aliases → no compile-time enforcement
-- Separate repositories → too much friction for a single-developer project
+// src/renderers/react/tsconfig.json
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "outDir": "../../../dist/renderers/react",
+    "jsx": "react-jsx"
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"],
+  "references": [
+    { "path": "../../game" }
+  ]
+}
 
-## R-008: Content Search Performance (<200ms)
+// tsconfig.json (root solution)
+{
+  "files": [],
+  "references": [
+    { "path": "src/game" },
+    { "path": "src/renderers/react" }
+  ]
+}
+```
 
-**Decision**: Pre-build a trie-based index of all content IDs and display names at load time. Search queries traverse the trie with prefix matching. For substring matching, also maintain a reverse-suffix trie. Index size for 300 entries is negligible (<50KB).
+### Notes
 
-**Rationale**: A trie gives O(k) lookup where k is query length, easily meeting the 200ms requirement even for 1000+ entries. Building the index at startup amortizes the cost.
+- `declarationMap: true` enables "Go to Definition" to navigate across project boundaries transparently.
+- `noEmit: true` in the base config means builds are type-check-only by default; bundling is handled separately.
+- `verbatimModuleSyntax: true` enforces explicit `import type` for type-only imports, improving tree-shaking and clarity.
 
-**Alternatives considered**:
-- Linear scan with Array.filter → O(n) per keystroke; fine for 300 items but doesn't scale
-- Fuse.js fuzzy search → adds dependency; fuzzy matching may confuse exact ID lookups
-- Web Worker search → unnecessary given data size
+---
 
-**Revised decision**: Given only 300 entries, a simple `Array.filter` with case-insensitive `includes()` will comfortably meet 200ms. Defer trie to when registries exceed 1000 entries.
+## 3. Vitest Configuration for Multi-Project
 
-## R-009: Pathfinding on Voronoi Maps
+### Decision
 
-**Decision**: A* pathfinding on the Delaunay dual graph (each voronoi cell is a node; Delaunay edges define neighbors). Heuristic: euclidean distance between cell centroids. Cost function considers terrain traversability.
+Use a single root `vitest.config.ts` with inline `projects` array (Vitest 3.2+ syntax, replacing the deprecated `workspace` key). Each project uses `extends: true` to inherit shared config. Coverage is configured globally (root-level only). Use `v8` coverage provider.
 
-**Rationale**: The Delaunay dual of a Voronoi diagram naturally encodes cell adjacency. A* on this graph is well-understood, efficient for ~1000 nodes, and works identically in headless and rendered contexts.
+### Rationale
 
-**Alternatives considered**:
-- Navigation mesh → overkill for cell-based movement
-- Dijkstra without heuristic → slower convergence; A* is trivially better
-- Pre-computed flow fields → useful for many units; defer to optimization
+- **`projects` replaces `workspace`** as of Vitest 3.2. The old `vitest.workspace.ts` file is deprecated.
+- **Inline project definitions** with `extends: true` keep all configuration in one file, reducing indirection. Each project just specifies its `include` pattern and `name`.
+- **Coverage is root-level only** — Vitest does not support per-project coverage thresholds. A single `coverage.thresholds` config applies to all files matched by `coverage.include`.
+- **v8 provider** is recommended: faster, lower memory, and since Vitest 3.2 its accuracy matches Istanbul via AST-aware remapping.
 
-## R-010: Map Generators — Diversity Requirements
+### Alternatives Considered
 
-The user requests "various distinct map generators so that the game world is rich." This resolves to:
+| Alternative                             | Why Rejected                                                                         |
+| --------------------------------------- | ------------------------------------------------------------------------------------ |
+| `vitest.workspace.ts` file              | Deprecated in Vitest 3.2; replaced by `projects` in root config                      |
+| Separate `vitest.config.ts` per project | Unnecessary complexity for two projects; root config with inline projects is cleaner |
+| Istanbul provider                       | Slower, higher memory; v8 now has equivalent accuracy                                |
+| Per-project coverage thresholds         | Not supported by Vitest; coverage config is root-level only                          |
 
-1. **VoronoiOutdoorGenerator** — Main world map. 500–1000 voronoi cells. Biomes via elevation+moisture. Rivers, lakes, forests, mountains, plains, swamps. Starting village auto-placed.
-2. **CaveGenerator** — Underground sub-maps. Square tiles 30×30. Cellular automata caverns with ore deposits and underground water.
-3. **CellarGenerator** — Small 10×10 square-tile rooms beneath buildings. BSP room partitioning.
-4. **VillageLayoutGenerator** — Operates ON the voronoi map. Places roads, assigns initial zones (town square, farms, workshops), spawns starting entities and furniture.
-5. **TerrainPainter** — Shared utility. Assigns terrain types to cells based on noise-derived properties.
+### Key Configuration Pattern
 
-Each generator is deterministic (takes PRNG seed), produces a `TileMap` subtype, and is independently testable headlessly.
+```typescript
+// vitest.config.ts
+import { defineConfig } from "vitest/config";
 
-## R-011: Save/Load Format Integration
+export default defineConfig({
+    test: {
+        projects: [
+            {
+                extends: true,
+                test: {
+                    name: "game",
+                    include: ["src/game/**/*.test.ts"],
+                    environment: "node",
+                },
+            },
+            {
+                extends: true,
+                test: {
+                    name: "react",
+                    include: ["src/renderers/react/**/*.test.{ts,tsx}"],
+                    environment: "jsdom",
+                },
+            },
+        ],
+        coverage: {
+            provider: "v8",
+            include: ["src/**/*.{ts,tsx}"],
+            exclude: ["**/*.test.{ts,tsx}", "**/*.d.ts", "**/README.md"],
+            thresholds: {
+                statements: 80,
+                branches: 80,
+                functions: 80,
+                lines: 80,
+            },
+            reporter: ["text", "html", "lcov"],
+        },
+    },
+});
+```
 
-**Decision**: Use the save format defined in spec 006. The React renderer provides UI (save button, load file picker, auto-save interval setting) but delegates serialization to `SaveManager` in the engine.
+### Notes
 
-**Rationale**: Keeps all state logic in the engine per constitution principles I and II. The renderer only triggers save/load commands.
+- Co-located tests (`Foo.test.ts` next to `Foo.ts`) are discovered by the `include` glob — no configuration change needed when adding tests.
+- The `--project game` CLI flag runs only the engine tests; useful for fast feedback loops.
+- `environment: 'jsdom'` is only needed for the React project (DOM APIs); the engine project uses `'node'`.
 
-## R-012: Code Style Migration (Spec 023)
+---
 
-**Decision**: Since the repository is essentially greenfield (no existing `src/` directory), spec 023 rules apply from the start. No migration is needed — all new code follows the rules directly.
+## 4. No-Barrel-File Enforcement
 
-**Key rules applied**:
-- Named exports only (no default exports)
-- No barrel files (no `index.ts` re-exports)
-- `type` over `interface` for data shapes
-- Native `enum` with `z.nativeEnum()` for Zod validation
-- No `any` or `unknown` (use `z.infer<>` for schema-derived types)
-- Co-located tests (`*.test.ts` adjacent to source)
-- `README.md` in every folder
-- TSDoc on all exports
-- Identifiers ≥3 chars (exception: `id`, `x`, `y`, `z` for coordinates)
+### Decision
+
+Use `eslint-plugin-barrel-files` with the `avoid-barrel-files` and `avoid-re-export-all` rules. Supplement with `import-x/no-restricted-paths` targeting `**/index.ts` if stricter enforcement is needed.
+
+### Rationale
+
+- **`eslint-plugin-barrel-files`** is purpose-built, lightweight (181 stars, ESM, flat config support since 2024), and provides exactly the rules needed:
+    - `avoid-barrel-files`: flags any file that only contains re-exports
+    - `avoid-re-export-all`: flags `export * from` patterns
+    - `avoid-importing-barrel-files`: flags imports that resolve to barrel files
+- The plugin handles edge cases (mixed exports, partial barrels) that a simple filename-based rule would miss.
+
+### Alternatives Considered
+
+| Alternative                                        | Why Rejected                                                                                   |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Custom ESLint rule checking filenames              | Only catches `index.ts` by name; misses barrel patterns in non-index files; maintenance burden |
+| `no-restricted-imports` with `index` pattern       | Only blocks importing barrels, doesn't prevent creating them                                   |
+| `eslint-plugin-import-x/no-cycle` + manual review  | Doesn't prevent barrels specifically; only detects circular dependencies                       |
+| Filename convention ban via `no-restricted-syntax` | Cannot analyze re-export patterns; too coarse                                                  |
+
+### Key Configuration Pattern
+
+```typescript
+// In eslint.config.ts
+import barrelFiles from 'eslint-plugin-barrel-files';
+
+// Add to config array:
+{
+  files: ['src/**/*.ts', 'src/**/*.tsx'],
+  plugins: { 'barrel-files': barrelFiles },
+  rules: {
+    'barrel-files/avoid-barrel-files': 'error',
+    'barrel-files/avoid-re-export-all': 'error',
+    'barrel-files/avoid-importing-barrel-files': 'error',
+  },
+}
+```
+
+### Notes
+
+- The plugin migrated to ESM and flat config in 2024. Ensure version >=2.0.0.
+- Existing barrel files (`src/game/registries/index.ts`, etc.) must be deleted as part of adoption (per FR-002).
+
+---
+
+## 5. TSDoc Enforcement via ESLint
+
+### Decision
+
+Use `eslint-plugin-jsdoc` with the `flat/recommended-tsdoc-error` preset. This provides `require-jsdoc` (enforces presence on exported symbols), `multiline-blocks` (enforces multi-line format), and `require-param`/`require-returns` (enforces tag presence). Supplement with `eslint-plugin-tsdoc` for TSDoc syntax validation.
+
+### Rationale
+
+- **`eslint-plugin-jsdoc`** (1.2k stars, v62+, actively maintained) is far more capable than `eslint-plugin-tsdoc` alone:
+    - `require-jsdoc` supports `publicOnly: true` to enforce only on exported symbols
+    - `multiline-blocks` enforces the multi-line `/** ... */` format (FR-011)
+    - `require-param`, `require-returns` enforce tag presence
+    - `require-description` ensures descriptions aren't empty
+    - TypeScript-aware: understands types from TS so it doesn't demand `@type` annotations
+    - Has a dedicated `flat/recommended-tsdoc` config for TSDoc-compatible projects
+- **`eslint-plugin-tsdoc`** adds TSDoc-specific syntax validation (tag names, modifiers) that `eslint-plugin-jsdoc` doesn't cover. They complement each other.
+
+### Alternatives Considered
+
+| Alternative                                        | Why Rejected                                                                                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `eslint-plugin-tsdoc` alone                        | Only validates syntax of existing comments; cannot enforce that comments exist, enforce multi-line format, or require `@param`/`@returns` |
+| `eslint-plugin-jsdoc` alone (without tsdoc plugin) | Doesn't validate TSDoc-specific syntax (e.g., `{@link}`, `@remarks`); combining both gives full coverage                                  |
+| TypeDoc `--validation` flag                        | Build-time only; no IDE feedback; doesn't enforce presence                                                                                |
+| Custom ESLint rule                                 | Reinventing the wheel; `eslint-plugin-jsdoc` already handles all cases                                                                    |
+
+### Key Configuration Pattern
+
+```typescript
+// In eslint.config.ts
+import jsdoc from 'eslint-plugin-jsdoc';
+import tsdocPlugin from 'eslint-plugin-tsdoc';
+
+// TSDoc syntax validation
+{
+  files: ['src/**/*.ts', 'src/**/*.tsx'],
+  plugins: { tsdoc: tsdocPlugin },
+  rules: {
+    'tsdoc/syntax': 'error',
+  },
+},
+
+// JSDoc presence and format enforcement
+jsdoc.configs['flat/recommended-tsdoc-error'],
+{
+  files: ['src/**/*.ts', 'src/**/*.tsx'],
+  rules: {
+    // Enforce JSDoc on exports only
+    'jsdoc/require-jsdoc': ['error', {
+      publicOnly: true,
+      require: {
+        FunctionDeclaration: true,
+        MethodDefinition: true,
+        ClassDeclaration: true,
+      },
+      contexts: [
+        'TSTypeAliasDeclaration',
+        'TSEnumDeclaration',
+        'TSInterfaceDeclaration',
+      ],
+    }],
+    // Enforce multi-line format (no single-line /** ... */)
+    'jsdoc/multiline-blocks': ['error', {
+      noSingleLineBothSides: true,
+    }],
+    // Enforce @param and @returns
+    'jsdoc/require-param': 'error',
+    'jsdoc/require-param-description': 'error',
+    'jsdoc/require-returns': 'error',
+    'jsdoc/require-returns-description': 'error',
+    // No types in TSDoc (TypeScript provides them)
+    'jsdoc/no-types': 'error',
+    'jsdoc/require-description': 'error',
+  },
+},
+
+// Exempt test files from JSDoc requirements
+{
+  files: ['**/*.test.ts', '**/*.test.tsx'],
+  rules: {
+    'jsdoc/require-jsdoc': 'off',
+  },
+}
+```
+
+### Notes
+
+- `publicOnly: true` means only exported symbols trigger the rule (matching FR-010).
+- The `flat/recommended-tsdoc` config turns off `require-param-type` and `require-returns-type` since TypeScript provides the types.
+- `contexts` array adds enforcement for type aliases, enums, and interfaces beyond just functions and classes.
+- Test files are exempted from JSDoc requirements (FR-014).
+
+---
+
+## 6. Folder README Enforcement
+
+### Decision
+
+Use a standalone shell script (`scripts/check-folder-readmes.sh`) run as a CI step and available as a pre-commit hook. Not an ESLint rule.
+
+### Rationale
+
+- ESLint operates on file contents, not filesystem structure. Checking "does this folder have a README?" is a filesystem query, not a lint-on-file operation.
+- A shell script is trivially simple (~10 lines), has zero dependencies, runs in <1s, and integrates naturally with CI and git hooks.
+- Custom ESLint rules add maintenance burden for a check that doesn't benefit from AST analysis.
+
+### Alternatives Considered
+
+| Alternative                             | Why Rejected                                                                                                                                      |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Custom ESLint rule                      | ESLint visits files, not directories; would need to synthesize a "virtual file" per directory; over-engineered                                    |
+| `eslint-plugin-folder-rules` or similar | No mature plugin exists for this specific check                                                                                                   |
+| Husky + lint-staged                     | lint-staged only processes changed files; wouldn't catch a new folder added without a README unless the hook script explicitly checks all folders |
+| `danger.js` CI check                    | Adds heavy dependency for a trivial check                                                                                                         |
+
+### Key Configuration Pattern
+
+```bash
+#!/usr/bin/env bash
+# scripts/check-folder-readmes.sh
+set -euo pipefail
+
+errors=0
+while IFS= read -r -d '' dir; do
+  if [[ ! -f "$dir/README.md" ]]; then
+    echo "ERROR: Missing README.md in $dir"
+    errors=$((errors + 1))
+  fi
+done < <(find src -type d -print0)
+
+if [[ $errors -gt 0 ]]; then
+  echo "Found $errors folder(s) without README.md"
+  exit 1
+fi
+
+echo "All folders have README.md ✓"
+```
+
+```jsonc
+// package.json
+{
+    "scripts": {
+        "check:readmes": "bash scripts/check-folder-readmes.sh",
+    },
+}
+```
+
+### Notes
+
+- Runs as part of the CI pipeline alongside `lint` and `typecheck`.
+- Can be added as a pre-commit hook via `lefthook` or `husky` for local fast feedback.
+- The script is simple enough that an AI agent or developer can understand and maintain it without documentation.
+
+---
+
+## 7. Prettier + ESLint Integration (2025+)
+
+### Decision
+
+Use `eslint-config-prettier/flat` as the **last** item in the ESLint flat config array. Run Prettier and ESLint as separate commands (`prettier --write` and `eslint --fix`). Do NOT use `eslint-plugin-prettier`.
+
+### Rationale
+
+- **`eslint-config-prettier`** (v10.x, 5.9k stars) remains the standard approach in 2025+. It disables all ESLint rules that conflict with Prettier, including rules from `@typescript-eslint` and other plugins automatically.
+- The flat config approach is identical in concept: place `eslint-config-prettier/flat` last in the array so it overrides any conflicting rules from earlier configs.
+- **Separate commands** (not `eslint-plugin-prettier`) is the recommended approach because:
+    - Faster: no re-formatting on every lint pass
+    - Cleaner error output: Prettier errors don't pollute ESLint results
+    - No red squiggles for formatting issues in the editor
+    - `eslint-plugin-prettier` is acknowledged as legacy by Prettier maintainers
+
+### Alternatives Considered
+
+| Alternative                                                    | Why Rejected                                                                                                               |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `eslint-plugin-prettier` (run Prettier as an ESLint rule)      | Slower; conflates formatting with linting; deprecated pattern; causes confusing `--fix` interactions                       |
+| No `eslint-config-prettier` (manually avoid conflicting rules) | Fragile; easy to accidentally enable a conflicting rule from a shared config                                               |
+| `@stylistic/eslint-plugin` replacing Prettier                  | Requires migrating all formatting rules; Prettier is simpler and more widely adopted                                       |
+| Biome (replaces both ESLint and Prettier)                      | Not yet mature for TypeScript project references; lacks the plugin ecosystem needed (import-x, jsdoc, barrel-files, tsdoc) |
+
+### Key Configuration Pattern
+
+```typescript
+// eslint.config.ts — last entry in the array
+import eslintConfigPrettier from "eslint-config-prettier/flat";
+
+export default defineConfig(
+    // ... all other configs ...
+    eslintConfigPrettier, // Must be last to override conflicting rules
+);
+```
+
+```jsonc
+// package.json scripts
+{
+    "scripts": {
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix .",
+    },
+}
+```
+
+```javascript
+// prettier.config.js
+export default {
+    semi: true,
+    singleQuote: true,
+    trailingComma: "all",
+    printWidth: 100,
+    tabWidth: 2,
+};
+```
+
+### Notes
+
+- The `/flat` import adds a `name` property to the config object for better config inspector experience.
+- CI runs `format:check` and `lint` as separate steps; both must pass.
+- Developers can run `format` + `lint:fix` locally to auto-fix everything.
+- IDE setup: enable "format on save" with Prettier extension; ESLint extension provides real-time lint feedback.
+
+---
+
+## Summary of Chosen Stack
+
+| Concern                | Tool                          | Version |
+| ---------------------- | ----------------------------- | ------- |
+| Linting                | ESLint 9 (flat config)        | ^9.x    |
+| TypeScript linting     | `typescript-eslint`           | ^8.x    |
+| Import boundary        | `eslint-plugin-import-x`      | ^4.x    |
+| Barrel file prevention | `eslint-plugin-barrel-files`  | ^2.x    |
+| TSDoc syntax           | `eslint-plugin-tsdoc`         | ^0.4.x  |
+| JSDoc enforcement      | `eslint-plugin-jsdoc`         | ^62.x   |
+| Formatting             | Prettier                      | ^3.x    |
+| Format/lint compat     | `eslint-config-prettier`      | ^10.x   |
+| Testing                | Vitest                        | ^3.2+   |
+| Coverage               | `@vitest/coverage-v8`         | ^3.2+   |
+| Type checking          | TypeScript project references | ^5.x    |
+| Folder READMEs         | Shell script                  | N/A     |
+
+All tools are dev-time only — zero runtime overhead as required by the spec.
