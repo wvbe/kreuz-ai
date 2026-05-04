@@ -201,16 +201,16 @@
 
 ### Integration
 
-- [ ] T088 [US1] Create registries index re-exporting all registries in `src/registries/index.ts`
-- [ ] T089 [US1] Wire ContentLoader to load all 12 registries in dependency order and run cross-validation in `src/engine/ContentLoader.ts`
+- [x] T088 [US1] Create registries index re-exporting all registries in `src/registries/index.ts`
+- [x] T089 [US1] Wire ContentLoader to load all 12 registries in dependency order and run cross-validation in `src/engine/ContentLoader.ts`
 
 ### Cross-Registry Validation Tests
 
-- [ ] T090 [US1] Write cross-registry validation test: all recipe material refs exist, all furniture construction material refs exist, all zone furniture refs exist, all entity prototype refs valid in `test/validation/cross-registry.test.ts`
+- [x] T090 [US1] Write cross-registry validation test: all recipe material refs exist, all furniture construction material refs exist, all zone furniture refs exist, all entity prototype refs valid in `test/validation/cross-registry.test.ts`
 
 ### Completeness Tests
 
-- [ ] T091 [US1] Write FR completeness test: verify FR-001 to FR-017 minimum counts and constraints in `test/content/completeness.test.ts`
+- [x] T091 [US1] Write FR completeness test: verify FR-001 to FR-017 minimum counts and constraints in `test/content/completeness.test.ts`
 
 **🚧 QUALITY GATE 6**: `npx vitest run` — ALL tests pass including cross-registry and completeness. `loadAllContent()` returns `{ success: true, errors: [] }`. Zero validation errors across all 300+ content entries. FR-001 through FR-017 all verified.
 
