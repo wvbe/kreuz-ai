@@ -1,9 +1,12 @@
 # Feature Specification: Zones & Rooms
 
-**Feature Branch**: `016-zones-rooms`
+**Feature Branch**: `015-zones-rooms`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify what zones and rooms are. Zones and rooms function the same in the sense that they enable certain activities or entity modifiers (such as happiness) if they are of sufficient size and has the correct furniture in it. A zone can be any amount of contiguous tiles, a room is a zone but needs to be enclosed in walls and doors on all sides. When a zone or room is for a specific profession, eg. 'bakery', then entities will also prefer to store related materials (eg. tools) there rather than somewhere else. Zones and rooms can be designated by the user because they are the colony government."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

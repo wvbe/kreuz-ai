@@ -1,9 +1,12 @@
 # Feature Specification: Construction System
 
-**Feature Branch**: `017-construction`
+**Feature Branch**: `016-construction`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify the construction and blueprints mechanism. There are not really blueprints, entities will simply build one or more other (furniture?) entities one-by-one, they are queued. A zone or room is created instantly but does not become effective until all of its requirements are met, such as necessary furnitures or enclosure in walls/doors. The construction of a thing is similar to crafting, in the sense that materials need to be brought and then an entity is busy with it for a bit. Building is always performed at the place where the furniture or wall will be placed. Sometimes the user needs an additional material, such as a tool, that is not consumed in the building process."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

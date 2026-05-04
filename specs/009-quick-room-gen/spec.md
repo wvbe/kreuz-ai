@@ -2,8 +2,11 @@
 
 **Feature Branch**: `009-quick-room-gen`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "One of the ways to generate a game is a quick-and-dirty room generator. This is useful for tests and POC. It generates a room with a handful of entities and handful of objects that entities and the user can interact with."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

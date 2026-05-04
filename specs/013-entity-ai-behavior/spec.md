@@ -2,8 +2,11 @@
 
 **Feature Branch**: `013-entity-ai-behavior`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want the entities like persons and animals to have interesting behaviour, influenced by lots of things such as their needs, mood, relationship to other entities, work occupation, wealth/poverty. Help me specify what a good AI architecture is to drive this."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

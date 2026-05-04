@@ -2,8 +2,11 @@
 
 **Feature Branch**: `006-save-format`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify the game state & save format"
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -94,7 +97,7 @@ After save and load, the game state must be deterministic: advancing the loaded 
 - **FR-002**: GameState root MUST include an `entities` array, where each entity is a JSON object with `id`, `prototype`, and `components` (nested by component name).
 - **FR-003**: GameState root MUST include a `maps` array, where each map contains map ID, terrain data as a 2D array of tile objects `[[{type: int, variant: int}, ...], ...]` where each tile is an object with `type` (integer ID from startup registry) and optional `variant` (integer for tile sub-type). Transition objects (doors, portals) serialize as full entity-like objects within the map's entity collection. Entity positions are NOT stored in map data; they are sourced from `entity.components.Position` on load.
 - **FR-004**: GameState root MUST include a `gameTime` field (integer) representing elapsed game ticks since game start.
-- **FR-005**: Each entity in `entities` MUST serialize all component state (inventory contents, position, health, etc.) as properties under `components.{ComponentName}`. Position component MUST include `mapId` and discrete cell coordinates: `{ mapId: int, cellX: int, cellY: int }` for square grids or `{ mapId: int, regionId: int }` for Voronoi grids. An optional `PreciseOffset` component stores sub-cell offset as fixed-point integers `{ offsetX: int, offsetY: int }` (thousandths of a cell).
+- **FR-005**: Each entity in `entities` MUST serialize all component state (inventory contents, position, health, etc.) as properties under `components.{ComponentName}`. Position component MUST include `mapId` and discrete cell coordinates: `{ mapId: int, cellX: int, cellY: int }` for square grids or `{ mapId: int, cellIndex: int }` for voronoi grids. No sub-cell data is stored in game state; visual interpolation is a renderer-only concern.
 - **FR-006**: Entity position is the single source of truth; map terrain grid does not store entity locations. On load, entities are placed according to their Position components.
 - **FR-006**: GameState MUST include a `timestamp` field (ISO 8601 string) indicating when the save was created (UTC).
 - **FR-007**: Terrain tiles can be mutated during gameplay (e.g., building foundations, digging). Mutated terrain is serialized in the 2D grid at its current state; mutations are not recorded as delta, only the final state is saved.
@@ -154,5 +157,5 @@ After save and load, the game state must be deterministic: advancing the loaded 
 
 ### Cross-Cutting Session 2026-05-02
 
-- Q: How should entity positions be serialized? → A: Position component stores discrete cell coordinates as integers: `{ mapId: int, cellX: int, cellY: int }` (square) or `{ mapId: int, regionId: int }` (Voronoi). Optional `PreciseOffset` component stores sub-cell offset as fixed-point integers `{ offsetX: int, offsetY: int }` (thousandths). This satisfies FR-014 (integer-only) while supporting hybrid spatial model.
+- Q: How should entity positions be serialized? → A: Position component stores discrete cell coordinates as integers: `{ mapId: int, cellX: int, cellY: int }` (square) or `{ mapId: int, cellIndex: int }` (voronoi). No sub-cell data is stored in game state; visual interpolation is a renderer-only concern. This satisfies FR-014 (integer-only).
 - Q: Should entity version field be in save format? → A: No. Entity version is runtime-only (reset to 0 on load). Entity JSON remains `{ id, prototype, components }`. Version is used for cache invalidation during gameplay; all caches are invalidated on load.

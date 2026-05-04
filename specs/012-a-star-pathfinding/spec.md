@@ -2,8 +2,11 @@
 
 **Feature Branch**: `012-a-star-pathfinding`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "Specify the pathfinding algorithm. Base it on A\*. It needs to be able to find its way through different maps/rooms/areas from the main map"
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -100,7 +103,7 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ### Key Entities
 
-- **PathNode**: Represents a discrete cell/region in A\* search (cellX/cellY or regionId, cost, heuristic, parent)
+- **PathNode**: Represents a discrete cell in A\* search (cellX/cellY or cellIndex, cost, heuristic, parent)
 - **Path**: Sequence of discrete cells/regions from start to target, or empty if no path exists
 - **Map**: World region with terrain grid and entities (see spec 004). Grid type determines coordinate semantics.
 - **Transition**: Entity with Position and Transition components defining passage between maps (replaces MapConnection)
@@ -120,7 +123,7 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 
 ## Assumptions
 
-- **Map Structure**: Maps are grid-based with discrete cell coordinates. Square maps use `{ cellX, cellY }` integers; Voronoi maps use `{ regionId }` integers. Pathfinding operates on these discrete positions only (no sub-cell precision needed). Sub-cell offsets (used for rendering) are in a separate `PreciseOffset` component and are ignored by pathfinding.
+- **Map Structure**: Maps are grid-based with discrete cell coordinates. Square maps use `{ cellX, cellY }` integers; voronoi maps use `{ cellIndex }` integers. Pathfinding operates on these discrete positions only. Visual interpolation between cells is a renderer-only concern and is not relevant to pathfinding.
 - **Terrain Types**: Map terrain is stored as simple type identifiers (e.g., "empty", "wall", "water"). Different terrain types can have different movement costs
 - **Entity Obstacles**: Other entities are treated as obstacles; their positions block movement
 - **Diagonal Movement**: Movement is allowed diagonally; diagonal movement costs 1.414x orthogonal (√2)

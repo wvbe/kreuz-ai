@@ -1,9 +1,12 @@
 # Feature Specification: Skills & Traits
 
-**Feature Branch**: `021-skills-traits`
+**Feature Branch**: `020-skills-traits`
 **Created**: 2026-05-03
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify skills as options 2 and 4 combined: skills are numeric ratings, and entities have personal traits or aptitudes too. There are no occupations aside from the fact that somebody who is baking a bread is at that time a baker. Somebody who bakes bread a lot will gain skills in and is more likely to then pick a new job that is also baking bread. In other words, there are no strict professions, but through skill growth, traits and self-selection some entities will naturally gravitate towards an occupation."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

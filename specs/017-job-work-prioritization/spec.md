@@ -1,9 +1,12 @@
 # Feature Specification: Job Work Prioritization System
 
-**Feature Branch**: `018-job-work-prioritization`
+**Feature Branch**: `017-job-work-prioritization`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify the job work prioritization system. Any entity can only pick up new work at a job board (which is an entity). There can be several job boards in the map, some rooms require one. Every job board has its own list of jobs, they are not connected. Most jobs get taken off the job-board when an entity starts to perform it so that other entities do not also start performing it. Some jobs are posted in duplicate, so that multiple entities can work concurrently. Some jobs reappear on the job board automatically when they are done (eg. 'bake a bread'), while others don't ('transport this bread'). Entities will prefer to do work that they are familiar with but can do new jobs too, rather than sitting idle. Some job boards are completely managed by the game, for example the jobboard belonging to a bakery, with the user having only minimal influence (stop bakery, resume bakery). Other job boards, such as one in a town square, is managed by the user. When the user does, a town crier is dispatched who will walk towards that job board and the job board is updated at the user specification when the town crier arrives there and does so."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

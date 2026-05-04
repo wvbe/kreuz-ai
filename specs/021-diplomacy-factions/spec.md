@@ -1,9 +1,12 @@
 # Feature Specification: Diplomacy & Factions
 
-**Feature Branch**: `022-diplomacy-factions`
+**Feature Branch**: `021-diplomacy-factions`
 **Created**: 2026-05-03
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "the diplomacy & factions feature. Each faction has a leader, and diplomatic dispatches must be brought to that leader and not just into territory." Prior clarifications: Factions are ECS entities with multi-membership; player government is a faction; faction standing is a baseline bias on individual affinity; diplomatic actions = trade agreements, gifts, declarations, overtures; consequences = trade access + affinity baseline + labour access; dispatch via dedicated Diplomatic Envoy entity.
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

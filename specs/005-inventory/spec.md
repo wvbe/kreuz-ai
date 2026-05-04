@@ -2,8 +2,11 @@
 
 **Feature Branch**: `005-inventory`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "A huge part of the game will be about goods, materials, money and ownership. There must be a notion of inventory that an entity (eg. person, vehicle, furniture) can have, and that can be interacted with to grab or store or trade material. Obviously inventories usually have a storage limit, in stacks, and materials of the same type can stack up to a certain amount before they require another stack/slot in inventory. The inventory helper class is cognizant of restrictions on grabbing/storing when it comes to availability and available space."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -64,18 +67,18 @@ Before performing store or retrieve operations, systems and entities can query t
 
 ### User Story 4 - Money as a Special Inventory Item (Priority: P1)
 
-Money is treated as a material in inventory with its own stack behavior, but it has special semantics: it is the primary medium of exchange in trades, and has a very high (or unlimited) stack limit compared to physical goods. Convenience methods (`balance()`, `debit(amount)`, `credit(amount)`) are available on inventory to interact with money without needing to know its material representation.
+Money is treated as a material in inventory with its own stack behavior, but it has special semantics: it is the primary medium of exchange in trades, and has a very high (or unlimited) stack limit compared to physical goods. Convenience system functions (`getBalance(entity)`, `debit(entity, amount)`, `credit(entity, amount)`) operate on the entity's inventory component data to interact with money without needing to know its material representation.
 
-**Why this priority**: Money underpins all economic interactions; must be clean and reliable. The ECS spec (`003`) references `entity.inventory.balance()` explicitly.
+**Why this priority**: Money underpins all economic interactions; must be clean and reliable.
 
 **Independent Test**: Can be fully tested headlessly by: crediting money to an inventory, querying balance, debiting amounts, attempting to debit more than available, and verifying correct rejection. Tests the entire money lifecycle within inventory.
 
 **Acceptance Scenarios**:
 
-1. **Given** an entity with an empty inventory, **When** `credit(100)` is called, **Then** balance is 100 and money occupies an inventory slot at 100.
-2. **Given** an inventory with a balance of 150, **When** `debit(50)` is called, **Then** balance is 100 and the money slot quantity is reduced.
-3. **Given** an inventory with a balance of 30, **When** `debit(50)` is called, **Then** operation is rejected with `InsufficientFundsError`; balance unchanged.
-4. **Given** two entities, **When** `entity.inventory.debit(100)` and `otherEntity.inventory.credit(100)` are performed atomically, **Then** total money across both inventories is unchanged (conservation).
+1. **Given** an entity with an empty inventory, **When** `credit(entity, 100)` is called, **Then** balance is 100 and money occupies an inventory slot at 100.
+2. **Given** an inventory with a balance of 150, **When** `debit(entity, 50)` is called, **Then** balance is 100 and the money slot quantity is reduced.
+3. **Given** an inventory with a balance of 30, **When** `debit(entity, 50)` is called, **Then** operation is rejected with `InsufficientFundsError`; balance unchanged.
+4. **Given** two entities, **When** `debit(entityA, 100)` and `credit(entityB, 100)` are performed atomically, **Then** total money across both inventories is unchanged (conservation).
 5. **Given** money in inventory, **When** serialized to JSON and deserialized, **Then** balance is preserved exactly (no floating-point drift).
 
 ---
@@ -262,7 +265,7 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 - **SC-004**: Money balance is conserved across all transfer operations; total money in game never increases or decreases through inventory operations alone.
 - **SC-005**: Inventory state serialized to JSON and deserialized produces bit-for-bit identical slot contents, quantities, and ownership.
 - **SC-006**: Transfer and equip/unequip operations are atomic; no partial state is observable or serializable.
-- **SC-007**: Inventory helper methods are usable directly from entity component access: `entity.inventory.balance()`, `entity.inventory.store(...)`, `entity.inventory.canRetrieve(...)`.
+- **SC-007**: Inventory system functions operate on entity data via typed parameters: `getBalance(entity)`, `storeItem(entity, ...)`, `canRetrieve(entity, ...)`. No methods are attached to entity objects.
 - **SC-008**: All inventory operations behave identically in headless and browser environments.
 - **SC-009**: `storeUpTo` always returns `stored + remainder == quantity` (integer conservation).
 - **SC-010**: Perishable stack expiry events fire at the correct game time tick; no expiry fires early or late by more than one tick.

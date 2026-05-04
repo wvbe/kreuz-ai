@@ -1,9 +1,12 @@
 # Feature Specification: Production & Crafting System
 
-**Feature Branch**: `015-production-crafting`
+**Feature Branch**: `014-production-crafting`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "Help me specify a production/crafting system. I want this to be based on materials and recipes -- which are both open-ended sets. Most recipes will have certain restrictions, such as needing a specific furniture or even needing a specific room. The act of producing/crafting will then be that an entity collects the required materials in the inventory of a suitable entity (either the one performing work, or the furniture where work is being performed at) if they have not been collected yet, then spends some busy time 'crafting it'. This may repeat multiple times if a process has intermediate materials."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

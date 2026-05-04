@@ -1,9 +1,12 @@
 # Feature Specification: Trade System & Currency
 
-**Feature Branch**: `020-trade-currency`
+**Feature Branch**: `019-trade-currency`
 **Created**: 2026-05-03
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "the trade system and currency. I want entities to be able to trade the items they need for their own needs with other entities. There is an in-game currency for this, which entities can earn through trade or work. The currency is an actual item, so it is stored in stacks (of max 1000). Every trade starts with the potential buyer making an offer for the goods, the offer could be currency or other items. The trader is at liberty to accept any offer, but will generally try to make a small profit. The user also has an inventory that can hold currency, this inventory is held in one or more containers in the same room (the throne room) as where town criers are dispatched from."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

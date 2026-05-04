@@ -2,26 +2,29 @@
 
 **Feature Branch**: `010-event-bus`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify the event bus with which events can be broadcasted so that other entities or systems can respond to them."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 
-### User Story 1 - Emit and Subscribe to Events (Priority: P1)
+### User Story 1 - Emit and Subscribe to Typed Events (Priority: P1)
 
-An event bus allows systems and entities to broadcast events (e.g., "inventory.item.stored", "entity.deleted") and other systems to subscribe and react to those events. The event bus provides `emit(eventName, payload)` and `subscribe(eventName, callback)` methods. When an event is emitted, all subscribers to that event are called with the payload. Event names are dot-separated hierarchical strings using lowercase kebab-case (e.g., "inventory.item.stored").
+An event bus allows systems to broadcast events and other systems to subscribe and react. Events are routed by string topic (e.g., `"entity.moved"`, `"inventory.item.stored"`) but carry **strongly-typed payloads**. The event bus provides `emit<T>(topic: string, payload: T)` and `subscribe<T>(topic: string, callback: (payload: T) => void)` methods. Type guards at subscription sites narrow payloads to their concrete type. Event topics are dot-separated hierarchical strings using lowercase kebab-case.
 
-**Why this priority**: Core infrastructure. Without an event bus, systems must be tightly coupled (entity directly calls inventory handler). Event bus enables loose coupling and composition. Blocking for game extensibility.
+**Why this priority**: Core infrastructure. Without an event bus, systems must be tightly coupled. Event bus enables loose coupling and composition. Blocking for game extensibility.
 
-**Independent Test**: Can be fully tested by: creating an event bus, emitting an event, verifying subscribers receive the payload, and verifying multiple subscribers all receive the same event.
+**Independent Test**: Can be fully tested by: creating an event bus, emitting a typed event, verifying subscribers receive the correctly-typed payload, and verifying multiple subscribers all receive the same event.
 
 **Acceptance Scenarios**:
 
-1. **Given** an event bus, **When** `emit("inventory.item.stored", { entityId: 1, materialId: 5, quantity: 5 })` is called, **Then** all subscribers to "inventory.item.stored" are called with the payload.
-2. **Given** two entities subscribed to the same event, **When** that event is emitted, **Then** both entities receive the payload and can react independently.
+1. **Given** an event bus, **When** `emit("inventory.item.stored", { entityId: "abc", materialId: "wood", quantity: 5 })` is called, **Then** all subscribers to "inventory.item.stored" are called with the typed payload.
+2. **Given** two systems subscribed to the same topic, **When** that event is emitted, **Then** both receive the payload and can react independently.
 3. **Given** an event emitted during a tick, **When** the tick completes, **Then** all subscribers have been called and their reactions completed before the tick boundary.
-4. **Given** multiple events emitted in sequence (e.g., "entity.spawned", "inventory.item.stored"), **When** the tick ends, **Then** events are processed in FIFO order (first emitted, first processed).
-5. **Given** an event with a complex payload (entity ID, item data, quantities), **When** serialized and deserialized, **Then** the payload is identical and can be used by subscribers after load (feature 006).
+4. **Given** multiple events emitted in sequence, **When** the tick ends, **Then** events are processed in FIFO order (first emitted, first processed).
+5. **Given** a subscriber using a type guard, **When** event payload arrives, **Then** TypeScript narrows the payload type correctly at compile time.
 
 ---
 

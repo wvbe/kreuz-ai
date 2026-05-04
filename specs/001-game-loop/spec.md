@@ -2,8 +2,11 @@
 
 **Feature Branch**: `001-game-loop`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "An important part of the game is the game loop, ie. the passage of time. It needs to have pause/continue, speed up/down controls, and it must be independent of the render loop (because a renderer is not required to play the game). The game experience will be measured in hours, days, weeks -- 1x game speed is about 48x realtime."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

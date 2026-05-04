@@ -65,112 +65,117 @@ tsconfig.json
 vitest.config.ts
 
 src/
-├── engine/
-│   ├── Registry.ts              # Generic typed registry base class
-│   └── ContentLoader.ts         # Loads and validates all data files
-│
-├── registries/
-│   ├── MaterialRegistry.ts      # Material definitions + types
-│   ├── RecipeRegistry.ts        # Crafting recipe definitions + types
-│   ├── FurnitureRegistry.ts     # Furniture prototype definitions + types
-│   ├── ZoneTypeRegistry.ts      # Zone type definitions + types
-│   ├── EntityPrototypeRegistry.ts # Humanoid + animal prototype definitions + types
-│   ├── SkillRegistry.ts         # Skill definitions + types
-│   ├── TraitRegistry.ts         # Trait definitions + types
-│   ├── NeedRegistry.ts          # Need definitions + types
-│   ├── JobTypeRegistry.ts       # Job type definitions + types
-│   ├── TerrainTypeRegistry.ts   # Terrain type definitions + types
-│   ├── FactionRegistry.ts       # Faction prototype definitions + types
-│   ├── BehaviorTreeRegistry.ts  # Behavior tree template definitions + types
-│   └── index.ts                 # Re-exports all registries
-│
-├── schemas/
-│   ├── materials.ts             # Zod schema + inferred type for Material
-│   ├── recipes.ts               # Zod schema + inferred type for Recipe
-│   ├── furniture.ts             # Zod schema + inferred type for Furniture
-│   ├── zones.ts                 # Zod schema + inferred type for ZoneType
-│   ├── entities.ts              # Zod schema + inferred type for EntityPrototype
-│   ├── skills.ts                # Zod schema + inferred type for Skill
-│   ├── traits.ts                # Zod schema + inferred type for Trait
-│   ├── needs.ts                 # Zod schema + inferred type for Need
-│   ├── jobs.ts                  # Zod schema + inferred type for JobType
-│   ├── terrain.ts               # Zod schema + inferred type for TerrainType
-│   ├── factions.ts              # Zod schema + inferred type for Faction
-│   ├── behavior-trees.ts        # Zod schema + inferred type for BehaviorTree
-│   └── index.ts                 # Re-exports all schemas and types
-│
-└── data/
-    ├── materials/
-    │   ├── raw-resources.json
-    │   ├── processed-goods.json
-    │   ├── finished-goods.json
-    │   ├── food-and-drink.json
-    │   └── currency.json
-    ├── recipes/
-    │   ├── wood-processing.json
-    │   ├── metal-processing.json
-    │   ├── tools-and-equipment.json
-    │   ├── weapons-and-armor.json
-    │   ├── textiles.json
-    │   ├── leather-processing.json
-    │   ├── stonework.json
-    │   ├── food-and-drink.json
-    │   └── miscellaneous.json
-    ├── furniture/
-    │   ├── workstations.json
-    │   ├── storage.json
-    │   ├── comfort-and-living.json
-    │   ├── religious.json
-    │   └── utility-and-decorative.json
-    ├── zones/
-    │   ├── production.json
-    │   ├── storage-and-utility.json
-    │   ├── living-and-social.json
-    │   ├── religious.json
-    │   ├── military.json
-    │   └── open-air.json
-    ├── entities/
-    │   ├── humanoids.json
-    │   ├── livestock.json
-    │   └── wild-animals.json
-    ├── skills.json
-    ├── traits.json
-    ├── needs.json
-    ├── jobs.json
-    ├── terrain.json
-    ├── factions/
-    │   ├── guilds.json
-    │   └── religious.json
-    └── behavior-trees/
-        ├── daily-routine.json
-        ├── worker-cycle.json
-        ├── guard-patrol.json
-        ├── merchant-routine.json
-        ├── priest-routine.json
-        ├── livestock-behavior.json
-        └── predator-behavior.json
-
-test/
-├── registries/
-│   ├── MaterialRegistry.test.ts
-│   ├── RecipeRegistry.test.ts
-│   ├── FurnitureRegistry.test.ts
-│   ├── ZoneTypeRegistry.test.ts
-│   ├── EntityPrototypeRegistry.test.ts
-│   ├── SkillRegistry.test.ts
-│   ├── TraitRegistry.test.ts
-│   ├── NeedRegistry.test.ts
-│   ├── JobTypeRegistry.test.ts
-│   ├── TerrainTypeRegistry.test.ts
-│   ├── FactionRegistry.test.ts
-│   └── BehaviorTreeRegistry.test.ts
-├── validation/
-│   └── cross-registry.test.ts   # Cross-reference integrity tests
-└── content/
-    └── completeness.test.ts     # FR-001 through FR-017 verification
+└── game/
+    ├── tsconfig.json                # Project reference (engine)
+    ├── README.md
+    ├── engine/
+    │   ├── README.md
+    │   ├── Registry.ts              # Generic typed registry base class
+    │   ├── Registry.test.ts
+    │   ├── ContentLoader.ts         # Loads and validates all data files
+    │   └── ContentLoader.test.ts
+    │
+    ├── registries/
+    │   ├── README.md
+    │   ├── MaterialRegistry.ts      # Material definitions + types
+    │   ├── MaterialRegistry.test.ts
+    │   ├── RecipeRegistry.ts        # Crafting recipe definitions + types
+    │   ├── RecipeRegistry.test.ts
+    │   ├── FurnitureRegistry.ts     # Furniture prototype definitions + types
+    │   ├── FurnitureRegistry.test.ts
+    │   ├── ZoneTypeRegistry.ts      # Zone type definitions + types
+    │   ├── ZoneTypeRegistry.test.ts
+    │   ├── EntityPrototypeRegistry.ts # Humanoid + animal prototype definitions + types
+    │   ├── EntityPrototypeRegistry.test.ts
+    │   ├── SkillRegistry.ts         # Skill definitions + types
+    │   ├── SkillRegistry.test.ts
+    │   ├── TraitRegistry.ts         # Trait definitions + types
+    │   ├── TraitRegistry.test.ts
+    │   ├── NeedRegistry.ts          # Need definitions + types
+    │   ├── NeedRegistry.test.ts
+    │   ├── JobTypeRegistry.ts       # Job type definitions + types
+    │   ├── JobTypeRegistry.test.ts
+    │   ├── TerrainTypeRegistry.ts   # Terrain type definitions + types
+    │   ├── TerrainTypeRegistry.test.ts
+    │   ├── FactionRegistry.ts       # Faction prototype definitions + types
+    │   ├── FactionRegistry.test.ts
+    │   ├── BehaviorTreeRegistry.ts  # Behavior tree template definitions + types
+    │   └── BehaviorTreeRegistry.test.ts
+    │
+    ├── schemas/
+    │   ├── README.md
+    │   ├── materials.ts             # Zod schema + inferred type for Material
+    │   ├── recipes.ts               # Zod schema + inferred type for Recipe
+    │   ├── furniture.ts             # Zod schema + inferred type for Furniture
+    │   ├── zones.ts                 # Zod schema + inferred type for ZoneType
+    │   ├── entities.ts              # Zod schema + inferred type for EntityPrototype
+    │   ├── skills.ts                # Zod schema + inferred type for Skill
+    │   ├── traits.ts                # Zod schema + inferred type for Trait
+    │   ├── needs.ts                 # Zod schema + inferred type for Need
+    │   ├── jobs.ts                  # Zod schema + inferred type for JobType
+    │   ├── terrain.ts               # Zod schema + inferred type for TerrainType
+    │   ├── factions.ts              # Zod schema + inferred type for Faction
+    │   └── behavior-trees.ts        # Zod schema + inferred type for BehaviorTree
+    │
+    ├── data/
+    │   ├── README.md
+    │   ├── materials/
+    │   │   ├── raw-resources.json
+    │   │   ├── processed-goods.json
+    │   │   ├── finished-goods.json
+    │   │   ├── food-and-drink.json
+    │   │   └── currency.json
+    │   ├── recipes/
+    │   │   ├── wood-processing.json
+    │   │   ├── metal-processing.json
+    │   │   ├── tools-and-equipment.json
+    │   │   ├── weapons-and-armor.json
+    │   │   ├── textiles.json
+    │   │   ├── leather-processing.json
+    │   │   ├── stonework.json
+    │   │   ├── food-and-drink.json
+    │   │   └── miscellaneous.json
+    │   ├── furniture/
+    │   │   ├── workstations.json
+    │   │   ├── storage.json
+    │   │   ├── comfort-and-living.json
+    │   │   ├── religious.json
+    │   │   └── utility-and-decorative.json
+    │   ├── zones/
+    │   │   ├── production.json
+    │   │   ├── storage-and-utility.json
+    │   │   ├── living-and-social.json
+    │   │   ├── religious.json
+    │   │   ├── military.json
+    │   │   └── open-air.json
+    │   ├── entities/
+    │   │   ├── humanoids.json
+    │   │   ├── livestock.json
+    │   │   └── wild-animals.json
+    │   ├── skills.json
+    │   ├── traits.json
+    │   ├── needs.json
+    │   ├── jobs.json
+    │   ├── terrain.json
+    │   ├── factions/
+    │   │   ├── guilds.json
+    │   │   └── religious.json
+    │   └── behavior-trees/
+    │       ├── daily-routine.json
+    │       ├── worker-cycle.json
+    │       ├── guard-patrol.json
+    │       ├── merchant-routine.json
+    │       ├── priest-routine.json
+    │       ├── livestock-behavior.json
+    │       └── predator-behavior.json
+    │
+    └── validation/
+        ├── README.md
+        ├── cross-registry.test.ts   # Cross-reference integrity tests
+        └── completeness.test.ts     # FR-001 through FR-017 verification
 ```
 
-**Structure Decision**: Single-project layout with clear separation between engine infrastructure (`src/engine/`), typed registry modules (`src/registries/`), Zod schemas (`src/schemas/`), and content data files (`src/data/`). Content data is pure JSON — no TypeScript in the data layer. Schemas define both types and validation using Zod. Registry modules provide typed loading, validation, and O(1) lookup. Tests mirror source structure.
+**Structure Decision**: All game engine code lives under `src/game/` per spec 023 FR-017. Clear separation between engine infrastructure (`src/game/engine/`), typed registry modules (`src/game/registries/`), Zod schemas (`src/game/schemas/`), and content data files (`src/game/data/`). No barrel files (FR-002). Tests are co-located next to source files (FR-013). Content data is pure JSON — no TypeScript in the data layer. Schemas define both types and validation using Zod. Registry modules provide typed loading, validation, and O(1) lookup.
 
 ## Complexity Tracking
 

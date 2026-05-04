@@ -1,9 +1,12 @@
 # Feature Specification: Stockpiles & Storage
 
-**Feature Branch**: `019-stockpiles-storage`
+**Feature Branch**: `018-stockpiles-storage`
 **Created**: 2026-05-03
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify stockpiles and storages. There are furniture entities that can have inventories, including but not limited to boxes, cabinets, bookcases. These entities work the same as other entities. There are many kinds of zones/rooms, as specified before, and amongst those is a 'pantry' room (enclosed) that has an effect on inventories within it that make items decay less."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 

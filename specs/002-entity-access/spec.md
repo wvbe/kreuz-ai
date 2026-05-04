@@ -2,8 +2,11 @@
 
 **Feature Branch**: `002-entity-access`
 **Created**: 2026-05-02
-**Status**: Draft
+**Status**: Unimplemented (fresh start)
 **Input**: User description: "Another important framework-level functionality is the access to game entities. The game design relies on the entity/component/system paradigm, so there should be efficient helper methods to get entities by their properties, or to get entities that are related to another in-game entity, object or event. This feature should include somewhat of a benchmarking test. This product of this feature is a set of reusable helper classes that will be in use throughout the rest of the game design."
+
+> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
+
 
 ## User Scenarios & Testing _(mandatory)_
 
