@@ -1,0 +1,69 @@
+[
+  {
+    "id": "altar",
+    "name": "Altar",
+    "categories": ["religious", "worship"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "stone_block", "quantity": 4 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 20 }]
+  },
+  {
+    "id": "candelabra",
+    "name": "Candelabra",
+    "categories": ["religious", "light"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "iron_ingot", "quantity": 2 },
+      { "materialId": "candle", "quantity": 4 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 }]
+  },
+  {
+    "id": "lectern",
+    "name": "Lectern",
+    "categories": ["religious", "worship"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 2 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "preaching" }]
+  },
+  {
+    "id": "reliquary",
+    "name": "Reliquary",
+    "categories": ["religious", "worship", "luxury"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "iron_ingot", "quantity": 2 },
+      { "materialId": "glass_pane", "quantity": 1 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 15 }]
+  },
+  {
+    "id": "prayer_bench",
+    "name": "Prayer Bench",
+    "categories": ["religious", "seating"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 3 },
+      { "materialId": "nails", "quantity": 2 }
+    ],
+    "effects": [
+      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 },
+      { "type": "entity.modifier", "modifier": "comfort.bonus", "value": 3 }
+    ]
+  },
+  {
+    "id": "church_bell",
+    "name": "Church Bell",
+    "categories": ["religious", "utility"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "bronze_ingot", "quantity": 4 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "congregation_call" }]
+  }
+]

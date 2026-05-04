@@ -1,0 +1,108 @@
+[
+  {
+    "id": "straw_pallet",
+    "name": "Straw Pallet",
+    "categories": ["bed", "comfort", "basic"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "flax", "quantity": 4 },
+      { "materialId": "pine_plank", "quantity": 2 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "rest.satisfaction", "value": 0.8 }]
+  },
+  {
+    "id": "wooden_bed",
+    "name": "Wooden Bed",
+    "categories": ["bed", "comfort"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 6 },
+      { "materialId": "nails", "quantity": 4 },
+      { "materialId": "wool_cloth", "quantity": 1 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "rest.satisfaction", "value": 1.2 }]
+  },
+  {
+    "id": "noble_bed",
+    "name": "Noble Bed",
+    "categories": ["bed", "comfort", "luxury"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 8 },
+      { "materialId": "nails", "quantity": 6 },
+      { "materialId": "wool_cloth", "quantity": 2 },
+      { "materialId": "linen_cloth", "quantity": 2 }
+    ],
+    "effects": [
+      { "type": "entity.modifier", "modifier": "rest.satisfaction", "value": 1.5 },
+      { "type": "entity.modifier", "modifier": "mood.bonus", "value": 5 }
+    ]
+  },
+  {
+    "id": "bench",
+    "name": "Bench",
+    "categories": ["seating", "comfort"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 3 },
+      { "materialId": "nails", "quantity": 2 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "comfort.bonus", "value": 5 }]
+  },
+  {
+    "id": "chair",
+    "name": "Chair",
+    "categories": ["seating", "comfort"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 3 },
+      { "materialId": "nails", "quantity": 4 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "comfort.bonus", "value": 10 }]
+  },
+  {
+    "id": "table",
+    "name": "Table",
+    "categories": ["surface", "social"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "social.bonus", "value": 5 }]
+  },
+  {
+    "id": "long_table",
+    "name": "Long Table",
+    "categories": ["surface", "social", "large"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 8 },
+      { "materialId": "nails", "quantity": 8 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "social.bonus", "value": 10 }]
+  },
+  {
+    "id": "hearth",
+    "name": "Hearth",
+    "categories": ["warmth", "comfort"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "stone_block", "quantity": 6 },
+      { "materialId": "iron_ingot", "quantity": 2 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "comfort.bonus", "value": 8 }]
+  },
+  {
+    "id": "throne",
+    "name": "Throne",
+    "categories": ["seating", "governance"],
+    "hasInventory": false,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 6 },
+      { "materialId": "stone_block", "quantity": 4 },
+      { "materialId": "iron_ingot", "quantity": 2 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "authority.bonus", "value": 10 }]
+  }
+]

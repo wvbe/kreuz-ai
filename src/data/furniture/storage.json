@@ -1,0 +1,158 @@
+[
+  {
+    "id": "chest",
+    "name": "Chest",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 12,
+    "inventoryWeightLimit": 200,
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 }
+    ]
+  },
+  {
+    "id": "barrel",
+    "name": "Barrel",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 8,
+    "inventoryWeightLimit": 150,
+    "inventoryFilter": { "categories": ["drink", "grain", "preserved"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 2 },
+      { "materialId": "rope", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "crate",
+    "name": "Crate",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 10,
+    "inventoryWeightLimit": 180,
+    "constructionCost": [
+      { "materialId": "pine_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 }
+    ]
+  },
+  {
+    "id": "sack",
+    "name": "Sack",
+    "categories": ["storage", "textile"],
+    "hasInventory": true,
+    "inventorySlots": 4,
+    "inventoryWeightLimit": 80,
+    "inventoryFilter": { "categories": ["grain", "flour", "fiber"] },
+    "constructionCost": [
+      { "materialId": "linen_cloth", "quantity": 1 },
+      { "materialId": "rope", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "bookcase",
+    "name": "Bookcase",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 6,
+    "inventoryWeightLimit": 60,
+    "inventoryFilter": { "categories": ["writing", "parchment"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 6 },
+      { "materialId": "nails", "quantity": 6 }
+    ]
+  },
+  {
+    "id": "coffer",
+    "name": "Coffer",
+    "categories": ["storage", "wood", "secure"],
+    "hasInventory": true,
+    "inventorySlots": 8,
+    "inventoryWeightLimit": 100,
+    "inventoryFilter": { "categories": ["currency", "valuable"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 },
+      { "materialId": "iron_ingot", "quantity": 2 }
+    ]
+  },
+  {
+    "id": "weapon_rack",
+    "name": "Weapon Rack",
+    "categories": ["storage", "wood", "military"],
+    "hasInventory": true,
+    "inventorySlots": 6,
+    "inventoryWeightLimit": 120,
+    "inventoryFilter": { "categories": ["weapon"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 }
+    ]
+  },
+  {
+    "id": "armor_stand",
+    "name": "Armor Stand",
+    "categories": ["storage", "wood", "military"],
+    "hasInventory": true,
+    "inventorySlots": 4,
+    "inventoryWeightLimit": 100,
+    "inventoryFilter": { "categories": ["armor"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 2 }
+    ]
+  },
+  {
+    "id": "wine_rack",
+    "name": "Wine Rack",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 6,
+    "inventoryWeightLimit": 80,
+    "inventoryFilter": { "categories": ["drink"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 }
+    ]
+  },
+  {
+    "id": "tool_rack",
+    "name": "Tool Rack",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 8,
+    "inventoryWeightLimit": 100,
+    "inventoryFilter": { "categories": ["tool"] },
+    "constructionCost": [
+      { "materialId": "pine_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 4 }
+    ]
+  },
+  {
+    "id": "pantry_shelf",
+    "name": "Pantry Shelf",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 10,
+    "inventoryWeightLimit": 150,
+    "inventoryFilter": { "categories": ["food"] },
+    "constructionCost": [
+      { "materialId": "pine_plank", "quantity": 4 },
+      { "materialId": "nails", "quantity": 6 }
+    ]
+  },
+  {
+    "id": "grain_bin",
+    "name": "Grain Bin",
+    "categories": ["storage", "wood"],
+    "hasInventory": true,
+    "inventorySlots": 6,
+    "inventoryWeightLimit": 200,
+    "inventoryFilter": { "categories": ["grain"] },
+    "constructionCost": [
+      { "materialId": "oak_plank", "quantity": 6 },
+      { "materialId": "nails", "quantity": 4 }
+    ]
+  }
+]

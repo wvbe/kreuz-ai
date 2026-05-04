@@ -1,0 +1,119 @@
+[
+  {
+    "id": "bakery",
+    "name": "Bakery",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [{ "furnitureId": "oven", "count": 1 }],
+    "effects": [{ "type": "activity.unlock", "activityId": "baking" }],
+    "professionAffinity": "baker"
+  },
+  {
+    "id": "smithy",
+    "name": "Smithy",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      { "furnitureId": "forge", "count": 1 },
+      { "furnitureId": "anvil", "count": 1 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "smithing" }],
+    "professionAffinity": "blacksmith"
+  },
+  {
+    "id": "carpentry",
+    "name": "Carpentry",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      { "furnitureId": "sawmill", "count": 1 },
+      { "furnitureId": "workbench", "count": 1 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "woodworking" }],
+    "professionAffinity": "carpenter"
+  },
+  {
+    "id": "tannery",
+    "name": "Tannery",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [{ "furnitureId": "tanning_rack", "count": 1 }],
+    "effects": [{ "type": "activity.unlock", "activityId": "leatherworking" }],
+    "professionAffinity": "tanner"
+  },
+  {
+    "id": "pottery",
+    "name": "Pottery",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [{ "furnitureId": "kiln", "count": 1 }],
+    "effects": [{ "type": "activity.unlock", "activityId": "pottery" }],
+    "professionAffinity": "potter"
+  },
+  {
+    "id": "brewery",
+    "name": "Brewery",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      { "furnitureId": "brewing_vat", "count": 1 },
+      { "furnitureId": "malting_floor", "count": 1 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "brewing" }],
+    "professionAffinity": "brewer"
+  },
+  {
+    "id": "weaving_hall",
+    "name": "Weaving Hall",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      { "furnitureId": "loom", "count": 1 },
+      { "furnitureId": "spinning_wheel", "count": 1 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "weaving" }],
+    "professionAffinity": "weaver"
+  },
+  {
+    "id": "kitchen",
+    "name": "Kitchen",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      { "furnitureId": "cooking_pot", "count": 1 },
+      { "furnitureId": "butchers_block", "count": 1 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "cooking" }],
+    "professionAffinity": "cook"
+  },
+  {
+    "id": "smokehouse",
+    "name": "Smokehouse",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "furnitureRequirements": [{ "furnitureId": "drying_rack", "count": 1 }],
+    "effects": [{ "type": "activity.unlock", "activityId": "preserving" }],
+    "professionAffinity": "cook"
+  },
+  {
+    "id": "masons_workshop",
+    "name": "Mason's Workshop",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [{ "furnitureId": "masons_bench", "count": 1 }],
+    "effects": [{ "type": "activity.unlock", "activityId": "masonry" }],
+    "professionAffinity": "mason"
+  },
+  {
+    "id": "scriptorium",
+    "name": "Scriptorium",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      { "furnitureId": "bookcase", "count": 1 },
+      { "furnitureId": "lectern", "count": 1 }
+    ],
+    "effects": [{ "type": "activity.unlock", "activityId": "scholarship" }],
+    "professionAffinity": "scholar"
+  }
+]

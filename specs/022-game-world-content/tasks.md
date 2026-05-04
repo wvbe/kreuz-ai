@@ -97,49 +97,49 @@
 
 ### Registry Modules
 
-- [ ] T038 [P] [US7] Implement TraitRegistry loading from JSON in `src/registries/TraitRegistry.ts`
-- [ ] T039 [P] [US3] Implement FurnitureRegistry loading from 5 JSON files in `src/registries/FurnitureRegistry.ts`
-- [ ] T040 [P] [US4] Implement ZoneTypeRegistry loading from 6 JSON files in `src/registries/ZoneTypeRegistry.ts`
-- [ ] T041 [P] [US12/13] Implement FactionRegistry loading from 2 JSON files in `src/registries/FactionRegistry.ts`
-- [ ] T042 [P] [US9] Implement JobTypeRegistry loading from JSON in `src/registries/JobTypeRegistry.ts`
+- [x] T038 [P] [US7] Implement TraitRegistry loading from JSON in `src/registries/TraitRegistry.ts`
+- [x] T039 [P] [US3] Implement FurnitureRegistry loading from 5 JSON files in `src/registries/FurnitureRegistry.ts`
+- [x] T040 [P] [US4] Implement ZoneTypeRegistry loading from 6 JSON files in `src/registries/ZoneTypeRegistry.ts`
+- [x] T041 [P] [US12/13] Implement FactionRegistry loading from 2 JSON files in `src/registries/FactionRegistry.ts`
+- [x] T042 [P] [US9] Implement JobTypeRegistry loading from JSON in `src/registries/JobTypeRegistry.ts`
 
 ### Data Files — Traits (US7)
 
-- [ ] T043 [P] [US7] Create trait registry data (31 entries: 12 aptitude + 7 performance + 12 need) in `src/data/traits.json`
+- [x] T043 [P] [US7] Create trait registry data (31 entries: 12 aptitude + 7 performance + 12 need) in `src/data/traits.json`
 
 ### Data Files — Furniture (US3)
 
-- [ ] T044 [P] [US3] Create workstation furniture data (27 entries) in `src/data/furniture/workstations.json`
-- [ ] T045 [P] [US3] Create storage furniture data (12 entries) in `src/data/furniture/storage.json`
-- [ ] T046 [P] [US3] Create comfort and living furniture data (9 entries) in `src/data/furniture/comfort-and-living.json`
-- [ ] T047 [P] [US3] Create religious furniture data (6 entries) in `src/data/furniture/religious.json`
-- [ ] T048 [P] [US3] Create utility and decorative furniture data (9 entries) in `src/data/furniture/utility-and-decorative.json`
+- [x] T044 [P] [US3] Create workstation furniture data (27 entries) in `src/data/furniture/workstations.json`
+- [x] T045 [P] [US3] Create storage furniture data (12 entries) in `src/data/furniture/storage.json`
+- [x] T046 [P] [US3] Create comfort and living furniture data (9 entries) in `src/data/furniture/comfort-and-living.json`
+- [x] T047 [P] [US3] Create religious furniture data (6 entries) in `src/data/furniture/religious.json`
+- [x] T048 [P] [US3] Create utility and decorative furniture data (9 entries) in `src/data/furniture/utility-and-decorative.json`
 
 ### Data Files — Zones (US4)
 
-- [ ] T049 [P] [US4] Create production zone data (11 entries) in `src/data/zones/production.json`
-- [ ] T050 [P] [US4] Create storage and utility zone data (4 entries) in `src/data/zones/storage-and-utility.json`
-- [ ] T051 [P] [US4] Create living and social zone data (5 entries) in `src/data/zones/living-and-social.json`
-- [ ] T052 [P] [US4] Create religious zone data (3 entries) in `src/data/zones/religious.json`
-- [ ] T053 [P] [US4] Create military zone data (2 entries) in `src/data/zones/military.json`
-- [ ] T054 [P] [US4] Create open-air zone data (12 entries) in `src/data/zones/open-air.json`
+- [x] T049 [P] [US4] Create production zone data (11 entries) in `src/data/zones/production.json`
+- [x] T050 [P] [US4] Create storage and utility zone data (4 entries) in `src/data/zones/storage-and-utility.json`
+- [x] T051 [P] [US4] Create living and social zone data (5 entries) in `src/data/zones/living-and-social.json`
+- [x] T052 [P] [US4] Create religious zone data (3 entries) in `src/data/zones/religious.json`
+- [x] T053 [P] [US4] Create military zone data (2 entries) in `src/data/zones/military.json`
+- [x] T054 [P] [US4] Create open-air zone data (12 entries) in `src/data/zones/open-air.json`
 
 ### Data Files — Factions (US12, US13)
 
-- [ ] T055 [P] [US12] Create guild faction data (9 entries) in `src/data/factions/guilds.json`
-- [ ] T056 [P] [US13] Create religious faction data (3 entries) in `src/data/factions/religious.json`
+- [x] T055 [P] [US12] Create guild faction data (9 entries) in `src/data/factions/guilds.json`
+- [x] T056 [P] [US13] Create religious faction data (3 entries) in `src/data/factions/religious.json`
 
 ### Data Files — Jobs (US9)
 
-- [ ] T057 [P] [US9] Create job type data (22 entries) in `src/data/jobs.json`
+- [x] T057 [P] [US9] Create job type data (22 entries) in `src/data/jobs.json`
 
 ### Tests
 
-- [ ] T058 [P] [US7] Write TraitRegistry test: count ≥ 24, skill/need refs valid in `test/registries/TraitRegistry.test.ts`
-- [ ] T059 [P] [US3] Write FurnitureRegistry test: count ≥ 50, construction material refs valid in `test/registries/FurnitureRegistry.test.ts`
-- [ ] T060 [P] [US4] Write ZoneTypeRegistry test: count ≥ 25, furniture refs valid in `test/registries/ZoneTypeRegistry.test.ts`
-- [ ] T061 [P] [US12/13] Write FactionRegistry test: count ≥ 11, skill/zone refs valid in `test/registries/FactionRegistry.test.ts`
-- [ ] T062 [P] [US9] Write JobTypeRegistry test: count ≥ 20, skill/material/zone refs valid in `test/registries/JobTypeRegistry.test.ts`
+- [x] T058 [P] [US7] Write TraitRegistry test: count ≥ 24, skill/need refs valid in `test/registries/TraitRegistry.test.ts`
+- [x] T059 [P] [US3] Write FurnitureRegistry test: count ≥ 50, construction material refs valid in `test/registries/FurnitureRegistry.test.ts`
+- [x] T060 [P] [US4] Write ZoneTypeRegistry test: count ≥ 25, furniture refs valid in `test/registries/ZoneTypeRegistry.test.ts`
+- [x] T061 [P] [US12/13] Write FactionRegistry test: count ≥ 11, skill/zone refs valid in `test/registries/FactionRegistry.test.ts`
+- [x] T062 [P] [US9] Write JobTypeRegistry test: count ≥ 20, skill/material/zone refs valid in `test/registries/JobTypeRegistry.test.ts`
 
 **🚧 QUALITY GATE 4**: `npx vitest run` — all Phase 3 + Phase 4 tests pass. Trait count ≥ 24. Furniture count ≥ 50. Zone count ≥ 25. Faction count ≥ 11. Job count ≥ 20. All cross-references to Materials/Skills/Needs/Terrain are valid.
 

@@ -1,0 +1,40 @@
+[
+  {
+    "id": "chapel",
+    "name": "Chapel",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      { "furnitureId": "altar", "count": 1 },
+      { "furnitureId": "candelabra", "count": 1 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 10 }]
+  },
+  {
+    "id": "church",
+    "name": "Church",
+    "requiresRoom": true,
+    "minTiles": 16,
+    "furnitureRequirements": [
+      { "furnitureId": "altar", "count": 1 },
+      { "furnitureId": "candelabra", "count": 2 },
+      { "furnitureId": "lectern", "count": 1 },
+      { "furnitureId": "prayer_bench", "count": 2 }
+    ],
+    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 20 }]
+  },
+  {
+    "id": "cloister",
+    "name": "Cloister",
+    "requiresRoom": true,
+    "minTiles": 10,
+    "furnitureRequirements": [
+      { "furnitureId": "prayer_bench", "count": 1 },
+      { "furnitureId": "bookcase", "count": 1 }
+    ],
+    "effects": [
+      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 },
+      { "type": "entity.modifier", "modifier": "mood.bonus", "value": 3 }
+    ]
+  }
+]

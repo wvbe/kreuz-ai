@@ -1,0 +1,179 @@
+[
+  {
+    "id": "farm.sow",
+    "name": "Sow Crops",
+    "skillDomain": "farming",
+    "toolRequired": "hoe",
+    "zoneContext": "farm_field",
+    "recurrence": "one-time",
+    "description": "Plant seeds in tilled soil for the growing season."
+  },
+  {
+    "id": "farm.tend",
+    "name": "Tend Crops",
+    "skillDomain": "farming",
+    "zoneContext": "farm_field",
+    "recurrence": "recurring",
+    "description": "Water, weed, and care for growing crops."
+  },
+  {
+    "id": "farm.harvest",
+    "name": "Harvest Crops",
+    "skillDomain": "farming",
+    "toolRequired": "sickle",
+    "zoneContext": "farm_field",
+    "recurrence": "one-time",
+    "description": "Collect mature crops from the field."
+  },
+  {
+    "id": "mine.ore",
+    "name": "Mine Ore",
+    "skillDomain": "mining",
+    "toolRequired": "pickaxe",
+    "recurrence": "recurring",
+    "description": "Extract iron, copper, tin, or coal from ore veins."
+  },
+  {
+    "id": "quarry.stone",
+    "name": "Quarry Stone",
+    "skillDomain": "masonry",
+    "toolRequired": "pickaxe",
+    "zoneContext": "quarry",
+    "recurrence": "recurring",
+    "description": "Extract limestone or granite from the quarry."
+  },
+  {
+    "id": "fell.trees",
+    "name": "Fell Trees",
+    "skillDomain": "woodcutting",
+    "toolRequired": "axe",
+    "recurrence": "recurring",
+    "description": "Harvest wood logs from forest terrain."
+  },
+  {
+    "id": "fish.catch",
+    "name": "Catch Fish",
+    "skillDomain": "fishing",
+    "toolRequired": "fishing_rod",
+    "zoneContext": "fishing_dock",
+    "recurrence": "recurring",
+    "description": "Catch raw fish from rivers and ponds."
+  },
+  {
+    "id": "gather.herbs",
+    "name": "Gather Herbs",
+    "skillDomain": "herbalism",
+    "zoneContext": "herb_garden",
+    "recurrence": "recurring",
+    "description": "Collect medicinal herbs from the garden."
+  },
+  {
+    "id": "tend.animals",
+    "name": "Tend Livestock",
+    "skillDomain": "animal_husbandry",
+    "zoneContext": "pasture",
+    "recurrence": "recurring",
+    "description": "Feed, shear, and milk animals in the pasture."
+  },
+  {
+    "id": "tend.bees",
+    "name": "Tend Apiary",
+    "skillDomain": "animal_husbandry",
+    "zoneContext": "apiary_yard",
+    "recurrence": "recurring",
+    "description": "Harvest honey and beeswax from the apiary."
+  },
+  {
+    "id": "craft.produce",
+    "name": "Craft / Produce",
+    "recurrence": "recurring",
+    "description": "Execute any crafting recipe at the appropriate workstation."
+  },
+  {
+    "id": "haul.deliver",
+    "name": "Haul Materials",
+    "skillDomain": "hauling",
+    "recurrence": "recurring",
+    "description": "Move items between inventories and storage locations."
+  },
+  {
+    "id": "build.construct",
+    "name": "Build Structure",
+    "skillDomain": "construction",
+    "toolRequired": "iron_hammer",
+    "recurrence": "one-time",
+    "description": "Execute a construction job to build walls, floors, or furniture."
+  },
+  {
+    "id": "build.deconstruct",
+    "name": "Deconstruct",
+    "skillDomain": "construction",
+    "toolRequired": "iron_hammer",
+    "recurrence": "one-time",
+    "description": "Remove a structure, recovering some materials."
+  },
+  {
+    "id": "guard.patrol",
+    "name": "Patrol Area",
+    "skillDomain": "combat",
+    "zoneContext": "guard_post",
+    "recurrence": "recurring",
+    "description": "Walk a patrol route and detect threats to the settlement."
+  },
+  {
+    "id": "guard.watch",
+    "name": "Stand Watch",
+    "skillDomain": "combat",
+    "zoneContext": "guard_post",
+    "recurrence": "recurring",
+    "description": "Stationary guard duty at a watch point."
+  },
+  {
+    "id": "trade.sell",
+    "name": "Sell Goods",
+    "skillDomain": "trading",
+    "zoneContext": "market",
+    "recurrence": "recurring",
+    "description": "Merchant sells goods to buyers at the market."
+  },
+  {
+    "id": "trade.buy",
+    "name": "Purchase Goods",
+    "skillDomain": "trading",
+    "zoneContext": "market",
+    "recurrence": "one-time",
+    "description": "Buyer-initiated trade at the market."
+  },
+  {
+    "id": "preach.sermon",
+    "name": "Deliver Sermon",
+    "skillDomain": "preaching",
+    "zoneContext": "chapel",
+    "recurrence": "recurring",
+    "description": "Priest preaches to the congregation in a chapel or church."
+  },
+  {
+    "id": "preach.pray",
+    "name": "Personal Prayer",
+    "skillDomain": "preaching",
+    "zoneContext": "chapel",
+    "recurrence": "recurring",
+    "description": "Individual devotion at a place of worship."
+  },
+  {
+    "id": "diplomacy.dispatch",
+    "name": "Diplomatic Mission",
+    "skillDomain": "trading",
+    "zoneContext": "throne_room",
+    "recurrence": "one-time",
+    "description": "Envoy delivery for diplomatic purposes."
+  },
+  {
+    "id": "haul.bury",
+    "name": "Bury Deceased",
+    "skillDomain": "hauling",
+    "zoneContext": "cemetery",
+    "recurrence": "one-time",
+    "description": "Transport a body to the cemetery for burial."
+  }
+]

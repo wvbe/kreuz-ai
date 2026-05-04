@@ -1,0 +1,21 @@
+[
+  {
+    "id": "barracks",
+    "name": "Barracks",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      { "furnitureTag": "bed", "count": 2 },
+      { "furnitureId": "weapon_rack", "count": 1 }
+    ],
+    "effects": []
+  },
+  {
+    "id": "guard_post",
+    "name": "Guard Post",
+    "requiresRoom": false,
+    "minTiles": 2,
+    "furnitureRequirements": [],
+    "effects": [{ "type": "entity.modifier", "modifier": "safety.bonus", "value": 10 }]
+  }
+]
