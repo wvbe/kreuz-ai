@@ -59,31 +59,31 @@
 
 ### Registry Modules
 
-- [ ] T022 [P] [US1] Implement MaterialRegistry loading from 5 JSON files in `src/registries/MaterialRegistry.ts`
-- [ ] T023 [P] [US6] Implement SkillRegistry loading from JSON in `src/registries/SkillRegistry.ts`
-- [ ] T024 [P] [US8] Implement NeedRegistry loading from JSON in `src/registries/NeedRegistry.ts`
-- [ ] T025 [P] [US10] Implement TerrainTypeRegistry loading from JSON in `src/registries/TerrainTypeRegistry.ts`
+- [x] T022 [P] [US1] Implement MaterialRegistry loading from 5 JSON files in `src/registries/MaterialRegistry.ts`
+- [x] T023 [P] [US6] Implement SkillRegistry loading from JSON in `src/registries/SkillRegistry.ts`
+- [x] T024 [P] [US8] Implement NeedRegistry loading from JSON in `src/registries/NeedRegistry.ts`
+- [x] T025 [P] [US10] Implement TerrainTypeRegistry loading from JSON in `src/registries/TerrainTypeRegistry.ts`
 
 ### Data Files — Materials (US1)
 
-- [ ] T026 [P] [US1] Create raw resources data (29 entries) in `src/data/materials/raw-resources.json`
-- [ ] T027 [P] [US1] Create processed goods data (22 entries) in `src/data/materials/processed-goods.json`
-- [ ] T028 [P] [US1] Create finished goods data (20 entries) in `src/data/materials/finished-goods.json`
-- [ ] T029 [P] [US1] Create food and drink data (15 entries) in `src/data/materials/food-and-drink.json`
-- [ ] T030 [P] [US1] Create currency data (1 entry) in `src/data/materials/currency.json`
+- [x] T026 [P] [US1] Create raw resources data (29 entries) in `src/data/materials/raw-resources.json`
+- [x] T027 [P] [US1] Create processed goods data (22 entries) in `src/data/materials/processed-goods.json`
+- [x] T028 [P] [US1] Create finished goods data (20 entries) in `src/data/materials/finished-goods.json`
+- [x] T029 [P] [US1] Create food and drink data (15 entries) in `src/data/materials/food-and-drink.json`
+- [x] T030 [P] [US1] Create currency data (1 entry) in `src/data/materials/currency.json`
 
 ### Data Files — Skills, Needs, Terrain (US6, US8, US10)
 
-- [ ] T031 [P] [US6] Create skill registry data (21 entries) in `src/data/skills.json`
-- [ ] T032 [P] [US8] Create need registry data (6 entries) in `src/data/needs.json`
-- [ ] T033 [P] [US10] Create terrain type data (21 entries) in `src/data/terrain.json`
+- [x] T031 [P] [US6] Create skill registry data (21 entries) in `src/data/skills.json`
+- [x] T032 [P] [US8] Create need registry data (6 entries) in `src/data/needs.json`
+- [x] T033 [P] [US10] Create terrain type data (21 entries) in `src/data/terrain.json`
 
 ### Tests
 
-- [ ] T034 [P] [US1] Write MaterialRegistry test: loads all files, validates count ≥ 70, no duplicate IDs, Zod parse passes in `test/registries/MaterialRegistry.test.ts`
-- [ ] T035 [P] [US6] Write SkillRegistry test: loads, count ≥ 20, all fields valid in `test/registries/SkillRegistry.test.ts`
-- [ ] T036 [P] [US8] Write NeedRegistry test: loads, count = 6, satisfaction methods present in `test/registries/NeedRegistry.test.ts`
-- [ ] T037 [P] [US10] Write TerrainTypeRegistry test: loads, count ≥ 15, harvestable refs valid in `test/registries/TerrainTypeRegistry.test.ts`
+- [x] T034 [P] [US1] Write MaterialRegistry test: loads all files, validates count ≥ 70, no duplicate IDs, Zod parse passes in `test/registries/MaterialRegistry.test.ts`
+- [x] T035 [P] [US6] Write SkillRegistry test: loads, count ≥ 20, all fields valid in `test/registries/SkillRegistry.test.ts`
+- [x] T036 [P] [US8] Write NeedRegistry test: loads, count = 6, satisfaction methods present in `test/registries/NeedRegistry.test.ts`
+- [x] T037 [P] [US10] Write TerrainTypeRegistry test: loads, count ≥ 15, harvestable refs valid in `test/registries/TerrainTypeRegistry.test.ts`
 
 **🚧 QUALITY GATE 3**: `npx vitest run` — all 4 registry tests pass. Material count ≥ 70. Skill count ≥ 20. Need count = 6. Terrain count ≥ 15. Zero Zod validation errors.
 

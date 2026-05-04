@@ -1,0 +1,22 @@
+[
+  { "id": "iron_hammer", "name": "Iron Hammer", "categories": ["tool", "metal"], "stackLimit": 5, "weight": 5, "perishable": false, "value": 20 },
+  { "id": "iron_chisel", "name": "Iron Chisel", "categories": ["tool", "metal"], "stackLimit": 5, "weight": 3, "perishable": false, "value": 15 },
+  { "id": "saw", "name": "Saw", "categories": ["tool", "metal", "wood"], "stackLimit": 5, "weight": 4, "perishable": false, "value": 20 },
+  { "id": "axe", "name": "Axe", "categories": ["tool", "metal", "wood"], "stackLimit": 5, "weight": 5, "perishable": false, "value": 20 },
+  { "id": "pickaxe", "name": "Pickaxe", "categories": ["tool", "metal", "wood"], "stackLimit": 5, "weight": 6, "perishable": false, "value": 20 },
+  { "id": "sickle", "name": "Sickle", "categories": ["tool", "metal"], "stackLimit": 5, "weight": 3, "perishable": false, "value": 15 },
+  { "id": "hoe", "name": "Hoe", "categories": ["tool", "metal", "wood"], "stackLimit": 5, "weight": 4, "perishable": false, "value": 15 },
+  { "id": "fishing_rod", "name": "Fishing Rod", "categories": ["tool", "wood"], "stackLimit": 5, "weight": 2, "perishable": false, "value": 8 },
+  { "id": "needle", "name": "Needle", "categories": ["tool", "metal"], "stackLimit": 10, "weight": 1, "perishable": false, "value": 5 },
+  { "id": "iron_sword", "name": "Iron Sword", "categories": ["weapon", "metal"], "stackLimit": 3, "weight": 5, "perishable": false, "value": 40 },
+  { "id": "iron_shield", "name": "Iron Shield", "categories": ["weapon", "metal", "wood"], "stackLimit": 3, "weight": 7, "perishable": false, "value": 30 },
+  { "id": "spear", "name": "Spear", "categories": ["weapon", "metal", "wood"], "stackLimit": 5, "weight": 4, "perishable": false, "value": 18 },
+  { "id": "bow", "name": "Bow", "categories": ["weapon", "wood"], "stackLimit": 3, "weight": 2, "perishable": false, "value": 15 },
+  { "id": "arrow", "name": "Arrow", "categories": ["weapon", "wood", "metal"], "stackLimit": 20, "weight": 1, "perishable": false, "value": 2 },
+  { "id": "leather_armor", "name": "Leather Armor", "categories": ["armor", "leather"], "stackLimit": 3, "weight": 8, "perishable": false, "value": 35 },
+  { "id": "iron_chainmail", "name": "Iron Chainmail", "categories": ["armor", "metal"], "stackLimit": 2, "weight": 15, "perishable": false, "value": 80 },
+  { "id": "iron_helm", "name": "Iron Helm", "categories": ["armor", "metal"], "stackLimit": 3, "weight": 4, "perishable": false, "value": 25 },
+  { "id": "peasant_clothing", "name": "Peasant Clothing", "categories": ["clothing", "textile"], "stackLimit": 5, "weight": 2, "perishable": false, "value": 12 },
+  { "id": "fine_clothing", "name": "Fine Clothing", "categories": ["clothing", "textile", "luxury"], "stackLimit": 3, "weight": 3, "perishable": false, "value": 30 },
+  { "id": "monks_habit", "name": "Monk's Habit", "categories": ["clothing", "textile", "religious"], "stackLimit": 5, "weight": 2, "perishable": false, "value": 15 }
+]
