@@ -5,7 +5,7 @@
 
 ## Summary
 
-Define and implement the complete game content data layer for a 13th-century European colony simulation. This includes ~75 materials, ~55 crafting recipes, ~55 furniture prototypes, ~28 zone types, 23 humanoid entity prototypes, 21 skills, 31 traits, 6 needs, 22 job types, 21 terrain types, 13 animal prototypes, 12 factions, and 7 behavior tree templates — all expressed as typed, validated, JSON-serializable data files loaded at startup through a unified content registry system.
+Define and implement the complete game content data layer for a 13th-century European colony simulation. This includes ~87 materials, ~55 crafting recipes, ~55 furniture prototypes, ~28 zone types, 23 humanoid entity prototypes, 21 skills, 31 traits, 6 needs, 22 job types, 21 terrain types, 13 animal prototypes, 12 factions, and 7 behavior tree templates — all expressed as typed, validated, JSON-serializable data files loaded at startup through a unified content registry system.
 
 The implementation establishes the project's foundational architecture: TypeScript project scaffolding, the content registry pattern, validation pipeline, and data file structure that all future game systems depend on.
 

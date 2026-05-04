@@ -121,6 +121,7 @@ The game world uses a rich set of materials grounded in 13th-century European li
 | Fruit Preserves | food, preserved, sweet | 15          | Yes (slow) | Fruit cooked with honey              |
 | Butter          | food, dairy            | 15          | Yes        | Churned from milk                    |
 | Porridge        | food, cooked, staple   | 10          | Yes        | Oat or barley cereal                 |
+| Eggs            | food, raw, animal      | 15          | Yes        | From chickens, daily laying          |
 
 **Materials — Currency**:
 
@@ -130,7 +131,7 @@ The game world uses a rich set of materials grounded in 13th-century European li
 
 **Acceptance Scenarios**:
 
-1. **Given** the material registry is loaded, **When** queried for all materials with category `food`, **Then** at least 14 entries are returned, each with valid `perishability` durations.
+1. **Given** the material registry is loaded, **When** queried for all materials with category `food`, **Then** at least 15 entries are returned, each with valid `perishability` durations.
 2. **Given** a material with category `raw`, **When** cross-referenced with the recipe registry, **Then** at least one recipe exists that uses it as an input (no orphan raw materials).
 3. **Given** all tool materials, **When** checked against construction and crafting recipe restrictions, **Then** each tool is required by at least one recipe or construction job as a non-consumed tool.
 4. **Given** the currency material "Silver Penny", **When** used in trade (spec 019), **Then** it functions identically to any other stackable material with `stackLimit: 1000`.
@@ -660,24 +661,24 @@ The job system (spec 017) uses job types to define what work entities can perfor
 | farm.sow           | Sow Crops          | farming          | Hoe           | Farm Field              | One-time per season | Plant seeds in tilled soil          |
 | farm.tend          | Tend Crops         | farming          | —             | Farm Field              | Recurring           | Water, weed, care for growing crops |
 | farm.harvest       | Harvest Crops      | farming          | Sickle        | Farm Field              | One-time per season | Collect mature crops                |
-| mine.ore           | Mine Ore           | mining           | Pickaxe       | Mine (underground)      | Recurring           | Extract iron, copper, tin, coal     |
+| mine.ore           | Mine Ore           | mining           | Pickaxe       | — (terrain: ore_vein)   | Recurring           | Extract iron, copper, tin, coal     |
 | quarry.stone       | Quarry Stone       | masonry          | Pickaxe       | Quarry                  | Recurring           | Extract limestone, granite          |
-| fell.trees         | Fell Trees         | woodcutting      | Axe           | Forest (map edge)       | Recurring           | Harvest wood logs                   |
+| fell.trees         | Fell Trees         | woodcutting      | Axe           | — (terrain: forest)     | Recurring           | Harvest wood logs                   |
 | fish.catch         | Catch Fish         | fishing          | Fishing Rod   | Fishing Dock            | Recurring           | Catch raw fish                      |
-| gather.herbs       | Gather Herbs       | herbalism        | —             | Herb Garden / wild      | Recurring           | Collect medicinal herbs             |
+| gather.herbs       | Gather Herbs       | herbalism        | —             | Herb Garden             | Recurring           | Collect medicinal herbs             |
 | tend.animals       | Tend Livestock     | animal_husbandry | —             | Pasture                 | Recurring           | Feed, shear, milk animals           |
 | tend.bees          | Tend Apiary        | animal_husbandry | —             | Apiary Yard             | Recurring           | Harvest honey and beeswax           |
 | craft.produce      | Craft / Produce    | (per recipe)     | (per recipe)  | (per recipe zone)       | Recurring           | Execute any crafting recipe         |
 | haul.deliver       | Haul Materials     | hauling          | —             | Any                     | Recurring           | Move items between inventories      |
 | build.construct    | Build Structure    | construction     | Iron Hammer   | Any                     | One-time            | Execute construction job (spec 016) |
 | build.deconstruct  | Deconstruct        | construction     | Iron Hammer   | Any                     | One-time            | Remove structure (spec 016)         |
-| guard.patrol       | Patrol Area        | combat           | (any weapon)  | Guard Post / settlement | Recurring           | Walk patrol route, detect threats   |
+| guard.patrol       | Patrol Area        | combat           | (any weapon)  | Guard Post              | Recurring           | Walk patrol route, detect threats   |
 | guard.watch        | Stand Watch        | combat           | (any weapon)  | Guard Post              | Recurring           | Stationary guard duty               |
 | trade.sell         | Sell Goods         | trading          | —             | Market                  | Recurring           | Merchant sells to buyers            |
 | trade.buy          | Purchase Goods     | trading          | —             | Market                  | One-time            | Buyer-initiated trade (spec 019)    |
 | preach.sermon      | Deliver Sermon     | preaching        | —             | Chapel / Church         | Recurring           | Priest preaches to congregation     |
 | preach.pray        | Personal Prayer    | preaching        | —             | Chapel / Church         | Recurring           | Individual devotion                 |
-| diplomacy.dispatch | Diplomatic Mission | trading          | —             | Throne Room → target    | One-time            | Envoy delivery (spec 021)           |
+| diplomacy.dispatch | Diplomatic Mission | trading          | —             | Throne Room             | One-time            | Envoy delivery (spec 021)           |
 | haul.bury          | Bury Deceased      | hauling          | —             | Cemetery                | One-time            | Transport body to gravesite         |
 
 **Acceptance Scenarios**:
@@ -750,7 +751,7 @@ The game world includes domesticated livestock and wild animals. Livestock are e
 | Cow       | Milk (milking, periodic), Raw Meat (butcher) | Animal Husbandry | Pasture | Graze, wander within zone | Dairy and meat               |
 | Goat      | Milk (milking, periodic), Raw Hide (butcher) | Animal Husbandry | Pasture | Graze, wander within zone | Hardy dairy animal           |
 | Pig       | Raw Meat (butcher), Tallow (butcher)         | Animal Husbandry | Pasture | Forage, wander            | Meat and fat                 |
-| Chicken   | Eggs → Food item (periodic)                  | Animal Husbandry | Pasture | Peck, wander              | Daily food source            |
+| Chicken   | Eggs (periodic)                              | Animal Husbandry | Pasture | Peck, wander              | Daily food source            |
 | Horse     | — (mount/draft, future)                      | Animal Husbandry | Pasture | Graze, wander             | Transport (future); prestige |
 | Donkey    | — (pack animal, future)                      | Animal Husbandry | Pasture | Graze, wander             | Hauling aid (future)         |
 
@@ -1066,6 +1067,7 @@ Selector
 ### Session 2026-05-04
 
 - Q: What library should define and validate content data schemas? → A: Zod (enables runtime validation at startup + JSON Schema generation for tooling)
+- Q: Which job types use zoneContext: undefined (terrain-based) vs. actual zone IDs? → A: fell.trees and mine.ore are terrain-based (no zone); gather.herbs uses Herb Garden zone only; guard.patrol uses Guard Post zone only; diplomacy.dispatch uses Throne Room as origin zone only
 
 ## Assumptions
 

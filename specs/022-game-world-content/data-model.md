@@ -91,7 +91,7 @@ type Material = z.infer<typeof MaterialSchema>;
 - `perishTicks` required and > 0 if `perishable` is true
 - `categories` must be non-empty
 
-**Count**: ~75 entries
+**Count**: ~87 entries
 
 ---
 
