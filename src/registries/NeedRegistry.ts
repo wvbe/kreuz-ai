@@ -1,6 +1,6 @@
-import { Registry } from '../engine/Registry.js';
-import { NeedSchema, type Need } from '../schemas/needs.js';
-import needsData from '../data/needs.json' with { type: 'json' };
+import { Registry } from "../engine/Registry.js";
+import { NeedSchema, type Need } from "../schemas/needs.js";
+import needsData from "../data/needs.json" with { type: "json" };
 
 export function createNeedRegistry(): Registry<Need> {
   const registry = new Registry<Need>();

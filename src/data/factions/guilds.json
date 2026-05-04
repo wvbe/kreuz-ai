@@ -84,7 +84,7 @@
     "disposition": "mercantile",
     "membershipCriteria": { "skillId": "trading", "minLevel": 15 },
     "associatedZones": ["market"],
-    "mechanics": { "tradeDiscount": 0.80 },
+    "mechanics": { "tradeDiscount": 0.8 },
     "description": "Masters of trade and commerce, controlling the settlement's market."
   },
   {

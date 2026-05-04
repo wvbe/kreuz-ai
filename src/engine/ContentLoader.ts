@@ -1,4 +1,4 @@
-import { Registry } from './Registry.js';
+import { Registry } from "./Registry.js";
 import {
   createMaterialRegistry,
   createSkillRegistry,
@@ -12,7 +12,7 @@ import {
   createRecipeRegistry,
   createBehaviorTreeRegistry,
   createEntityPrototypeRegistry,
-} from '../registries/index.js';
+} from "../registries/index.js";
 
 export interface ContentValidationError {
   registry: string;
@@ -74,28 +74,71 @@ export class ContentLoader {
     const entityPrototypes = createEntityPrototypeRegistry();
 
     const registries: ContentRegistries = {
-      materials, skills, needs, terrainTypes, traits,
-      furniture, zoneTypes, factions, jobTypes,
-      recipes, behaviorTrees, entityPrototypes,
+      materials,
+      skills,
+      needs,
+      terrainTypes,
+      traits,
+      furniture,
+      zoneTypes,
+      factions,
+      jobTypes,
+      recipes,
+      behaviorTrees,
+      entityPrototypes,
     };
 
     // Cross-registry validation: recipe references
     for (const recipe of recipes.getAll() as readonly any[]) {
       for (const input of recipe.inputs) {
         if (!materials.has(input.materialId)) {
-          errors.push({ registry: 'recipes', entryId: recipe.id, field: 'inputs', message: `Unknown input material "${input.materialId}"`, referencedId: input.materialId, referencedRegistry: 'materials' });
+          errors.push({
+            registry: "recipes",
+            entryId: recipe.id,
+            field: "inputs",
+            message: `Unknown input material "${input.materialId}"`,
+            referencedId: input.materialId,
+            referencedRegistry: "materials",
+          });
         }
       }
       for (const output of recipe.outputs) {
         if (!materials.has(output.materialId)) {
-          errors.push({ registry: 'recipes', entryId: recipe.id, field: 'outputs', message: `Unknown output material "${output.materialId}"`, referencedId: output.materialId, referencedRegistry: 'materials' });
+          errors.push({
+            registry: "recipes",
+            entryId: recipe.id,
+            field: "outputs",
+            message: `Unknown output material "${output.materialId}"`,
+            referencedId: output.materialId,
+            referencedRegistry: "materials",
+          });
         }
       }
-      if (recipe.restrictions?.skill && !skills.has(recipe.restrictions.skill.skillId)) {
-        errors.push({ registry: 'recipes', entryId: recipe.id, field: 'restrictions.skill', message: `Unknown skill "${recipe.restrictions.skill.skillId}"`, referencedId: recipe.restrictions.skill.skillId, referencedRegistry: 'skills' });
+      if (
+        recipe.restrictions?.skill &&
+        !skills.has(recipe.restrictions.skill.skillId)
+      ) {
+        errors.push({
+          registry: "recipes",
+          entryId: recipe.id,
+          field: "restrictions.skill",
+          message: `Unknown skill "${recipe.restrictions.skill.skillId}"`,
+          referencedId: recipe.restrictions.skill.skillId,
+          referencedRegistry: "skills",
+        });
       }
-      if (recipe.restrictions?.workstation && !furniture.has(recipe.restrictions.workstation)) {
-        errors.push({ registry: 'recipes', entryId: recipe.id, field: 'restrictions.workstation', message: `Unknown workstation "${recipe.restrictions.workstation}"`, referencedId: recipe.restrictions.workstation, referencedRegistry: 'furniture' });
+      if (
+        recipe.restrictions?.workstation &&
+        !furniture.has(recipe.restrictions.workstation)
+      ) {
+        errors.push({
+          registry: "recipes",
+          entryId: recipe.id,
+          field: "restrictions.workstation",
+          message: `Unknown workstation "${recipe.restrictions.workstation}"`,
+          referencedId: recipe.restrictions.workstation,
+          referencedRegistry: "furniture",
+        });
       }
     }
 
@@ -104,7 +147,14 @@ export class ContentLoader {
       if (item.constructionMaterials) {
         for (const mat of item.constructionMaterials) {
           if (!materials.has(mat.materialId)) {
-            errors.push({ registry: 'furniture', entryId: item.id, field: 'constructionMaterials', message: `Unknown material "${mat.materialId}"`, referencedId: mat.materialId, referencedRegistry: 'materials' });
+            errors.push({
+              registry: "furniture",
+              entryId: item.id,
+              field: "constructionMaterials",
+              message: `Unknown material "${mat.materialId}"`,
+              referencedId: mat.materialId,
+              referencedRegistry: "materials",
+            });
           }
         }
       }
@@ -115,14 +165,28 @@ export class ContentLoader {
       if (zone.requiredFurniture) {
         for (const fId of zone.requiredFurniture) {
           if (!furniture.has(fId)) {
-            errors.push({ registry: 'zoneTypes', entryId: zone.id, field: 'requiredFurniture', message: `Unknown furniture "${fId}"`, referencedId: fId, referencedRegistry: 'furniture' });
+            errors.push({
+              registry: "zoneTypes",
+              entryId: zone.id,
+              field: "requiredFurniture",
+              message: `Unknown furniture "${fId}"`,
+              referencedId: fId,
+              referencedRegistry: "furniture",
+            });
           }
         }
       }
       if (zone.optionalFurniture) {
         for (const fId of zone.optionalFurniture) {
           if (!furniture.has(fId)) {
-            errors.push({ registry: 'zoneTypes', entryId: zone.id, field: 'optionalFurniture', message: `Unknown furniture "${fId}"`, referencedId: fId, referencedRegistry: 'furniture' });
+            errors.push({
+              registry: "zoneTypes",
+              entryId: zone.id,
+              field: "optionalFurniture",
+              message: `Unknown furniture "${fId}"`,
+              referencedId: fId,
+              referencedRegistry: "furniture",
+            });
           }
         }
       }
@@ -133,33 +197,68 @@ export class ContentLoader {
       if (entity.startingSkills) {
         for (const s of entity.startingSkills) {
           if (!skills.has(s.skillId)) {
-            errors.push({ registry: 'entityPrototypes', entryId: entity.id, field: 'startingSkills', message: `Unknown skill "${s.skillId}"`, referencedId: s.skillId, referencedRegistry: 'skills' });
+            errors.push({
+              registry: "entityPrototypes",
+              entryId: entity.id,
+              field: "startingSkills",
+              message: `Unknown skill "${s.skillId}"`,
+              referencedId: s.skillId,
+              referencedRegistry: "skills",
+            });
           }
         }
       }
       if (entity.defaultTraits) {
         for (const tId of entity.defaultTraits) {
           if (!traits.has(tId)) {
-            errors.push({ registry: 'entityPrototypes', entryId: entity.id, field: 'defaultTraits', message: `Unknown trait "${tId}"`, referencedId: tId, referencedRegistry: 'traits' });
+            errors.push({
+              registry: "entityPrototypes",
+              entryId: entity.id,
+              field: "defaultTraits",
+              message: `Unknown trait "${tId}"`,
+              referencedId: tId,
+              referencedRegistry: "traits",
+            });
           }
         }
       }
       if (entity.defaultFactions) {
         for (const fId of entity.defaultFactions) {
           if (!factions.has(fId)) {
-            errors.push({ registry: 'entityPrototypes', entryId: entity.id, field: 'defaultFactions', message: `Unknown faction "${fId}"`, referencedId: fId, referencedRegistry: 'factions' });
+            errors.push({
+              registry: "entityPrototypes",
+              entryId: entity.id,
+              field: "defaultFactions",
+              message: `Unknown faction "${fId}"`,
+              referencedId: fId,
+              referencedRegistry: "factions",
+            });
           }
         }
       }
       if (entity.behaviorTree && !behaviorTrees.has(entity.behaviorTree)) {
-        errors.push({ registry: 'entityPrototypes', entryId: entity.id, field: 'behaviorTree', message: `Unknown behavior tree "${entity.behaviorTree}"`, referencedId: entity.behaviorTree, referencedRegistry: 'behaviorTrees' });
+        errors.push({
+          registry: "entityPrototypes",
+          entryId: entity.id,
+          field: "behaviorTree",
+          message: `Unknown behavior tree "${entity.behaviorTree}"`,
+          referencedId: entity.behaviorTree,
+          referencedRegistry: "behaviorTrees",
+        });
       }
     }
 
     // Cross-registry validation: job type skill references
     for (const job of jobTypes.getAll() as readonly any[]) {
       if (job.requiredSkill && !skills.has(job.requiredSkill)) {
-        errors.push({ registry: 'jobTypes', entryId: job.id, field: 'requiredSkill', message: `Unknown skill "${job.requiredSkill}"`, referencedId: job.requiredSkill, referencedRegistry: 'skills' });
+        errors.push({
+          registry: "jobTypes",
+          entryId: job.id,
+          field: "requiredSkill",
+          message: `Unknown skill "${job.requiredSkill}"`,
+          referencedId: job.requiredSkill,
+          referencedRegistry: "skills",
+        });
       }
     }
 

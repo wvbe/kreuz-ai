@@ -25,23 +25,23 @@ Consumer systems (ECS, production, AI, trade, etc.) depend only on the registry 
  * All entries are immutable after loading.
  */
 interface IRegistry<T extends { id: string }> {
-    /** Get entry by ID. Throws if not found. */
-    get(id: string): Readonly<T>;
+  /** Get entry by ID. Throws if not found. */
+  get(id: string): Readonly<T>;
 
-    /** Get entry by ID, or undefined if not found. */
-    tryGet(id: string): Readonly<T> | undefined;
+  /** Get entry by ID, or undefined if not found. */
+  tryGet(id: string): Readonly<T> | undefined;
 
-    /** Check if an entry exists. */
-    has(id: string): boolean;
+  /** Check if an entry exists. */
+  has(id: string): boolean;
 
-    /** Get all entries as a readonly array. */
-    getAll(): readonly Readonly<T>[];
+  /** Get all entries as a readonly array. */
+  getAll(): readonly Readonly<T>[];
 
-    /** Get all entries matching a predicate. */
-    filter(predicate: (entry: Readonly<T>) => boolean): readonly Readonly<T>[];
+  /** Get all entries matching a predicate. */
+  filter(predicate: (entry: Readonly<T>) => boolean): readonly Readonly<T>[];
 
-    /** Number of entries in the registry. */
-    readonly size: number;
+  /** Number of entries in the registry. */
+  readonly size: number;
 }
 ```
 
@@ -51,8 +51,8 @@ interface IRegistry<T extends { id: string }> {
 // Production system looking up a recipe's workstation
 const recipe = recipeRegistry.get("forge_sword");
 if (recipe.restrictions.workstation) {
-    const furniture = furnitureRegistry.get(recipe.restrictions.workstation);
-    // ... check if workstation exists in zone
+  const furniture = furnitureRegistry.get(recipe.restrictions.workstation);
+  // ... check if workstation exists in zone
 }
 
 // Trade system looking up base price
@@ -66,8 +66,8 @@ const tree = behaviorTreeRegistry.get(entity.behaviorTree);
 // Job system checking tool requirement
 const jobType = jobTypeRegistry.get("mine.ore");
 if (jobType.toolRequired) {
-    const tool = materialRegistry.get(jobType.toolRequired);
-    // ... check entity inventory for tool
+  const tool = materialRegistry.get(jobType.toolRequired);
+  // ... check entity inventory for tool
 }
 ```
 
@@ -77,47 +77,47 @@ if (jobType.toolRequired) {
 
 ```typescript
 interface ContentLoadResult {
-    /** True if all registries loaded and validated without errors. */
-    success: boolean;
+  /** True if all registries loaded and validated without errors. */
+  success: boolean;
 
-    /** List of validation errors (empty if success). */
-    errors: ContentValidationError[];
+  /** List of validation errors (empty if success). */
+  errors: ContentValidationError[];
 
-    /** List of validation warnings (non-fatal). */
-    warnings: ContentValidationWarning[];
+  /** List of validation warnings (non-fatal). */
+  warnings: ContentValidationWarning[];
 
-    /** All loaded registries, accessible by name. */
-    registries: ContentRegistries;
+  /** All loaded registries, accessible by name. */
+  registries: ContentRegistries;
 }
 
 interface ContentValidationError {
-    registry: string; // Which registry the error is in
-    entryId?: string; // Which entry (if applicable)
-    field?: string; // Which field
-    message: string; // Human-readable error description
-    referencedId?: string; // The missing/invalid reference
-    referencedRegistry?: string; // Where it was expected to be found
+  registry: string; // Which registry the error is in
+  entryId?: string; // Which entry (if applicable)
+  field?: string; // Which field
+  message: string; // Human-readable error description
+  referencedId?: string; // The missing/invalid reference
+  referencedRegistry?: string; // Where it was expected to be found
 }
 
 interface ContentValidationWarning {
-    registry: string;
-    entryId?: string;
-    message: string;
+  registry: string;
+  entryId?: string;
+  message: string;
 }
 
 interface ContentRegistries {
-    materials: IRegistry<Material>;
-    recipes: IRegistry<Recipe>;
-    furniture: IRegistry<Furniture>;
-    zoneTypes: IRegistry<ZoneType>;
-    entityPrototypes: IRegistry<EntityPrototype>;
-    skills: IRegistry<Skill>;
-    traits: IRegistry<Trait>;
-    needs: IRegistry<Need>;
-    jobTypes: IRegistry<JobType>;
-    terrainTypes: IRegistry<TerrainType>;
-    factions: IRegistry<Faction>;
-    behaviorTrees: IRegistry<BehaviorTree>;
+  materials: IRegistry<Material>;
+  recipes: IRegistry<Recipe>;
+  furniture: IRegistry<Furniture>;
+  zoneTypes: IRegistry<ZoneType>;
+  entityPrototypes: IRegistry<EntityPrototype>;
+  skills: IRegistry<Skill>;
+  traits: IRegistry<Trait>;
+  needs: IRegistry<Need>;
+  jobTypes: IRegistry<JobType>;
+  terrainTypes: IRegistry<TerrainType>;
+  factions: IRegistry<Faction>;
+  behaviorTrees: IRegistry<BehaviorTree>;
 }
 
 /**

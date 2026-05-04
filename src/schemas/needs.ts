@@ -1,7 +1,13 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const NeedSatisfactionMethodSchema = z.object({
-  type: z.enum(['consume', 'use_furniture', 'zone_presence', 'social', 'proximity']),
+  type: z.enum([
+    "consume",
+    "use_furniture",
+    "zone_presence",
+    "social",
+    "proximity",
+  ]),
   materialCategory: z.string().optional(),
   materialId: z.string().optional(),
   satisfactionAmount: z.number().optional(),
@@ -24,4 +30,6 @@ export const NeedSchema = z.object({
 });
 
 export type Need = z.infer<typeof NeedSchema>;
-export type NeedSatisfactionMethod = z.infer<typeof NeedSatisfactionMethodSchema>;
+export type NeedSatisfactionMethod = z.infer<
+  typeof NeedSatisfactionMethodSchema
+>;

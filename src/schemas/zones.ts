@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const FurnitureRequirementSchema = z.object({
   furnitureId: z.string().optional(),
@@ -7,7 +7,7 @@ export const FurnitureRequirementSchema = z.object({
 });
 
 export const ZoneEffectSchema = z.object({
-  type: z.enum(['activity.unlock', 'entity.modifier']),
+  type: z.enum(["activity.unlock", "entity.modifier"]),
   activityId: z.string().optional(),
   modifier: z.string().optional(),
   value: z.number().optional(),

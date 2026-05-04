@@ -7,7 +7,11 @@
     "defaultEquipment": [],
     "behaviorTree": "livestock_behavior",
     "products": [
-      { "materialId": "raw_wool", "method": "periodic", "intervalTicks": 200 }
+      {
+        "materialId": "raw_wool",
+        "method": "periodic",
+        "intervalTicks": 200
+      }
     ],
     "habitat": ["grassland", "fertile_soil"]
   },
@@ -19,7 +23,11 @@
     "defaultEquipment": [],
     "behaviorTree": "livestock_behavior",
     "products": [
-      { "materialId": "milk", "method": "periodic", "intervalTicks": 150 },
+      {
+        "materialId": "milk",
+        "method": "periodic",
+        "intervalTicks": 150
+      },
       { "materialId": "raw_meat", "method": "butcher" }
     ],
     "habitat": ["grassland", "fertile_soil"]
@@ -32,7 +40,11 @@
     "defaultEquipment": [],
     "behaviorTree": "livestock_behavior",
     "products": [
-      { "materialId": "milk", "method": "periodic", "intervalTicks": 180 },
+      {
+        "materialId": "milk",
+        "method": "periodic",
+        "intervalTicks": 180
+      },
       { "materialId": "raw_hide", "method": "butcher" }
     ],
     "habitat": ["grassland", "rocky"]

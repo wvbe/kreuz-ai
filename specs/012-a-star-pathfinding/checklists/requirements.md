@@ -36,30 +36,30 @@
 All checklist items pass successfully:
 
 1. **Content Quality**: Specification is technology-agnostic with clear user value focus
-    - No language/framework specifics mentioned
-    - Focused on pathfinding capabilities users need
-    - Written in plain language
+   - No language/framework specifics mentioned
+   - Focused on pathfinding capabilities users need
+   - Written in plain language
 
 2. **Requirements**: All 11 functional requirements are clear and testable
-    - FR-001: A\* algorithm with Manhattan heuristic - testable
-    - FR-002 through FR-011: All have clear success conditions
+   - FR-001: A\* algorithm with Manhattan heuristic - testable
+   - FR-002 through FR-011: All have clear success conditions
 
 3. **Success Criteria**: All 7 measurable outcomes are quantified
-    - SC-001: 95% optimality rate
-    - SC-002: < 100ms for 50x50 map
-    - SC-003 through SC-007: All measurable
+   - SC-001: 95% optimality rate
+   - SC-002: < 100ms for 50x50 map
+   - SC-003 through SC-007: All measurable
 
 4. **User Scenarios**: Four prioritized stories with independent tests
-    - P1: Single-map pathfinding (core)
-    - P2: Cross-map navigation (essential)
-    - P2: Dynamic obstacles (important)
-    - P3: Cost-based pathfinding (enhancement)
+   - P1: Single-map pathfinding (core)
+   - P2: Cross-map navigation (essential)
+   - P2: Dynamic obstacles (important)
+   - P3: Cost-based pathfinding (enhancement)
 
 5. **Assumptions**: 11 clear assumptions documented
-    - Map structure and coordinate system defined
-    - Movement rules specified
-    - Connection model defined
-    - Performance constraints stated
+   - Map structure and coordinate system defined
+   - Movement rules specified
+   - Connection model defined
+   - Performance constraints stated
 
 ### Completeness Check ✓
 

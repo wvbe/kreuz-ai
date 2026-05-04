@@ -1,24 +1,200 @@
 [
-  { "id": "oak_plank", "name": "Oak Plank", "categories": ["wood", "processed"], "stackLimit": 30, "weight": 3, "perishable": false, "value": 5 },
-  { "id": "pine_plank", "name": "Pine Plank", "categories": ["wood", "processed"], "stackLimit": 30, "weight": 2, "perishable": false, "value": 4 },
-  { "id": "birch_plank", "name": "Birch Plank", "categories": ["wood", "processed"], "stackLimit": 30, "weight": 2, "perishable": false, "value": 4 },
-  { "id": "stone_block", "name": "Stone Block", "categories": ["stone", "processed"], "stackLimit": 10, "weight": 14, "perishable": false, "value": 6 },
-  { "id": "brick", "name": "Brick", "categories": ["ceramic", "processed", "building"], "stackLimit": 30, "weight": 4, "perishable": false, "value": 3 },
-  { "id": "iron_ingot", "name": "Iron Ingot", "categories": ["metal", "processed"], "stackLimit": 20, "weight": 6, "perishable": false, "value": 10 },
-  { "id": "copper_ingot", "name": "Copper Ingot", "categories": ["metal", "processed"], "stackLimit": 20, "weight": 5, "perishable": false, "value": 8 },
-  { "id": "bronze_ingot", "name": "Bronze Ingot", "categories": ["metal", "processed", "alloy"], "stackLimit": 20, "weight": 6, "perishable": false, "value": 14 },
-  { "id": "charcoal", "name": "Charcoal", "categories": ["fuel", "processed"], "stackLimit": 30, "weight": 2, "perishable": false, "value": 3 },
-  { "id": "flour", "name": "Flour", "categories": ["grain", "processed"], "stackLimit": 30, "weight": 2, "perishable": false, "value": 2 },
-  { "id": "malt", "name": "Malt", "categories": ["grain", "processed", "brewing"], "stackLimit": 30, "weight": 2, "perishable": false, "value": 3 },
-  { "id": "linen_thread", "name": "Linen Thread", "categories": ["fiber", "processed"], "stackLimit": 40, "weight": 1, "perishable": false, "value": 3 },
-  { "id": "wool_thread", "name": "Wool Thread", "categories": ["fiber", "processed"], "stackLimit": 40, "weight": 1, "perishable": false, "value": 4 },
-  { "id": "linen_cloth", "name": "Linen Cloth", "categories": ["textile", "processed"], "stackLimit": 20, "weight": 2, "perishable": false, "value": 8 },
-  { "id": "wool_cloth", "name": "Wool Cloth", "categories": ["textile", "processed"], "stackLimit": 20, "weight": 3, "perishable": false, "value": 12 },
-  { "id": "leather", "name": "Leather", "categories": ["animal", "processed"], "stackLimit": 15, "weight": 4, "perishable": false, "value": 8 },
-  { "id": "nails", "name": "Nails", "categories": ["metal", "processed", "fastener"], "stackLimit": 50, "weight": 1, "perishable": false, "value": 2 },
-  { "id": "rope", "name": "Rope", "categories": ["fiber", "processed"], "stackLimit": 20, "weight": 3, "perishable": false, "value": 4 },
-  { "id": "parchment", "name": "Parchment", "categories": ["animal", "processed", "writing"], "stackLimit": 15, "weight": 1, "perishable": false, "value": 10 },
-  { "id": "candle", "name": "Candle", "categories": ["processed", "light"], "stackLimit": 30, "weight": 1, "perishable": false, "value": 3 },
-  { "id": "glass_pane", "name": "Glass Pane", "categories": ["processed", "rare", "building"], "stackLimit": 10, "weight": 4, "perishable": false, "value": 25 },
-  { "id": "plaster", "name": "Plaster", "categories": ["processed", "building"], "stackLimit": 20, "weight": 5, "perishable": false, "value": 3 }
+  {
+    "id": "oak_plank",
+    "name": "Oak Plank",
+    "categories": ["wood", "processed"],
+    "stackLimit": 30,
+    "weight": 3,
+    "perishable": false,
+    "value": 5
+  },
+  {
+    "id": "pine_plank",
+    "name": "Pine Plank",
+    "categories": ["wood", "processed"],
+    "stackLimit": 30,
+    "weight": 2,
+    "perishable": false,
+    "value": 4
+  },
+  {
+    "id": "birch_plank",
+    "name": "Birch Plank",
+    "categories": ["wood", "processed"],
+    "stackLimit": 30,
+    "weight": 2,
+    "perishable": false,
+    "value": 4
+  },
+  {
+    "id": "stone_block",
+    "name": "Stone Block",
+    "categories": ["stone", "processed"],
+    "stackLimit": 10,
+    "weight": 14,
+    "perishable": false,
+    "value": 6
+  },
+  {
+    "id": "brick",
+    "name": "Brick",
+    "categories": ["ceramic", "processed", "building"],
+    "stackLimit": 30,
+    "weight": 4,
+    "perishable": false,
+    "value": 3
+  },
+  {
+    "id": "iron_ingot",
+    "name": "Iron Ingot",
+    "categories": ["metal", "processed"],
+    "stackLimit": 20,
+    "weight": 6,
+    "perishable": false,
+    "value": 10
+  },
+  {
+    "id": "copper_ingot",
+    "name": "Copper Ingot",
+    "categories": ["metal", "processed"],
+    "stackLimit": 20,
+    "weight": 5,
+    "perishable": false,
+    "value": 8
+  },
+  {
+    "id": "bronze_ingot",
+    "name": "Bronze Ingot",
+    "categories": ["metal", "processed", "alloy"],
+    "stackLimit": 20,
+    "weight": 6,
+    "perishable": false,
+    "value": 14
+  },
+  {
+    "id": "charcoal",
+    "name": "Charcoal",
+    "categories": ["fuel", "processed"],
+    "stackLimit": 30,
+    "weight": 2,
+    "perishable": false,
+    "value": 3
+  },
+  {
+    "id": "flour",
+    "name": "Flour",
+    "categories": ["grain", "processed"],
+    "stackLimit": 30,
+    "weight": 2,
+    "perishable": false,
+    "value": 2
+  },
+  {
+    "id": "malt",
+    "name": "Malt",
+    "categories": ["grain", "processed", "brewing"],
+    "stackLimit": 30,
+    "weight": 2,
+    "perishable": false,
+    "value": 3
+  },
+  {
+    "id": "linen_thread",
+    "name": "Linen Thread",
+    "categories": ["fiber", "processed"],
+    "stackLimit": 40,
+    "weight": 1,
+    "perishable": false,
+    "value": 3
+  },
+  {
+    "id": "wool_thread",
+    "name": "Wool Thread",
+    "categories": ["fiber", "processed"],
+    "stackLimit": 40,
+    "weight": 1,
+    "perishable": false,
+    "value": 4
+  },
+  {
+    "id": "linen_cloth",
+    "name": "Linen Cloth",
+    "categories": ["textile", "processed"],
+    "stackLimit": 20,
+    "weight": 2,
+    "perishable": false,
+    "value": 8
+  },
+  {
+    "id": "wool_cloth",
+    "name": "Wool Cloth",
+    "categories": ["textile", "processed"],
+    "stackLimit": 20,
+    "weight": 3,
+    "perishable": false,
+    "value": 12
+  },
+  {
+    "id": "leather",
+    "name": "Leather",
+    "categories": ["animal", "processed"],
+    "stackLimit": 15,
+    "weight": 4,
+    "perishable": false,
+    "value": 8
+  },
+  {
+    "id": "nails",
+    "name": "Nails",
+    "categories": ["metal", "processed", "fastener"],
+    "stackLimit": 50,
+    "weight": 1,
+    "perishable": false,
+    "value": 2
+  },
+  {
+    "id": "rope",
+    "name": "Rope",
+    "categories": ["fiber", "processed"],
+    "stackLimit": 20,
+    "weight": 3,
+    "perishable": false,
+    "value": 4
+  },
+  {
+    "id": "parchment",
+    "name": "Parchment",
+    "categories": ["animal", "processed", "writing"],
+    "stackLimit": 15,
+    "weight": 1,
+    "perishable": false,
+    "value": 10
+  },
+  {
+    "id": "candle",
+    "name": "Candle",
+    "categories": ["processed", "light"],
+    "stackLimit": 30,
+    "weight": 1,
+    "perishable": false,
+    "value": 3
+  },
+  {
+    "id": "glass_pane",
+    "name": "Glass Pane",
+    "categories": ["processed", "rare", "building"],
+    "stackLimit": 10,
+    "weight": 4,
+    "perishable": false,
+    "value": 25
+  },
+  {
+    "id": "plaster",
+    "name": "Plaster",
+    "categories": ["processed", "building"],
+    "stackLimit": 20,
+    "weight": 5,
+    "perishable": false,
+    "value": 3
+  }
 ]

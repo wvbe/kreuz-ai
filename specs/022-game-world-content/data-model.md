@@ -64,7 +64,8 @@ The content data model defines 13 entity types (registry entries) and their rela
 
 ```typescript
 // Zod schema (source of truth)
-const MaterialSchema = z.object({
+const MaterialSchema = z
+  .object({
     id: z.string().min(1),
     name: z.string().min(1),
     categories: z.array(z.string()).min(1),
@@ -73,10 +74,11 @@ const MaterialSchema = z.object({
     perishable: z.boolean(),
     perishTicks: z.number().int().positive().optional(),
     value: z.number().min(0),
-}).refine(
+  })
+  .refine(
     (m) => !m.perishable || (m.perishTicks !== undefined && m.perishTicks > 0),
-    { message: "perishTicks required and > 0 when perishable is true" }
-);
+    { message: "perishTicks required and > 0 when perishable is true" },
+  );
 
 // Type inferred from schema — no manual interface needed
 type Material = z.infer<typeof MaterialSchema>;
@@ -99,34 +101,34 @@ type Material = z.infer<typeof MaterialSchema>;
 
 ```typescript
 interface RecipeInput {
-    materialId: string; // References Material.id
-    quantity: number; // Integer ≥ 1
+  materialId: string; // References Material.id
+  quantity: number; // Integer ≥ 1
 }
 
 interface RecipeOutput {
-    materialId: string; // References Material.id
-    quantity: number; // Integer ≥ 1
+  materialId: string; // References Material.id
+  quantity: number; // Integer ≥ 1
 }
 
 interface Recipe {
-    id: string; // Unique, e.g., "saw_oak_planks"
-    name: string; // Human-readable
-    inputs: RecipeInput[]; // Non-empty
-    outputs: RecipeOutput[]; // Non-empty (may include byproducts)
-    durationTicks: number; // Integer > 0
-    restrictions: {
-        workstation?: string; // References Furniture.id (by tag or specific ID)
-        room?: string; // References ZoneType.id
-        skill?: {
-            skillId: string; // References Skill.id
-            minLevel?: number; // Optional minimum level to attempt
-        };
+  id: string; // Unique, e.g., "saw_oak_planks"
+  name: string; // Human-readable
+  inputs: RecipeInput[]; // Non-empty
+  outputs: RecipeOutput[]; // Non-empty (may include byproducts)
+  durationTicks: number; // Integer > 0
+  restrictions: {
+    workstation?: string; // References Furniture.id (by tag or specific ID)
+    room?: string; // References ZoneType.id
+    skill?: {
+      skillId: string; // References Skill.id
+      minLevel?: number; // Optional minimum level to attempt
     };
-    outputDestination: "workstation" | "crafter" | "stockpile";
-    skillExperienceAwarded?: {
-        skillId: string; // References Skill.id
-        amount: number; // Growth amount on completion
-    };
+  };
+  outputDestination: "workstation" | "crafter" | "stockpile";
+  skillExperienceAwarded?: {
+    skillId: string; // References Skill.id
+    amount: number; // Growth amount on completion
+  };
 }
 ```
 
@@ -148,32 +150,32 @@ interface Recipe {
 
 ```typescript
 interface ConstructionCost {
-    materialId: string; // References Material.id
-    quantity: number; // Integer ≥ 1
+  materialId: string; // References Material.id
+  quantity: number; // Integer ≥ 1
 }
 
 interface FurnitureEffect {
-    type: "activity.unlock" | "entity.modifier";
-    // For activity.unlock:
-    activityId?: string;
-    // For entity.modifier:
-    modifier?: string; // e.g., "mood.bonus", "inventory.decay.rate"
-    value?: number;
+  type: "activity.unlock" | "entity.modifier";
+  // For activity.unlock:
+  activityId?: string;
+  // For entity.modifier:
+  modifier?: string; // e.g., "mood.bonus", "inventory.decay.rate"
+  value?: number;
 }
 
 interface Furniture {
-    id: string; // Unique, e.g., "sawmill"
-    name: string; // Human-readable
-    categories: string[]; // e.g., ["workstation", "wood"]
-    hasInventory: boolean; // Whether it has storage slots
-    inventorySlots?: number; // Slot count (if hasInventory)
-    inventoryWeightLimit?: number; // Weight capacity (if hasInventory)
-    inventoryFilter?: {
-        categories?: string[]; // Accepted material categories
-        materialIds?: string[]; // Accepted specific materials
-    };
-    constructionCost: ConstructionCost[]; // Materials to build it
-    effects?: FurnitureEffect[];
+  id: string; // Unique, e.g., "sawmill"
+  name: string; // Human-readable
+  categories: string[]; // e.g., ["workstation", "wood"]
+  hasInventory: boolean; // Whether it has storage slots
+  inventorySlots?: number; // Slot count (if hasInventory)
+  inventoryWeightLimit?: number; // Weight capacity (if hasInventory)
+  inventoryFilter?: {
+    categories?: string[]; // Accepted material categories
+    materialIds?: string[]; // Accepted specific materials
+  };
+  constructionCost: ConstructionCost[]; // Materials to build it
+  effects?: FurnitureEffect[];
 }
 ```
 
@@ -192,26 +194,26 @@ interface Furniture {
 
 ```typescript
 interface FurnitureRequirement {
-    furnitureId?: string; // Specific furniture ID
-    furnitureTag?: string; // Or furniture category tag
-    count: number; // Minimum count required
+  furnitureId?: string; // Specific furniture ID
+  furnitureTag?: string; // Or furniture category tag
+  count: number; // Minimum count required
 }
 
 interface ZoneEffect {
-    type: "activity.unlock" | "entity.modifier";
-    activityId?: string; // For activity.unlock
-    modifier?: string; // For entity.modifier
-    value?: number;
+  type: "activity.unlock" | "entity.modifier";
+  activityId?: string; // For activity.unlock
+  modifier?: string; // For entity.modifier
+  value?: number;
 }
 
 interface ZoneType {
-    id: string; // Unique, e.g., "bakery"
-    name: string; // Human-readable
-    requiresRoom: boolean; // Must be fully enclosed
-    minTiles: number; // Minimum tile count ≥ 1
-    furnitureRequirements: FurnitureRequirement[];
-    effects: ZoneEffect[];
-    professionAffinity?: string; // Skill or role name for routing preference
+  id: string; // Unique, e.g., "bakery"
+  name: string; // Human-readable
+  requiresRoom: boolean; // Must be fully enclosed
+  minTiles: number; // Minimum tile count ≥ 1
+  furnitureRequirements: FurnitureRequirement[];
+  effects: ZoneEffect[];
+  professionAffinity?: string; // Skill or role name for routing preference
 }
 ```
 
@@ -230,40 +232,40 @@ interface ZoneType {
 
 ```typescript
 interface StartingSkill {
-    skillId: string; // References Skill.id
-    level: number; // Integer 0-100
+  skillId: string; // References Skill.id
+  level: number; // Integer 0-100
 }
 
 interface DefaultEquipment {
-    materialId: string; // References Material.id
-    quantity?: number; // Default 1
+  materialId: string; // References Material.id
+  quantity?: number; // Default 1
 }
 
 interface EntityPrototype {
-    id: string; // Unique, e.g., "blacksmith"
-    name: string; // Human-readable
-    entityType: "humanoid" | "livestock" | "wild_animal";
-    startingSkills: StartingSkill[];
-    defaultTraits?: string[]; // References Trait.id (for authored prototypes)
-    traitSlots?: number; // For procedural generation: how many random traits (1-3)
-    defaultEquipment: DefaultEquipment[];
-    defaultFactions?: string[]; // References Faction.id
-    behaviorTree: string; // References BehaviorTree.id
-    sellsItems?: boolean; // Trade flag (spec 019)
-    needPriorityOrder?: string[]; // Custom need priority (references Need.id)
-    // Livestock-specific:
-    products?: {
-        materialId: string; // References Material.id
-        method: "periodic" | "butcher";
-        intervalTicks?: number; // For periodic harvesting
-    }[];
-    // Wild animal-specific:
-    drops?: {
-        materialId: string; // References Material.id
-        quantity: number;
-    }[];
-    habitat?: string[]; // References TerrainType.id
-    threatLevel?: "none" | "low" | "medium" | "high" | "very_high";
+  id: string; // Unique, e.g., "blacksmith"
+  name: string; // Human-readable
+  entityType: "humanoid" | "livestock" | "wild_animal";
+  startingSkills: StartingSkill[];
+  defaultTraits?: string[]; // References Trait.id (for authored prototypes)
+  traitSlots?: number; // For procedural generation: how many random traits (1-3)
+  defaultEquipment: DefaultEquipment[];
+  defaultFactions?: string[]; // References Faction.id
+  behaviorTree: string; // References BehaviorTree.id
+  sellsItems?: boolean; // Trade flag (spec 019)
+  needPriorityOrder?: string[]; // Custom need priority (references Need.id)
+  // Livestock-specific:
+  products?: {
+    materialId: string; // References Material.id
+    method: "periodic" | "butcher";
+    intervalTicks?: number; // For periodic harvesting
+  }[];
+  // Wild animal-specific:
+  drops?: {
+    materialId: string; // References Material.id
+    quantity: number;
+  }[];
+  habitat?: string[]; // References TerrainType.id
+  threatLevel?: "none" | "low" | "medium" | "high" | "very_high";
 }
 ```
 
@@ -285,18 +287,18 @@ interface EntityPrototype {
 
 ```typescript
 interface SkillOutcomeEffect {
-    type: "speedMultiplier" | "outputBonus" | "custom";
-    valueAtMax: number; // Effect value at skill level 100
-    description?: string; // For custom effects
+  type: "speedMultiplier" | "outputBonus" | "custom";
+  valueAtMax: number; // Effect value at skill level 100
+  description?: string; // For custom effects
 }
 
 interface Skill {
-    id: string; // Unique, e.g., "smithing"
-    name: string; // Human-readable
-    baseGrowthPerCompletion: number; // Float > 0
-    diminishingReturnsThreshold: number; // Integer 0-100
-    diminishingReturnsFactor: number; // Float 0-1
-    outcomeEffects: SkillOutcomeEffect[];
+  id: string; // Unique, e.g., "smithing"
+  name: string; // Human-readable
+  baseGrowthPerCompletion: number; // Float > 0
+  diminishingReturnsThreshold: number; // Integer 0-100
+  diminishingReturnsFactor: number; // Float 0-1
+  outcomeEffects: SkillOutcomeEffect[];
 }
 ```
 
@@ -315,35 +317,35 @@ interface Skill {
 
 ```typescript
 interface SkillAptitudeModifier {
-    type: "skillAptitude";
-    skillId: string | "ALL"; // References Skill.id or ALL
-    growthMultiplier: number; // Float, e.g., 1.5 = 50% faster growth
-    startingValueBonus?: number; // Integer, added to starting skill
+  type: "skillAptitude";
+  skillId: string | "ALL"; // References Skill.id or ALL
+  growthMultiplier: number; // Float, e.g., 1.5 = 50% faster growth
+  startingValueBonus?: number; // Integer, added to starting skill
 }
 
 interface PerformanceModifier {
-    type: "performanceModifier";
-    domain: string | "ALL"; // Skill domain or ALL
-    multiplier: number; // Float, e.g., 1.3 = 30% faster
-    outputBonus?: number; // Float, e.g., 0.5 = 50% chance extra output
+  type: "performanceModifier";
+  domain: string | "ALL"; // Skill domain or ALL
+  multiplier: number; // Float, e.g., 1.3 = 30% faster
+  outputBonus?: number; // Float, e.g., 0.5 = 50% chance extra output
 }
 
 interface NeedModifier {
-    type: "needModifier";
-    needId: string; // References Need.id
-    decayRateMultiplier?: number; // Float, e.g., 0.7 = 30% slower decay
-    satisfactionBonusMultiplier?: number; // Float, e.g., 1.3 = 30% more satisfaction
-    flatBonus?: number; // For mood/social event bonuses
-    trigger?: string; // Event that triggers the flat bonus
+  type: "needModifier";
+  needId: string; // References Need.id
+  decayRateMultiplier?: number; // Float, e.g., 0.7 = 30% slower decay
+  satisfactionBonusMultiplier?: number; // Float, e.g., 1.3 = 30% more satisfaction
+  flatBonus?: number; // For mood/social event bonuses
+  trigger?: string; // Event that triggers the flat bonus
 }
 
 type TraitModifier = SkillAptitudeModifier | PerformanceModifier | NeedModifier;
 
 interface Trait {
-    id: string; // Unique, e.g., "born_baker"
-    name: string; // Human-readable
-    description: string; // Tooltip text
-    modifiers: TraitModifier[];
+  id: string; // Unique, e.g., "born_baker"
+  name: string; // Human-readable
+  description: string; // Tooltip text
+  modifiers: TraitModifier[];
 }
 ```
 
@@ -362,37 +364,32 @@ interface Trait {
 
 ```typescript
 interface NeedSatisfactionMethod {
-    type:
-        | "consume"
-        | "use_furniture"
-        | "zone_presence"
-        | "social"
-        | "proximity";
-    // For consume:
-    materialCategory?: string; // Material category to consume
-    materialId?: string; // Specific material
-    satisfactionAmount?: number; // How much need is restored
-    // For use_furniture:
-    furnitureId?: string; // Furniture to use
-    furnitureTag?: string; // Or furniture category
-    restorationRate?: number; // Per-tick restoration while using
-    // For zone_presence:
-    zoneTypeId?: string; // Zone to be in
-    passiveBonus?: number; // Per-tick passive restoration
-    // For social:
-    satisfactionAmount?: number;
-    // For proximity:
-    entityTag?: string; // Nearby entity type/tag
-    radius?: number; // Tile radius
-    bonus?: number;
+  type: "consume" | "use_furniture" | "zone_presence" | "social" | "proximity";
+  // For consume:
+  materialCategory?: string; // Material category to consume
+  materialId?: string; // Specific material
+  satisfactionAmount?: number; // How much need is restored
+  // For use_furniture:
+  furnitureId?: string; // Furniture to use
+  furnitureTag?: string; // Or furniture category
+  restorationRate?: number; // Per-tick restoration while using
+  // For zone_presence:
+  zoneTypeId?: string; // Zone to be in
+  passiveBonus?: number; // Per-tick passive restoration
+  // For social:
+  satisfactionAmount?: number;
+  // For proximity:
+  entityTag?: string; // Nearby entity type/tag
+  radius?: number; // Tile radius
+  bonus?: number;
 }
 
 interface Need {
-    id: string; // Unique, e.g., "hunger"
-    name: string; // Human-readable
-    decayPerTick: number; // Float > 0
-    criticalThreshold: number; // Float 0-1 (e.g., 0.2 = 20%)
-    satisfactionMethods: NeedSatisfactionMethod[];
+  id: string; // Unique, e.g., "hunger"
+  name: string; // Human-readable
+  decayPerTick: number; // Float > 0
+  criticalThreshold: number; // Float 0-1 (e.g., 0.2 = 20%)
+  satisfactionMethods: NeedSatisfactionMethod[];
 }
 ```
 
@@ -413,13 +410,13 @@ interface Need {
 
 ```typescript
 interface JobType {
-    id: string; // Unique, e.g., "farm.sow"
-    name: string; // Human-readable
-    skillDomain?: string; // References Skill.id
-    toolRequired?: string; // References Material.id (tool material)
-    zoneContext?: string; // References ZoneType.id
-    recurrence: "one-time" | "recurring";
-    description?: string; // Tooltip text
+  id: string; // Unique, e.g., "farm.sow"
+  name: string; // Human-readable
+  skillDomain?: string; // References Skill.id
+  toolRequired?: string; // References Material.id (tool material)
+  zoneContext?: string; // References ZoneType.id
+  recurrence: "one-time" | "recurring";
+  description?: string; // Tooltip text
 }
 ```
 
@@ -437,15 +434,15 @@ interface JobType {
 
 ```typescript
 interface TerrainType {
-    id: string; // Unique, e.g., "forest_oak"
-    name: string; // Human-readable
-    traversable: boolean;
-    movementModifier?: "slow" | "very_slow" | "fast"; // Omit for normal speed
-    buildable: boolean;
-    harvestableResources?: {
-        materialId: string; // References Material.id
-    }[];
-    clearResult?: string; // TerrainType.id this becomes when cleared (e.g., forest → grassland)
+  id: string; // Unique, e.g., "forest_oak"
+  name: string; // Human-readable
+  traversable: boolean;
+  movementModifier?: "slow" | "very_slow" | "fast"; // Omit for normal speed
+  buildable: boolean;
+  harvestableResources?: {
+    materialId: string; // References Material.id
+  }[];
+  clearResult?: string; // TerrainType.id this becomes when cleared (e.g., forest → grassland)
 }
 ```
 
@@ -462,24 +459,24 @@ interface TerrainType {
 
 ```typescript
 interface FactionMembershipCriteria {
-    skillId: string; // References Skill.id
-    minLevel: number; // Minimum skill level to qualify
+  skillId: string; // References Skill.id
+  minLevel: number; // Minimum skill level to qualify
 }
 
 interface Faction {
-    id: string; // Unique, e.g., "guild_bakers"
-    name: string; // Human-readable
-    factionType: string; // "occupational", "religious", etc. (open set)
-    leaderTitle: string; // Human-readable, e.g., "Master Baker"
-    disposition: string; // "mercantile", "isolationist", "aggressive" (open set)
-    membershipCriteria?: FactionMembershipCriteria;
-    associatedZones?: string[]; // References ZoneType.id
-    mechanics?: {
-        tradeDiscount?: number; // Price multiplier bonus for members (e.g., 0.85)
-        faithBonus?: number; // Extra faith satisfaction for members
-        titheRate?: number; // Periodic currency collection rate
-    };
-    description?: string;
+  id: string; // Unique, e.g., "guild_bakers"
+  name: string; // Human-readable
+  factionType: string; // "occupational", "religious", etc. (open set)
+  leaderTitle: string; // Human-readable, e.g., "Master Baker"
+  disposition: string; // "mercantile", "isolationist", "aggressive" (open set)
+  membershipCriteria?: FactionMembershipCriteria;
+  associatedZones?: string[]; // References ZoneType.id
+  mechanics?: {
+    tradeDiscount?: number; // Price multiplier bonus for members (e.g., 0.85)
+    faithBonus?: number; // Extra faith satisfaction for members
+    titheRate?: number; // Periodic currency collection rate
+  };
+  description?: string;
 }
 ```
 
@@ -498,21 +495,21 @@ interface Faction {
 type BehaviorNodeType = "selector" | "sequence" | "condition" | "action";
 
 interface BehaviorNode {
-    type: BehaviorNodeType;
-    name?: string; // Optional label for debugging
-    // For condition nodes:
-    check?: string; // Named predicate, e.g., "anyNeedBelowCritical"
-    // For action nodes:
-    action?: string; // Named action, e.g., "satisfyCriticalNeed"
-    scoring?: "utility"; // Optional utility scoring mode
-    // For composite nodes (selector, sequence):
-    children?: BehaviorNode[];
+  type: BehaviorNodeType;
+  name?: string; // Optional label for debugging
+  // For condition nodes:
+  check?: string; // Named predicate, e.g., "anyNeedBelowCritical"
+  // For action nodes:
+  action?: string; // Named action, e.g., "satisfyCriticalNeed"
+  scoring?: "utility"; // Optional utility scoring mode
+  // For composite nodes (selector, sequence):
+  children?: BehaviorNode[];
 }
 
 interface BehaviorTree {
-    id: string; // Unique, e.g., "daily_routine"
-    name: string; // Human-readable
-    root: BehaviorNode; // Tree root
+  id: string; // Unique, e.g., "daily_routine"
+  name: string; // Human-readable
+  root: BehaviorNode; // Tree root
 }
 ```
 

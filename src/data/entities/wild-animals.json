@@ -20,9 +20,7 @@
     "startingSkills": [],
     "defaultEquipment": [],
     "behaviorTree": "livestock_behavior",
-    "drops": [
-      { "materialId": "raw_meat", "quantity": 1 }
-    ],
+    "drops": [{ "materialId": "raw_meat", "quantity": 1 }],
     "habitat": ["grassland", "forest_oak", "forest_birch"],
     "threatLevel": "none"
   },
@@ -48,9 +46,7 @@
     "startingSkills": [],
     "defaultEquipment": [],
     "behaviorTree": "predator_behavior",
-    "drops": [
-      { "materialId": "raw_hide", "quantity": 1 }
-    ],
+    "drops": [{ "materialId": "raw_hide", "quantity": 1 }],
     "habitat": ["forest_oak", "forest_pine", "mountain"],
     "threatLevel": "high"
   },
@@ -75,9 +71,7 @@
     "startingSkills": [],
     "defaultEquipment": [],
     "behaviorTree": "predator_behavior",
-    "drops": [
-      { "materialId": "raw_hide", "quantity": 1 }
-    ],
+    "drops": [{ "materialId": "raw_hide", "quantity": 1 }],
     "habitat": ["forest_oak", "forest_birch", "grassland"],
     "threatLevel": "low"
   }

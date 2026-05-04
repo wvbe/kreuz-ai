@@ -32,7 +32,7 @@
 ## Notes
 
 - All 3 clarification questions resolved (2026-05-02):
-    - Q1: Interruption returns all materials (no loss)
-    - Q2: Output destination configurable per recipe (workstation/crafter/stockpile)
-    - Q3: All outputs (including byproducts) treated equally; craft blocks if any output can't fit
+  - Q1: Interruption returns all materials (no loss)
+  - Q2: Output destination configurable per recipe (workstation/crafter/stockpile)
+  - Q3: All outputs (including byproducts) treated equally; craft blocks if any output can't fit
 - Spec is ready for `/speckit.clarify` or `/speckit.plan`

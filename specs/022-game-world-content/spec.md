@@ -656,30 +656,30 @@ The job system (spec 017) uses job types to define what work entities can perfor
 
 **Job Type Registry**:
 
-| Job Type ID        | Name               | Skill Domain     | Tool Required | Zone Context            | Recurrence          | Notes                               |
-| ------------------ | ------------------ | ---------------- | ------------- | ----------------------- | ------------------- | ----------------------------------- |
-| farm.sow           | Sow Crops          | farming          | Hoe           | Farm Field              | One-time per season | Plant seeds in tilled soil          |
-| farm.tend          | Tend Crops         | farming          | —             | Farm Field              | Recurring           | Water, weed, care for growing crops |
-| farm.harvest       | Harvest Crops      | farming          | Sickle        | Farm Field              | One-time per season | Collect mature crops                |
-| mine.ore           | Mine Ore           | mining           | Pickaxe       | — (terrain: ore_vein)   | Recurring           | Extract iron, copper, tin, coal     |
-| quarry.stone       | Quarry Stone       | masonry          | Pickaxe       | Quarry                  | Recurring           | Extract limestone, granite          |
-| fell.trees         | Fell Trees         | woodcutting      | Axe           | — (terrain: forest)     | Recurring           | Harvest wood logs                   |
-| fish.catch         | Catch Fish         | fishing          | Fishing Rod   | Fishing Dock            | Recurring           | Catch raw fish                      |
-| gather.herbs       | Gather Herbs       | herbalism        | —             | Herb Garden             | Recurring           | Collect medicinal herbs             |
-| tend.animals       | Tend Livestock     | animal_husbandry | —             | Pasture                 | Recurring           | Feed, shear, milk animals           |
-| tend.bees          | Tend Apiary        | animal_husbandry | —             | Apiary Yard             | Recurring           | Harvest honey and beeswax           |
-| craft.produce      | Craft / Produce    | (per recipe)     | (per recipe)  | (per recipe zone)       | Recurring           | Execute any crafting recipe         |
-| haul.deliver       | Haul Materials     | hauling          | —             | Any                     | Recurring           | Move items between inventories      |
-| build.construct    | Build Structure    | construction     | Iron Hammer   | Any                     | One-time            | Execute construction job (spec 016) |
-| build.deconstruct  | Deconstruct        | construction     | Iron Hammer   | Any                     | One-time            | Remove structure (spec 016)         |
-| guard.patrol       | Patrol Area        | combat           | (any weapon)  | Guard Post              | Recurring           | Walk patrol route, detect threats   |
-| guard.watch        | Stand Watch        | combat           | (any weapon)  | Guard Post              | Recurring           | Stationary guard duty               |
-| trade.sell         | Sell Goods         | trading          | —             | Market                  | Recurring           | Merchant sells to buyers            |
-| trade.buy          | Purchase Goods     | trading          | —             | Market                  | One-time            | Buyer-initiated trade (spec 019)    |
-| preach.sermon      | Deliver Sermon     | preaching        | —             | Chapel / Church         | Recurring           | Priest preaches to congregation     |
-| preach.pray        | Personal Prayer    | preaching        | —             | Chapel / Church         | Recurring           | Individual devotion                 |
-| diplomacy.dispatch | Diplomatic Mission | trading          | —             | Throne Room             | One-time            | Envoy delivery (spec 021)           |
-| haul.bury          | Bury Deceased      | hauling          | —             | Cemetery                | One-time            | Transport body to gravesite         |
+| Job Type ID        | Name               | Skill Domain     | Tool Required | Zone Context          | Recurrence          | Notes                               |
+| ------------------ | ------------------ | ---------------- | ------------- | --------------------- | ------------------- | ----------------------------------- |
+| farm.sow           | Sow Crops          | farming          | Hoe           | Farm Field            | One-time per season | Plant seeds in tilled soil          |
+| farm.tend          | Tend Crops         | farming          | —             | Farm Field            | Recurring           | Water, weed, care for growing crops |
+| farm.harvest       | Harvest Crops      | farming          | Sickle        | Farm Field            | One-time per season | Collect mature crops                |
+| mine.ore           | Mine Ore           | mining           | Pickaxe       | — (terrain: ore_vein) | Recurring           | Extract iron, copper, tin, coal     |
+| quarry.stone       | Quarry Stone       | masonry          | Pickaxe       | Quarry                | Recurring           | Extract limestone, granite          |
+| fell.trees         | Fell Trees         | woodcutting      | Axe           | — (terrain: forest)   | Recurring           | Harvest wood logs                   |
+| fish.catch         | Catch Fish         | fishing          | Fishing Rod   | Fishing Dock          | Recurring           | Catch raw fish                      |
+| gather.herbs       | Gather Herbs       | herbalism        | —             | Herb Garden           | Recurring           | Collect medicinal herbs             |
+| tend.animals       | Tend Livestock     | animal_husbandry | —             | Pasture               | Recurring           | Feed, shear, milk animals           |
+| tend.bees          | Tend Apiary        | animal_husbandry | —             | Apiary Yard           | Recurring           | Harvest honey and beeswax           |
+| craft.produce      | Craft / Produce    | (per recipe)     | (per recipe)  | (per recipe zone)     | Recurring           | Execute any crafting recipe         |
+| haul.deliver       | Haul Materials     | hauling          | —             | Any                   | Recurring           | Move items between inventories      |
+| build.construct    | Build Structure    | construction     | Iron Hammer   | Any                   | One-time            | Execute construction job (spec 016) |
+| build.deconstruct  | Deconstruct        | construction     | Iron Hammer   | Any                   | One-time            | Remove structure (spec 016)         |
+| guard.patrol       | Patrol Area        | combat           | (any weapon)  | Guard Post            | Recurring           | Walk patrol route, detect threats   |
+| guard.watch        | Stand Watch        | combat           | (any weapon)  | Guard Post            | Recurring           | Stationary guard duty               |
+| trade.sell         | Sell Goods         | trading          | —             | Market                | Recurring           | Merchant sells to buyers            |
+| trade.buy          | Purchase Goods     | trading          | —             | Market                | One-time            | Buyer-initiated trade (spec 019)    |
+| preach.sermon      | Deliver Sermon     | preaching        | —             | Chapel / Church       | Recurring           | Priest preaches to congregation     |
+| preach.pray        | Personal Prayer    | preaching        | —             | Chapel / Church       | Recurring           | Individual devotion                 |
+| diplomacy.dispatch | Diplomatic Mission | trading          | —             | Throne Room           | One-time            | Envoy delivery (spec 021)           |
+| haul.bury          | Bury Deceased      | hauling          | —             | Cemetery              | One-time            | Transport body to gravesite         |
 
 **Acceptance Scenarios**:
 

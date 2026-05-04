@@ -8,7 +8,10 @@
     ],
     "outputs": [{ "materialId": "iron_ingot", "quantity": 1 }],
     "durationTicks": 36,
-    "restrictions": { "workstation": "smelter", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "smelter",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 3.0 }
   },
@@ -21,7 +24,10 @@
     ],
     "outputs": [{ "materialId": "copper_ingot", "quantity": 1 }],
     "durationTicks": 30,
-    "restrictions": { "workstation": "smelter", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "smelter",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.5 }
   },
@@ -34,7 +40,10 @@
     ],
     "outputs": [{ "materialId": "bronze_ingot", "quantity": 1 }],
     "durationTicks": 40,
-    "restrictions": { "workstation": "smelter", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "smelter",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 3.5 }
   },
@@ -44,7 +53,10 @@
     "inputs": [{ "materialId": "iron_ingot", "quantity": 1 }],
     "outputs": [{ "materialId": "nails", "quantity": 10 }],
     "durationTicks": 20,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.0 }
   }

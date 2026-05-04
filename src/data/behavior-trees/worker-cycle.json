@@ -10,15 +10,35 @@
         "type": "selector",
         "name": "gather_required",
         "children": [
-          { "type": "condition", "name": "materials_ready", "check": "all_materials_at_worksite" },
+          {
+            "type": "condition",
+            "name": "materials_ready",
+            "check": "all_materials_at_worksite"
+          },
           {
             "type": "sequence",
             "name": "fetch_materials",
             "children": [
-              { "type": "action", "name": "query_material", "action": "query_nearest_material" },
-              { "type": "action", "name": "travel_source", "action": "travel_to_source" },
-              { "type": "action", "name": "pick_up", "action": "pick_up_materials" },
-              { "type": "action", "name": "travel_worksite", "action": "travel_to_worksite" }
+              {
+                "type": "action",
+                "name": "query_material",
+                "action": "query_nearest_material"
+              },
+              {
+                "type": "action",
+                "name": "travel_source",
+                "action": "travel_to_source"
+              },
+              {
+                "type": "action",
+                "name": "pick_up",
+                "action": "pick_up_materials"
+              },
+              {
+                "type": "action",
+                "name": "travel_worksite",
+                "action": "travel_to_worksite"
+              }
             ]
           }
         ]
@@ -27,20 +47,44 @@
         "type": "selector",
         "name": "gather_tool",
         "children": [
-          { "type": "condition", "name": "has_tool", "check": "required_tool_in_inventory" },
+          {
+            "type": "condition",
+            "name": "has_tool",
+            "check": "required_tool_in_inventory"
+          },
           {
             "type": "sequence",
             "name": "fetch_tool",
             "children": [
-              { "type": "action", "name": "query_tool", "action": "query_nearest_tool" },
-              { "type": "action", "name": "travel_tool", "action": "travel_to_tool" },
-              { "type": "action", "name": "pick_up_tool", "action": "pick_up_tool" }
+              {
+                "type": "action",
+                "name": "query_tool",
+                "action": "query_nearest_tool"
+              },
+              {
+                "type": "action",
+                "name": "travel_tool",
+                "action": "travel_to_tool"
+              },
+              {
+                "type": "action",
+                "name": "pick_up_tool",
+                "action": "pick_up_tool"
+              }
             ]
           }
         ]
       },
-      { "type": "action", "name": "perform_work", "action": "perform_work" },
-      { "type": "action", "name": "deliver_output", "action": "deliver_output" }
+      {
+        "type": "action",
+        "name": "perform_work",
+        "action": "perform_work"
+      },
+      {
+        "type": "action",
+        "name": "deliver_output",
+        "action": "deliver_output"
+      }
     ]
   }
 }

@@ -13,7 +13,14 @@
       { "materialId": "peasant_clothing", "quantity": 1 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "farmer",
@@ -30,7 +37,14 @@
       { "materialId": "peasant_clothing", "quantity": 1 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "blacksmith",
@@ -47,7 +61,14 @@
     ],
     "defaultFactions": ["guild_smiths"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "carpenter",
@@ -64,7 +85,14 @@
     ],
     "defaultFactions": ["guild_carpenters"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "mason",
@@ -81,7 +109,14 @@
     ],
     "defaultFactions": ["guild_masons"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "baker",
@@ -92,12 +127,17 @@
       { "skillId": "cooking", "level": 10 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "peasant_clothing", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "peasant_clothing", "quantity": 1 }],
     "defaultFactions": ["guild_bakers"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "brewer",
@@ -108,12 +148,17 @@
       { "skillId": "cooking", "level": 5 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "peasant_clothing", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "peasant_clothing", "quantity": 1 }],
     "defaultFactions": ["guild_brewers"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "weaver",
@@ -130,7 +175,14 @@
     ],
     "defaultFactions": ["guild_weavers"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "tanner",
@@ -141,12 +193,17 @@
       { "skillId": "hauling", "level": 5 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "peasant_clothing", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "peasant_clothing", "quantity": 1 }],
     "defaultFactions": ["guild_tanners"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "potter",
@@ -157,12 +214,17 @@
       { "skillId": "cooking", "level": 5 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "peasant_clothing", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "peasant_clothing", "quantity": 1 }],
     "defaultFactions": ["guild_potters"],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "cook",
@@ -173,11 +235,16 @@
       { "skillId": "baking", "level": 10 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "peasant_clothing", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "peasant_clothing", "quantity": 1 }],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "fisherman",
@@ -193,7 +260,14 @@
       { "materialId": "peasant_clothing", "quantity": 1 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "herbalist",
@@ -209,7 +283,14 @@
       { "materialId": "peasant_clothing", "quantity": 1 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "miner",
@@ -225,7 +306,14 @@
       { "materialId": "peasant_clothing", "quantity": 1 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "lumberjack",
@@ -241,7 +329,14 @@
       { "materialId": "peasant_clothing", "quantity": 1 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "shepherd",
@@ -252,11 +347,16 @@
       { "skillId": "farming", "level": 5 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "peasant_clothing", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "peasant_clothing", "quantity": 1 }],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "guard",
@@ -273,7 +373,14 @@
       { "materialId": "iron_helm", "quantity": 1 }
     ],
     "behaviorTree": "guard_patrol",
-    "needPriorityOrder": ["safety", "rest", "hunger", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "safety",
+      "rest",
+      "hunger",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "soldier",
@@ -291,15 +398,20 @@
       { "materialId": "iron_helm", "quantity": 1 }
     ],
     "behaviorTree": "guard_patrol",
-    "needPriorityOrder": ["safety", "rest", "hunger", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "safety",
+      "rest",
+      "hunger",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "merchant",
     "name": "Merchant",
     "entityType": "humanoid",
-    "startingSkills": [
-      { "skillId": "trading", "level": 30 }
-    ],
+    "startingSkills": [{ "skillId": "trading", "level": 30 }],
     "traitSlots": 3,
     "defaultEquipment": [
       { "materialId": "fine_clothing", "quantity": 1 },
@@ -308,7 +420,14 @@
     "defaultFactions": ["guild_merchants"],
     "behaviorTree": "merchant_routine",
     "sellsItems": true,
-    "needPriorityOrder": ["social", "hunger", "rest", "comfort", "safety", "faith"]
+    "needPriorityOrder": [
+      "social",
+      "hunger",
+      "rest",
+      "comfort",
+      "safety",
+      "faith"
+    ]
   },
   {
     "id": "priest",
@@ -319,12 +438,17 @@
       { "skillId": "herbalism", "level": 10 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "monks_habit", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "monks_habit", "quantity": 1 }],
     "defaultFactions": ["parish_church"],
     "behaviorTree": "priest_routine",
-    "needPriorityOrder": ["faith", "social", "hunger", "rest", "comfort", "safety"]
+    "needPriorityOrder": [
+      "faith",
+      "social",
+      "hunger",
+      "rest",
+      "comfort",
+      "safety"
+    ]
   },
   {
     "id": "monk",
@@ -336,12 +460,17 @@
       { "skillId": "herbalism", "level": 15 }
     ],
     "traitSlots": 3,
-    "defaultEquipment": [
-      { "materialId": "monks_habit", "quantity": 1 }
-    ],
+    "defaultEquipment": [{ "materialId": "monks_habit", "quantity": 1 }],
     "defaultFactions": ["monastic_order"],
     "behaviorTree": "priest_routine",
-    "needPriorityOrder": ["faith", "social", "hunger", "rest", "comfort", "safety"]
+    "needPriorityOrder": [
+      "faith",
+      "social",
+      "hunger",
+      "rest",
+      "comfort",
+      "safety"
+    ]
   },
   {
     "id": "scholar",
@@ -357,7 +486,14 @@
       { "materialId": "parchment", "quantity": 3 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["hunger", "rest", "safety", "social", "comfort", "faith"]
+    "needPriorityOrder": [
+      "hunger",
+      "rest",
+      "safety",
+      "social",
+      "comfort",
+      "faith"
+    ]
   },
   {
     "id": "noble",
@@ -373,6 +509,13 @@
       { "materialId": "silver_penny", "quantity": 200 }
     ],
     "behaviorTree": "daily_routine",
-    "needPriorityOrder": ["comfort", "social", "hunger", "rest", "safety", "faith"]
+    "needPriorityOrder": [
+      "comfort",
+      "social",
+      "hunger",
+      "rest",
+      "safety",
+      "faith"
+    ]
   }
 ]

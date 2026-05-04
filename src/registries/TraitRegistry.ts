@@ -1,6 +1,6 @@
-import { Registry } from '../engine/Registry.js';
-import { TraitSchema, type Trait } from '../schemas/traits.js';
-import traitsData from '../data/traits.json' with { type: 'json' };
+import { Registry } from "../engine/Registry.js";
+import { TraitSchema, type Trait } from "../schemas/traits.js";
+import traitsData from "../data/traits.json" with { type: "json" };
 
 export function createTraitRegistry(): Registry<Trait> {
   const registry = new Registry<Trait>();

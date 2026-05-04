@@ -47,15 +47,15 @@ After all registries are loaded, a cross-validation pass checks referential inte
 
 ```json
 [
-    {
-        "id": "oak_log",
-        "name": "Oak Log",
-        "categories": ["wood", "raw"],
-        "stackLimit": 20,
-        "weight": 8,
-        "perishable": false,
-        "value": 3
-    }
+  {
+    "id": "oak_log",
+    "name": "Oak Log",
+    "categories": ["wood", "raw"],
+    "stackLimit": 20,
+    "weight": 8,
+    "perishable": false,
+    "value": 3
+  }
 ]
 ```
 
@@ -127,35 +127,35 @@ Each cross-reference check is a simple existence test: `if (!targetRegistry.has(
 
 ```json
 {
-    "id": "daily_routine",
-    "name": "Daily Routine",
-    "root": {
-        "type": "selector",
+  "id": "daily_routine",
+  "name": "Daily Routine",
+  "root": {
+    "type": "selector",
+    "children": [
+      {
+        "type": "sequence",
+        "name": "Critical Needs",
         "children": [
-            {
-                "type": "sequence",
-                "name": "Critical Needs",
-                "children": [
-                    { "type": "condition", "check": "anyNeedBelowCritical" },
-                    {
-                        "type": "action",
-                        "action": "satisfyCriticalNeed",
-                        "scoring": "utility"
-                    }
-                ]
-            },
-            {
-                "type": "sequence",
-                "name": "Work Cycle",
-                "children": [
-                    { "type": "condition", "check": "jobAvailable" },
-                    { "type": "action", "action": "travelToWorksite" },
-                    { "type": "action", "action": "gatherMaterials" },
-                    { "type": "action", "action": "performWork" }
-                ]
-            }
+          { "type": "condition", "check": "anyNeedBelowCritical" },
+          {
+            "type": "action",
+            "action": "satisfyCriticalNeed",
+            "scoring": "utility"
+          }
         ]
-    }
+      },
+      {
+        "type": "sequence",
+        "name": "Work Cycle",
+        "children": [
+          { "type": "condition", "check": "jobAvailable" },
+          { "type": "action", "action": "travelToWorksite" },
+          { "type": "action", "action": "gatherMaterials" },
+          { "type": "action", "action": "performWork" }
+        ]
+      }
+    ]
+  }
 }
 ```
 
@@ -231,13 +231,13 @@ This is lightweight (no proxy objects, no immutability library) and provides bot
 ```typescript
 // Known categories as constants (not an enum — open set)
 export const MaterialCategory = {
-    WOOD: "wood",
-    STONE: "stone",
-    METAL: "metal",
-    RAW: "raw",
-    PROCESSED: "processed",
-    FOOD: "food",
-    // ...
+  WOOD: "wood",
+  STONE: "stone",
+  METAL: "metal",
+  RAW: "raw",
+  PROCESSED: "processed",
+  FOOD: "food",
+  // ...
 } as const;
 ```
 

@@ -32,6 +32,6 @@
 ## Notes
 
 - All 2 clarification questions resolved (2026-05-02):
-    - Q1: Deconstruction yield is configurable per entity prototype (`deconstructionYield` field); returned materials dropped as loose pile at site
-    - Q2: Construction progress resets to 0 on interruption; materials remain staged; next builder starts fresh
+  - Q1: Deconstruction yield is configurable per entity prototype (`deconstructionYield` field); returned materials dropped as loose pile at site
+  - Q2: Construction progress resets to 0 on interruption; materials remain staged; next builder starts fresh
 - Spec is ready for `/speckit.clarify` or `/speckit.plan`

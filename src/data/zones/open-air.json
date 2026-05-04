@@ -85,7 +85,9 @@
     "requiresRoom": false,
     "minTiles": 6,
     "furnitureRequirements": [],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 3 }]
+    "effects": [
+      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 3 }
+    ]
   },
   {
     "id": "stockpile",

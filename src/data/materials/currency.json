@@ -1,3 +1,11 @@
 [
-  { "id": "silver_penny", "name": "Silver Penny", "categories": ["currency"], "stackLimit": 1000, "weight": 1, "perishable": false, "value": 1 }
+  {
+    "id": "silver_penny",
+    "name": "Silver Penny",
+    "categories": ["currency"],
+    "stackLimit": 1000,
+    "weight": 1,
+    "perishable": false,
+    "value": 1
+  }
 ]

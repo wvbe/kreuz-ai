@@ -9,22 +9,46 @@
         "type": "sequence",
         "name": "hunt",
         "children": [
-          { "type": "condition", "name": "prey_detected", "check": "prey_within_range" },
-          { "type": "action", "name": "stalk", "action": "stalk_prey" },
-          { "type": "action", "name": "attack", "action": "attack_prey" }
+          {
+            "type": "condition",
+            "name": "prey_detected",
+            "check": "prey_within_range"
+          },
+          {
+            "type": "action",
+            "name": "stalk",
+            "action": "stalk_prey"
+          },
+          {
+            "type": "action",
+            "name": "attack",
+            "action": "attack_prey"
+          }
         ]
       },
       {
         "type": "sequence",
         "name": "territorial",
         "children": [
-          { "type": "condition", "name": "intruder_detected", "check": "humanoid_in_territory" },
+          {
+            "type": "condition",
+            "name": "intruder_detected",
+            "check": "humanoid_in_territory"
+          },
           {
             "type": "selector",
             "name": "territorial_response",
             "children": [
-              { "type": "action", "name": "attack_intruder", "action": "attack_intruder" },
-              { "type": "action", "name": "flee", "action": "flee_from_intruder" }
+              {
+                "type": "action",
+                "name": "attack_intruder",
+                "action": "attack_intruder"
+              },
+              {
+                "type": "action",
+                "name": "flee",
+                "action": "flee_from_intruder"
+              }
             ]
           }
         ]

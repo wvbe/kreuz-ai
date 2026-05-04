@@ -5,26 +5,74 @@
     "decayPerTick": 0.15,
     "criticalThreshold": 0.2,
     "satisfactionMethods": [
-      { "type": "consume", "materialCategory": "food", "satisfactionAmount": 30 },
-      { "type": "consume", "materialId": "stew", "satisfactionAmount": 50 },
-      { "type": "consume", "materialId": "roast_meat", "satisfactionAmount": 55 },
-      { "type": "consume", "materialId": "pottage", "satisfactionAmount": 35 },
-      { "type": "consume", "materialId": "porridge", "satisfactionAmount": 25 },
-      { "type": "consume", "materialId": "cheese", "satisfactionAmount": 20 },
-      { "type": "consume", "materialId": "dried_meat", "satisfactionAmount": 20 },
-      { "type": "consume", "materialId": "fruit", "satisfactionAmount": 15 }
+      {
+        "type": "consume",
+        "materialCategory": "food",
+        "satisfactionAmount": 30
+      },
+      {
+        "type": "consume",
+        "materialId": "stew",
+        "satisfactionAmount": 50
+      },
+      {
+        "type": "consume",
+        "materialId": "roast_meat",
+        "satisfactionAmount": 55
+      },
+      {
+        "type": "consume",
+        "materialId": "pottage",
+        "satisfactionAmount": 35
+      },
+      {
+        "type": "consume",
+        "materialId": "porridge",
+        "satisfactionAmount": 25
+      },
+      {
+        "type": "consume",
+        "materialId": "cheese",
+        "satisfactionAmount": 20
+      },
+      {
+        "type": "consume",
+        "materialId": "dried_meat",
+        "satisfactionAmount": 20
+      },
+      {
+        "type": "consume",
+        "materialId": "fruit",
+        "satisfactionAmount": 15
+      }
     ]
   },
   {
     "id": "rest",
     "name": "Rest",
-    "decayPerTick": 0.10,
+    "decayPerTick": 0.1,
     "criticalThreshold": 0.2,
     "satisfactionMethods": [
-      { "type": "use_furniture", "furnitureTag": "bed", "restorationRate": 1.0 },
-      { "type": "use_furniture", "furnitureId": "straw_pallet", "restorationRate": 0.8 },
-      { "type": "use_furniture", "furnitureId": "wooden_bed", "restorationRate": 1.2 },
-      { "type": "use_furniture", "furnitureId": "noble_bed", "restorationRate": 1.5 }
+      {
+        "type": "use_furniture",
+        "furnitureTag": "bed",
+        "restorationRate": 1.0
+      },
+      {
+        "type": "use_furniture",
+        "furnitureId": "straw_pallet",
+        "restorationRate": 0.8
+      },
+      {
+        "type": "use_furniture",
+        "furnitureId": "wooden_bed",
+        "restorationRate": 1.2
+      },
+      {
+        "type": "use_furniture",
+        "furnitureId": "noble_bed",
+        "restorationRate": 1.5
+      }
     ]
   },
   {
@@ -33,8 +81,17 @@
     "decayPerTick": 0.05,
     "criticalThreshold": 0.2,
     "satisfactionMethods": [
-      { "type": "proximity", "entityTag": "guard", "radius": 10, "bonus": 10 },
-      { "type": "zone_presence", "zoneTypeId": "guard_post", "passiveBonus": 10 }
+      {
+        "type": "proximity",
+        "entityTag": "guard",
+        "radius": 10,
+        "bonus": 10
+      },
+      {
+        "type": "zone_presence",
+        "zoneTypeId": "guard_post",
+        "passiveBonus": 10
+      }
     ]
   },
   {
@@ -44,8 +101,16 @@
     "criticalThreshold": 0.15,
     "satisfactionMethods": [
       { "type": "social", "satisfactionAmount": 15 },
-      { "type": "zone_presence", "zoneTypeId": "great_hall", "passiveBonus": 20 },
-      { "type": "zone_presence", "zoneTypeId": "tavern", "passiveBonus": 15 }
+      {
+        "type": "zone_presence",
+        "zoneTypeId": "great_hall",
+        "passiveBonus": 20
+      },
+      {
+        "type": "zone_presence",
+        "zoneTypeId": "tavern",
+        "passiveBonus": 15
+      }
     ]
   },
   {
@@ -54,9 +119,22 @@
     "decayPerTick": 0.06,
     "criticalThreshold": 0.15,
     "satisfactionMethods": [
-      { "type": "use_furniture", "furnitureId": "chair", "restorationRate": 10 },
-      { "type": "use_furniture", "furnitureId": "bench", "restorationRate": 5 },
-      { "type": "proximity", "entityTag": "hearth", "radius": 5, "bonus": 8 }
+      {
+        "type": "use_furniture",
+        "furnitureId": "chair",
+        "restorationRate": 10
+      },
+      {
+        "type": "use_furniture",
+        "furnitureId": "bench",
+        "restorationRate": 5
+      },
+      {
+        "type": "proximity",
+        "entityTag": "hearth",
+        "radius": 5,
+        "bonus": 8
+      }
     ]
   },
   {
@@ -65,10 +143,26 @@
     "decayPerTick": 0.04,
     "criticalThreshold": 0.1,
     "satisfactionMethods": [
-      { "type": "use_furniture", "furnitureId": "altar", "restorationRate": 20 },
-      { "type": "use_furniture", "furnitureId": "lectern", "restorationRate": 25 },
-      { "type": "zone_presence", "zoneTypeId": "chapel", "passiveBonus": 10 },
-      { "type": "zone_presence", "zoneTypeId": "church", "passiveBonus": 20 }
+      {
+        "type": "use_furniture",
+        "furnitureId": "altar",
+        "restorationRate": 20
+      },
+      {
+        "type": "use_furniture",
+        "furnitureId": "lectern",
+        "restorationRate": 25
+      },
+      {
+        "type": "zone_presence",
+        "zoneTypeId": "chapel",
+        "passiveBonus": 10
+      },
+      {
+        "type": "zone_presence",
+        "zoneTypeId": "church",
+        "passiveBonus": 20
+      }
     ]
   }
 ]

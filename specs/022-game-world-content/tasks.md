@@ -248,15 +248,15 @@ Each phase MUST pass its quality gate before the next phase begins.
 
 ### Parallel Opportunities Per Phase
 
-| Phase | Parallelizable Tasks | Sequential Tasks |
-|-------|---------------------|-----------------|
-| 1 | T005 | T001→T002→T003→T004 |
-| 2 | T009–T020 (all schemas) | T006→T007→T008, T021 |
-| 3 | T022–T037 (all) | None |
-| 4 | T038–T062 (all) | None |
-| 5 | T063–T087 (all) | None |
-| 6 | T090–T091 | T088→T089 |
-| 7 | T092–T095 | T096 |
+| Phase | Parallelizable Tasks    | Sequential Tasks     |
+| ----- | ----------------------- | -------------------- |
+| 1     | T005                    | T001→T002→T003→T004  |
+| 2     | T009–T020 (all schemas) | T006→T007→T008, T021 |
+| 3     | T022–T037 (all)         | None                 |
+| 4     | T038–T062 (all)         | None                 |
+| 5     | T063–T087 (all)         | None                 |
+| 6     | T090–T091               | T088→T089            |
+| 7     | T092–T095               | T096                 |
 
 ### Critical Path
 

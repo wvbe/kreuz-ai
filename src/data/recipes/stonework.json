@@ -5,7 +5,10 @@
     "inputs": [{ "materialId": "limestone", "quantity": 2 }],
     "outputs": [{ "materialId": "stone_block", "quantity": 1 }],
     "durationTicks": 24,
-    "restrictions": { "workstation": "masons_bench", "skill": { "skillId": "masonry" } },
+    "restrictions": {
+      "workstation": "masons_bench",
+      "skill": { "skillId": "masonry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "masonry", "amount": 2.5 }
   },
@@ -15,7 +18,10 @@
     "inputs": [{ "materialId": "granite", "quantity": 2 }],
     "outputs": [{ "materialId": "stone_block", "quantity": 1 }],
     "durationTicks": 32,
-    "restrictions": { "workstation": "masons_bench", "skill": { "skillId": "masonry" } },
+    "restrictions": {
+      "workstation": "masons_bench",
+      "skill": { "skillId": "masonry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "masonry", "amount": 3.0 }
   },
@@ -28,7 +34,10 @@
     ],
     "outputs": [{ "materialId": "brick", "quantity": 6 }],
     "durationTicks": 30,
-    "restrictions": { "workstation": "kiln", "skill": { "skillId": "masonry" } },
+    "restrictions": {
+      "workstation": "kiln",
+      "skill": { "skillId": "masonry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "masonry", "amount": 2.5 }
   },
@@ -38,7 +47,10 @@
     "inputs": [{ "materialId": "limestone", "quantity": 2 }],
     "outputs": [{ "materialId": "plaster", "quantity": 3 }],
     "durationTicks": 16,
-    "restrictions": { "workstation": "masons_bench", "skill": { "skillId": "masonry" } },
+    "restrictions": {
+      "workstation": "masons_bench",
+      "skill": { "skillId": "masonry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "masonry", "amount": 1.5 }
   },
@@ -51,7 +63,10 @@
     ],
     "outputs": [{ "materialId": "glass_pane", "quantity": 1 }],
     "durationTicks": 60,
-    "restrictions": { "workstation": "kiln", "skill": { "skillId": "glassblowing" } },
+    "restrictions": {
+      "workstation": "kiln",
+      "skill": { "skillId": "glassblowing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "glassblowing", "amount": 4.0 }
   }

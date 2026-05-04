@@ -23,7 +23,10 @@
     "inputs": [{ "materialId": "flour", "quantity": 2 }],
     "outputs": [{ "materialId": "bread", "quantity": 2 }],
     "durationTicks": 20,
-    "restrictions": { "workstation": "oven", "skill": { "skillId": "baking" } },
+    "restrictions": {
+      "workstation": "oven",
+      "skill": { "skillId": "baking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "baking", "amount": 3.0 }
   },
@@ -33,7 +36,10 @@
     "inputs": [{ "materialId": "flour", "quantity": 2 }],
     "outputs": [{ "materialId": "rye_bread", "quantity": 2 }],
     "durationTicks": 20,
-    "restrictions": { "workstation": "oven", "skill": { "skillId": "baking" } },
+    "restrictions": {
+      "workstation": "oven",
+      "skill": { "skillId": "baking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "baking", "amount": 3.0 }
   },
@@ -43,7 +49,10 @@
     "inputs": [{ "materialId": "barley", "quantity": 3 }],
     "outputs": [{ "materialId": "malt", "quantity": 2 }],
     "durationTicks": 24,
-    "restrictions": { "workstation": "malting_floor", "skill": { "skillId": "brewing" } },
+    "restrictions": {
+      "workstation": "malting_floor",
+      "skill": { "skillId": "brewing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "brewing", "amount": 2.5 }
   },
@@ -53,7 +62,10 @@
     "inputs": [{ "materialId": "malt", "quantity": 3 }],
     "outputs": [{ "materialId": "ale", "quantity": 2 }],
     "durationTicks": 36,
-    "restrictions": { "workstation": "brewing_vat", "skill": { "skillId": "brewing" } },
+    "restrictions": {
+      "workstation": "brewing_vat",
+      "skill": { "skillId": "brewing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "brewing", "amount": 3.0 }
   },
@@ -63,7 +75,10 @@
     "inputs": [{ "materialId": "honey", "quantity": 2 }],
     "outputs": [{ "materialId": "mead", "quantity": 2 }],
     "durationTicks": 40,
-    "restrictions": { "workstation": "brewing_vat", "skill": { "skillId": "brewing" } },
+    "restrictions": {
+      "workstation": "brewing_vat",
+      "skill": { "skillId": "brewing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "brewing", "amount": 3.5 }
   },
@@ -73,7 +88,10 @@
     "inputs": [{ "materialId": "milk", "quantity": 3 }],
     "outputs": [{ "materialId": "cheese", "quantity": 1 }],
     "durationTicks": 30,
-    "restrictions": { "workstation": "cheese_press", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "cheese_press",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
   },
@@ -83,7 +101,10 @@
     "inputs": [{ "materialId": "milk", "quantity": 2 }],
     "outputs": [{ "materialId": "butter", "quantity": 1 }],
     "durationTicks": 16,
-    "restrictions": { "workstation": "churn", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "churn",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.0 }
   },
@@ -96,7 +117,10 @@
     ],
     "outputs": [{ "materialId": "dried_meat", "quantity": 2 }],
     "durationTicks": 48,
-    "restrictions": { "workstation": "drying_rack", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "drying_rack",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 3.0 }
   },
@@ -109,7 +133,10 @@
     ],
     "outputs": [{ "materialId": "salted_fish", "quantity": 2 }],
     "durationTicks": 36,
-    "restrictions": { "workstation": "salting_table", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "salting_table",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
   },
@@ -122,7 +149,10 @@
     ],
     "outputs": [{ "materialId": "pottage", "quantity": 2 }],
     "durationTicks": 20,
-    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "cooking_pot",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.0 }
   },
@@ -135,7 +165,10 @@
     ],
     "outputs": [{ "materialId": "stew", "quantity": 2 }],
     "durationTicks": 24,
-    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "cooking_pot",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
   },
@@ -145,7 +178,10 @@
     "inputs": [{ "materialId": "raw_meat", "quantity": 1 }],
     "outputs": [{ "materialId": "roast_meat", "quantity": 1 }],
     "durationTicks": 16,
-    "restrictions": { "workstation": "oven", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "oven",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.0 }
   },
@@ -155,7 +191,10 @@
     "inputs": [{ "materialId": "barley", "quantity": 2 }],
     "outputs": [{ "materialId": "porridge", "quantity": 2 }],
     "durationTicks": 12,
-    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "cooking_pot",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 1.5 }
   },
@@ -168,7 +207,10 @@
     ],
     "outputs": [{ "materialId": "fruit_preserves", "quantity": 2 }],
     "durationTicks": 28,
-    "restrictions": { "workstation": "cooking_pot", "skill": { "skillId": "cooking" } },
+    "restrictions": {
+      "workstation": "cooking_pot",
+      "skill": { "skillId": "cooking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "cooking", "amount": 2.5 }
   },
@@ -178,7 +220,10 @@
     "inputs": [{ "materialId": "grapes", "quantity": 4 }],
     "outputs": [{ "materialId": "wine", "quantity": 2 }],
     "durationTicks": 40,
-    "restrictions": { "workstation": "wine_press", "skill": { "skillId": "brewing" } },
+    "restrictions": {
+      "workstation": "wine_press",
+      "skill": { "skillId": "brewing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "brewing", "amount": 3.5 }
   }

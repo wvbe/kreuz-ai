@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const JobTypeSchema = z.object({
   id: z.string().min(1),
@@ -6,7 +6,7 @@ export const JobTypeSchema = z.object({
   skillDomain: z.string().optional(),
   toolRequired: z.string().optional(),
   zoneContext: z.string().optional(),
-  recurrence: z.enum(['one-time', 'recurring']),
+  recurrence: z.enum(["one-time", "recurring"]),
   description: z.string().optional(),
 });
 

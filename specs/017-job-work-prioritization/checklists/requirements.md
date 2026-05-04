@@ -32,6 +32,6 @@
 ## Notes
 
 - All 2 clarification questions resolved (2026-05-02):
-    - Q1: Town Criers are a finite fleet; each carries all pending changes for its destination at departure; new changes dispatch the next available Town Crier
-    - Q2: Home board first, then fallback after configurable idle-threshold ticks
+  - Q1: Town Criers are a finite fleet; each carries all pending changes for its destination at departure; new changes dispatch the next available Town Crier
+  - Q2: Home board first, then fallback after configurable idle-threshold ticks
 - Spec is ready for `/speckit.clarify` or `/speckit.plan`

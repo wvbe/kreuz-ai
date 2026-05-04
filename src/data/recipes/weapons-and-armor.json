@@ -8,7 +8,10 @@
     ],
     "outputs": [{ "materialId": "iron_sword", "quantity": 1 }],
     "durationTicks": 60,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 5.0 }
   },
@@ -21,7 +24,10 @@
     ],
     "outputs": [{ "materialId": "iron_shield", "quantity": 1 }],
     "durationTicks": 40,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 4.0 }
   },
@@ -34,7 +40,10 @@
     ],
     "outputs": [{ "materialId": "spear", "quantity": 1 }],
     "durationTicks": 24,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.5 }
   },
@@ -47,7 +56,10 @@
     ],
     "outputs": [{ "materialId": "bow", "quantity": 1 }],
     "durationTicks": 30,
-    "restrictions": { "workstation": "workbench", "skill": { "skillId": "carpentry" } },
+    "restrictions": {
+      "workstation": "workbench",
+      "skill": { "skillId": "carpentry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "carpentry", "amount": 3.0 }
   },
@@ -60,7 +72,10 @@
     ],
     "outputs": [{ "materialId": "arrow", "quantity": 10 }],
     "durationTicks": 20,
-    "restrictions": { "workstation": "workbench", "skill": { "skillId": "carpentry" } },
+    "restrictions": {
+      "workstation": "workbench",
+      "skill": { "skillId": "carpentry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "carpentry", "amount": 2.0 }
   },
@@ -70,7 +85,10 @@
     "inputs": [{ "materialId": "leather", "quantity": 4 }],
     "outputs": [{ "materialId": "leather_armor", "quantity": 1 }],
     "durationTicks": 50,
-    "restrictions": { "workstation": "workbench", "skill": { "skillId": "leatherworking" } },
+    "restrictions": {
+      "workstation": "workbench",
+      "skill": { "skillId": "leatherworking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "leatherworking", "amount": 4.0 }
   },
@@ -80,7 +98,10 @@
     "inputs": [{ "materialId": "iron_ingot", "quantity": 6 }],
     "outputs": [{ "materialId": "iron_chainmail", "quantity": 1 }],
     "durationTicks": 120,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 8.0 }
   },
@@ -90,7 +111,10 @@
     "inputs": [{ "materialId": "iron_ingot", "quantity": 2 }],
     "outputs": [{ "materialId": "iron_helm", "quantity": 1 }],
     "durationTicks": 36,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 3.5 }
   }

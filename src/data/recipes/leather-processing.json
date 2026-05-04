@@ -8,7 +8,10 @@
     ],
     "outputs": [{ "materialId": "leather", "quantity": 1 }],
     "durationTicks": 48,
-    "restrictions": { "workstation": "tanning_rack", "skill": { "skillId": "leatherworking" } },
+    "restrictions": {
+      "workstation": "tanning_rack",
+      "skill": { "skillId": "leatherworking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "leatherworking", "amount": 3.5 }
   },
@@ -18,7 +21,10 @@
     "inputs": [{ "materialId": "raw_hide", "quantity": 1 }],
     "outputs": [{ "materialId": "parchment", "quantity": 1 }],
     "durationTicks": 36,
-    "restrictions": { "workstation": "parchment_frame", "skill": { "skillId": "leatherworking" } },
+    "restrictions": {
+      "workstation": "parchment_frame",
+      "skill": { "skillId": "leatherworking" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "leatherworking", "amount": 3.0 }
   }

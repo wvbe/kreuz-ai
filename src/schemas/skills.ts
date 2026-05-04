@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const SkillOutcomeEffectSchema = z.object({
-  type: z.enum(['speedMultiplier', 'outputBonus', 'custom']),
+  type: z.enum(["speedMultiplier", "outputBonus", "custom"]),
   valueAtMax: z.number(),
   description: z.string().optional(),
 });

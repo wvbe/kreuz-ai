@@ -1,21 +1,21 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const SkillAptitudeModifierSchema = z.object({
-  type: z.literal('skillAptitude'),
+  type: z.literal("skillAptitude"),
   skillId: z.string().min(1),
   growthMultiplier: z.number(),
   startingValueBonus: z.number().int().optional(),
 });
 
 export const PerformanceModifierSchema = z.object({
-  type: z.literal('performanceModifier'),
+  type: z.literal("performanceModifier"),
   domain: z.string().min(1),
   multiplier: z.number(),
   outputBonus: z.number().optional(),
 });
 
 export const NeedModifierSchema = z.object({
-  type: z.literal('needModifier'),
+  type: z.literal("needModifier"),
   needId: z.string().min(1),
   decayRateMultiplier: z.number().optional(),
   satisfactionBonusMultiplier: z.number().optional(),
@@ -23,7 +23,7 @@ export const NeedModifierSchema = z.object({
   trigger: z.string().optional(),
 });
 
-export const TraitModifierSchema = z.discriminatedUnion('type', [
+export const TraitModifierSchema = z.discriminatedUnion("type", [
   SkillAptitudeModifierSchema,
   PerformanceModifierSchema,
   NeedModifierSchema,

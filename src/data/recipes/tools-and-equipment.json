@@ -8,7 +8,10 @@
     ],
     "outputs": [{ "materialId": "iron_hammer", "quantity": 1 }],
     "durationTicks": 30,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 3.0 }
   },
@@ -18,7 +21,10 @@
     "inputs": [{ "materialId": "iron_ingot", "quantity": 1 }],
     "outputs": [{ "materialId": "iron_chisel", "quantity": 1 }],
     "durationTicks": 24,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.5 }
   },
@@ -31,7 +37,10 @@
     ],
     "outputs": [{ "materialId": "saw", "quantity": 1 }],
     "durationTicks": 30,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 3.0 }
   },
@@ -44,7 +53,10 @@
     ],
     "outputs": [{ "materialId": "axe", "quantity": 1 }],
     "durationTicks": 28,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.8 }
   },
@@ -57,7 +69,10 @@
     ],
     "outputs": [{ "materialId": "pickaxe", "quantity": 1 }],
     "durationTicks": 28,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.8 }
   },
@@ -70,7 +85,10 @@
     ],
     "outputs": [{ "materialId": "sickle", "quantity": 1 }],
     "durationTicks": 22,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.2 }
   },
@@ -83,7 +101,10 @@
     ],
     "outputs": [{ "materialId": "hoe", "quantity": 1 }],
     "durationTicks": 22,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.2 }
   },
@@ -96,7 +117,10 @@
     ],
     "outputs": [{ "materialId": "fishing_rod", "quantity": 1 }],
     "durationTicks": 16,
-    "restrictions": { "workstation": "workbench", "skill": { "skillId": "carpentry" } },
+    "restrictions": {
+      "workstation": "workbench",
+      "skill": { "skillId": "carpentry" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "carpentry", "amount": 2.0 }
   },
@@ -106,7 +130,10 @@
     "inputs": [{ "materialId": "iron_ingot", "quantity": 1 }],
     "outputs": [{ "materialId": "needle", "quantity": 3 }],
     "durationTicks": 18,
-    "restrictions": { "workstation": "anvil", "skill": { "skillId": "smithing" } },
+    "restrictions": {
+      "workstation": "anvil",
+      "skill": { "skillId": "smithing" }
+    },
     "outputDestination": "workstation",
     "skillExperienceAwarded": { "skillId": "smithing", "amount": 2.0 }
   }

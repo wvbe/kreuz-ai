@@ -8,7 +8,13 @@
       { "furnitureId": "altar", "count": 1 },
       { "furnitureId": "candelabra", "count": 1 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 10 }]
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "faith.bonus",
+        "value": 10
+      }
+    ]
   },
   {
     "id": "church",
@@ -21,7 +27,13 @@
       { "furnitureId": "lectern", "count": 1 },
       { "furnitureId": "prayer_bench", "count": 2 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 20 }]
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "faith.bonus",
+        "value": 20
+      }
+    ]
   },
   {
     "id": "cloister",
@@ -33,7 +45,11 @@
       { "furnitureId": "bookcase", "count": 1 }
     ],
     "effects": [
-      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 },
+      {
+        "type": "entity.modifier",
+        "modifier": "faith.bonus",
+        "value": 5
+      },
       { "type": "entity.modifier", "modifier": "mood.bonus", "value": 3 }
     ]
   }

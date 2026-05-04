@@ -1,17 +1,152 @@
 [
-  { "id": "bread", "name": "Bread", "categories": ["food", "cooked", "staple"], "stackLimit": 20, "weight": 1, "perishable": true, "perishTicks": 400, "value": 3 },
-  { "id": "rye_bread", "name": "Rye Bread", "categories": ["food", "cooked", "staple"], "stackLimit": 20, "weight": 1, "perishable": true, "perishTicks": 400, "value": 2 },
-  { "id": "ale", "name": "Ale", "categories": ["drink", "brewed"], "stackLimit": 15, "weight": 3, "perishable": true, "perishTicks": 600, "value": 4 },
-  { "id": "wine", "name": "Wine", "categories": ["drink", "brewed", "luxury"], "stackLimit": 15, "weight": 3, "perishable": true, "perishTicks": 2000, "value": 10 },
-  { "id": "mead", "name": "Mead", "categories": ["drink", "brewed"], "stackLimit": 15, "weight": 3, "perishable": true, "perishTicks": 800, "value": 8 },
-  { "id": "cheese", "name": "Cheese", "categories": ["food", "dairy", "preserved"], "stackLimit": 20, "weight": 2, "perishable": true, "perishTicks": 1500, "value": 5 },
-  { "id": "dried_meat", "name": "Dried Meat", "categories": ["food", "preserved"], "stackLimit": 20, "weight": 2, "perishable": true, "perishTicks": 1500, "value": 6 },
-  { "id": "salted_fish", "name": "Salted Fish", "categories": ["food", "preserved"], "stackLimit": 20, "weight": 2, "perishable": true, "perishTicks": 1500, "value": 5 },
-  { "id": "pottage", "name": "Pottage", "categories": ["food", "cooked"], "stackLimit": 10, "weight": 3, "perishable": true, "perishTicks": 200, "value": 2 },
-  { "id": "stew", "name": "Stew", "categories": ["food", "cooked"], "stackLimit": 10, "weight": 3, "perishable": true, "perishTicks": 200, "value": 4 },
-  { "id": "roast_meat", "name": "Roast Meat", "categories": ["food", "cooked"], "stackLimit": 10, "weight": 3, "perishable": true, "perishTicks": 200, "value": 5 },
-  { "id": "fruit_preserves", "name": "Fruit Preserves", "categories": ["food", "preserved", "sweet"], "stackLimit": 15, "weight": 2, "perishable": true, "perishTicks": 1200, "value": 6 },
-  { "id": "butter", "name": "Butter", "categories": ["food", "dairy"], "stackLimit": 15, "weight": 1, "perishable": true, "perishTicks": 400, "value": 3 },
-  { "id": "porridge", "name": "Porridge", "categories": ["food", "cooked", "staple"], "stackLimit": 10, "weight": 2, "perishable": true, "perishTicks": 150, "value": 1 },
-  { "id": "eggs", "name": "Eggs", "categories": ["food", "raw", "animal"], "stackLimit": 15, "weight": 1, "perishable": true, "perishTicks": 300, "value": 2 }
+  {
+    "id": "bread",
+    "name": "Bread",
+    "categories": ["food", "cooked", "staple"],
+    "stackLimit": 20,
+    "weight": 1,
+    "perishable": true,
+    "perishTicks": 400,
+    "value": 3
+  },
+  {
+    "id": "rye_bread",
+    "name": "Rye Bread",
+    "categories": ["food", "cooked", "staple"],
+    "stackLimit": 20,
+    "weight": 1,
+    "perishable": true,
+    "perishTicks": 400,
+    "value": 2
+  },
+  {
+    "id": "ale",
+    "name": "Ale",
+    "categories": ["drink", "brewed"],
+    "stackLimit": 15,
+    "weight": 3,
+    "perishable": true,
+    "perishTicks": 600,
+    "value": 4
+  },
+  {
+    "id": "wine",
+    "name": "Wine",
+    "categories": ["drink", "brewed", "luxury"],
+    "stackLimit": 15,
+    "weight": 3,
+    "perishable": true,
+    "perishTicks": 2000,
+    "value": 10
+  },
+  {
+    "id": "mead",
+    "name": "Mead",
+    "categories": ["drink", "brewed"],
+    "stackLimit": 15,
+    "weight": 3,
+    "perishable": true,
+    "perishTicks": 800,
+    "value": 8
+  },
+  {
+    "id": "cheese",
+    "name": "Cheese",
+    "categories": ["food", "dairy", "preserved"],
+    "stackLimit": 20,
+    "weight": 2,
+    "perishable": true,
+    "perishTicks": 1500,
+    "value": 5
+  },
+  {
+    "id": "dried_meat",
+    "name": "Dried Meat",
+    "categories": ["food", "preserved"],
+    "stackLimit": 20,
+    "weight": 2,
+    "perishable": true,
+    "perishTicks": 1500,
+    "value": 6
+  },
+  {
+    "id": "salted_fish",
+    "name": "Salted Fish",
+    "categories": ["food", "preserved"],
+    "stackLimit": 20,
+    "weight": 2,
+    "perishable": true,
+    "perishTicks": 1500,
+    "value": 5
+  },
+  {
+    "id": "pottage",
+    "name": "Pottage",
+    "categories": ["food", "cooked"],
+    "stackLimit": 10,
+    "weight": 3,
+    "perishable": true,
+    "perishTicks": 200,
+    "value": 2
+  },
+  {
+    "id": "stew",
+    "name": "Stew",
+    "categories": ["food", "cooked"],
+    "stackLimit": 10,
+    "weight": 3,
+    "perishable": true,
+    "perishTicks": 200,
+    "value": 4
+  },
+  {
+    "id": "roast_meat",
+    "name": "Roast Meat",
+    "categories": ["food", "cooked"],
+    "stackLimit": 10,
+    "weight": 3,
+    "perishable": true,
+    "perishTicks": 200,
+    "value": 5
+  },
+  {
+    "id": "fruit_preserves",
+    "name": "Fruit Preserves",
+    "categories": ["food", "preserved", "sweet"],
+    "stackLimit": 15,
+    "weight": 2,
+    "perishable": true,
+    "perishTicks": 1200,
+    "value": 6
+  },
+  {
+    "id": "butter",
+    "name": "Butter",
+    "categories": ["food", "dairy"],
+    "stackLimit": 15,
+    "weight": 1,
+    "perishable": true,
+    "perishTicks": 400,
+    "value": 3
+  },
+  {
+    "id": "porridge",
+    "name": "Porridge",
+    "categories": ["food", "cooked", "staple"],
+    "stackLimit": 10,
+    "weight": 2,
+    "perishable": true,
+    "perishTicks": 150,
+    "value": 1
+  },
+  {
+    "id": "eggs",
+    "name": "Eggs",
+    "categories": ["food", "raw", "animal"],
+    "stackLimit": 15,
+    "weight": 1,
+    "perishable": true,
+    "perishTicks": 300,
+    "value": 2
+  }
 ]

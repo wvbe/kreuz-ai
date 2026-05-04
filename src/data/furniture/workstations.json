@@ -32,9 +32,7 @@
     "hasInventory": true,
     "inventorySlots": 6,
     "inventoryWeightLimit": 150,
-    "constructionCost": [
-      { "materialId": "iron_ingot", "quantity": 4 }
-    ],
+    "constructionCost": [{ "materialId": "iron_ingot", "quantity": 4 }],
     "effects": [{ "type": "activity.unlock", "activityId": "smithing" }]
   },
   {
@@ -123,9 +121,7 @@
     "hasInventory": true,
     "inventorySlots": 4,
     "inventoryWeightLimit": 60,
-    "constructionCost": [
-      { "materialId": "oak_plank", "quantity": 4 }
-    ],
+    "constructionCost": [{ "materialId": "oak_plank", "quantity": 4 }],
     "effects": [{ "type": "activity.unlock", "activityId": "parchment_making" }]
   },
   {
@@ -161,9 +157,7 @@
     "hasInventory": true,
     "inventorySlots": 6,
     "inventoryWeightLimit": 120,
-    "constructionCost": [
-      { "materialId": "brick", "quantity": 6 }
-    ],
+    "constructionCost": [{ "materialId": "brick", "quantity": 6 }],
     "effects": [{ "type": "activity.unlock", "activityId": "malting" }]
   },
   {
@@ -302,9 +296,7 @@
     "hasInventory": true,
     "inventorySlots": 4,
     "inventoryWeightLimit": 40,
-    "constructionCost": [
-      { "materialId": "iron_ingot", "quantity": 2 }
-    ],
+    "constructionCost": [{ "materialId": "iron_ingot", "quantity": 2 }],
     "effects": [{ "type": "activity.unlock", "activityId": "candle_making" }]
   },
   {
@@ -312,9 +304,7 @@
     "name": "Rope Walk",
     "categories": ["workstation", "fiber"],
     "hasInventory": false,
-    "constructionCost": [
-      { "materialId": "oak_plank", "quantity": 4 }
-    ],
+    "constructionCost": [{ "materialId": "oak_plank", "quantity": 4 }],
     "effects": [{ "type": "activity.unlock", "activityId": "rope_making" }]
   },
   {

@@ -16,6 +16,12 @@
     "requiresRoom": false,
     "minTiles": 2,
     "furnitureRequirements": [],
-    "effects": [{ "type": "entity.modifier", "modifier": "safety.bonus", "value": 10 }]
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "safety.bonus",
+        "value": 10
+      }
+    ]
   }
 ]

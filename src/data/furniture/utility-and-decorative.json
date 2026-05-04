@@ -37,10 +37,14 @@
     "name": "Torch Sconce",
     "categories": ["light", "utility"],
     "hasInventory": false,
-    "constructionCost": [
-      { "materialId": "iron_ingot", "quantity": 1 }
-    ],
-    "effects": [{ "type": "entity.modifier", "modifier": "illumination", "value": 5 }]
+    "constructionCost": [{ "materialId": "iron_ingot", "quantity": 1 }],
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "illumination",
+        "value": 5
+      }
+    ]
   },
   {
     "id": "chandelier",
@@ -52,7 +56,11 @@
       { "materialId": "candle", "quantity": 6 }
     ],
     "effects": [
-      { "type": "entity.modifier", "modifier": "illumination", "value": 15 },
+      {
+        "type": "entity.modifier",
+        "modifier": "illumination",
+        "value": 15
+      },
       { "type": "entity.modifier", "modifier": "mood.bonus", "value": 3 }
     ]
   },
@@ -65,7 +73,9 @@
       { "materialId": "wool_cloth", "quantity": 3 },
       { "materialId": "linen_thread", "quantity": 2 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "mood.bonus", "value": 5 }]
+    "effects": [
+      { "type": "entity.modifier", "modifier": "mood.bonus", "value": 5 }
+    ]
   },
   {
     "id": "banner",
@@ -76,17 +86,19 @@
       { "materialId": "linen_cloth", "quantity": 1 },
       { "materialId": "pine_plank", "quantity": 1 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "mood.bonus", "value": 2 }]
+    "effects": [
+      { "type": "entity.modifier", "modifier": "mood.bonus", "value": 2 }
+    ]
   },
   {
     "id": "gravestone",
     "name": "Gravestone",
     "categories": ["decorative", "stone"],
     "hasInventory": false,
-    "constructionCost": [
-      { "materialId": "stone_block", "quantity": 2 }
-    ],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 2 }]
+    "constructionCost": [{ "materialId": "stone_block", "quantity": 2 }],
+    "effects": [
+      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 2 }
+    ]
   },
   {
     "id": "signpost",

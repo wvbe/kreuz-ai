@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const FactionMembershipCriteriaSchema = z.object({
   skillId: z.string().min(1),

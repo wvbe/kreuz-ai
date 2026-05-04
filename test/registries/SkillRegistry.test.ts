@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest';
-import { createSkillRegistry } from '../../src/registries/SkillRegistry.js';
+import { describe, it, expect } from "vitest";
+import { createSkillRegistry } from "../../src/registries/SkillRegistry.js";
 
-describe('SkillRegistry', () => {
+describe("SkillRegistry", () => {
   const registry = createSkillRegistry();
 
-  it('loads at least 20 skills (FR-006)', () => {
+  it("loads at least 20 skills (FR-006)", () => {
     expect(registry.size).toBeGreaterThanOrEqual(20);
   });
 
-  it('every skill has valid growth parameters', () => {
+  it("every skill has valid growth parameters", () => {
     for (const skill of registry.getAll()) {
       expect(skill.id).toBeTruthy();
       expect(skill.name).toBeTruthy();
@@ -20,15 +20,15 @@ describe('SkillRegistry', () => {
     }
   });
 
-  it('every skill has at least one outcome effect', () => {
+  it("every skill has at least one outcome effect", () => {
     for (const skill of registry.getAll()) {
       expect(skill.outcomeEffects.length).toBeGreaterThanOrEqual(1);
     }
   });
 
-  it('contains key skills (smithing, farming, combat)', () => {
-    expect(registry.has('smithing')).toBe(true);
-    expect(registry.has('farming')).toBe(true);
-    expect(registry.has('combat')).toBe(true);
+  it("contains key skills (smithing, farming, combat)", () => {
+    expect(registry.has("smithing")).toBe(true);
+    expect(registry.has("farming")).toBe(true);
+    expect(registry.has("combat")).toBe(true);
   });
 });

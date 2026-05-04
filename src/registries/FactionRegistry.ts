@@ -1,7 +1,7 @@
-import { Registry } from '../engine/Registry.js';
-import { FactionSchema, type Faction } from '../schemas/factions.js';
-import guilds from '../data/factions/guilds.json' with { type: 'json' };
-import religious from '../data/factions/religious.json' with { type: 'json' };
+import { Registry } from "../engine/Registry.js";
+import { FactionSchema, type Faction } from "../schemas/factions.js";
+import guilds from "../data/factions/guilds.json" with { type: "json" };
+import religious from "../data/factions/religious.json" with { type: "json" };
 
 export function createFactionRegistry(): Registry<Faction> {
   const registry = new Registry<Faction>();

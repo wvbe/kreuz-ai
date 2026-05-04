@@ -5,7 +5,13 @@
     "requiresRoom": true,
     "minTiles": 4,
     "furnitureRequirements": [{ "furnitureId": "pantry_shelf", "count": 1 }],
-    "effects": [{ "type": "entity.modifier", "modifier": "inventory.decay.rate", "value": 0.5 }]
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "inventory.decay.rate",
+        "value": 0.5
+      }
+    ]
   },
   {
     "id": "wine_cellar",
@@ -16,7 +22,13 @@
       { "furnitureId": "wine_rack", "count": 1 },
       { "furnitureId": "barrel", "count": 1 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "inventory.decay.rate", "value": 0.3 }]
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "inventory.decay.rate",
+        "value": 0.3
+      }
+    ]
   },
   {
     "id": "warehouse",

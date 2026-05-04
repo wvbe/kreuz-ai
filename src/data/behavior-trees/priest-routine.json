@@ -9,28 +9,60 @@
         "type": "sequence",
         "name": "scheduled_service",
         "children": [
-          { "type": "condition", "name": "sermon_time", "check": "sermon_time_and_chapel_available" },
-          { "type": "action", "name": "travel_pulpit", "action": "travel_to_pulpit" },
-          { "type": "action", "name": "deliver_sermon", "action": "deliver_sermon" }
+          {
+            "type": "condition",
+            "name": "sermon_time",
+            "check": "sermon_time_and_chapel_available"
+          },
+          {
+            "type": "action",
+            "name": "travel_pulpit",
+            "action": "travel_to_pulpit"
+          },
+          {
+            "type": "action",
+            "name": "deliver_sermon",
+            "action": "deliver_sermon"
+          }
         ]
       },
       {
         "type": "sequence",
         "name": "tend_faithful",
         "children": [
-          { "type": "condition", "name": "low_mood_nearby", "check": "entity_with_low_mood_nearby" },
-          { "type": "action", "name": "counsel", "action": "seek_conversation" }
+          {
+            "type": "condition",
+            "name": "low_mood_nearby",
+            "check": "entity_with_low_mood_nearby"
+          },
+          {
+            "type": "action",
+            "name": "counsel",
+            "action": "seek_conversation"
+          }
         ]
       },
       {
         "type": "sequence",
         "name": "monastic_work",
         "children": [
-          { "type": "condition", "name": "monk_with_workspace", "check": "monk_and_workspace_available" },
-          { "type": "action", "name": "perform_work", "action": "perform_work" }
+          {
+            "type": "condition",
+            "name": "monk_with_workspace",
+            "check": "monk_and_workspace_available"
+          },
+          {
+            "type": "action",
+            "name": "perform_work",
+            "action": "perform_work"
+          }
         ]
       },
-      { "type": "action", "name": "fallback_routine", "action": "daily_routine_fallback" }
+      {
+        "type": "action",
+        "name": "fallback_routine",
+        "action": "daily_routine_fallback"
+      }
     ]
   }
 }

@@ -4,10 +4,14 @@
     "name": "Altar",
     "categories": ["religious", "worship"],
     "hasInventory": false,
-    "constructionCost": [
-      { "materialId": "stone_block", "quantity": 4 }
-    ],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 20 }]
+    "constructionCost": [{ "materialId": "stone_block", "quantity": 4 }],
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "faith.bonus",
+        "value": 20
+      }
+    ]
   },
   {
     "id": "candelabra",
@@ -18,7 +22,9 @@
       { "materialId": "iron_ingot", "quantity": 2 },
       { "materialId": "candle", "quantity": 4 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 }]
+    "effects": [
+      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 }
+    ]
   },
   {
     "id": "lectern",
@@ -40,7 +46,13 @@
       { "materialId": "iron_ingot", "quantity": 2 },
       { "materialId": "glass_pane", "quantity": 1 }
     ],
-    "effects": [{ "type": "entity.modifier", "modifier": "faith.bonus", "value": 15 }]
+    "effects": [
+      {
+        "type": "entity.modifier",
+        "modifier": "faith.bonus",
+        "value": 15
+      }
+    ]
   },
   {
     "id": "prayer_bench",
@@ -52,8 +64,16 @@
       { "materialId": "nails", "quantity": 2 }
     ],
     "effects": [
-      { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 },
-      { "type": "entity.modifier", "modifier": "comfort.bonus", "value": 3 }
+      {
+        "type": "entity.modifier",
+        "modifier": "faith.bonus",
+        "value": 5
+      },
+      {
+        "type": "entity.modifier",
+        "modifier": "comfort.bonus",
+        "value": 3
+      }
     ]
   },
   {
@@ -61,9 +81,9 @@
     "name": "Church Bell",
     "categories": ["religious", "utility"],
     "hasInventory": false,
-    "constructionCost": [
-      { "materialId": "bronze_ingot", "quantity": 4 }
-    ],
-    "effects": [{ "type": "activity.unlock", "activityId": "congregation_call" }]
+    "constructionCost": [{ "materialId": "bronze_ingot", "quantity": 4 }],
+    "effects": [
+      { "type": "activity.unlock", "activityId": "congregation_call" }
+    ]
   }
 ]

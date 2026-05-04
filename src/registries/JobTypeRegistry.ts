@@ -1,6 +1,6 @@
-import { Registry } from '../engine/Registry.js';
-import { JobTypeSchema, type JobType } from '../schemas/jobs.js';
-import jobsData from '../data/jobs.json' with { type: 'json' };
+import { Registry } from "../engine/Registry.js";
+import { JobTypeSchema, type JobType } from "../schemas/jobs.js";
+import jobsData from "../data/jobs.json" with { type: "json" };
 
 export function createJobTypeRegistry(): Registry<JobType> {
   const registry = new Registry<JobType>();

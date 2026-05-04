@@ -164,9 +164,9 @@ NPC factions (non-player factions) can also initiate diplomatic acts toward the 
 - **FR-006**: On Envoy delivery (Envoy reaches leader entity), standing changes MUST be applied immediately to both faction standing maps (sender and receiver may update independently). `diplomacy.message.delivered` MUST be emitted.
 - **FR-007**: Standing values MUST be clamped to [-100, 100] at all times. Default standing between two factions with no prior contact is 0.
 - **FR-008**: Standing consequences MUST be enforced in the systems that read them:
-    - Trade (spec 019): entities from factions with standing < -30 (configurable) refuse trade. Trade Agreements grant a configurable `priceMultiplier` discount.
-    - Affinity baseline (spec 013): entity-to-entity first-meeting affinity offset = average standing across all shared faction pairs, mapped to a configurable affinity bias range.
-    - Labour (spec 017): entities from factions with standing < -30 do not accept jobs from the hostile faction.
+  - Trade (spec 019): entities from factions with standing < -30 (configurable) refuse trade. Trade Agreements grant a configurable `priceMultiplier` discount.
+  - Affinity baseline (spec 013): entity-to-entity first-meeting affinity offset = average standing across all shared faction pairs, mapped to a configurable affinity bias range.
+  - Labour (spec 017): entities from factions with standing < -30 do not accept jobs from the hostile faction.
 - **FR-009**: System MUST support four diplomatic act types: Gift (transfers items/currency from sender treasury to leader inventory), Trade Agreement (sets `tradeAgreement: true` on both factions' standing entries if accepted), Declaration (sets standing to a configured value; sub-types: war/peace/neutrality), Overture (triggers faction AI evaluation; may result in a counter-dispatch).
 - **FR-010**: Gift acts MUST deduct the gifted items/currency from the sending faction's treasury (Throne Room containers for the player faction) before dispatching the Envoy. If insufficient funds, the act is blocked.
 - **FR-011**: System MUST emit events: `diplomacy.act.initiated`, `diplomacy.dispatch.started`, `diplomacy.message.delivered`, `diplomacy.dispatch.failed` (with reason: `leader-unavailable`, `unreachable`, `envoy-destroyed`), `diplomacy.standing.changed`, `diplomacy.agreement.formed`, `diplomacy.agreement.cancelled`.

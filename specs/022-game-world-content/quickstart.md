@@ -12,23 +12,23 @@ Schemas are defined in `src/schemas/` using **Zod**. Each schema is the single s
 ## Adding a New Material
 
 1. Choose the appropriate data file in `src/data/materials/` based on category:
-    - `raw-resources.json` — natural resources
-    - `processed-goods.json` — refined/crafted intermediates
-    - `finished-goods.json` — tools, weapons, armor, clothing
-    - `food-and-drink.json` — consumables
-    - `currency.json` — monetary items
+   - `raw-resources.json` — natural resources
+   - `processed-goods.json` — refined/crafted intermediates
+   - `finished-goods.json` — tools, weapons, armor, clothing
+   - `food-and-drink.json` — consumables
+   - `currency.json` — monetary items
 
 2. Add a new entry to the array:
 
 ```json
 {
-    "id": "wax_seal",
-    "name": "Wax Seal",
-    "categories": ["processed", "writing"],
-    "stackLimit": 20,
-    "weight": 1,
-    "perishable": false,
-    "value": 5
+  "id": "wax_seal",
+  "name": "Wax Seal",
+  "categories": ["processed", "writing"],
+  "stackLimit": 20,
+  "weight": 1,
+  "perishable": false,
+  "value": 5
 }
 ```
 
@@ -42,19 +42,19 @@ Schemas are defined in `src/schemas/` using **Zod**. Each schema is the single s
 
 ```json
 {
-    "id": "make_wax_seal",
-    "name": "Make Wax Seal",
-    "inputs": [{ "materialId": "beeswax", "quantity": 1 }],
-    "outputs": [{ "materialId": "wax_seal", "quantity": 3 }],
-    "durationTicks": 12,
-    "restrictions": {
-        "workstation": "candle_mold"
-    },
-    "outputDestination": "crafter",
-    "skillExperienceAwarded": {
-        "skillId": "leatherworking",
-        "amount": 1.5
-    }
+  "id": "make_wax_seal",
+  "name": "Make Wax Seal",
+  "inputs": [{ "materialId": "beeswax", "quantity": 1 }],
+  "outputs": [{ "materialId": "wax_seal", "quantity": 3 }],
+  "durationTicks": 12,
+  "restrictions": {
+    "workstation": "candle_mold"
+  },
+  "outputDestination": "crafter",
+  "skillExperienceAwarded": {
+    "skillId": "leatherworking",
+    "amount": 1.5
+  }
 }
 ```
 
@@ -68,18 +68,18 @@ Schemas are defined in `src/schemas/` using **Zod**. Each schema is the single s
 
 ```json
 {
-    "id": "lectern_ornate",
-    "name": "Ornate Lectern",
-    "categories": ["religious", "furniture", "luxury"],
-    "hasInventory": false,
-    "constructionCost": [
-        { "materialId": "oak_plank", "quantity": 6 },
-        { "materialId": "nails", "quantity": 4 },
-        { "materialId": "glass_pane", "quantity": 1 }
-    ],
-    "effects": [
-        { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 }
-    ]
+  "id": "lectern_ornate",
+  "name": "Ornate Lectern",
+  "categories": ["religious", "furniture", "luxury"],
+  "hasInventory": false,
+  "constructionCost": [
+    { "materialId": "oak_plank", "quantity": 6 },
+    { "materialId": "nails", "quantity": 4 },
+    { "materialId": "glass_pane", "quantity": 1 }
+  ],
+  "effects": [
+    { "type": "entity.modifier", "modifier": "faith.bonus", "value": 5 }
+  ]
 }
 ```
 
@@ -91,16 +91,16 @@ Schemas are defined in `src/schemas/` using **Zod**. Each schema is the single s
 
 ```json
 {
-    "id": "scriptorium",
-    "name": "Scriptorium",
-    "requiresRoom": true,
-    "minTiles": 6,
-    "furnitureRequirements": [
-        { "furnitureId": "bookcase", "count": 1 },
-        { "furnitureId": "lectern", "count": 1 }
-    ],
-    "effects": [{ "type": "activity.unlock", "activityId": "scholarship" }],
-    "professionAffinity": "preaching"
+  "id": "scriptorium",
+  "name": "Scriptorium",
+  "requiresRoom": true,
+  "minTiles": 6,
+  "furnitureRequirements": [
+    { "furnitureId": "bookcase", "count": 1 },
+    { "furnitureId": "lectern", "count": 1 }
+  ],
+  "effects": [{ "type": "activity.unlock", "activityId": "scholarship" }],
+  "professionAffinity": "preaching"
 }
 ```
 
@@ -112,20 +112,20 @@ Schemas are defined in `src/schemas/` using **Zod**. Each schema is the single s
 
 ```json
 {
-    "id": "apothecary",
-    "name": "Apothecary",
-    "entityType": "humanoid",
-    "startingSkills": [
-        { "skillId": "herbalism", "level": 25 },
-        { "skillId": "cooking", "level": 15 }
-    ],
-    "traitSlots": 2,
-    "defaultEquipment": [
-        { "materialId": "herbs", "quantity": 5 },
-        { "materialId": "peasant_clothing" }
-    ],
-    "behaviorTree": "daily_routine",
-    "sellsItems": true
+  "id": "apothecary",
+  "name": "Apothecary",
+  "entityType": "humanoid",
+  "startingSkills": [
+    { "skillId": "herbalism", "level": 25 },
+    { "skillId": "cooking", "level": 15 }
+  ],
+  "traitSlots": 2,
+  "defaultEquipment": [
+    { "materialId": "herbs", "quantity": 5 },
+    { "materialId": "peasant_clothing" }
+  ],
+  "behaviorTree": "daily_routine",
+  "sellsItems": true
 }
 ```
 

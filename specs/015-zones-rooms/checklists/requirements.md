@@ -32,6 +32,6 @@
 ## Notes
 
 - All 2 clarification questions resolved (2026-05-02):
-    - Q1: Doors always enclose regardless of open/closed state; only a missing door entity breaks enclosure
-    - Q2: Hybrid effect schema — activity unlocks are named references, entity modifiers are declarative values
+  - Q1: Doors always enclose regardless of open/closed state; only a missing door entity breaks enclosure
+  - Q2: Hybrid effect schema — activity unlocks are named references, entity modifiers are declarative values
 - Spec is ready for `/speckit.clarify` or `/speckit.plan`
