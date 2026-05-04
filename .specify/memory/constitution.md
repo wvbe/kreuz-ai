@@ -25,7 +25,7 @@ Game systems—Citizens, Jobs, Economy, Factions, Politics, Research, Trading—
 ## Architectural Constraints
 
 - **Browser Integration**: The HTML/DOM browser layer is a view-only consumer of game state. State flows from engine → browser; browser input becomes commands fed into the engine.
-- **Testability Mandate**: Every game system must be unit-testable in isolation; the entire game must be integration-testable with no external dependencies (no network, no timers, no browser APIs).
+- **Testability Mandate**: Every game system must be unit-testable in isolation; the entire game must be integration-testable with no external dependencies (no network, no timers, no browser APIs). All tests must contain minimal abstraction, minimal harnassing.
 - **Seed-Based Randomness**: All randomness must derive from a single project seed, ensuring identical play-throughs are reproducible.
 - **State Transparency**: Game state must be inspectable, queryable, and loggable at any point; opaque or hidden state is prohibited.
 

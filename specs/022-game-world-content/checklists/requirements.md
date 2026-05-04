@@ -33,9 +33,9 @@
 
 - All checklist items pass. Spec is ready for `/speckit.plan`.
 - Informed defaults used for all potentially ambiguous areas — documented in Assumptions section:
-  - Currency: Silver Penny (historical denarius)
-  - Religion: Christian variants only in initial catalog (open set for expansion)
-  - No magic/supernatural; grounded historical realism
-  - Animal breeding and seasonal cycles out of scope for this spec
-  - Numeric values are representative starting points; all are designer-tunable game data
+    - Currency: Silver Penny (historical denarius)
+    - Religion: Christian variants only in initial catalog (open set for expansion)
+    - No magic/supernatural; grounded historical realism
+    - Animal breeding and seasonal cycles out of scope for this spec
+    - Numeric values are representative starting points; all are designer-tunable game data
 - Cross-references validated against existing specs 002-021 — all material IDs, skill IDs, zone types, furniture types, and faction types are internally consistent.

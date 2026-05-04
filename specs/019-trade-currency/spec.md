@@ -77,8 +77,8 @@ When a seller receives a TradeOffer, it evaluates whether to accept or counter-o
 2. **Given** the same Seller, **When** a Buyer offers 9 currency for 2 Food (< 11), **Then** the Seller emits `trade.offer.countered` with a minimum acceptable offer of 11 currency.
 3. **Given** a Seller with `priceMultiplier: 1.5` and the same base price and margin, **When** a Buyer offers 11 currency for 2 Food (threshold is now 5 × 1.5 × 2 × 1.1 = 16.5), **Then** the Seller counter-offers at 17 currency (rounded up).
 4. **Given** a Seller receives a barter offer (3 Stone for 2 Food), **When** the Seller evaluates the offer, **Then** the Seller looks up Stone's global base price, applies the same `priceMultiplier` and `minimumMarginRate`, and accepts or counters accordingly.
-4. **Given** a Seller has already accepted a trade offer and reserved the goods, **When** a second Buyer offers more, **Then** the Seller honours the first accepted offer; the goods are not re-offered until the first trade completes or is cancelled.
-5. **Given** a Seller's inventory has only 1 Food remaining but a Buyer requests 2, **When** the Seller evaluates the offer, **Then** the Seller either counter-offers for 1 unit or rejects if the partial quantity does not meet its threshold.
+5. **Given** a Seller has already accepted a trade offer and reserved the goods, **When** a second Buyer offers more, **Then** the Seller honours the first accepted offer; the goods are not re-offered until the first trade completes or is cancelled.
+6. **Given** a Seller's inventory has only 1 Food remaining but a Buyer requests 2, **When** the Seller evaluates the offer, **Then** the Seller either counter-offers for 1 unit or rejects if the partial quantity does not meet its threshold.
 
 ---
 
