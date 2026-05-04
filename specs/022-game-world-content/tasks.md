@@ -11,11 +11,11 @@
 
 **Purpose**: Create the TypeScript project from scratch with all tooling configured.
 
-- [ ] T001 Create `package.json` with type=module, runtime dep=zod, dev deps=typescript+vitest+zod-to-json-schema in `package.json`
-- [ ] T002 Create `tsconfig.json` with strict=true, resolveJsonModule=true, target=ES2022, module=NodeNext in `tsconfig.json`
-- [ ] T003 Create `vitest.config.ts` with minimal configuration in `vitest.config.ts`
-- [ ] T004 Install all dependencies via `npm install`
-- [ ] T005 [P] Create directory structure: `src/engine/`, `src/registries/`, `src/schemas/`, `src/data/`, `test/`
+- [x] T001 Create `package.json` with type=module, runtime dep=zod, dev deps=typescript+vitest+zod-to-json-schema in `package.json`
+- [x] T002 Create `tsconfig.json` with strict=true, resolveJsonModule=true, target=ES2022, module=NodeNext in `tsconfig.json`
+- [x] T003 Create `vitest.config.ts` with minimal configuration in `vitest.config.ts`
+- [x] T004 Install all dependencies via `npm install`
+- [x] T005 [P] Create directory structure: `src/engine/`, `src/registries/`, `src/schemas/`, `src/data/`, `test/`
 
 **🚧 QUALITY GATE 1**: `npx tsc --noEmit` succeeds with zero errors. `npx vitest run` executes (even if no tests exist yet).
 
@@ -27,25 +27,25 @@
 
 ### Engine Infrastructure
 
-- [ ] T006 Implement generic `Registry<T>` class with get/tryGet/has/getAll/filter/size and Object.freeze in `src/engine/Registry.ts`
-- [ ] T007 Implement `ContentLoader` orchestrator with loadAllContent() and cross-validation in `src/engine/ContentLoader.ts`
-- [ ] T008 [P] Write Registry unit test verifying register, get, has, freeze, duplicate rejection in `test/registries/Registry.test.ts`
+- [x] T006 Implement generic `Registry<T>` class with get/tryGet/has/getAll/filter/size and Object.freeze in `src/engine/Registry.ts`
+- [x] T007 Implement `ContentLoader` orchestrator with loadAllContent() and cross-validation in `src/engine/ContentLoader.ts`
+- [x] T008 [P] Write Registry unit test verifying register, get, has, freeze, duplicate rejection in `test/registries/Registry.test.ts`
 
 ### Zod Schemas (all parallelizable — no inter-dependencies)
 
-- [ ] T009 [P] Define MaterialSchema with all fields, refine for perishTicks constraint in `src/schemas/materials.ts`
-- [ ] T010 [P] Define SkillSchema with growth params, diminishing returns, outcome effects in `src/schemas/skills.ts`
-- [ ] T011 [P] Define NeedSchema with decay rate, critical threshold, satisfaction methods in `src/schemas/needs.ts`
-- [ ] T012 [P] Define TerrainTypeSchema with traversable, buildable, harvestable, clearResult in `src/schemas/terrain.ts`
-- [ ] T013 [P] Define TraitSchema with discriminated union for modifier types (skillAptitude/performance/need) in `src/schemas/traits.ts`
-- [ ] T014 [P] Define FurnitureSchema with constructionCost, inventoryFilter, effects in `src/schemas/furniture.ts`
-- [ ] T015 [P] Define ZoneTypeSchema with furnitureRequirements, effects, professionAffinity in `src/schemas/zones.ts`
-- [ ] T016 [P] Define FactionSchema with membershipCriteria, associatedZones, mechanics in `src/schemas/factions.ts`
-- [ ] T017 [P] Define BehaviorTreeSchema with recursive BehaviorNode, depth validation in `src/schemas/behavior-trees.ts`
-- [ ] T018 [P] Define JobTypeSchema with skillDomain, toolRequired, zoneContext in `src/schemas/jobs.ts`
-- [ ] T019 [P] Define RecipeSchema with inputs, outputs, restrictions, skillExperienceAwarded in `src/schemas/recipes.ts`
-- [ ] T020 [P] Define EntityPrototypeSchema with startingSkills, products, drops, habitat in `src/schemas/entities.ts`
-- [ ] T021 Create schema index re-exporting all schemas and inferred types in `src/schemas/index.ts`
+- [x] T009 [P] Define MaterialSchema with all fields, refine for perishTicks constraint in `src/schemas/materials.ts`
+- [x] T010 [P] Define SkillSchema with growth params, diminishing returns, outcome effects in `src/schemas/skills.ts`
+- [x] T011 [P] Define NeedSchema with decay rate, critical threshold, satisfaction methods in `src/schemas/needs.ts`
+- [x] T012 [P] Define TerrainTypeSchema with traversable, buildable, harvestable, clearResult in `src/schemas/terrain.ts`
+- [x] T013 [P] Define TraitSchema with discriminated union for modifier types (skillAptitude/performance/need) in `src/schemas/traits.ts`
+- [x] T014 [P] Define FurnitureSchema with constructionCost, inventoryFilter, effects in `src/schemas/furniture.ts`
+- [x] T015 [P] Define ZoneTypeSchema with furnitureRequirements, effects, professionAffinity in `src/schemas/zones.ts`
+- [x] T016 [P] Define FactionSchema with membershipCriteria, associatedZones, mechanics in `src/schemas/factions.ts`
+- [x] T017 [P] Define BehaviorTreeSchema with recursive BehaviorNode, depth validation in `src/schemas/behavior-trees.ts`
+- [x] T018 [P] Define JobTypeSchema with skillDomain, toolRequired, zoneContext in `src/schemas/jobs.ts`
+- [x] T019 [P] Define RecipeSchema with inputs, outputs, restrictions, skillExperienceAwarded in `src/schemas/recipes.ts`
+- [x] T020 [P] Define EntityPrototypeSchema with startingSkills, products, drops, habitat in `src/schemas/entities.ts`
+- [x] T021 Create schema index re-exporting all schemas and inferred types in `src/schemas/index.ts`
 
 **🚧 QUALITY GATE 2**: `npx tsc --noEmit` passes. Unit test for Registry passes. Each schema can parse a minimal valid JSON object and reject an invalid one (verified manually or via a simple smoke test in T008).
 
