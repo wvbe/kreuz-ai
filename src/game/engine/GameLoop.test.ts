@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { createGameLoop, registerSystem, tick, tickMultiple } from "./GameLoop.js";
-import { createEntityManager } from "./EntityManager.js";
-import { createEventBus } from "./EventBus.js";
-import { createPrng } from "./Prng.js";
-import type { GameState } from "./GameLoop.js";
+import { createGameLoop, registerSystem, tick, tickMultiple } from "./GameLoop";
+import { createEntityManager } from "./EntityManager";
+import { createEventBus } from "./EventBus";
+import { createPrng } from "./Prng";
+import type { GameState } from "./GameLoop";
 
 function createTestState(): GameState {
   return {

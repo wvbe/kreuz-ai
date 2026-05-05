@@ -2,8 +2,8 @@
  * Inventory system: item storage, stacking, capacity, and transfers.
  */
 
-import type { EntityManager, EntityId } from "../engine/EntityManager.js";
-import { getComponent, addComponent } from "../engine/EntityManager.js";
+import type { EntityManager, EntityId } from "../engine/EntityManager";
+import { getComponent, addComponent } from "../engine/EntityManager";
 
 export type InventoryItem = {
   materialId: string;

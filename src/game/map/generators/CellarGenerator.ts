@@ -3,10 +3,10 @@
  * Creates small square-tile indoor spaces with rooms and connecting doors.
  */
 
-import type { PrngState } from "../../engine/Prng.js";
-import { randomInt } from "../../engine/Prng.js";
-import { createSquareTileMap, addWall, type SquareTileMapData } from "../SquareTileMap.js";
-import { TerrainType } from "../TileMap.js";
+import type { PrngState } from "../../engine/Prng";
+import { randomInt } from "../../engine/Prng";
+import { createSquareTileMap, addWall, type SquareTileMapData } from "../SquareTileMap";
+import { TerrainType } from "../TileMap";
 
 export type CellarConfig = {
   mapId: string;

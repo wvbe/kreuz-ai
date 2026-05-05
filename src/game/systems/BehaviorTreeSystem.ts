@@ -33,6 +33,7 @@ export function createSequence(name: string, children: BehaviorNode[]): Behavior
     name,
     children,
     execute(context: BehaviorContext): NodeStatus {
+      console.log(`Executing sequence '${name}' at child index ${currentChild}`);
       while (currentChild < children.length) {
         const status = children[currentChild]!.execute(context);
         if (status === NodeStatus.Running) return NodeStatus.Running;

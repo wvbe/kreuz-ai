@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { createGame, tickGame, dispatchCommand, subscribeToState, saveGame, defaultGameConfig } from "./GameEngine.js";
-import { getEntitiesWithComponent } from "./EntityManager.js";
-import { getEntitiesByTag } from "./EntityManager.js";
+import { createGame, tickGame, dispatchCommand, subscribeToState, saveGame, defaultGameConfig } from "./GameEngine";
+import { getEntitiesWithComponent } from "./EntityManager";
+import { getEntitiesByTag } from "./EntityManager";
 
 describe("GameEngine", () => {
   it("creates a new game with default config", () => {

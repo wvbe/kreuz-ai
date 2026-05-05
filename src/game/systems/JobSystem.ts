@@ -2,8 +2,8 @@
  * Job system: job boards, claiming, priority scoring, and work progress.
  */
 
-import type { EntityManager, EntityId } from "../engine/EntityManager.js";
-import { getComponent, getEntitiesWithComponent } from "../engine/EntityManager.js";
+import type { EntityManager, EntityId } from "../engine/EntityManager";
+import { getComponent, getEntitiesWithComponent } from "../engine/EntityManager";
 
 export enum JobStatus {
   Posted = "posted",

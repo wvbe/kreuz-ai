@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { createColonistNeeds, satisfyNeed, getMostUrgentNeed, hasCriticalNeed, updateNeeds } from "./NeedSystem.js";
-import { createEntityManager, createEntity, addComponent } from "../engine/EntityManager.js";
-import { createEventBus } from "../engine/EventBus.js";
-import { createPrng } from "../engine/Prng.js";
-import type { GameState } from "../engine/GameLoop.js";
+import { createColonistNeeds, satisfyNeed, getMostUrgentNeed, hasCriticalNeed, updateNeeds } from "./NeedSystem";
+import { createEntityManager, createEntity, addComponent } from "../engine/EntityManager";
+import { createEventBus } from "../engine/EventBus";
+import { createPrng } from "../engine/Prng";
+import type { GameState } from "../engine/GameLoop";
 
 describe("NeedSystem", () => {
   it("creates colonist needs with proper defaults", () => {

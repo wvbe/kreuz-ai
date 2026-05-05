@@ -2,8 +2,8 @@
  * Construction system: build queue, placement validation, material consumption, progress.
  */
 
-import type { EntityManager, EntityId } from "../engine/EntityManager.js";
-import { hasEnough, removeItem } from "./InventorySystem.js";
+import type { EntityManager, EntityId } from "../engine/EntityManager";
+import { hasEnough, removeItem } from "./InventorySystem";
 
 export enum ConstructionStatus {
   Queued = "queued",

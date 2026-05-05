@@ -7,8 +7,8 @@ import {
   createWait,
   tickBehaviorTree,
   NodeStatus,
-} from "./BehaviorTreeSystem.js";
-import type { BehaviorContext, BehaviorTreeComponent } from "./BehaviorTreeSystem.js";
+} from "./BehaviorTreeSystem";
+import type { BehaviorContext, BehaviorTreeComponent } from "./BehaviorTreeSystem";
 
 function createContext(tick: number = 0): BehaviorContext {
   return { entityId: 1, tick, blackboard: new Map() };

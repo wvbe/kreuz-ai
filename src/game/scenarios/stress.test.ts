@@ -2,8 +2,8 @@
  * Stress scenario: 50 entities, all systems active, verify no state corruption over 1000 ticks.
  */
 import { describe, it, expect } from "vitest";
-import { createGame, tickGame, saveGame, type GameConfig } from "../engine/GameEngine.js";
-import { getEntitiesByTag, getEntitiesWithComponent, getComponent } from "../engine/EntityManager.js";
+import { createGame, tickGame, saveGame, type GameConfig } from "../engine/GameEngine";
+import { getEntitiesByTag, getEntitiesWithComponent, getComponent } from "../engine/EntityManager";
 
 const STRESS_CONFIG: GameConfig = {
   seed: 99999,

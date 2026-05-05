@@ -3,7 +3,7 @@
  * Creates a complete set of registries from inline data (no external JSON files needed for now).
  */
 
-import { createRegistry, registerEntry, type Registry, type ContentEntry } from "./Registry.js";
+import { createRegistry, registerEntry, type Registry, type ContentEntry } from "./Registry";
 
 export type MaterialEntry = ContentEntry & {
   category: string;

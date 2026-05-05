@@ -7,7 +7,7 @@ import {
   enqueue,
   flush,
   matchesPattern,
-} from "./EventBus.js";
+} from "./EventBus";
 
 describe("EventBus", () => {
   it("emits events to subscribed handlers", () => {

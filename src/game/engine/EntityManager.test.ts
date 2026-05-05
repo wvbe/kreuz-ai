@@ -13,7 +13,7 @@ import {
   hasTag,
   getEntitiesByTag,
   entityExists,
-} from "./EntityManager.js";
+} from "./EntityManager";
 
 describe("EntityManager", () => {
   it("creates entities with sequential IDs", () => {

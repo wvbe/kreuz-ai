@@ -1,6 +1,20 @@
-import React, { createContext, useContext, useRef, useState, useCallback, useEffect, type ReactNode } from "react";
-import { createGame, tickGame, dispatchCommand, subscribeToState, type GameInstance } from "@game/engine/GameEngine.js";
-import type { GameState } from "@game/engine/GameLoop.js";
+import React, {
+  createContext,
+  useContext,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  type ReactNode,
+} from "react";
+import {
+  createGame,
+  tickGame,
+  dispatchCommand,
+  subscribeToState,
+  type GameInstance,
+} from "@game/engine/GameEngine";
+import type { GameState } from "@game/engine/GameLoop";
 
 type GameContextType = {
   instance: GameInstance;
@@ -25,7 +39,13 @@ export function GameProvider({ children, seed }: { children: ReactNode; seed?: n
   const [speed, setSpeedState] = useState(1);
 
   if (!instanceRef.current) {
-    instanceRef.current = createGame({ seed: seed ?? 42, mapCellCount: 600, mapWidth: 200, mapHeight: 200, initialColonists: 12 });
+    instanceRef.current = createGame({
+      seed: seed ?? 42,
+      mapCellCount: 600,
+      mapWidth: 20,
+      mapHeight: 20,
+      initialColonists: 12,
+    });
   }
 
   const instance = instanceRef.current;
@@ -39,9 +59,12 @@ export function GameProvider({ children, seed }: { children: ReactNode; seed?: n
 
   useEffect(() => {
     if (paused) return;
-    const interval = setInterval(() => {
-      tickGame(instance);
-    }, Math.max(16, 1000 / (speed * 10)));
+    const interval = setInterval(
+      () => {
+        tickGame(instance);
+      },
+      Math.max(16, 1000 / (speed * 10)),
+    );
     return () => clearInterval(interval);
   }, [instance, paused, speed]);
 

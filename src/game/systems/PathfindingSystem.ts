@@ -3,7 +3,7 @@
  * Works with both voronoi and square-tile maps using their adjacency data.
  */
 
-import type { TileMap, Cell } from "../map/TileMap.js";
+import type { TileMap, Cell } from "../map/TileMap";
 
 export type PathResult = {
   path: number[];
@@ -16,6 +16,7 @@ export type PathResult = {
  * Returns empty path if target is unreachable.
  */
 export function findPath(map: TileMap, startCellId: number, goalCellId: number): PathResult {
+  console.log("Finding path");
   if (startCellId === goalCellId) {
     return { path: [startCellId], cost: 0, found: true };
   }
@@ -62,7 +63,8 @@ export function findPath(map: TileMap, startCellId: number, goalCellId: number):
       const neighborCell = map.cells[neighborId];
       if (!neighborCell || !neighborCell.walkable) continue;
 
-      const tentativeG = (gScore.get(current) ?? Infinity) + movementCost(currentCell, neighborCell);
+      const tentativeG =
+        (gScore.get(current) ?? Infinity) + movementCost(currentCell, neighborCell);
 
       if (tentativeG < (gScore.get(neighborId) ?? Infinity)) {
         cameFrom.set(neighborId, current);

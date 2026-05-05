@@ -3,10 +3,10 @@
  * Produces connected cave systems with flood-fill connectivity check.
  */
 
-import type { PrngState } from "../../engine/Prng.js";
-import { nextRandom } from "../../engine/Prng.js";
-import { createSquareTileMap, type SquareTileMapData } from "../SquareTileMap.js";
-import { TerrainType } from "../TileMap.js";
+import type { PrngState } from "../../engine/Prng";
+import { nextRandom } from "../../engine/Prng";
+import { createSquareTileMap, type SquareTileMapData } from "../SquareTileMap";
+import { TerrainType } from "../TileMap";
 
 export type CaveConfig = {
   mapId: string;

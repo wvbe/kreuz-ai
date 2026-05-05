@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { createEntityManager, createEntity, addComponent } from "../engine/EntityManager.js";
-import { addItem, removeItem, transferItem, getItemQuantity, hasEnough, createInventory } from "./InventorySystem.js";
+import { createEntityManager, createEntity, addComponent } from "../engine/EntityManager";
+import { addItem, removeItem, transferItem, getItemQuantity, hasEnough, createInventory } from "./InventorySystem";
 
 describe("InventorySystem", () => {
   function setupEntity(capacity: number) {

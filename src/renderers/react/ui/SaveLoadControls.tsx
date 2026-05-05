@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { useGame } from "../hooks/GameProvider.js";
-import { saveGame } from "@game/engine/GameEngine.js";
+import { useGame } from "../hooks/GameProvider";
+import { saveGame } from "@game/engine/GameEngine";
 
 /**
  * SaveLoadControls: save to file, load from file picker, auto-save interval.

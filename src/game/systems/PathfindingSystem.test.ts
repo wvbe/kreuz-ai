@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { findPath } from "./PathfindingSystem.js";
-import { createSquareTileMap } from "../map/SquareTileMap.js";
-import { createVoronoiTileMap } from "../map/VoronoiTileMap.js";
-import { createPrng } from "../engine/Prng.js";
+import { findPath } from "./PathfindingSystem";
+import { createSquareTileMap } from "../map/SquareTileMap";
+import { createVoronoiTileMap } from "../map/VoronoiTileMap";
+import { createPrng } from "../engine/Prng";
 
 describe("PathfindingSystem", () => {
   it("finds shortest path on a square grid", () => {

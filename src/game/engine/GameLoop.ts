@@ -3,9 +3,9 @@
  * Calls registered systems in order each tick.
  */
 
-import type { EntityManager } from "./EntityManager.js";
-import type { EventBusState } from "./EventBus.js";
-import type { PrngState } from "./Prng.js";
+import type { EntityManager } from "./EntityManager";
+import type { EventBusState } from "./EventBus";
+import type { PrngState } from "./Prng";
 
 export type GameState = {
   tick: number;

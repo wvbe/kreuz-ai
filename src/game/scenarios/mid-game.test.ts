@@ -2,9 +2,9 @@
  * Mid-game scenario: 30 colonists, multiple zones, active trade, faction tensions.
  */
 import { describe, it, expect } from "vitest";
-import { createGame, tickGame, dispatchCommand, type GameConfig } from "../engine/GameEngine.js";
-import { getEntitiesByTag, getComponent } from "../engine/EntityManager.js";
-import { createZone } from "../systems/ZoneSystem.js";
+import { createGame, tickGame, dispatchCommand, type GameConfig } from "../engine/GameEngine";
+import { getEntitiesByTag, getComponent } from "../engine/EntityManager";
+import { createZone } from "../systems/ZoneSystem";
 
 const MID_GAME_CONFIG: GameConfig = {
   seed: 54321,

@@ -1,9 +1,9 @@
 import React from "react";
-import { useGame } from "../hooks/GameProvider.js";
-import { getComponent, hasTag, getEntitiesByTag } from "@game/engine/EntityManager.js";
-import type { NeedsComponent } from "@game/systems/NeedSystem.js";
-import type { SkillsComponent } from "@game/systems/SkillSystem.js";
-import type { InventoryComponent } from "@game/systems/InventorySystem.js";
+import { useGame } from "../hooks/GameProvider";
+import { getComponent, hasTag, getEntitiesByTag } from "@game/engine/EntityManager";
+import type { NeedsComponent } from "@game/systems/NeedSystem";
+import type { SkillsComponent } from "@game/systems/SkillSystem";
+import type { InventoryComponent } from "@game/systems/InventorySystem";
 
 type InspectionPanelProps = {
   entityId: number | null;

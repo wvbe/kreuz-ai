@@ -3,26 +3,26 @@
  * Provides create, load, tick, dispatch, and subscribe operations.
  */
 
-import { createPrng, randomInt, pickRandom, type PrngState } from "./Prng.js";
-import { createEntityManager, createEntity, addComponent, addTag, type EntityManager, type EntityId } from "./EntityManager.js";
-import { createEventBus, emit, subscribe as busSubscribe, flush, type EventBusState, type GameEvent, type EventHandler } from "./EventBus.js";
-import { createGameLoop, registerSystem, tick as gameTick, type GameState, type GameLoopState } from "./GameLoop.js";
-import { loadAllContent, type ContentRegistries } from "../content/ContentLoader.js";
-import { generateOutdoorMap } from "../map/generators/VoronoiOutdoorGenerator.js";
-import { generateVillageLayout, type VillageLayout } from "../map/generators/VillageLayoutGenerator.js";
-import { generateCave } from "../map/generators/CaveGenerator.js";
-import { type TileMap, TerrainType } from "../map/TileMap.js";
-import { createMapRegistry, addMapLink, type MapRegistry } from "../map/MapLink.js";
-import { updateNeeds, createColonistNeeds } from "../systems/NeedSystem.js";
-import { createSkillsComponent } from "../systems/SkillSystem.js";
-import { createInventory } from "../systems/InventorySystem.js";
-import { createJobBoard, type JobBoardComponent } from "../systems/JobSystem.js";
-import { createFactionSystem, createFaction, joinFaction, type FactionSystem } from "../systems/FactionSystem.js";
-import { createZoneSystem, createZone, type ZoneSystem } from "../systems/ZoneSystem.js";
-import { createTradeSystem, type TradeSystem } from "../systems/TradeSystem.js";
-import { createConstructionSystem, type ConstructionSystem } from "../systems/ConstructionSystem.js";
-import { createStockpileSystem, type StockpileSystem } from "../systems/StockpileSystem.js";
-import { saveToJson, loadFromJson } from "./SaveManager.js";
+import { createPrng, randomInt, pickRandom, type PrngState } from "./Prng";
+import { createEntityManager, createEntity, addComponent, addTag, type EntityManager, type EntityId } from "./EntityManager";
+import { createEventBus, emit, subscribe as busSubscribe, flush, type EventBusState, type GameEvent, type EventHandler } from "./EventBus";
+import { createGameLoop, registerSystem, tick as gameTick, type GameState, type GameLoopState } from "./GameLoop";
+import { loadAllContent, type ContentRegistries } from "../content/ContentLoader";
+import { generateOutdoorMap } from "../map/generators/VoronoiOutdoorGenerator";
+import { generateVillageLayout, type VillageLayout } from "../map/generators/VillageLayoutGenerator";
+import { generateCave } from "../map/generators/CaveGenerator";
+import { type TileMap, TerrainType } from "../map/TileMap";
+import { createMapRegistry, addMapLink, type MapRegistry } from "../map/MapLink";
+import { updateNeeds, createColonistNeeds } from "../systems/NeedSystem";
+import { createSkillsComponent } from "../systems/SkillSystem";
+import { createInventory } from "../systems/InventorySystem";
+import { createJobBoard, type JobBoardComponent } from "../systems/JobSystem";
+import { createFactionSystem, createFaction, joinFaction, type FactionSystem } from "../systems/FactionSystem";
+import { createZoneSystem, createZone, type ZoneSystem } from "../systems/ZoneSystem";
+import { createTradeSystem, type TradeSystem } from "../systems/TradeSystem";
+import { createConstructionSystem, type ConstructionSystem } from "../systems/ConstructionSystem";
+import { createStockpileSystem, type StockpileSystem } from "../systems/StockpileSystem";
+import { saveToJson, loadFromJson } from "./SaveManager";
 
 export type GameInstance = {
   state: GameState;

@@ -3,8 +3,8 @@
  * Used as a post-processing step after map generation.
  */
 
-import type { TileMap } from "../TileMap.js";
-import { TerrainType } from "../TileMap.js";
+import type { TileMap } from "../TileMap";
+import { TerrainType } from "../TileMap";
 
 export type BiomeConfig = {
   elevationThresholds: { water: number; mountain: number };

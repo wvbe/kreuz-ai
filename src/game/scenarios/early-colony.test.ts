@@ -2,9 +2,9 @@
  * Early colony scenario: 10 colonists, basic production chains, verify replay determinism.
  */
 import { describe, it, expect } from "vitest";
-import { createGame, tickGame, saveGame, type GameInstance, type GameConfig } from "../engine/GameEngine.js";
-import { getEntitiesByTag } from "../engine/EntityManager.js";
-import { getComponent } from "../engine/EntityManager.js";
+import { createGame, tickGame, saveGame, type GameInstance, type GameConfig } from "../engine/GameEngine";
+import { getEntitiesByTag } from "../engine/EntityManager";
+import { getComponent } from "../engine/EntityManager";
 
 const SCENARIO_CONFIG: GameConfig = {
   seed: 12345,

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useGame } from "../hooks/GameProvider.js";
+import { useGame } from "../hooks/GameProvider";
 
 type ZoneDrawerProps = {
   onClose: () => void;

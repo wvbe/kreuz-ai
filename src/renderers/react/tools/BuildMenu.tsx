@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { useGame } from "../hooks/GameProvider.js";
-import { type TileMap, TerrainType, type Cell } from "@game/map/TileMap.js";
+import { useGame } from "../hooks/GameProvider";
+import { type TileMap, TerrainType, type Cell } from "@game/map/TileMap";
 
 type BuildMenuProps = {
   onClose: () => void;

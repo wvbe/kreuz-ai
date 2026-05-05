@@ -2,8 +2,8 @@
  * Need system: need decay per tick, satisfaction, and urgency thresholds.
  */
 
-import type { GameState } from "../engine/GameLoop.js";
-import { getEntitiesWithComponent, getComponent } from "../engine/EntityManager.js";
+import type { GameState } from "../engine/GameLoop";
+import { getEntitiesWithComponent, getComponent } from "../engine/EntityManager";
 
 export type Need = {
   needId: string;

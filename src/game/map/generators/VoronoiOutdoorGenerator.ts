@@ -4,11 +4,11 @@
  * Uses Lloyd relaxation for natural cell distribution.
  */
 
-import type { PrngState } from "../../engine/Prng.js";
-import { randomFloat, randomInt } from "../../engine/Prng.js";
-import { createVoronoiTileMap } from "../VoronoiTileMap.js";
-import type { TileMap } from "../TileMap.js";
-import { TerrainType } from "../TileMap.js";
+import type { PrngState } from "../../engine/Prng";
+import { randomFloat, randomInt } from "../../engine/Prng";
+import { createVoronoiTileMap } from "../VoronoiTileMap";
+import type { TileMap } from "../TileMap";
+import { TerrainType } from "../TileMap";
 
 export type OutdoorGeneratorConfig = {
   mapId: string;

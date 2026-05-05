@@ -1,7 +1,7 @@
 import React from "react";
-import { useGame } from "../hooks/GameProvider.js";
-import { GameControls } from "./GameControls.js";
-import { getEntitiesByTag } from "@game/engine/EntityManager.js";
+import { useGame } from "../hooks/GameProvider";
+import { GameControls } from "./GameControls";
+import { getEntitiesByTag } from "@game/engine/EntityManager";
 
 type ToolbarProps = {
   tick: number;

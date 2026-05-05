@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { useGame } from "../hooks/GameProvider.js";
-import { getAllEntries, searchEntries, type ContentEntry } from "@game/content/Registry.js";
-import type { ContentRegistries } from "@game/content/ContentLoader.js";
+import { useGame } from "../hooks/GameProvider";
+import { getAllEntries, searchEntries, type ContentEntry } from "@game/content/Registry";
+import type { ContentRegistries } from "@game/content/ContentLoader";
 
 type ContentBrowserProps = {
   onClose: () => void;

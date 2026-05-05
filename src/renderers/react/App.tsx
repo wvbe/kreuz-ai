@@ -1,14 +1,14 @@
 import React, { useState, useCallback } from "react";
 import { Canvas } from "@react-three/fiber";
-import { GameProvider, useGame } from "./hooks/GameProvider.js";
-import { MapView } from "./map/MapView.js";
-import { InspectionPanel } from "./panels/InspectionPanel.js";
-import { ContentBrowser } from "./panels/ContentBrowser.js";
-import { CommandPanel } from "./panels/CommandPanel.js";
-import { BuildMenu } from "./tools/BuildMenu.js";
-import { ZoneDrawer } from "./tools/ZoneDrawer.js";
-import { Toolbar } from "./ui/Toolbar.js";
-import { SaveLoadControls } from "./ui/SaveLoadControls.js";
+import { GameProvider, useGame } from "./hooks/GameProvider";
+import { MapView } from "./map/MapView";
+import { InspectionPanel } from "./panels/InspectionPanel";
+import { ContentBrowser } from "./panels/ContentBrowser";
+import { CommandPanel } from "./panels/CommandPanel";
+import { BuildMenu } from "./tools/BuildMenu";
+import { ZoneDrawer } from "./tools/ZoneDrawer";
+import { Toolbar } from "./ui/Toolbar";
+import { SaveLoadControls } from "./ui/SaveLoadControls";
 
 type PanelType = "inspection" | "content" | "commands" | "build" | "zones" | null;
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { createEntityManager, createEntity, addComponent, addTag } from "./EntityManager.js";
-import { getEntitiesInCell, getEntitiesInMap, getEntitiesByComponent, getEntitiesByTagQuery, getEntityPosition } from "./EntityQueries.js";
+import { createEntityManager, createEntity, addComponent, addTag } from "./EntityManager";
+import { getEntitiesInCell, getEntitiesInMap, getEntitiesByComponent, getEntitiesByTagQuery, getEntityPosition } from "./EntityQueries";
 
 describe("EntityQueries", () => {
   it("finds entities in a specific cell", () => {

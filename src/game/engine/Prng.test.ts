@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createPrng, nextRandom, randomInt, randomFloat, shuffle, pickRandom } from "./Prng.js";
+import { createPrng, nextRandom, randomInt, randomFloat, shuffle, pickRandom } from "./Prng";
 
 describe("Prng", () => {
   it("produces deterministic sequence for same seed", () => {

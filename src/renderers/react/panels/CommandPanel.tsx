@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useGame } from "../hooks/GameProvider.js";
+import { useGame } from "../hooks/GameProvider";
 
 /**
  * CommandPanel: issue government commands that affect simulation.

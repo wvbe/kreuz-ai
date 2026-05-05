@@ -2,8 +2,8 @@
  * Entity query helpers for spatial and component-based lookups.
  */
 
-import type { EntityManager, EntityId, Component } from "./EntityManager.js";
-import { getComponent, getEntitiesWithComponent, hasTag } from "./EntityManager.js";
+import type { EntityManager, EntityId, Component } from "./EntityManager";
+import { getComponent, getEntitiesWithComponent, hasTag } from "./EntityManager";
 
 /**
  * Gets all entities in a specific cell on a specific map.

@@ -4,9 +4,9 @@
  * Cells are irregular polygons defined by seed points.
  */
 
-import { MapType, TerrainType, type Cell, type TileMap } from "./TileMap.js";
-import type { PrngState } from "../engine/Prng.js";
-import { nextRandom, randomFloat } from "../engine/Prng.js";
+import { MapType, TerrainType, type Cell, type TileMap } from "./TileMap";
+import type { PrngState } from "../engine/Prng";
+import { nextRandom, randomFloat } from "../engine/Prng";
 
 export type VoronoiPoint = {
   x: number;

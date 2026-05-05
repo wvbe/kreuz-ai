@@ -3,11 +3,11 @@
  * Handles Map and Set serialization for round-trip fidelity.
  */
 
-import type { GameState } from "./GameLoop.js";
-import { createEntityManager, addComponent, addTag, createEntity } from "./EntityManager.js";
-import type { EntityManager, EntityId } from "./EntityManager.js";
-import { createEventBus } from "./EventBus.js";
-import type { PrngState } from "./Prng.js";
+import type { GameState } from "./GameLoop";
+import { createEntityManager, addComponent, addTag, createEntity } from "./EntityManager";
+import type { EntityManager, EntityId } from "./EntityManager";
+import { createEventBus } from "./EventBus";
+import type { PrngState } from "./Prng";
 
 export type SaveData = {
   version: number;

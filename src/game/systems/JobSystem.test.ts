@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { createJobBoard, postJob, claimBestJob, workOnJob, cancelJob, getPendingJobs, cleanupJobs, JobStatus } from "./JobSystem.js";
-import type { Job } from "./JobSystem.js";
+import { createJobBoard, postJob, claimBestJob, workOnJob, cancelJob, getPendingJobs, cleanupJobs, JobStatus } from "./JobSystem";
+import type { Job } from "./JobSystem";
 
 describe("JobSystem", () => {
   function createTestJob(overrides: Partial<Job> = {}): Job {

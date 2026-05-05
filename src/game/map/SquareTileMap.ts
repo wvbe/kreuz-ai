@@ -3,7 +3,7 @@
  * Grid-based map with 4-connected adjacency and wall edge support.
  */
 
-import { MapType, TerrainType, type Cell, type TileMap } from "./TileMap.js";
+import { MapType, TerrainType, type Cell, type TileMap } from "./TileMap";
 
 export type WallEdge = {
   cellA: number;

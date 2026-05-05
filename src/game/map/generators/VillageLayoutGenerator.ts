@@ -3,10 +3,10 @@
  * Places roads, zone seeds, and initial structures on a voronoi map.
  */
 
-import type { TileMap } from "../TileMap.js";
-import { TerrainType } from "../TileMap.js";
-import type { PrngState } from "../../engine/Prng.js";
-import { randomInt, pickRandom, shuffle } from "../../engine/Prng.js";
+import type { TileMap } from "../TileMap";
+import { TerrainType } from "../TileMap";
+import type { PrngState } from "../../engine/Prng";
+import { randomInt, pickRandom, shuffle } from "../../engine/Prng";
 
 export type VillageZone = {
   cellId: number;

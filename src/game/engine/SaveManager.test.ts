@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { serialize, deserialize, saveToJson, loadFromJson } from "./SaveManager.js";
-import { createEntityManager, createEntity, addComponent, addTag, getComponent, hasTag } from "./EntityManager.js";
-import { createEventBus } from "./EventBus.js";
-import { createPrng } from "./Prng.js";
-import type { GameState } from "./GameLoop.js";
+import { serialize, deserialize, saveToJson, loadFromJson } from "./SaveManager";
+import { createEntityManager, createEntity, addComponent, addTag, getComponent, hasTag } from "./EntityManager";
+import { createEventBus } from "./EventBus";
+import { createPrng } from "./Prng";
+import type { GameState } from "./GameLoop";
 
 function createTestState(): GameState {
   const entities = createEntityManager();

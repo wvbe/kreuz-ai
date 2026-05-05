@@ -2,11 +2,11 @@
  * Production system: recipe execution, input consumption, output production.
  */
 
-import type { EntityManager, EntityId } from "../engine/EntityManager.js";
-import { addItem, removeItem, hasEnough } from "./InventorySystem.js";
-import { getSkillLevel } from "./SkillSystem.js";
-import type { SkillsComponent } from "./SkillSystem.js";
-import { getComponent } from "../engine/EntityManager.js";
+import type { EntityManager, EntityId } from "../engine/EntityManager";
+import { addItem, removeItem, hasEnough } from "./InventorySystem";
+import { getSkillLevel } from "./SkillSystem";
+import type { SkillsComponent } from "./SkillSystem";
+import { getComponent } from "../engine/EntityManager";
 
 export type RecipeInput = {
   materialId: string;
