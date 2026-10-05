@@ -1,0 +1,320 @@
+{
+  "name": "living-world",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assertHash": {
+        "label": "day1"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 576
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 3
+        },
+        "path": "needs.2.needId",
+        "op": "eq",
+        "value": "hunger"
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 3
+        },
+        "path": "needs.2.valueMilli",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 3
+        },
+        "path": "healthMilli",
+        "op": "eq",
+        "value": 100000
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 3
+        },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 4
+        },
+        "path": "needs.2.needId",
+        "op": "eq",
+        "value": "hunger"
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 4
+        },
+        "path": "needs.2.valueMilli",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 4
+        },
+        "path": "healthMilli",
+        "op": "eq",
+        "value": 100000
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 4
+        },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 5
+        },
+        "path": "needs.2.needId",
+        "op": "eq",
+        "value": "hunger"
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 5
+        },
+        "path": "needs.2.valueMilli",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 5
+        },
+        "path": "healthMilli",
+        "op": "eq",
+        "value": 100000
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 5
+        },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 6
+        },
+        "path": "needs.2.needId",
+        "op": "eq",
+        "value": "hunger"
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 6
+        },
+        "path": "needs.2.valueMilli",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 6
+        },
+        "path": "healthMilli",
+        "op": "eq",
+        "value": 100000
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 6
+        },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 7
+        },
+        "path": "needs.2.needId",
+        "op": "eq",
+        "value": "hunger"
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 7
+        },
+        "path": "needs.2.valueMilli",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 7
+        },
+        "path": "healthMilli",
+        "op": "eq",
+        "value": 100000
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 7
+        },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 8
+        },
+        "path": "needs.2.needId",
+        "op": "eq",
+        "value": "hunger"
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 8
+        },
+        "path": "needs.2.valueMilli",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "needs-of",
+        "args": {
+          "entityId": 8
+        },
+        "path": "healthMilli",
+        "op": "eq",
+        "value": 100000
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 8
+        },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assertHash": {
+        "label": "day2"
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}
