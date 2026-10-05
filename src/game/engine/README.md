@@ -7,5 +7,6 @@ Engine kernel building blocks.
 - `TickPipeline.ts` - the single `tick()` primitive. `TickSlot` pins the 21 canonical slots of DECISIONS section 2 (a test compares the enum to that document); systems register with an explicit `{ id, slot, order }`. Slot 0 skips the tick when paused and flushes `tick.begin`, slot 2 advances `GameTime`, slot 20 drains the bus.
 - `AutoRunner.ts` - optional real-time driver and the only file in `src/game` allowed to use timers (lint override). All timing goes through an injected `Scheduler`; tests use a fake one.
 - `IdCounters.ts` - persisted, never-reused monotonic ID counters (`CounterName` = the root `counters` keys of DECISIONS D-05). IDs start at 1.
+- `fixedPoint.ts` - `FixedUnit`, exact `decimalToFixed` for authored decimals, `fixedPointSchema`, `floorDiv/ceilDiv/truncDiv` (spec 006 FR-014).
 
 Depends on `../time` for the clock. Used by every other folder under `src/game`.
