@@ -33,7 +33,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] **Checkpoint B:** settlers live autonomously, 1k-tick soak deterministic, save/load mid-soak identical
 
 ## Phase 3 — Economy
-- [ ] 3.1 Job boards & claiming, Town Crier (017)
+- [ ] 3.1 Job boards & claiming, Town Crier (017) - parts a (board/posting data, lifecycle, pause), b (claim order, eligibility, wage, executor registry, `fell.trees`) and e (system vs player pause, `claim_job` in `basic_needs`) done, D-46; still open: c (Town Crier fleet delivering postings to user-managed boards), d (job-type content hooks for the other job types)
 - [ ] 3.2 Stockpiles & storage (018)
 - [ ] 3.3 Production & crafting (014)
 - [ ] 3.4 Zones & rooms (015)
