@@ -1,6 +1,6 @@
 # src/game/map
 
-Maps, terrain and the cell-to-entity index (spec 004, DECISIONS D-05, D-21, D-34). Generators (outdoor, village, cave) are task 2.1; this folder only has the structures plus `fill` and `setTerrain`.
+Maps, terrain and the cell-to-entity index (spec 004, DECISIONS D-05, D-21, D-34). The generators live in `../worldgen`; this folder has the structures plus `fill`, `assignTerrain` (silent bulk write for generators) and `setTerrain`.
 
 - `mapTypes.ts` - `GridType` (`square | voronoi`), `BlockReason`, `MoveCostClass` (5/7/10/15/25), `MapGeometry`, `MapParams`, `MapState`, `MapLink`, `MapLocation`, and the world constants (`voronoiWorldSize` 65536, `squareTilePitch` 1000).
 - `TerrainRegistry.ts` - per-engine terrain definitions `{ id, moveCost, passable, blockReason }` fed by the content pack (task 1.7); `terrainDefinitionSchema` is the Zod schema the loader reuses. Impassable terrain names `water` or `impassable_cliff`.

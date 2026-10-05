@@ -22,7 +22,6 @@ import type { DecayModifiers } from "../inventory/inventoryTypes";
 import type { MaterialRegistry } from "../inventory/MaterialRegistry";
 import { MapError, MapErrorKind } from "../map/MapError";
 import { MapRegistry } from "../map/MapRegistry";
-import { GridType } from "../map/mapTypes";
 import type { MapState } from "../map/mapTypes";
 import { positionComponent } from "../map/positionComponent";
 import { Difficulty, initOptionsSchema } from "../save/initOptions";
@@ -38,6 +37,7 @@ import { TaskHandlerRegistry } from "../task/TaskHandlerRegistry";
 import { TaskSystem } from "../task/TaskSystem";
 import { taskQueueComponent } from "../task/taskQueueComponent";
 import { GameTime, hourOfDay } from "../time/GameTime";
+import { generateWorld } from "../worldgen/generateWorld";
 import { EventBus } from "./EventBus";
 import type { EventBusErrorReport, EventBusErrorSink, JsonValue } from "./EventBus";
 import { GameEngineError, GameEngineErrorKind } from "./GameEngineError";
@@ -641,25 +641,7 @@ export class GameEngine {
         if (mode !== InitMode.NewGame || options.mapSize === null) {
           return;
         }
-        const terrainId = engine.content.terrain
-          .ids()
-          .find((id) => engine.content.terrain.require(id).passable);
-        if (terrainId === undefined) {
-          throw new ContentValidationError([
-            {
-              file: ContentFile.Terrain,
-              id: null,
-              field: "passable",
-              message: "a starting map needs at least one passable terrain",
-            },
-          ]);
-        }
-        engine.maps.createMap({
-          gridType: GridType.Voronoi,
-          terrainId,
-          size: options.mapSize,
-          seed: options.seed,
-        });
+        generateWorld(engine, options.mapSize, options.seed);
       },
     });
   }

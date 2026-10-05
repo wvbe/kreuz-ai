@@ -92,8 +92,9 @@ describe("engine determinism (spec 007, Constitution I)", () => {
 
   it("really simulates something: entities moved, tasks ran, bread decayed", () => {
     const engine = run(31, totalTicks);
-    expect(engine.getEntities()).toHaveLength(7);
-    const first = engine.getEntity(2);
+    // 1 government + job board + 6 generated settlers (task 2.1) + 6 demo peasants.
+    expect(engine.getEntities()).toHaveLength(14);
+    const first = engine.getEntity(9);
     expect(first?.components["Position"]?.["cellIndex"]).toBeDefined();
     const bread = (first?.components["Inventory"]?.["slots"] as { remainingMilli: number }[])[0];
     expect(bread?.remainingMilli).toBeLessThan(864_000);

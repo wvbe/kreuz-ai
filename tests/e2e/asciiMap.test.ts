@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { GameSession } from "../../src/game/api/GameSession";
+import { MapSize } from "../../src/game/map/mapSize";
 import { GridType } from "../../src/game/map/mapTypes";
 import { collectEntityMarkers } from "../../src/renderers/cli/collectEntityMarkers";
 import { renderAsciiMap } from "../../src/renderers/cli/renderAsciiMap";
@@ -34,8 +35,13 @@ function render(session: GameSession, mapId: number): string {
 describe("ASCII map golden files", () => {
   it("renders a seeded Voronoi map", async () => {
     const session = new GameSession();
-    session.newGame({ seed: 42, mapSize: 0 });
-    const map = session.engine.maps.require(1);
+    session.newGame({ seed: 42 });
+    const map = session.engine.maps.createMap({
+      gridType: GridType.Voronoi,
+      terrainId: "grassland",
+      size: MapSize.Small,
+      seed: 42,
+    });
     for (let cell = 0; cell < map.cellCount; cell += 1) {
       const center = map.centroid(cell);
       const band =
@@ -46,6 +52,17 @@ describe("ASCII map golden files", () => {
     const text = render(session, 1);
     expect(text).toBe(render(session, 1));
     await expect(text).toMatchFileSnapshot("./golden/voronoi-seed42-small.txt");
+  });
+
+  it("renders the generated world of seed 42, small, with non-uniform terrain", async () => {
+    const session = new GameSession();
+    session.newGame({ seed: 42, mapSize: MapSize.Small });
+    const text = render(session, 1);
+    expect(text).toBe(render(session, 1));
+    for (const glyph of ["~", ",", "T", "o", "*", "^", "="]) {
+      expect(text).toContain(glyph);
+    }
+    await expect(text).toMatchFileSnapshot("./golden/world-seed42-small.txt");
   });
 
   it("renders a square map", async () => {

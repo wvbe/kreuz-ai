@@ -24,7 +24,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] **Checkpoint A:** `npm run ci` green; CLI new/step/save/load works; determinism e2e passes in-process and via child process
 
 ## Phase 2 — A living world
-- [ ] 2.1 Map generators: outdoor, village, cave/cellar, quick site (004, 009)
+- [x] 2.1 Map generators: outdoor, village, cave/cellar, quick site (004, 009)
 - [x] 2.2 A* pathfinding (012)
 - [ ] 2.3 Skills & traits (020)
 - [ ] 2.4 Needs, mood, utility+BT AI, movement (013)

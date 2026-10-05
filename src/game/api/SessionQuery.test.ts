@@ -39,12 +39,12 @@ describe("SessionQuery", () => {
       startingTier: "hamlet",
     });
     expect(session.query.entities({ prototype: "government_faction" }).total).toBe(1);
-    expect(session.query.entities({ limit: 1, offset: 5 }).entities).toEqual([]);
+    expect(session.query.entities({ limit: 1, offset: 50 }).entities).toEqual([]);
     expect(session.query.entity(1)?.prototype).toBe("government_faction");
     expect(session.query.maps().maps).toHaveLength(1);
     expect(session.query.map(1)?.cellCount).toBe(session.query.map(1)?.terrain.length);
     expect(session.query.cell(1, 0)).toMatchObject({ mapId: 1, cellIndex: 0, occupants: [] });
-    expect(session.query.settlement()).toMatchObject({ tier: "hamlet", population: 0, tick: 2 });
+    expect(session.query.settlement()).toMatchObject({ tier: "hamlet", population: 6, tick: 2 });
     expect(session.query.eventLog(1).events).toHaveLength(1);
     expect(session.query.pendingCommands().commands).toEqual([]);
   });

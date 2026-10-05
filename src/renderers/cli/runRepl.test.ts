@@ -62,7 +62,7 @@ describe("executeReplLine", () => {
     expect(run(context, "inspect 1")).toContain("#1 government_faction");
     expect(run(context, "inspect 99")).toBe("no entity #99");
     expect(run(context, "events 2")).toContain("of");
-    expect(run(context, "entities peasant 5")).toContain("no entities");
+    expect(run(context, "entities government_faction 5")).toContain("#1 government_faction");
   });
 
   it("uses the injected entropy for a seedless new", () => {

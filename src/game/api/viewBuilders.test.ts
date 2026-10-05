@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { loadContent } from "../content/ContentLoader";
 import { GameEngine } from "../engine/GameEngine";
 import { MapSize } from "../map/mapSize";
+import { GridType } from "../map/mapTypes";
 import { ApiError, ApiErrorKind } from "./ApiError";
 import { CommandQueue } from "./CommandQueue";
 import { EventLog } from "./EventLog";
@@ -22,7 +23,13 @@ import {
 
 function createEngine(): GameEngine {
   const engine = new GameEngine(loadContent(), { entropy: () => 1 });
-  engine.newGame({ seed: 5, mapSize: MapSize.Small });
+  engine.newGame({ seed: 5 });
+  engine.maps.createMap({
+    gridType: GridType.Voronoi,
+    terrainId: "grassland",
+    size: MapSize.Small,
+    seed: 5,
+  });
   engine.store.spawn("peasant");
   engine.store.spawn("peasant");
   engine.store.spawn("farmer");

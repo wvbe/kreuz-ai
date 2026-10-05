@@ -10,6 +10,7 @@ import { RelationshipDirection } from "../ecs/RelationshipRegistry";
 import { getTotal } from "../inventory/inventoryQueries";
 import { storeUpTo } from "../inventory/inventoryOperations";
 import { MapSize } from "../map/mapSize";
+import { GridType } from "../map/mapTypes";
 import { Difficulty } from "../save/initOptions";
 import { InvalidSaveFormatError } from "../save/InvalidSaveFormatError";
 import { SaveSectionLocation } from "../save/SaveSectionRegistry";
@@ -312,7 +313,7 @@ describe("GameEngine query facade", () => {
     engine.newGame({ seed: 1, mapSize: MapSize.Small });
     engine.runTicks(300);
     const state = engine.getState();
-    expect(state.entityCount).toBe(1);
+    expect(state.entityCount).toBe(8);
     expect(state.mapCount).toBe(1);
     expect(state.time).toEqual({
       tick: 300,
@@ -546,7 +547,13 @@ describe("GameEngine registerSystem", () => {
 describe("GameEngine built-in systems", () => {
   it("runs the removal slot: deletes entities, frees cells and clears references", () => {
     const engine = createEngine();
-    engine.newGame({ seed: 1, mapSize: MapSize.Small });
+    engine.newGame({ seed: 1 });
+    engine.maps.createMap({
+      gridType: GridType.Voronoi,
+      terrainId: "grassland",
+      size: MapSize.Small,
+      seed: 1,
+    });
     const placed = engine.store.spawn("peasant");
     engine.maps.placeEntity(placed.id, 1, 0);
     const unplaced = engine.store.spawn("peasant");
