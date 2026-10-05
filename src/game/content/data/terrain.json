@@ -69,6 +69,28 @@
     "buildable": false
   },
   {
+    "id": "iron_ore_deposit",
+    "name": "Iron ore deposit",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "iron_ore",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "cave_floor",
+    "name": "Cave floor",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false
+  },
+  {
     "id": "floor_wood",
     "name": "Wooden floor",
     "moveCost": 7,

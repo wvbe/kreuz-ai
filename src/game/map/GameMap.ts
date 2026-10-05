@@ -335,6 +335,29 @@ export class GameMap {
   }
 
   /**
+   * Replaces the terrain of every cell at once without emitting events, for generators that
+   * compute a whole map before it is used (task 2.1). Bumps `revision` once. Later edits use
+   * {@link GameMap.setTerrain}.
+   *
+   * @param terrainIds - One registered terrain id per cell, in cell order.
+   */
+  assignTerrain(terrainIds: readonly string[]): void {
+    if (terrainIds.length !== this.terrainIds.length) {
+      throw new MapError(
+        MapErrorKind.InvalidParams,
+        `map ${this.id} has ${this.terrainIds.length} cells but ${terrainIds.length} terrain ids were given`,
+      );
+    }
+    for (const terrainId of terrainIds) {
+      this.deps.terrain.require(terrainId);
+    }
+    for (let cell = 0; cell < terrainIds.length; cell += 1) {
+      this.terrainIds[cell] = terrainIds[cell] as string;
+    }
+    this.revisionCounter += 1;
+  }
+
+  /**
    * Movement cost of entering a cell (terrain class of DECISIONS D-04).
    *
    * @param cell - Cell index.

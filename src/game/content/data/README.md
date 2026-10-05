@@ -9,7 +9,7 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | File | v0 content | Phase 5 |
 | --- | --- | --- |
 | `categories.json` | 14 item categories | extend with the 022 categories |
-| `terrain.json` | 9 terrain types | 15+ |
+| `terrain.json` | 11 terrain types | 15+ |
 | `materials.json` | 14 materials incl. `silver_penny` | 70+ |
 | `needs.json` | the 6 needs; only hunger (bread) and rest (wooden_bed) have satisfaction methods | all methods |
 | `skills.json` | 8 skills | 20+ |

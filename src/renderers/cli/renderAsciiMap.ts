@@ -17,6 +17,8 @@ export const terrainGlyphs: ReadonlyMap<string, string> = new Map([
   ["stone_deposit", "o"],
   ["mountain", "^"],
   ["rock_wall", "#"],
+  ["iron_ore_deposit", "*"],
+  ["cave_floor", ":"],
   ["floor_wood", "_"],
   ["road_dirt", "="],
 ]);

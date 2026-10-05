@@ -40,7 +40,7 @@ function loadIssues(pack: ContentPackFiles): readonly ContentIssue[] {
 describe("loadContent (vertical-slice pack v0)", () => {
   it("loads without errors and exposes every category", () => {
     const content = loadContent();
-    expect(content.terrain.ids()).toHaveLength(9);
+    expect(content.terrain.ids()).toHaveLength(11);
     expect(content.materials.ids()).toHaveLength(14);
     expect(content.needs.size).toBe(6);
     expect(content.skills.size).toBe(8);

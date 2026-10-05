@@ -140,6 +140,25 @@ describe("GameMap on a square grid", () => {
     expect(() => map.setTerrain(9, "road")).toThrow(MapError);
   });
 
+  it("assigns a whole terrain list silently and validates it", () => {
+    const bus = new EventBus();
+    const events = collect(bus);
+    const map = new GameMap(squareState(2, 2), { terrain, bus });
+    const revision = map.revision;
+    map.assignTerrain(["road", "grass", "marsh", "river"]);
+    expect([0, 1, 2, 3].map((cell) => map.terrainAt(cell))).toEqual([
+      "road",
+      "grass",
+      "marsh",
+      "river",
+    ]);
+    expect(map.revision).toBe(revision + 1);
+    bus.processQueue();
+    expect(events).toEqual([]);
+    expect(() => map.assignTerrain(["road"])).toThrow(MapError);
+    expect(() => map.assignTerrain(["road", "road", "road", "lava"])).toThrow(MapError);
+  });
+
   it("fills every cell silently", () => {
     const bus = new EventBus();
     const events = collect(bus);
