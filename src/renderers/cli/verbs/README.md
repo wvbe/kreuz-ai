@@ -5,6 +5,7 @@ The REPL commands, one file per verb group. A verb is `{name, usage, summary, ru
 - `Verb.ts` - `Verb`, `VerbContext`, `VerbOutput`, `FileIo`, helpers `verbDone`, `verbFailed`, `parseCount`.
 - `kernelVerbs.ts` - `new, step, run-until, pause, resume, speed, status, save, load`.
 - `inspectVerbs.ts` - `map, entities, inspect, events`.
+- `jobVerbs.ts` - `jobs [boardId]` (boards and postings from the `job-boards` and `jobs-on` queries, formatted by `../formatJobs.ts`).
 - `metaVerbs.ts` - `help, quit`.
 - `verbRegistry.ts` - `verbGroups` (the list of groups) and `createVerbRegistry` (flattens, rejects duplicate names).
 

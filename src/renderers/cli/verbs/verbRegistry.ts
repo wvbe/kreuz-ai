@@ -1,4 +1,5 @@
 import { inspectVerbs } from "./inspectVerbs";
+import { jobVerbs } from "./jobVerbs";
 import { kernelVerbs } from "./kernelVerbs";
 import { metaVerbs } from "./metaVerbs";
 import type { Verb } from "./Verb";
@@ -7,7 +8,12 @@ import type { Verb } from "./Verb";
  * Every verb group, in the order `help` lists them. A later phase adds its verbs by creating one
  * `verbs/<group>Verbs.ts` file exporting a `readonly Verb[]` and adding that array here.
  */
-export const verbGroups: readonly (readonly Verb[])[] = [kernelVerbs, inspectVerbs, metaVerbs];
+export const verbGroups: readonly (readonly Verb[])[] = [
+  kernelVerbs,
+  inspectVerbs,
+  jobVerbs,
+  metaVerbs,
+];
 
 /**
  * Flattens the verb groups.

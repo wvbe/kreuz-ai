@@ -24,6 +24,7 @@ Exit codes: 0 ok, 1 a scenario step failed, 2 bad arguments / unreadable or inva
 | `entities [prototype] [limit]` | List entities. |
 | `inspect <id>` | One entity and its components; characters also get a `skills:` and a `traits:` line. |
 | `events [n]` | The last n events (default 20). |
+| `jobs [boardId]` | Every job board (or one) with mode, pause state, open and claimed counts, its postings (`#id jobType status [by #worker] prio wage at cell`) and the last finished ones. |
 | `save <file>`, `load <file>` | Write / read a save file. |
 | `help [verb]`, `quit` | Help and exit. |
 

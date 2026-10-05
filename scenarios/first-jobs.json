@@ -1,0 +1,101 @@
+{
+  "name": "first-jobs",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "jobs-on",
+        "args": {
+          "boardId": 2
+        },
+        "path": "postings.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assertHash": {
+        "label": "day1"
+      }
+    },
+    {
+      "assert": {
+        "query": "jobs-on",
+        "args": {
+          "boardId": 2
+        },
+        "path": "history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "jobs-on",
+        "args": {
+          "boardId": 2
+        },
+        "path": "history.0.status",
+        "op": "eq",
+        "value": "done"
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 4
+        },
+        "path": "components.Inventory.slots.1.materialId",
+        "op": "eq",
+        "value": "oak_log"
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 4
+        },
+        "path": "components.Inventory.slots.1.quantity",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 4
+        },
+        "path": "components.Inventory.slots.2.materialId",
+        "op": "eq",
+        "value": "silver_penny"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}
