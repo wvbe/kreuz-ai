@@ -93,6 +93,7 @@ export class GameMap {
   private readonly terrainIds: string[];
   private readonly obstructions = new Map<number, BlockReason>();
   private readonly outgoing = new Map<number, MapLink>();
+  private revisionCounter = 0;
 
   /**
    * Builds a map from saved or freshly created state, validating everything.
@@ -180,6 +181,17 @@ export class GameMap {
       previous = link.cell;
       this.outgoing.set(link.cell, { ...link });
     }
+  }
+
+  /**
+   * Change counter for derived caches (path cache, task 2.2): increases synchronously on every
+   * change that can alter routing (terrain, obstruction, link, fill). It is not saved, so a
+   * restored map starts again at 0; caches compare the map object as well.
+   *
+   * @returns The revision.
+   */
+  get revision(): number {
+    return this.revisionCounter;
   }
 
   /**
@@ -299,6 +311,7 @@ export class GameMap {
       return false;
     }
     this.terrainIds[cell] = terrainId;
+    this.revisionCounter += 1;
     this.deps.bus?.emit("map.terrain.changed", {
       mapId: this.id,
       cellIndex: cell,
@@ -318,6 +331,7 @@ export class GameMap {
   fill(terrainId: string): void {
     this.deps.terrain.require(terrainId);
     this.terrainIds.fill(terrainId);
+    this.revisionCounter += 1;
   }
 
   /**
@@ -372,6 +386,7 @@ export class GameMap {
     } else {
       this.obstructions.set(cell, reason);
     }
+    this.revisionCounter += 1;
     this.deps.bus?.emit("map.cell.obstruction.changed", {
       mapId: this.id,
       cellIndex: cell,
@@ -406,6 +421,7 @@ export class GameMap {
       );
     }
     this.outgoing.set(link.cell, { ...link });
+    this.revisionCounter += 1;
   }
 
   /**

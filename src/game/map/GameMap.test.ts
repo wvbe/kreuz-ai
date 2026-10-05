@@ -83,6 +83,21 @@ describe("GameMap on a square grid", () => {
     expect(map.inBounds(1.5)).toBe(false);
   });
 
+  it("counts every routing-relevant change in revision, and only real changes", () => {
+    const map = new GameMap(squareState(3, 3), { terrain });
+    expect(map.revision).toBe(0);
+    map.setTerrain(0, "road");
+    map.setTerrain(0, "road");
+    expect(map.revision).toBe(1);
+    map.setObstruction(1, BlockReason.Wall);
+    map.setObstruction(1, BlockReason.Wall);
+    expect(map.revision).toBe(2);
+    map.addLink({ cell: 2, targetMapId: 9, targetCell: 0 });
+    map.fill("grass");
+    expect(map.revision).toBe(4);
+    expect(new GameMap(map.serialize(), { terrain }).revision).toBe(0);
+  });
+
   it("rejects out of bounds cells and coordinates", () => {
     const map = new GameMap(squareState(4, 3), { terrain });
     expect(() => map.neighbors(12)).toThrow(MapError);
