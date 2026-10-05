@@ -37,7 +37,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 3.2 Stockpiles & storage (018) - reservations, `Furniture`/`Stockpile`, tiered routing, `haul.deliver` + poster, stock queries, storage decay, `stock` verb, D-47; zones (tier 0/1, Pantry) wait for 3.4
 - [x] 3.3 Production & crafting (014) - workstation prototypes + `ProductionOrders`, order commands, `craft.produce` (fetch, lock, craft, consume), output hauling, D-10 cancel rules, `explainOrder` for 025, `orders`/`order` verbs, `debugSpawn` + `scenarios/bakery.json`, D-49
 - [x] 3.4 Zones & rooms (015) - `Zone` entities, requirement grammar + status/`zone.*` events (D-11 timing), merge/split commands, skill affinity, storage tiers 0/1 + zone filter, board pausing, `zones`/`zone` verbs + map overlay, D-48
-- [ ] 3.5 Construction (016)
+- [x] 3.5 Construction (016) - `build_site` blueprints, `validatePlacement` with structured reasons, supply (`build.supply`, `Supply` reservations) and build (`build.construct`) jobs on the board, walls/doors that obstruct cells, completion by prototype, cancel/deconstruct with refunds, build definitions for every v0 piece, `build`/`sites` verbs, `scenarios/build-bakery.json`, D-50; tools and `NoQualifiedWorker` not modelled
 - [ ] 3.6 Status explanations & flow (025)
 - [ ] **Checkpoint C (playable in terminal):** scripted e2e farm → bakery → bread eaten; `why` explains every idle citizen
 

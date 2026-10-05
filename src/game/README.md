@@ -22,5 +22,6 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [storage](storage/README.md) - reservations, `Furniture` / `Stockpile`, tiered routing, hauling (`haul.deliver`), stock queries, storage decay.
 - [zones](zones/README.md) - zones and rooms: `Zone`, the furniture requirement grammar, status and `zone.*` events, merge and split, skill affinity, board pausing, zone hooks of storage.
 - [production](production/README.md) - production and crafting: workstations with `ProductionOrders`, order commands, the `craft.produce` job (fetch, lock, craft, consume), output hauling, cancel semantics and blocked-reason reporting for 025.
+- [construction](construction/README.md) - construction (016): blueprints as `build_site` entities, placement validation, supply and build jobs, walls and doors that obstruct cells, cancel and deconstruction.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).
