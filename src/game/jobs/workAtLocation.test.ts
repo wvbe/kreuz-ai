@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { bundledContentFiles, loadContentPack } from "../content/ContentLoader";
+import { ContentFile } from "../content/contentTypes";
 import { BlockReason } from "../map/mapTypes";
 import { requireBoard } from "./jobBoards";
 import { registerJobType, jobTaskData } from "./jobExecutor";
@@ -8,11 +10,29 @@ import { PostingStatus, approachFailedReason, jobTaskPriority } from "./jobTypes
 import { createJobWorld, noAiOverride } from "./testJobWorld";
 import { createWorkAtLocationExecutor } from "./workAtLocation";
 
-// `build.construct` has no built-in executor yet; skill id `construction` (a speed bonus), so the worker's skill speeds it up.
-const jobType = "build.construct";
+// A job type of its own with the skill `construction` (a speed bonus), so the worker's skill speeds
+// it up; the real job types all have executors.
+const jobType = "test.work";
+
+function contentWithTestJob() {
+  const jobs = bundledContentFiles[ContentFile.Jobs];
+  return loadContentPack({
+    ...bundledContentFiles,
+    [ContentFile.Jobs]: [
+      ...(Array.isArray(jobs) ? jobs : []),
+      {
+        id: jobType,
+        name: "Test work",
+        skillId: "construction",
+        zoneContext: { kind: "any" },
+        recurrence: "one-time",
+      },
+    ],
+  });
+}
 
 function setup(targetCell: number, baseTicks = 10) {
-  const world = createJobWorld();
+  const world = createJobWorld({ content: contentWithTestJob() });
   const completions: number[] = [];
   registerJobType(
     world.engine,

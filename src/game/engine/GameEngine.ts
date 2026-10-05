@@ -49,6 +49,7 @@ import { jobsSystemId } from "../jobs/jobTypes";
 import { registerJobs } from "../jobs/registerJobs";
 import { registerStorage } from "../storage/registerStorage";
 import { registerProduction } from "../production/registerProduction";
+import { registerConstruction } from "../construction/registerConstruction";
 import { registerZones } from "../zones/registerZones";
 import { zonesSystemId } from "../zones/zoneTypes";
 import { getStorageService } from "../storage/storageServiceRegistry";
@@ -661,6 +662,7 @@ export class GameEngine {
     registerStorage(this);
     registerZones(this);
     registerProduction(this);
+    registerConstruction(this);
     this.registerSystem({
       id: "world.starting-map",
       dependencies: [

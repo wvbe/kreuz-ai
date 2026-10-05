@@ -219,7 +219,9 @@ describe("room restriction uses active zones", () => {
     world.give(world.chest(91), "flour", 6);
     const cells = world.rect(2, 2, 2, 2);
     const oven = world.station("oven", cells[0] ?? 0);
-    const walls = world.walls(2, 2, 2, 2);
+    // Walls obstruct the cells (task 3.5): the crafter walks in through a door.
+    const walls = world.walls(2, 2, 2, 2, [31]);
+    world.door(31);
     world.designate("bakery", cells);
     world.feed([world.settler(77)]);
     return { world, oven, walls };
@@ -248,7 +250,7 @@ describe("room restriction uses active zones", () => {
     const stalled = crafts();
     world.run(100);
     expect(crafts()).toBe(stalled);
-    world.walls(2, 2, 2, 2);
+    world.wall(21);
     world.run(3);
     expect(explainOrder(world.engine, id).reasons).toEqual([]);
     for (

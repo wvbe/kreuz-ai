@@ -53,17 +53,21 @@ export function isBorderCell(map: GameMap, cell: number): boolean {
  * @returns True when the cell is a wall or a door.
  */
 export function isEnclosingCell(engine: GameEngine, map: GameMap, cell: number): boolean {
-  if (map.blockReason(cell) === BlockReason.Wall) {
-    return true;
-  }
-  return engine.maps.occupants.occupantsOf(map.id, cell).some((id) => {
+  let pendingWall = false;
+  for (const id of engine.maps.occupants.occupantsOf(map.id, cell)) {
     const entity = engine.store.get(id);
-    return (
-      entity !== undefined &&
-      !engine.store.isPendingDelete(id) &&
-      enclosurePrototypeIds.includes(entity.prototype)
-    );
-  });
+    if (entity === undefined) {
+      continue;
+    }
+    if (engine.store.isPendingDelete(id)) {
+      pendingWall = pendingWall || entity.prototype === "wall";
+    } else if (enclosurePrototypeIds.includes(entity.prototype)) {
+      return true;
+    }
+  }
+  // The obstruction of a wall that is deleted this tick is cleared when the deletion is flushed,
+  // after the zones ran: it must not keep the room closed for one more tick.
+  return map.blockReason(cell) === BlockReason.Wall && !pendingWall;
 }
 
 /**
