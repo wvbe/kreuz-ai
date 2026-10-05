@@ -1,8 +1,6 @@
 # Feature Specification: TypeScript Code Style Convention
 
-**Feature Branch**: `023-typescript-code-style`
 **Created**: 2026-05-04
-**Status**: Draft
 **Input**: User description: "I want to specify the code style we'll be using."
 
 ## Clarifications
@@ -13,15 +11,13 @@
 - Q: Should shared utilities have their own neutral folder? → A: No. Shared utilities live in `src/game/` and renderers import from there.
 - Q: How should the engine–renderer dependency boundary be enforced? → A: Both TypeScript project references (compile-time) and a linter rule (dev-time fast feedback).
 - Q: Do the style rules apply inside `src/renderers/` too? → A: Yes. The same rules apply to all of `src/`; React-specific conventions (.tsx, PascalCase components) are already compatible.
-- Q: Should the spec prescribe the tsconfig layout for project references? → A: No. The spec requires that project references exist; exact file layout is deferred to the implementation plan.
-- Q: Spec 022 plan references old paths (`src/engine/`, `src/registries/`, `src/schemas/`, separate `test/`, barrel `index.ts`). Do these need updating? → A: Yes. All paths updated to `src/game/` prefix, barrel files removed, tests co-located. Spec 022 plan amended.
+- Q: Should the spec prescribe the tsconfig layout for project references? → A: No. The spec requires that project references exist; the exact file layout is not prescribed.
 - Q: Entity data model — OOP methods on entities vs pure data? → A: Pure data entities; systems provide functions that operate on entity state. Aligns with constitution principle V (modular systems) and JSON serialization (principle II).
 - Q: Spatial positioning — sub-cell continuous coordinates or cell-level only? → A: Cell-level for game logic; sub-cell interpolation for rendering only. Game systems operate on cell indices; the renderer smoothly interpolates movement between cells for visual presentation.
 - Q: Event system — string-based hierarchical events or TypeScript discriminated unions? → A: Hybrid — typed event payloads with string-based routing and type guards. Events are routed by string topic but payloads are strongly typed. Type guards narrow the payload at subscription sites.
-- Q: Multi-tick task execution — state machines vs async/await? → A: Two-layer model. High-level entity behavior uses `async/await` for readable sequential code (e.g., `await walkTo(target); await craft(recipe)`). Low-level tick systems advance state machines each tick and resolve promises when operations complete. Execution is deterministic because async resolution is driven by tick progression, not real time.
-- Q: Should older specs (001–021) be updated to align with spec 023 conventions? → A: Yes. Bulk-update all older specs: fix branch numbers, remove references to old paths/patterns, add "fresh implementation" note. Old implementation was discarded.
+- Q: Multi-tick task execution — state machines vs async/await? → A: Two-layer model. High-level entity behavior uses `async/await` for readable sequential code (e.g., `await walkTo(target); await craft(recipe)`). Low-level tick systems advance state machines each tick and resolve promises when operations complete. Execution is deterministic because async resolution is driven by tick progression, not real time. Only the tick-level state machines and task records are authoritative and serialized; native promises are never serialized, and after load behavior scripts resume from the serialized task checkpoints.
 
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 — Developer writes a new source file (Priority: P1)
 
@@ -65,14 +61,14 @@ A developer adds a new subfolder to `src/`. They add a `README.md` describing th
 
 **Acceptance Scenarios**:
 
-1. **Given** a new folder `src/pathfinding/` is created without a `README.md`, **When** the convention check runs, **Then** a violation is reported.
+1. **Given** a new folder `src/game/pathfinding/` is created without a `README.md`, **When** the convention check runs, **Then** a violation is reported.
 2. **Given** the README is added, **When** the check runs, **Then** no violation.
 
 ---
 
 ### User Story 4 — LLM/AI agent writes code in this repository (Priority: P1)
 
-An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are explicit enough that the agent can follow them without ambiguity and without being given the full TypeScript handbook.
+An AI coding agent generates code. The conventions are explicit enough that the agent can follow them without ambiguity and without being given the full TypeScript handbook.
 
 **Why this priority**: This codebase is AI-assisted. Ambiguous rules produce inconsistent AI output.
 
@@ -92,20 +88,20 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 - Does "every function needs a unit test" apply to test helper functions defined inside test files? → No; test-only helpers are exempt.
 - What about generated code (e.g., from `zod-to-json-schema`)? → Generated files are exempt; they must be clearly marked with a `// @generated` header comment.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
 #### Exports & Modules
 
 - **FR-001**: Every named export MUST use an explicit named export statement (`export const`, `export type`, `export enum`, `export function`, `export class`). Default exports are PROHIBITED.
-- **FR-002**: Barrel files (`index.ts` files that re-export from other modules) are PROHIBITED. Consumers MUST import directly from the file that defines the symbol. Existing barrel files (e.g., `src/game/registries/index.ts`, `src/game/schemas/index.ts`) MUST be deleted and all import sites updated as part of adopting this convention. No grandfathering.
+- **FR-002**: Barrel files (`index.ts` files that re-export from other modules) are PROHIBITED. Consumers MUST import directly from the file that defines the symbol.
 - **FR-003**: Import paths MUST NOT include file extensions. Import ordering is delegated to the code formatter and is out of scope for this convention.
 
 #### Types & Enums
 
 - **FR-004**: `type` aliases MUST be used instead of `interface` for standalone type declarations. `interface` is PROHIBITED except when declaration merging is explicitly required. This rule does not restrict `class` declarations — classes are permitted and appropriate for stateful abstractions. A `class` implicitly defines both a value and a type; that is distinct from an `interface` declaration.
-- **FR-005**: `enum` MUST be used instead of string literal unions (`type Foo = 'a' | 'b'`) whenever a set of named constants is intended. String literal unions are PROHIBITED for hand-written application code. Zod schemas MUST use `z.nativeEnum(MyEnum)` rather than `z.enum([...])` to remain consistent with this rule. _Enforcement: code review only (no automated lint rule exists for this pattern)._
+- **FR-005**: `enum` MUST be used instead of string literal unions (`type Foo = 'a' | 'b'`) whenever a set of named constants is intended. String literal unions are PROHIBITED for hand-written application code. Zod schemas MUST use `z.nativeEnum(MyEnum)` rather than `z.enum([...])` to remain consistent with this rule. Exception: data-defined, open-ended vocabularies (content IDs, categories, tags, faction types/dispositions) are `string`, validated against loaded content, not enums. _Enforcement: code review only (no automated lint rule exists for this pattern)._
 - **FR-006**: `any` and `unknown` are PROHIBITED in production source code. Type parameters, explicit narrowing, or `satisfies` MUST be used instead. Exceptions require a `// eslint-disable-next-line` comment with a justification.
 
 #### Naming
@@ -118,11 +114,11 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 
 - **FR-010**: Every **exported** function, method, type alias, enum, and class MUST have a TSDoc block comment. The opening `/**` MUST appear on its own line, and the description MUST start on the following line. TSDoc on unexported symbols is encouraged but not required.
 - **FR-011**: TSDoc blocks MUST NOT be one-liners. The format is:
-    ```
-    /**
-     * Description here.
-     */
-    ```
+  ```
+  /**
+   * Description here.
+   */
+  ```
 - **FR-012**: Non-obvious parameters and return values SHOULD be documented with `@param` and `@returns` tags. Simple getters and trivially named parameters are exempt.
 
 #### Tests
@@ -135,12 +131,12 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 
 - **FR-016**: Every folder in `src/` MUST contain a `README.md` file that describes the folder's purpose, what it contains, and how it relates to other folders.
 - **FR-017**: The top-level source layout MUST follow this structure:
-    - `src/game/` — the headless game engine. All simulation logic, registries, schemas, and engine utilities live here.
-    - `src/renderers/` — all rendering targets. Each renderer is a subfolder (e.g. `src/renderers/react/`). Future renderers are siblings (e.g. `src/renderers/cli/`).
-    - Any utility code needed by both the engine and a renderer MUST live inside `src/game/` and be imported by renderers from there. No additional shared layer exists.
+  - `src/game/` — the headless game engine. All simulation logic, registries, schemas, and engine utilities live here.
+  - `src/renderers/` — all rendering targets. Each renderer is a subfolder (e.g. `src/renderers/react/`). Future renderers are siblings (e.g. `src/renderers/cli/`).
+  - Any utility code needed by both the engine and a renderer MUST live inside `src/game/` and be imported by renderers from there. No additional shared layer exists.
 - **FR-018**: The dependency direction is strictly one-way: code in `src/renderers/` MAY import from `src/game/`. Code in `src/game/` MUST NOT import from `src/renderers/` or any of its subfolders. This boundary MUST be enforced by both:
-    1. **TypeScript project references** — `src/game/` and `src/renderers/` each have their own `tsconfig.json`; the engine project does not reference the renderers project, making cross-direction imports a compile error.
-    2. **A linter rule** (e.g. ESLint `import/no-restricted-paths` or equivalent) — provides fast feedback during development before a full compile.
+  1. **TypeScript project references** — `src/game/` and `src/renderers/` each have their own `tsconfig.json`; the engine project does not reference the renderers project, making cross-direction imports a compile error.
+  2. **A linter rule** (e.g. ESLint `import/no-restricted-paths` or equivalent) — provides fast feedback during development before a full compile.
 
 ### Key Entities
 
@@ -148,19 +144,20 @@ An AI coding agent (e.g., GitHub Copilot) generates code. The conventions are ex
 - **Test file**: A `.test.ts` file co-located next to its source file.
 - **Barrel file**: An `index.ts` whose sole purpose is re-exporting symbols from other files in the same or sub-directory.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
-- **SC-001**: A developer unfamiliar with this project can write a conforming file on their first attempt without consulting anyone beyond reading this spec.
-- **SC-002**: An AI coding agent generates conforming code when provided only this spec as context, requiring zero manual style corrections.
-- **SC-003**: All existing files in `src/` comply with these rules within one sprint of adoption (zero linter violations reported in CI).
-- **SC-004**: Code review time attributable to style discussions drops to zero after adoption.
-- **SC-005**: Every folder in `src/` has a README that answers "what is this for?" within 30 seconds of reading.
+- **SC-001**: A sample file written by a developer new to the project, using only this spec, passes the linter, the compiler and the README check with zero violations on first run.
+- **SC-002**: An AI coding agent given only this spec as context generates a sample file (User Story 4) that passes the linter, the compiler and the README check with zero violations and zero manual style corrections.
+- **SC-003**: Every file in `src/` complies with these rules at all times: CI reports zero linter violations on every merge.
+- **SC-004**: Every folder in `src/` has a README that answers "what is this for?" within 30 seconds of reading.
 
 ## Assumptions
 
-- The TypeScript compiler and a linter (ESLint or equivalent) are already configured in the project. This spec describes the rules; wiring them into tooling is a separate implementation task.
+- This spec describes the rules; wiring them into tooling (TypeScript compiler, a linter such as ESLint, a formatter) is part of implementing it.
+- Module resolution MUST allow extensionless imports (e.g. `moduleResolution: "bundler"`); headless Node runs use a TS-aware runner or bundler.
+- A README-check script (run in CI) enforces FR-016.
 - "Every function" means every **exported** function. Private or unexported functions inside a module are encouraged but not required to have tests or TSDoc.
 - The codebase targets TypeScript strict mode (`"strict": true`). Rules here are additive to strict mode, not a replacement.
 - Code formatter (Prettier or equivalent) handles import ordering, indentation, and whitespace. Those concerns are explicitly out of scope here.
