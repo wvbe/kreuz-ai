@@ -1,0 +1,154 @@
+{
+  "name": "why-flow",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0,
+    "startingTier": "village"
+  },
+  "steps": [
+    {
+      "debugSpawn": {
+        "prototypeId": "wall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    { "debugSpawn": { "prototypeId": "door", "mapId": 1, "cells": [325] } },
+    { "debugSpawn": { "prototypeId": "oven", "mapId": 1, "cells": [326] } },
+    { "debugSpawn": { "prototypeId": "grinding_mill", "mapId": 1, "cells": [324] } },
+    {
+      "debugSpawn": {
+        "prototypeId": "chest",
+        "mapId": 1,
+        "cells": [295],
+        "inventory": [{ "materialId": "wheat", "quantity": 8 }]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    { "step": 3 },
+    { "command": { "kind": "CreateProductionOrder", "recipeId": "bake_bread", "quantity": 4 } },
+    { "step": 30 },
+    {
+      "assert": {
+        "query": "explain",
+        "args": { "id": 1, "kind": "ProductionOrder" },
+        "path": "state",
+        "op": "eq",
+        "value": "Blocked"
+      }
+    },
+    {
+      "assert": {
+        "query": "explain",
+        "args": { "id": 1, "kind": "ProductionOrder" },
+        "path": "reasons.0.kind",
+        "op": "eq",
+        "value": "MissingInput"
+      }
+    },
+    {
+      "assert": {
+        "query": "explain",
+        "args": { "id": 1, "kind": "ProductionOrder" },
+        "path": "reasons.0.params.materialId",
+        "op": "eq",
+        "value": "flour"
+      }
+    },
+    {
+      "assert": {
+        "query": "explain",
+        "args": { "id": 1, "kind": "ProductionOrder" },
+        "path": "reasons.0.params.noProducer",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "idle-blocked",
+        "args": { "kind": "ProductionOrder" },
+        "path": "0.reasons.0.kind",
+        "op": "eq",
+        "value": "MissingInput"
+      }
+    },
+    {
+      "assert": {
+        "query": "idle-blocked",
+        "args": { "kind": "ProductionOrder" },
+        "path": "0.settled",
+        "op": "eq",
+        "value": true
+      }
+    },
+    { "assert": { "query": "flow", "path": "length", "op": "eq", "value": 0 } },
+    { "command": { "kind": "CreateProductionOrder", "recipeId": "grind_flour", "quantity": 4 } },
+    { "step": 2 },
+    {
+      "assert": {
+        "query": "explain",
+        "args": { "id": 1, "kind": "ProductionOrder" },
+        "path": "reasons.0.params.noProducer",
+        "op": "eq",
+        "value": false
+      }
+    },
+    { "step": 598 },
+    { "saveLoad": true },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": { "materialId": "bread" },
+        "path": "windowProduced",
+        "op": "gte",
+        "value": 8
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": { "materialId": "wheat" },
+        "path": "windowConsumed",
+        "op": "eq",
+        "value": 8
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": { "materialId": "flour" },
+        "path": "windowProduced",
+        "op": "gte",
+        "value": 4
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": { "materialId": "bread" },
+        "path": "producers.0.source",
+        "op": "eq",
+        "value": "Recipe"
+      }
+    },
+    {
+      "assert": {
+        "query": "idle-blocked",
+        "args": { "kind": "ProductionOrder" },
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    { "replay": true }
+  ]
+}
