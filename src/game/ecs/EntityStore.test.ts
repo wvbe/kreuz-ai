@@ -209,7 +209,7 @@ describe("EntityStore deletion", () => {
     expect(ecsKind(() => store.requestDelete(2))).toBe(EcsErrorKind.UnknownEntity);
   });
 
-  it("runs before-delete hooks and uses the first name", () => {
+  it("runs every before-delete hook and uses the first name", () => {
     const { store, bus, events } = createFixture();
     const seen: number[] = [];
     store.addBeforeDeleteHook((entity) => {
@@ -218,12 +218,17 @@ describe("EntityStore deletion", () => {
         ? (entity.components["Identity"]["given"] as string)
         : null;
     });
-    store.addBeforeDeleteHook(() => "second");
+    let secondRan = 0;
+    store.addBeforeDeleteHook(() => {
+      secondRan += 1;
+      return "second";
+    });
     const citizen = store.spawn("citizen", { Identity: { given: "Ada" } });
     store.requestDelete(citizen.id);
     store.flushDeletions();
     bus.processQueue();
     expect(seen).toEqual([citizen.id]);
+    expect(secondRan).toBe(1);
     expect(events.at(-1)?.payload).toEqual({ entityId: 1, prototypeId: "citizen", name: "Ada" });
   });
 

@@ -40,7 +40,7 @@ export type EntityListOptions = {
 
 /**
  * Synchronous hook run just before an entity is removed. It may return the entity's display name
- * for the `entity.deleted` payload (DECISIONS D-17); the first non-null name wins.
+ * for the `entity.deleted` payload (DECISIONS D-17); the first non-null name wins, but every hook always runs (hooks also clean up references).
  */
 export type BeforeDeleteHook = (entity: Entity) => string | null;
 
@@ -294,7 +294,8 @@ export class EntityStore {
       }
       let name: string | null = null;
       for (const hook of this.hooks) {
-        name = name ?? hook(entity);
+        const hookName = hook(entity);
+        name = name ?? hookName;
       }
       this.entityMap.delete(id);
       this.versions.delete(id);
