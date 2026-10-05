@@ -9,5 +9,6 @@
     "tsBuildInfoFile": "../../build/tsc/renderers.tsbuildinfo"
   },
   "include": ["./**/*.ts", "./**/*.tsx"],
+  "exclude": ["./cli/**"],
   "references": [{ "path": "../game" }]
 }

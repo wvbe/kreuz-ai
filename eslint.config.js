@@ -97,7 +97,8 @@ export default defineConfig(
           min: 3,
           properties: "always",
           // "ok": the `{ ok: true | false }` discriminant of CommandResult/QueryResult (DECISIONS section 3).
-          exceptions: ["id", "x", "y", "z", "dx", "dy", "ok", "T", "K", "V", "U", "_"],
+          // "op": the comparison key of scenario `assert` steps (DECISIONS D-40).
+          exceptions: ["id", "x", "y", "z", "dx", "dy", "ok", "op", "T", "K", "V", "U", "_"],
         },
       ],
       "@typescript-eslint/naming-convention": [
@@ -226,6 +227,31 @@ export default defineConfig(
     rules: {
       "no-restricted-globals": "off",
     },
+  },
+  {
+    // The CLI renderer is Node-only and may use the engine solely through src/game/api (value
+    // imports) plus type-only imports such as JsonValue (plan task 1.10).
+    files: ["src/renderers/cli/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "/game/(?!api/)",
+              allowTypeImports: true,
+              message:
+                "The CLI renderer drives the game through src/game/api only (type imports excepted).",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Tests of the CLI may build sessions and engines directly.
+    files: ["src/renderers/cli/**/*.test.ts"],
+    rules: { "@typescript-eslint/no-restricted-imports": "off" },
   },
   {
     // The renderers are the only place with DOM globals and React component naming.

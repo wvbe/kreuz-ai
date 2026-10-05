@@ -6,7 +6,7 @@ The scenario format and runner shared by the e2e tests, the CLI (`--script`) and
 - `runScenario.ts` - `runScenario(scenario, {createSession?, stepTypes?})` returning `{ok:true, stepsRun, tick, finalHash}` or `{ok:false, failure:{stepIndex, message, expected?, actual?}}` (`stepIndex` -1 is the initial new-game). Every step is validated before anything runs.
 - `formatScenarioResult.ts` - the `PASS`/`FAIL` text the CLI prints.
 - `scenarioStep.ts` - `defineScenarioStep({key, schema, run})`, `StepContext`, `StepFailure`.
-- `builtinSteps.ts` - the built-in step types (below).
+- `builtinScenarioSteps.ts` - the built-in step types (below).
 - `assertion.ts` - `AssertOp`, `getPathValue` (dotted paths, array indices, `length`), `jsonEquals`, `evaluateAssertion`.
 
 Built-in steps: `{command, atTick?, expectError?}`, `{step: n}`, `{assert: {query, args?, path, op: eq|gt|gte|lt|lte|exists|includes, value?}}`, `{assertHash: {label?, equals?, matches?}}`, `{saveLoad: true}`, `{replay: true}`.
@@ -24,4 +24,4 @@ const spawnStep = defineScenarioStep({
 runScenario(scenario, { stepTypes: [spawnStep] });
 ```
 
-Most needs are met without a new type: game actions are `command` steps (any registered command kind) and checks are `assert` steps over any registered query. To make a type available to the CLI and the scenario e2e test, append it to `builtinScenarioSteps` in `builtinSteps.ts`.
+Most needs are met without a new type: game actions are `command` steps (any registered command kind) and checks are `assert` steps over any registered query. To make a type available to the CLI and the scenario e2e test, append it to `builtinScenarioSteps` in `builtinScenarioSteps.ts`.

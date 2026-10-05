@@ -14,6 +14,8 @@
     "test:coverage": "vitest run --coverage",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
+    "cli": "vite-node src/renderers/cli/main.ts",
+    "cli:jsonl": "vite-node src/renderers/cli/main.ts -- --jsonl",
     "check:readmes": "vite-node scripts/check-readmes.ts",
     "check:conventions": "vite-node scripts/check-conventions.ts",
     "ci": "npm run format:check && npm run typecheck && npm run lint && npm run check:readmes && npm run check:conventions && npm run test:coverage && npm run build"

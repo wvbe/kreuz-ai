@@ -1,0 +1,28 @@
+import { inspectVerbs } from "./inspectVerbs";
+import { kernelVerbs } from "./kernelVerbs";
+import { metaVerbs } from "./metaVerbs";
+import type { Verb } from "./Verb";
+
+/**
+ * Every verb group, in the order `help` lists them. A later phase adds its verbs by creating one
+ * `verbs/<group>Verbs.ts` file exporting a `readonly Verb[]` and adding that array here.
+ */
+export const verbGroups: readonly (readonly Verb[])[] = [kernelVerbs, inspectVerbs, metaVerbs];
+
+/**
+ * Flattens the verb groups.
+ *
+ * @param groups - Verb groups (default: all registered groups).
+ * @returns All verbs; a duplicate name is a programming error and throws.
+ */
+export function createVerbRegistry(groups: readonly (readonly Verb[])[] = verbGroups): Verb[] {
+  const verbs = groups.flat();
+  const seen = new Set<string>();
+  for (const verb of verbs) {
+    if (seen.has(verb.name)) {
+      throw new Error(`duplicate CLI verb "${verb.name}"`);
+    }
+    seen.add(verb.name);
+  }
+  return verbs;
+}

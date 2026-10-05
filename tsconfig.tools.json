@@ -7,6 +7,6 @@
     "outDir": "build/tsc/tools",
     "tsBuildInfoFile": "build/tsc/tools.tsbuildinfo"
   },
-  "references": [{ "path": "src/game" }],
+  "references": [{ "path": "src/game" }, { "path": "src/renderers/cli" }],
   "include": ["scripts/**/*.ts", "tests/**/*.ts", "vite.config.ts"]
 }

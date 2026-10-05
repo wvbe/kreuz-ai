@@ -3,6 +3,7 @@
   "references": [
     { "path": "src/game" },
     { "path": "src/renderers" },
+    { "path": "src/renderers/cli" },
     { "path": "tsconfig.tools.json" }
   ]
 }

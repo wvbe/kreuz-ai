@@ -1,6 +1,6 @@
 import { loadContent } from "../../content/ContentLoader";
 import { GameSession } from "../GameSession";
-import { builtinScenarioSteps } from "./builtinSteps";
+import { builtinScenarioSteps } from "./builtinScenarioSteps";
 import type { Scenario } from "./Scenario";
 import type { ScenarioStepObject, ScenarioStepType, StepFailure } from "./scenarioStep";
 

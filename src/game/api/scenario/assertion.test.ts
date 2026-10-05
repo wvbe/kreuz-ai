@@ -23,9 +23,11 @@ describe("getPathValue", () => {
 
 describe("jsonEquals", () => {
   it("ignores key order and compares deeply", () => {
-    expect(jsonEquals({ a: 1, b: [1, { c: 2 }] }, { b: [1, { c: 2 }], a: 1 })).toBe(true);
-    expect(jsonEquals({ a: 1 }, { a: 2 })).toBe(false);
-    expect(jsonEquals({ a: 1 }, { b: 1 })).toBe(false);
+    expect(jsonEquals({ aaa: 1, bbb: [1, { ccc: 2 }] }, { bbb: [1, { ccc: 2 }], aaa: 1 })).toBe(
+      true,
+    );
+    expect(jsonEquals({ aaa: 1 }, { aaa: 2 })).toBe(false);
+    expect(jsonEquals({ aaa: 1 }, { bbb: 1 })).toBe(false);
     expect(jsonEquals([1, 2], [1])).toBe(false);
     expect(jsonEquals([1], { 0: 1 })).toBe(false);
     expect(jsonEquals(null, null)).toBe(true);
