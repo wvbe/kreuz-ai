@@ -92,11 +92,11 @@ Full content(022) ‖ (parallel once loader + schemas stable)        React UI(02
 - [ ] 1.6 Save format, migrations, round-trip (006)
 - [ ] 1.7 Content loader + registries + vertical-slice pack v0 (022-loader, FR-018/019)
 - [x] 1.8 GameEngine bootstrap + system registry (007)
-- [ ] 1.9 `GameSession` facade + `Command`/query/view types + command log/replay
-- [ ] 1.10 CLI renderer v0 + JSONL protocol + scenario runner (e2e harness)
+- [x] 1.9 `GameSession` facade + `Command`/query/view types + command log/replay
+- [x] 1.10 CLI renderer v0 + JSONL protocol + scenario runner (e2e harness)
 
 ### Checkpoint A — Kernel
-- [ ] Fresh clone: `npm run ci` green; `vite-node src/renderers/cli/main.ts` can new/step/save/load; same-seed determinism e2e passes in-process and via child process
+- [x] Fresh clone: `npm run ci` green; `vite-node src/renderers/cli/main.ts` can new/step/save/load; same-seed determinism e2e passes in-process and via child process
 
 ### Phase 2 — A living world
 - [ ] 2.1 Map generators: outdoor Voronoi, village layout, cave/cellar, quick room/site (004 gens, 009)

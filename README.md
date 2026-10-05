@@ -4,9 +4,24 @@ A headless, deterministic colony/settlement simulation set in 13th-century Europ
 
 **Status**: foundations in place (scaffold, PRNG, event bus); engine under construction per [tasks/plan.md](tasks/plan.md). Run `npm install && npm run ci`.
 
+## Play / drive it headlessly
+
+No browser needed. The terminal renderer and the scenario runner drive the same `GameSession` facade the React app will use (details in [docs/CLI.md](docs/CLI.md)).
+
+```sh
+npm run cli                                  # interactive shell: new 42 steady small, step 100, map, status, help
+npm run cli -- --jsonl                       # one JSON command or query per stdin line, one JSON response per stdout line
+npm run cli -- --script scenarios/kernel-smoke.json   # run a scenario; exit code 1 on the first failing step
+```
+
+JSONL example (`printf '%s\n' ... | npm run -s cli -- --jsonl`): `{"kind":"new-game","options":{"seed":42,"mapSize":0}}`, `{"kind":"step","ticks":100}`, `{"query":"time"}`, `{"hash":true}`. Each response is `{"ok":true,"result":...,"events":[...]}` or `{"ok":false,"error":{"kind":...,"message":...},"events":[]}`.
+
+Scenarios are JSON files in [scenarios/](scenarios/) (`{name, seed, options?, steps[]}` with command, step, assert, assertHash, saveLoad and replay steps). `npm test` runs all of them in-process and through a child process (`tests/e2e/`).
+
 ## Documents
 
 - [docs/CONSTITUTION.md](docs/CONSTITUTION.md) — project principles that every spec and implementation must follow.
+- [docs/CLI.md](docs/CLI.md) — terminal verbs, JSONL protocol and scenario format.
 - [docs/ROADMAP.md](docs/ROADMAP.md) — ideas that have no spec yet.
 - [specs/](specs/) — feature specifications:
   - [001-game-loop](specs/001-game-loop/spec.md) — Game Loop & Time Progression
