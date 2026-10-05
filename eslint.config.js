@@ -111,12 +111,17 @@ export default defineConfig(
             "classMethod",
             "classProperty",
             "typeProperty",
-            "objectLiteralProperty",
             "objectLiteralMethod",
             "parameterProperty",
             "accessor",
           ],
           format: ["camelCase"],
+          leadingUnderscore: "allow",
+        },
+        {
+          // DECISIONS D-32: ECS component names are PascalCase map keys (`{ Position: {...} }`).
+          selector: "objectLiteralProperty",
+          format: ["camelCase", "PascalCase"],
           leadingUnderscore: "allow",
         },
         {
