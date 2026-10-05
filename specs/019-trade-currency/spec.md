@@ -1,14 +1,9 @@
 # Feature Specification: Trade System & Currency
 
-**Feature Branch**: `019-trade-currency`
 **Created**: 2026-05-03
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "the trade system and currency. I want entities to be able to trade the items they need for their own needs with other entities. There is an in-game currency for this, which entities can earn through trade or work. The currency is an actual item, so it is stored in stacks (of max 1000). Every trade starts with the potential buyer making an offer for the goods, the offer could be currency or other items. The trader is at liberty to accept any offer, but will generally try to make a small profit. The user also has an inventory that can hold currency, this inventory is held in one or more containers in the same room (the throne room) as where town criers are dispatched from."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Currency as an Inventory Item (Priority: P1)
 
@@ -68,7 +63,7 @@ When an entity needs a material it does not have (e.g., a hungry citizen needing
 
 ### User Story 4 - Seller Evaluation and Profit Logic (Priority: P1)
 
-When a seller receives a TradeOffer, it evaluates whether to accept or counter-offer based on a simple profit check: the offer's total value must equal or exceed the seller's cost basis plus a minimum profit margin. Each seller has a reference price for items it holds, derived from a global Item Value Registry (a data-driven mapping of material ID to base price in currency units) multiplied by a per-entity `priceMultiplier` (default 1.0; e.g., 1.2 = 20% more expensive than base). The effective minimum acceptable price for a sale is `basePrice × priceMultiplier × quantity × (1 + minimumMarginRate)`. If the offer meets the threshold, the seller accepts. If it does not, the seller may counter with the minimum acceptable amount. A seller never sells below this threshold by default.
+When a seller receives a TradeOffer, it evaluates whether to accept or counter-offer based on a simple profit check: the offer's total value must equal or exceed the seller's cost basis plus a minimum profit margin. Each seller has a reference price for items it holds, derived from the material's `value` field in the material registry (its base price in currency units) multiplied by a per-entity `priceMultiplier` (default 1.0; e.g., 1.2 = 20% more expensive than base). Like all game-state numbers, `priceMultiplier` and `minimumMarginRate` are stored as fixed-point integers (×1000, so 1.2 is stored as 1200); content data may author them as decimals, converted at load. The effective minimum acceptable price for a sale is `basePrice × priceMultiplier × quantity × (1 + minimumMarginRate)`, computed in integer arithmetic and rounded up to whole currency units. If the offer meets the threshold, the seller accepts. If it does not, the seller may counter with the minimum acceptable amount. A seller never sells below this threshold by default.
 
 **Why this priority**: Without a consistent evaluation model, trade is either always accepted (trivially exploitable) or always negotiated in unbounded loops. The profit-margin model provides predictable, tuneable seller behaviour.
 
@@ -99,7 +94,7 @@ Once a TradeOffer is accepted, both sides atomically exchange items. The buyer's
 2. **Given** a trade is accepted but the Buyer's inventory is full (cannot receive the goods), **When** execution is attempted, **Then** the trade is cancelled; both inventories remain unchanged; `trade.execution.failed` is emitted with reason `buyer-inventory-full`.
 3. **Given** a trade is accepted but the Seller's inventory is full (cannot receive the payment), **When** execution is attempted, **Then** the trade is cancelled; `trade.execution.failed` emitted with reason `seller-inventory-full`.
 4. **Given** a successful trade execution, **When** complete, **Then** `trade.completed` is emitted containing buyer ID, seller ID, items exchanged, and the tick at which it completed.
-5. **Given** a trade execution is in progress and the game is saved, **When** loaded, **Then** the pending trade either completes or is cancelled cleanly; no items are lost or duplicated.
+5. **Given** an accepted trade awaiting execution when the game is saved, **When** loaded, **Then** the pending trade either completes or is cancelled cleanly; no items are lost or duplicated (execution itself is atomic and synchronous within a tick, feature 005).
 
 ---
 
@@ -126,7 +121,7 @@ Entities earn currency as wages for completing assigned work (jobs from feature 
 - What happens if a Buyer entity is destroyed mid-negotiation (offer pending)? → The pending offer is cancelled; the `trade.offer.cancelled` event is emitted; the Seller's reserved goods (if any) are released.
 - What happens if a Seller entity is destroyed after accepting an offer but before execution? → The trade is cancelled; `trade.execution.failed` is emitted; the Buyer's reserved payment is returned.
 - What happens if two Buyers simultaneously offer for the same goods and the Seller only has enough for one? → The Seller accepts the first offer received (by tick order); the second offer is rejected with `trade.offer.rejected` reason `insufficient-stock`.
-- What happens if a barter item offered by the Buyer has no entry in the item value registry? → The Seller rejects the offer with `trade.offer.rejected` reason `unknown-item-value`; the Buyer may re-offer with currency.
+- What happens if a barter item offered by the Buyer has no `value` defined on its material? → The Seller rejects the offer with `trade.offer.rejected` reason `unknown-item-value`; the Buyer may re-offer with currency.
 - What happens if the currency material's stack limit of 1000 is reached across all inventory slots? → Any further currency payment is rejected via standard `InventoryFullError`; the payer retains their currency.
 - What happens if the Throne Room has no storage containers? → Treasury balance is 0; wages cannot be paid; a system warning event is emitted.
 - What happens if an entity tries to trade with itself? → The trade is rejected immediately; no events are emitted for self-trades.
@@ -136,21 +131,21 @@ Entities earn currency as wages for completing assigned work (jobs from feature 
 
 ### Session 2026-05-03 (Cross-cutting: Diplomacy & Factions)
 
-- Q: Can entities from hostile factions initiate or accept trade with the player's colony? → A: No. Faction standing gates trade access. An entity whose faction has a hostile standing with the player's faction will refuse TradeOffers from player-colony entities (and vice versa). Neutral or friendly standing allows trade. The diplomacy spec will define the standing thresholds. The `trade.offer.rejected` event should include a `faction-hostile` reason code when this occurs.
-- Q: Does faction standing affect the `priceMultiplier` in trade evaluations? → A: Yes — friendly factions may offer better effective prices (lower `priceMultiplier` baseline) and hostile-but-trading factions may charge more. The exact modifiers will be defined in the diplomacy spec; this spec's `priceMultiplier` field should be treated as the base before any faction-standing adjustments.
+- Q: Can entities from hostile factions initiate or accept trade with the player's colony? → A: No. Faction standing gates trade access. An entity whose faction has a hostile standing with the player's faction will refuse TradeOffers from player-colony entities (and vice versa). Neutral or friendly standing allows trade. Spec 021 defines the standing thresholds (hostile below -30 by default, configurable). The `trade.offer.rejected` event should include a `faction-hostile` reason code when this occurs.
+- Q: Does faction standing affect the `priceMultiplier` in trade evaluations? → A: Yes — friendly factions may offer better effective prices (lower `priceMultiplier` baseline). Spec 021 defines the modifiers (e.g., a configurable Trade Agreement discount on `priceMultiplier`, 021 FR-008); this spec's `priceMultiplier` field should be treated as the base before any faction-standing adjustments.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
 - **FR-001**: Currency MUST be registered in the material registry as a stackable item with `stackLimit: 1000`. No special currency component is needed; it is stored and transferred using the standard inventory system (feature 005).
 - **FR-002**: Any entity or storage container with an Inventory component MAY hold currency. Currency stacks obey all standard inventory rules (slot limits, weight limits if configured, serialization).
-- **FR-003**: The player's treasury MUST be the collective inventory of all storage furniture within the active Throne Room zone (feature 015). Treasury balance = sum of all currency items across those containers.
+- **FR-003**: The player's treasury MUST be the collective inventory of all storage furniture within the active Throne Room zone (feature 015). Treasury balance = sum of all currency items across those containers. Treasury inflows include daily household rent (spec 029 FR-013), transferred directly into these containers like wages (FR-012), in the opposite direction.
 - **FR-004**: System MUST support a `TradeOffer` structure containing: buyer entity ID, seller entity ID, requested items (material ID × quantity), offered payment (currency amount and/or barter items), and an expiry timeout in ticks.
 - **FR-005**: Buyers MUST initiate trades by emitting `trade.offer.proposed`. Any entity capable of AI decision-making (feature 013) MAY initiate a trade when it identifies a need and a potential seller entity whose `sellsItems` flag is set.
-- **FR-006**: System MUST define an **Item Value Registry**: a data-driven mapping of material ID to base price in currency units. All sellers use this registry as the starting point for price evaluation.
-- **FR-007**: Sellers MUST evaluate incoming TradeOffers by converting the offered payment to a currency-equivalent value using the Item Value Registry, then comparing against `basePrice × priceMultiplier × quantity × (1 + minimumMarginRate)`. If the offer meets the threshold, the Seller accepts; otherwise it counter-offers with the minimum acceptable amount.
-- **FR-008**: A Seller entity prototype MUST support two price-related fields: `priceMultiplier` (default 1.0, scales the global base price) and `minimumMarginRate` (default 0.1). Both are set in entity prototype data. An entity may update its own `priceMultiplier` at runtime (e.g., a desperate seller lowering prices).
+- **FR-006**: Each material in the material registry MUST be able to declare a `value`: its base price in currency units (data-driven). There is no separate item value registry. All sellers use the material `value` as the starting point for price evaluation.
+- **FR-007**: Sellers MUST evaluate incoming TradeOffers by converting the offered payment to a currency-equivalent value using each material's `value`, then comparing against `basePrice × priceMultiplier × quantity × (1 + minimumMarginRate)`. If the offer meets the threshold, the Seller accepts; otherwise it counter-offers with the minimum acceptable amount.
+- **FR-008**: A Seller entity prototype MUST support two price-related fields: `priceMultiplier` (default 1.0, scales the global base price) and `minimumMarginRate` (default 0.1). Both are set in entity prototype data (authored as decimals) and stored as fixed-point integers (×1000; defaults 1000 and 100). An entity may update its own `priceMultiplier` at runtime (e.g., a desperate seller lowering prices).
 - **FR-008b**: Any entity MAY set a `sellsItems` flag at runtime (not just at prototype definition time). When set, the entity becomes discoverable as a seller. When cleared, it is no longer approached for trades.
 - **FR-009**: Trade execution MUST be atomic: both inventory transfers (payment from buyer, goods from seller) either both succeed or both roll back. No partial execution is permitted.
 - **FR-010**: System MUST emit the following events on the event bus (feature 010): `trade.offer.proposed`, `trade.offer.accepted`, `trade.offer.countered`, `trade.offer.rejected`, `trade.offer.cancelled`, `trade.offer.expired`, `trade.completed`, `trade.execution.failed`.
@@ -164,27 +159,28 @@ Entities earn currency as wages for completing assigned work (jobs from feature 
 
 - **CurrencyItem**: An instance of the currency material in any inventory. No special component; governed entirely by feature 005 inventory rules. Stack limit: 1000.
 - **PlayerTreasury**: Not a distinct entity — a virtual aggregate of all currency in storage furniture within the active Throne Room zone. Queried via the storage query system (feature 018).
-- **ItemValueRegistry**: A data-driven registry mapping material IDs to base prices in currency units. Read-only at runtime (game balance data). Used by all sellers as the foundation for price evaluation; each seller applies their own `priceMultiplier` on top.
+- **Material value**: The `value` field on a material definition (feature 014/022): its base price in currency units. Read-only at runtime (game balance data; registries are immutable after bootstrap). Used by all sellers as the foundation for price evaluation; each seller applies their own `priceMultiplier` on top.
 - **TradeOffer**: A data structure (not a persistent entity) representing a buyer's proposal: buyer ID, seller ID, requested items, offered payment (currency + optional barter items), creation tick, expiry tick.
 - **PendingWagePayment**: A serializable record of a deferred wage: job ID, worker entity ID, wage amount, tick it became due. Retried each tick until fulfilled.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
 - **SC-001**: Currency can be stored, retrieved, and transferred between any two entities using the standard inventory API with no trade-specific code path.
 - **SC-002**: Trade execution is fully atomic: in 100% of test cases where execution is attempted, either both inventories update or neither does.
 - **SC-003**: A completed economic loop (entity earns wage → spends currency on need → seller receives currency) can be demonstrated end-to-end in a headless test within a single game session.
-- **SC-004**: Item Value Registry is purely data-driven: a new item's base trade price can be set without any code change. Per-entity `priceMultiplier` adjustments are also data-driven (set in entity prototype data).
+- **SC-004**: Material `value` pricing is purely data-driven: a new item's base trade price can be set without any code change. Per-entity `priceMultiplier` adjustments are also data-driven (set in entity prototype data).
 - **SC-005**: Deferred wage payments are eventually made in 100% of test cases once the treasury has sufficient funds; no payment is silently dropped.
 - **SC-006**: All trade state (pending offers, deferred wages) is fully preserved through save/load with no currency loss or duplication.
 - **SC-007**: Counter-offer chains never exceed `maxNegotiationRounds`; offers beyond the limit expire cleanly with a `trade.offer.expired` event.
 
 ## Assumptions
 
-- **Currency is the only "money" type**: There is one currency material. Multi-currency systems (e.g., gold + silver) are out of scope. Barter is supported as an alternative to currency but the Item Value Registry always prices in currency units.
-- **Item Value Registry is static at runtime**: Prices are defined in game data files and do not fluctuate with supply/demand. Dynamic pricing is out of scope for this feature.
+- **Currency is the only "money" type**: There is one currency material. Multi-currency systems (e.g., gold + silver) are out of scope. Barter is supported as an alternative to currency but material `value` always prices in currency units.
+- **Material values are static at runtime**: Prices are defined in game data files and do not fluctuate with supply/demand. Dynamic pricing is out of scope for this feature.
 - **Any entity can become a seller dynamically**: There is no designated merchant entity type. Any entity may set a `sellsItems` flag — either permanently via its prototype (e.g., a market stall) or dynamically at runtime (e.g., a citizen with surplus goods or a need for currency). The AI system (feature 013) governs when and whether an entity decides to raise or clear this flag.
 - **Trade is peer-to-peer**: There is no central marketplace or auction house. Buyers find sellers via the storage query system (feature 018) and approach them directly.
 - **Throne Room is a single zone**: There is exactly one active Throne Room zone at a time. If multiple Throne Room zones exist, treasury queries sum across all of them (same logic as any zone query).
 - **Wage amounts are fixed per job posting**: Wage negotiation is out of scope. The wage on a JobPosting is authoritative; the worker accepts it as part of taking the job.
+- **Settlement imports and exports**: **Open question:** which trades count as settlement imports or exports for the spec 025 ProductionLedger (`FlowSource` Trade)? Until decided, spec 025 counts only trades in which one party is a Throne Room treasury container (FR-003).
