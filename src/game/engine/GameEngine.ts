@@ -1,3 +1,5 @@
+import { aiSystemId } from "../ai/aiTypes";
+import { registerAi } from "../ai/registerAi";
 import { aiStateComponent } from "../behavior/aiStateComponent";
 import { BehaviorError } from "../behavior/BehaviorError";
 import { BehaviorHandlerRegistry } from "../behavior/BehaviorHandlerRegistry";
@@ -645,9 +647,10 @@ export class GameEngine {
     registerIdentity(this);
     registerFactions(this);
     registerSkills(this);
+    registerAi(this);
     this.registerSystem({
       id: "world.starting-map",
-      dependencies: [skillsSystemId, factionsSystemId, identitySystemId],
+      dependencies: [skillsSystemId, factionsSystemId, identitySystemId, aiSystemId],
       init: ({ engine, mode, options }) => {
         if (mode !== InitMode.NewGame || options.mapSize === null) {
           return;

@@ -51,11 +51,26 @@ export const contentConstantsSchema = z
     chronicleCapacity: positiveSchema,
     cropGrowthTicks: positiveSchema,
     needStartValue: percentSchema,
+    starvationHealthPerTick: milliSchema,
+    healthRegenPerTick: milliSchema,
+    moodSmoothing: fractionSchema,
+    groundSleepRate: fractionSchema,
+    sleepWakeThreshold: percentSchema,
+    wealthyCoins: countSchema,
+    poorCoins: countSchema,
+    wanderRadiusCost: positiveSchema,
+    idleStandChance: fractionSchema,
+    idleStandMinTicks: positiveSchema,
+    idleStandMaxTicks: positiveSchema,
   })
   .strict()
   .refine((constants) => constants.downgradeGraceDays > constants.upgradeGraceDays, {
     message: "downgradeGraceDays must exceed upgradeGraceDays",
     path: ["downgradeGraceDays"],
+  })
+  .refine((constants) => constants.idleStandMaxTicks >= constants.idleStandMinTicks, {
+    message: "idleStandMaxTicks must not be below idleStandMinTicks",
+    path: ["idleStandMaxTicks"],
   });
 
 /**

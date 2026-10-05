@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import type { BehaviorHandlerRegistry } from "../behavior/BehaviorHandlerRegistry";
 import { NodeStatus } from "../behavior/behaviorTypes";
 import { bundledContentFiles, loadContent, loadContentPack } from "../content/ContentLoader";
 import { ContentValidationError } from "../content/ContentValidationError";
@@ -382,8 +381,12 @@ describe("GameEngine registerSystem", () => {
       "demo.total",
       "faction-of",
       "factions",
+      "find-path",
+      "find-route",
       "identity-of",
       "members-of",
+      "needs-of",
+      "reachable",
       "skills-of",
       "traits-of",
     ]);
@@ -639,7 +642,7 @@ describe("GameEngine built-in systems", () => {
       cancel: () => undefined,
     });
     engine.newGame({ seed: 1 });
-    const entity = engine.store.spawn("peasant");
+    const entity = engine.store.spawn("peasant", { AiState: { treeId: null } });
     engine.tasks.enqueue(entity.id, { type: "demo.walk" });
     engine.runTicks(6);
     expect(steps).toBe(3);
@@ -664,27 +667,16 @@ describe("GameEngine built-in systems", () => {
     expect(engine.errors).toEqual([]);
   });
 
-  it("loads the content behavior trees once their handlers are registered", () => {
+  it("loads the content behavior trees because the AI registers their handlers", () => {
     const engine = createEngine();
     engine.newGame({ seed: 1 });
-    expect(engine.warnings).toHaveLength(1);
-    expect(engine.warnings[0]).toContain("behavior trees not loaded yet");
-    engine.newGame({ seed: 1 });
-    expect(engine.warnings).toHaveLength(1);
-
-    const ready = createEngine();
-    registerPackHandlers(ready.behaviorHandlers);
-    ready.newGame({ seed: 1 });
-    expect(ready.warnings).toEqual([]);
-    expect(ready.behaviorTrees.require("basic_needs").id).toBe("basic_needs");
-    const peasant = ready.store.spawn("peasant");
-    ready.behavior.setTree(peasant.id, "basic_needs");
-    expect(ready.behavior.tick(peasant.id, 1).status).toBe(NodeStatus.Success);
+    expect(engine.warnings).toEqual([]);
+    expect(engine.behaviorTrees.require("basic_needs").id).toBe("basic_needs");
+    expect(engine.behaviorHandlers.hasCondition("any_need_below_critical")).toBe(true);
+    expect(engine.behaviorHandlers.hasAction("satisfy_critical_need")).toBe(true);
+    expect(engine.behaviorHandlers.hasAction("idle_wander")).toBe(true);
+    const peasant = engine.store.spawn("peasant");
+    engine.behavior.setTree(peasant.id, "basic_needs");
+    expect(engine.behavior.tick(peasant.id, 1).status).toBe(NodeStatus.Success);
   });
 });
-
-function registerPackHandlers(handlers: BehaviorHandlerRegistry): void {
-  handlers.registerCondition("any_need_below_critical", () => NodeStatus.Failure);
-  handlers.registerAction("satisfy_critical_need", () => NodeStatus.Success);
-  handlers.registerAction("idle_wander", () => NodeStatus.Success);
-}

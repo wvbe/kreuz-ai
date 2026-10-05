@@ -58,7 +58,7 @@ describe("loadContent (vertical-slice pack v0)", () => {
     expect(content.materials.require("bread").valueMilli).toBe(2000);
     expect(content.materials.require("nails").valueMilli).toBe(200);
     expect(content.materials.require("silver_penny").weightMilli).toBe(10);
-    expect(content.needs.require("hunger").decayPerTick).toBe(100);
+    expect(content.needs.require("hunger").decayPerTick).toBe(150);
     expect(content.needs.require("hunger").criticalThreshold).toBe(20000);
     expect(content.needs.require("rest").satisfactionMethods[0]?.amount).toBe(1200);
     expect(content.skills.require("farming").diminishingFactor).toBe(250);

@@ -85,12 +85,34 @@ describe("executeReplLine", () => {
     const bakerLine = run(context, "entities baker")
       .split("\n")
       .find((line) => line.includes("#"));
-    expect(bakerLine).toMatch(/^ {2}#\d+ baker \S+.*the Baker$/);
+    expect(bakerLine).toMatch(
+      /^ {2}#\d+ baker \S+.*the Baker {2}\[hunger 80% rest 80% mood 50% \| idle\]$/,
+    );
     const bakerId = Number(/#(\d+)/.exec(bakerLine ?? "")?.[1]);
     const lines = run(context, `inspect ${bakerId}`).split("\n");
     expect(lines.some((line) => /^ {2}name: .*the Baker$/.test(line))).toBe(true);
     expect(lines).toContain("  factions: #1 Settlement");
+    expect(lines.some((line) => /^ {2}needs: comfort 80%, faith 80%, hunger 80%/.test(line))).toBe(
+      true,
+    );
+    expect(lines).toContain("  action: idle");
     expect(run(context, "inspect 1")).not.toContain("name:");
+  });
+
+  it("shows settlers moving between two map snapshots and their needs and action (Checkpoint B)", () => {
+    const { context } = createContext();
+    run(context, "new 42 steady small");
+    const before = run(context, "map");
+    const listBefore = run(context, "entities farmer");
+    run(context, "step 40");
+    const after = run(context, "map");
+    const listAfter = run(context, "entities farmer");
+    expect(after).not.toBe(before);
+    expect(listBefore).toMatch(/\[hunger \d+% rest \d+% mood \d+% \| .+\]/);
+    expect(listAfter).toMatch(/\[hunger 7\d% rest 7\d% mood \d+% \| .+\]/);
+    const detail = run(context, "inspect 3");
+    expect(detail).toMatch(/ {2}action: (move to cell \d+|stand around|idle)/);
+    expect(detail).toContain("  priorities: hunger > rest > safety > social > comfort > faith");
   });
 
   it("uses the injected entropy for a seedless new", () => {

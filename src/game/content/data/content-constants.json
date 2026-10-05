@@ -23,5 +23,16 @@
   "journalCapacity": 20,
   "chronicleCapacity": 100,
   "cropGrowthTicks": 864,
-  "needStartValue": 80
+  "needStartValue": 80,
+  "starvationHealthPerTick": 0.25,
+  "healthRegenPerTick": 0.02,
+  "moodSmoothing": 0.05,
+  "groundSleepRate": 0.5,
+  "sleepWakeThreshold": 90,
+  "wealthyCoins": 500,
+  "poorCoins": 50,
+  "wanderRadiusCost": 60,
+  "idleStandChance": 0.3,
+  "idleStandMinTicks": 6,
+  "idleStandMaxTicks": 24
 }

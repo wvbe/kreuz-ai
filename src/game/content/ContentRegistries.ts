@@ -159,7 +159,12 @@ export class ContentRegistries {
       prototypes.register(structuredClone(prototype));
     }
     for (const humanoid of this.humanoids.all()) {
-      prototypes.register(humanoidPrototypeDefinition(humanoid, this.materials));
+      prototypes.register(
+        humanoidPrototypeDefinition(humanoid, this.materials, {
+          needs: this.needs.all(),
+          startValueMilli: this.constants.needStartValue,
+        }),
+      );
     }
   }
 

@@ -10,6 +10,10 @@ import { IdCounters } from "../../src/game/engine/IdCounters";
 import { citizenComponent } from "../../src/game/factions/citizenComponent";
 import { factionComponent } from "../../src/game/factions/factionComponent";
 import { identityComponent } from "../../src/game/identity/identityComponent";
+import { healthComponent } from "../../src/game/ai/needs/healthComponent";
+import { moodComponent } from "../../src/game/ai/mood/moodComponent";
+import { needsComponent } from "../../src/game/ai/needs/needsComponent";
+import { relationshipsComponent } from "../../src/game/ai/relationships/relationshipsComponent";
 import { inventoryComponent } from "../../src/game/inventory/inventoryComponent";
 import { getTotal } from "../../src/game/inventory/inventoryQueries";
 import { positionComponent } from "../../src/game/map/positionComponent";
@@ -41,6 +45,10 @@ describe("content pack v0 with the kernel", () => {
       factionComponent,
       citizenComponent,
       identityComponent,
+      needsComponent,
+      moodComponent,
+      healthComponent,
+      relationshipsComponent,
     ]) {
       components.register(definition);
     }
@@ -83,6 +91,10 @@ describe("content pack v0 with the kernel", () => {
     components.register(factionComponent);
     components.register(citizenComponent);
     components.register(identityComponent);
+    components.register(needsComponent);
+    components.register(moodComponent);
+    components.register(healthComponent);
+    components.register(relationshipsComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

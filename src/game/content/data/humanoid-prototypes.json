@@ -6,9 +6,14 @@
       "farming": 5,
       "hauling": 5
     },
-    "equipment": [],
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
     "traitSlots": 2,
-    "behaviorTreeId": "idle_wander"
+    "behaviorTreeId": "basic_needs"
   },
   {
     "id": "farmer",
@@ -42,6 +47,10 @@
       {
         "materialId": "nails",
         "quantity": 20
+      },
+      {
+        "materialId": "bread",
+        "quantity": 2
       }
     ],
     "traitSlots": 2,

@@ -2,7 +2,7 @@
   {
     "id": "hunger",
     "name": "Hunger",
-    "decayPerTick": 0.1,
+    "decayPerTick": 0.15,
     "criticalThreshold": 20,
     "satisfactionMethods": [
       {
@@ -15,7 +15,7 @@
   {
     "id": "rest",
     "name": "Rest",
-    "decayPerTick": 0.08,
+    "decayPerTick": 0.15,
     "criticalThreshold": 20,
     "satisfactionMethods": [
       {

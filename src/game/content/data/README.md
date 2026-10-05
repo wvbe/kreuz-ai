@@ -27,7 +27,7 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `dwelling-levels.json` | 4 levels, placeholder numbers | tuned (spec 029) |
 | `settlement-tiers.json` | 4 tiers with the 027 default requirements | tuned, more zone requirements |
 | `difficulty-modes.json` | 3 modes with the 027 multipliers | final |
-| `content-constants.json` | spec values where given, the rest are guesses | tuned |
+| `content-constants.json` | spec values where given, the rest are guesses (task 2.4 added `starvationHealthPerTick`, `healthRegenPerTick`, `moodSmoothing`, `groundSleepRate`, `sleepWakeThreshold`, `wealthyCoins`, `poorCoins`, `wanderRadiusCost`, `idleStandChance`, `idleStandMinTicks/MaxTicks`) | tuned |
 | `moment-templates.json` | one short English template per moment kind | final text |
 | `name-formats.json` | the 028 templates | final |
 

@@ -8,6 +8,8 @@ import {
   formatEntityList,
   formatEvents,
   formatIdentity,
+  formatNeeds,
+  formatNeedsSummary,
   formatStatus,
   maxPrintedEvents,
   styledNameOf,
@@ -96,6 +98,16 @@ describe("formatEntityList", () => {
     ).toEqual(["entities 1-2 of 2", "  #1 government_faction", "  #3 baker Ansel the Baker"]);
   });
 
+  it("appends a need and action summary when given", () => {
+    expect(
+      formatEntityList(
+        { total: 1, offset: 0, entities: [{ id: 3, prototype: "baker" }] },
+        new Map(),
+        new Map([[3, "hunger 40% | idle"]]),
+      ),
+    ).toEqual(["entities 1-1 of 1", "  #3 baker  [hunger 40% | idle]"]);
+  });
+
   it("says when empty", () => {
     expect(formatEntityList({ total: 0, offset: 0, entities: [] })).toEqual([
       "no entities (total 0)",
@@ -176,5 +188,52 @@ describe("formatIdentity", () => {
   it("prints nothing for entities without the views or without factions", () => {
     expect(formatIdentity(null, null)).toEqual([]);
     expect(formatIdentity(null, { entityId: 1, factions: [] })).toEqual([]);
+  });
+});
+
+const needsView = {
+  entityId: 3,
+  needs: [
+    { needId: "faith", name: "Faith", valueMilli: 74_000, percent: 74, critical: false },
+    { needId: "hunger", name: "Hunger", valueMilli: 18_500, percent: 18, critical: true },
+    { needId: "rest", name: "Rest", valueMilli: 35_000, percent: 35, critical: false },
+  ],
+  moodMilli: 61_562,
+  riskSuccessPermille: 585,
+  healthMilli: 99_000,
+  role: "worker",
+  priorityOrder: ["hunger", "rest", "faith"],
+  coins: 0,
+  wealth: "poor",
+  action: "move to cell 326",
+};
+
+describe("formatNeedsSummary", () => {
+  it("shows hunger, rest, mood and the action in one line, marking critical needs", () => {
+    expect(formatNeedsSummary(needsView)).toBe("hunger 18%! rest 35% mood 61% | move to cell 326");
+  });
+
+  it("is null for anything that is not a needs view", () => {
+    expect(formatNeedsSummary(null)).toBeNull();
+    expect(formatNeedsSummary({ entityId: 1 })).toBeNull();
+  });
+
+  it("skips needs the entity does not have", () => {
+    expect(formatNeedsSummary({ ...needsView, needs: [] })).toBe("mood 61% | move to cell 326");
+  });
+});
+
+describe("formatNeeds", () => {
+  it("prints all needs, mood, health, role, wealth, priorities and the action", () => {
+    expect(formatNeeds(needsView)).toEqual([
+      "  needs: faith 74%, hunger 18%!, rest 35%",
+      "  mood: 61%  health: 99%  role: worker  wealth: poor (0 coins)",
+      "  priorities: hunger > rest > faith",
+      "  action: move to cell 326",
+    ]);
+  });
+
+  it("prints nothing for entities without needs", () => {
+    expect(formatNeeds(null)).toEqual([]);
   });
 });

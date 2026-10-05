@@ -5,6 +5,8 @@ import {
   formatEntityList,
   formatEvents,
   formatIdentity,
+  formatNeeds,
+  formatNeedsSummary,
   styledNameOf,
 } from "../formatViews";
 import { renderAsciiMap } from "../renderAsciiMap";
@@ -46,14 +48,20 @@ export const inspectVerbs: readonly Verb[] = [
         ...(prototype === undefined ? {} : { prototype }),
       });
       const names = new Map<number, string>();
+      const summaries = new Map<number, string>();
       for (const entity of list.entities) {
+        const needs = session.query.run("needs-of", { entityId: entity.id });
+        const summary = needs.ok ? formatNeedsSummary(needs.data) : null;
+        if (summary !== null) {
+          summaries.set(entity.id, summary);
+        }
         const identity = session.query.run("identity-of", { entityId: entity.id });
         const name = identity.ok ? styledNameOf(identity.data) : null;
         if (name !== null) {
           names.set(entity.id, name);
         }
       }
-      return verbDone(formatEntityList(list, names));
+      return verbDone(formatEntityList(list, names, summaries));
     },
   },
   {
@@ -70,6 +78,7 @@ export const inspectVerbs: readonly Verb[] = [
       const traits = session.query.run("traits-of", { entityId: id });
       const identity = session.query.run("identity-of", { entityId: id });
       const membership = session.query.run("faction-of", { entityId: id });
+      const needs = session.query.run("needs-of", { entityId: id });
       return verbDone([
         ...formatEntityDetail(detail, id),
         ...formatIdentity(
@@ -77,6 +86,7 @@ export const inspectVerbs: readonly Verb[] = [
           membership.ok ? membership.data : null,
         ),
         ...formatCharacter(skills.ok ? skills.data : null, traits.ok ? traits.data : null),
+        ...formatNeeds(needs.ok ? needs.data : null),
       ]);
     },
   },

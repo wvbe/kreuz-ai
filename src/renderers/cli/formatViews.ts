@@ -58,11 +58,13 @@ export function formatEvents(events: readonly EventRecord[], limit = maxPrintedE
  *
  * @param list - The `entities` view.
  * @param names - Styled names by entity id (from `identity-of`); named entities print theirs.
+ * @param summaries - One-line need and action summaries by entity id (see {@link formatNeedsSummary}).
  * @returns Output lines.
  */
 export function formatEntityList(
   list: EntityListView,
   names: ReadonlyMap<number, string> = new Map(),
+  summaries: ReadonlyMap<number, string> = new Map(),
 ): string[] {
   if (list.entities.length === 0) {
     return [`no entities (total ${list.total})`];
@@ -71,7 +73,8 @@ export function formatEntityList(
     `entities ${list.offset + 1}-${list.offset + list.entities.length} of ${list.total}`,
     ...list.entities.map((entity) => {
       const name = names.get(entity.id);
-      return `  #${entity.id} ${entity.prototype}${name === undefined ? "" : ` ${name}`}`;
+      const summary = summaries.get(entity.id);
+      return `  #${entity.id} ${entity.prototype}${name === undefined ? "" : ` ${name}`}${summary === undefined ? "" : `  [${summary}]`}`;
     }),
   ];
 }
@@ -170,4 +173,66 @@ export function formatIdentity(identity: JsonValue, membership: JsonValue): stri
     );
   }
   return lines;
+}
+
+const needsViewSchema = z.object({
+  needs: z.array(
+    z.object({
+      needId: z.string(),
+      percent: z.number(),
+      critical: z.boolean(),
+    }),
+  ),
+  moodMilli: z.number(),
+  healthMilli: z.number(),
+  role: z.string(),
+  priorityOrder: z.array(z.string()),
+  wealth: z.string(),
+  coins: z.number(),
+  action: z.string(),
+});
+
+/**
+ * One-line summary of a `needs-of` result for the `entities` list: the three needs that matter
+ * most day to day (hunger, rest and the lowest other one), mood in percent and the current
+ * action. Anything that is not a needs view gives null.
+ *
+ * @param view - Data of the `needs-of` query, or null.
+ * @returns The summary text, or null.
+ */
+export function formatNeedsSummary(view: JsonValue): string | null {
+  const parsed = needsViewSchema.safeParse(view);
+  if (!parsed.success) {
+    return null;
+  }
+  const { needs, moodMilli, action } = parsed.data;
+  const pick = (needId: string): string => {
+    const need = needs.find((candidate) => candidate.needId === needId);
+    return need === undefined ? "" : `${needId} ${need.percent}%${need.critical ? "!" : ""} `;
+  };
+  return `${pick("hunger")}${pick("rest")}mood ${Math.floor(moodMilli / 1000)}% | ${action}`;
+}
+
+/**
+ * Formats a `needs-of` result for `inspect`: every need with its level (a `!` marks critical
+ * ones), mood, health, role, wealth and the current action.
+ *
+ * @param view - Data of the `needs-of` query, or null.
+ * @returns Output lines, none when the entity has no needs.
+ */
+export function formatNeeds(view: JsonValue): string[] {
+  const parsed = needsViewSchema.safeParse(view);
+  if (!parsed.success) {
+    return [];
+  }
+  const data = parsed.data;
+  const levels = data.needs
+    .map((need) => `${need.needId} ${need.percent}%${need.critical ? "!" : ""}`)
+    .join(", ");
+  return [
+    `  needs: ${levels}`,
+    `  mood: ${Math.floor(data.moodMilli / 1000)}%  health: ${Math.floor(data.healthMilli / 1000)}%  role: ${data.role}  wealth: ${data.wealth} (${data.coins} coins)`,
+    `  priorities: ${data.priorityOrder.join(" > ")}`,
+    `  action: ${data.action}`,
+  ];
 }

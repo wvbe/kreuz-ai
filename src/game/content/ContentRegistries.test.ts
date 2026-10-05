@@ -12,6 +12,10 @@ import { positionComponent } from "../map/positionComponent";
 import { skillsComponent, traitsComponent } from "../skills/skillsComponent";
 import { taskQueueComponent } from "../task/taskQueueComponent";
 import { governmentFactionPrototypeId } from "./ContentRegistries";
+import { healthComponent } from "../ai/needs/healthComponent";
+import { moodComponent } from "../ai/mood/moodComponent";
+import { needsComponent } from "../ai/needs/needsComponent";
+import { relationshipsComponent } from "../ai/relationships/relationshipsComponent";
 import { loadContent } from "./ContentLoader";
 
 function components(): ComponentRegistry {
@@ -24,7 +28,15 @@ function components(): ComponentRegistry {
   registry.register(traitsComponent);
   registry.register(factionComponent);
   registry.register(citizenComponent);
-  registry.register(identityComponent);
+  for (const definition of [
+    identityComponent,
+    needsComponent,
+    moodComponent,
+    healthComponent,
+    relationshipsComponent,
+  ]) {
+    registry.register(definition);
+  }
   return registry;
 }
 

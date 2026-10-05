@@ -352,11 +352,18 @@ describe("GameSession end to end", () => {
               : name === "skills-of" ||
                   name === "traits-of" ||
                   name === "identity-of" ||
-                  name === "faction-of"
+                  name === "faction-of" ||
+                  name === "needs-of"
                 ? { entityId: 3 }
-                : name === "members-of"
-                  ? { factionId: 1 }
-                  : {},
+                : name === "find-path"
+                  ? { mapId: 1, from: 0, target: 1 }
+                  : name === "find-route"
+                    ? { from: { mapId: 1, cellIndex: 0 }, target: { mapId: 1, cellIndex: 1 } }
+                    : name === "reachable"
+                      ? { mapId: 1, from: 0 }
+                      : name === "members-of"
+                        ? { factionId: 1 }
+                        : {},
       );
       expect(result.ok).toBe(true);
       expect(JSON.parse(JSON.stringify(result))).toEqual(result);
