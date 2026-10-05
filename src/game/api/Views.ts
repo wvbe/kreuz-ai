@@ -110,8 +110,16 @@ export type MapLinkView = {
 };
 
 /**
- * One map: grid and terrain per cell (geometry stays in the renderer's hands: it is derived from
- * `params` and the grid type).
+ * A point in map units (DECISIONS D-40): milli-tiles on square maps, `0..65535` on voronoi maps.
+ */
+export type PointView = {
+  readonly x: number;
+  readonly y: number;
+};
+
+/**
+ * One map: grid, terrain per cell and the representative point of every cell, which is all a
+ * renderer needs to draw it (D-40).
  */
 export type MapView = {
   readonly id: number;
@@ -125,6 +133,15 @@ export type MapView = {
    * Terrain id of every cell, by cell index.
    */
   readonly terrain: readonly string[];
+  /**
+   * Representative point of every cell, by cell index: the tile centre on square maps, the site
+   * on voronoi maps.
+   */
+  readonly centers: readonly PointView[];
+  /**
+   * Width and height of the whole map in map units.
+   */
+  readonly extent: PointView;
   readonly links: readonly MapLinkView[];
 };
 

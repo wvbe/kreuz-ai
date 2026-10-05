@@ -2,6 +2,7 @@ import type { EntityId } from "../ecs/Entity";
 import { cloneJson } from "../ecs/jsonData";
 import type { GameEngine } from "../engine/GameEngine";
 import type { JsonValue } from "../engine/EventBus";
+import { squareTilePitch, voronoiWorldSize } from "../map/mapTypes";
 import type { MapLink } from "../map/mapTypes";
 import { ApiError, ApiErrorKind } from "./ApiError";
 import type { CommandQueue } from "./CommandQueue";
@@ -155,6 +156,11 @@ export function buildMapView(engine: GameEngine, mapId: number): MapView {
   if (state.params.relaxPasses !== undefined) {
     params["relaxPasses"] = state.params.relaxPasses;
   }
+  const map = engine.maps.require(mapId);
+  const extent =
+    state.width !== undefined && state.height !== undefined
+      ? { x: state.width * squareTilePitch, y: state.height * squareTilePitch }
+      : { x: voronoiWorldSize, y: voronoiWorldSize };
   return {
     id: state.id,
     gridType: state.gridType,
@@ -164,6 +170,11 @@ export function buildMapView(engine: GameEngine, mapId: number): MapView {
     params,
     cellCount: state.cells.length,
     terrain: state.cells.map((cell) => cell.terrain),
+    centers: state.cells.map((_cell, index) => {
+      const point = map.centroid(index);
+      return { x: point.x, y: point.y };
+    }),
+    extent,
     links: state.links.map((link) => ({
       cell: link.cell,
       targetMapId: link.targetMapId,

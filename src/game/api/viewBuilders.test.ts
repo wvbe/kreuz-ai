@@ -78,6 +78,8 @@ describe("view builders", () => {
     const map = buildMapView(engine, 1);
     expect(map).toMatchObject({ id: 1, parentId: null, gridType: "voronoi" });
     expect(map.terrain).toHaveLength(map.cellCount);
+    expect(map.centers).toHaveLength(map.cellCount);
+    expect(map.extent).toEqual({ x: 65536, y: 65536 });
     expect(map.params["generator"]).toBeTypeOf("string");
     expect(() => buildMapView(engine, 9)).toThrow(ApiError);
   });
