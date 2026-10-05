@@ -1,0 +1,82 @@
+[
+  {
+    "id": "quick_learner",
+    "name": "Quick learner",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "ALL",
+        "growthMultiplier": 1.2
+      }
+    ]
+  },
+  {
+    "id": "slow_learner",
+    "name": "Slow learner",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "ALL",
+        "growthMultiplier": 0.8
+      }
+    ]
+  },
+  {
+    "id": "strong",
+    "name": "Strong",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "hauling",
+        "stat": "multiplier",
+        "value": 1.3
+      }
+    ]
+  },
+  {
+    "id": "weak",
+    "name": "Weak",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "hauling",
+        "stat": "multiplier",
+        "value": 0.7
+      }
+    ]
+  },
+  {
+    "id": "hearty",
+    "name": "Hearty",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "hunger",
+        "decayRateMultiplier": 0.8
+      }
+    ]
+  },
+  {
+    "id": "tireless",
+    "name": "Tireless",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "rest",
+        "decayRateMultiplier": 0.7
+      }
+    ]
+  },
+  {
+    "id": "born_baker",
+    "name": "Born baker",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "baking",
+        "growthMultiplier": 1.5,
+        "startingValueBonus": 10
+      }
+    ]
+  }
+]

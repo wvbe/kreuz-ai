@@ -1,0 +1,109 @@
+[
+  {
+    "id": "wooden_bed",
+    "name": "Wooden bed",
+    "tags": ["bed", "comfort"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "oven",
+    "name": "Oven",
+    "tags": ["oven", "workstation"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 6
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "grinding_mill",
+    "name": "Grinding mill",
+    "tags": ["grinding_mill", "workstation"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "sawmill",
+    "name": "Sawmill",
+    "tags": ["sawmill", "workstation"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "nails",
+        "quantity": 8
+      }
+    ]
+  },
+  {
+    "id": "workbench",
+    "name": "Workbench",
+    "tags": ["workbench", "workstation"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "chest",
+    "name": "Chest",
+    "tags": ["storage"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "storage": {
+      "slotCount": 16,
+      "weightLimit": 200,
+      "categoryFilter": []
+    }
+  },
+  {
+    "id": "table",
+    "name": "Table",
+    "tags": ["table"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      }
+    ]
+  }
+]

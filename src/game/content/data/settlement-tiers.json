@@ -1,0 +1,73 @@
+[
+  {
+    "tier": "hamlet",
+    "settlementNoun": "hamlet"
+  },
+  {
+    "tier": "village",
+    "settlementNoun": "village",
+    "requirements": [
+      {
+        "kind": "population",
+        "min": 8
+      },
+      {
+        "kind": "dwellings_at_level",
+        "level": "hovel",
+        "min": 4
+      },
+      {
+        "kind": "active_zone",
+        "zoneTypeIds": ["throne_room"],
+        "min": 1
+      }
+    ]
+  },
+  {
+    "tier": "market_town",
+    "settlementNoun": "market town",
+    "requirements": [
+      {
+        "kind": "population",
+        "min": 20
+      },
+      {
+        "kind": "dwellings_at_level",
+        "level": "cottage",
+        "min": 8
+      },
+      {
+        "kind": "founded_guilds",
+        "min": 1
+      }
+    ]
+  },
+  {
+    "tier": "chartered_town",
+    "settlementNoun": "town",
+    "requirements": [
+      {
+        "kind": "population",
+        "min": 40
+      },
+      {
+        "kind": "dwellings_at_level",
+        "level": "timber_framed_house",
+        "min": 12
+      },
+      {
+        "kind": "dwellings_at_level",
+        "level": "burgher_house",
+        "min": 3
+      },
+      {
+        "kind": "founded_guilds",
+        "min": 3
+      },
+      {
+        "kind": "milestone_reached",
+        "milestone": "first-trade-agreement"
+      }
+    ]
+  }
+]

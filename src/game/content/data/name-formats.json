@@ -1,0 +1,8 @@
+{
+  "plain": "{given} {byname}",
+  "practitioner": "{given} the {noun}",
+  "master": "{given}, Master {noun}",
+  "officeSuffixMaster": " of the {factionName}",
+  "officeSuffixOther": ", {leaderTitle} of the {factionName}",
+  "stewardTitle": "Steward"
+}

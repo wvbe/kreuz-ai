@@ -1,0 +1,71 @@
+[
+  {
+    "id": "peasant",
+    "name": "Peasant",
+    "startingSkills": {
+      "farming": 5,
+      "hauling": 5
+    },
+    "equipment": [],
+    "traitSlots": 2,
+    "behaviorTreeId": "idle_wander"
+  },
+  {
+    "id": "farmer",
+    "name": "Farmer",
+    "startingSkills": {
+      "farming": 30,
+      "hauling": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "carpenter",
+    "name": "Carpenter",
+    "startingSkills": {
+      "carpentry": 30,
+      "woodcutting": 10,
+      "construction": 10
+    },
+    "equipment": [
+      {
+        "materialId": "iron_hammer",
+        "quantity": 1
+      },
+      {
+        "materialId": "nails",
+        "quantity": 20
+      }
+    ],
+    "traitSlots": 2,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "baker",
+    "name": "Baker",
+    "startingSkills": {
+      "baking": 30
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      },
+      {
+        "materialId": "silver_penny",
+        "quantity": 20
+      }
+    ],
+    "traitSlots": 2,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_bakers"],
+    "defaultTraitIds": ["born_baker"]
+  }
+]

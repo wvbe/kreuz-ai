@@ -1,0 +1,102 @@
+[
+  {
+    "level": "hovel",
+    "capacity": 2,
+    "rentPerDay": 0,
+    "minTiles": 4,
+    "furniture": [
+      {
+        "kind": "tag",
+        "ref": "bed",
+        "count": 1
+      }
+    ],
+    "foodVariety": 0,
+    "immigrantPrototypes": [
+      {
+        "prototypeId": "peasant",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "level": "cottage",
+    "capacity": 3,
+    "rentPerDay": 1,
+    "minTiles": 6,
+    "furniture": [
+      {
+        "kind": "tag",
+        "ref": "bed",
+        "count": 2
+      }
+    ],
+    "foodVariety": 2,
+    "immigrantPrototypes": [
+      {
+        "prototypeId": "peasant",
+        "weight": 1
+      }
+    ],
+    "suppliedGoods": [
+      {
+        "materialIds": ["bread"],
+        "perResidentPerDay": 0.5
+      }
+    ]
+  },
+  {
+    "level": "timber_framed_house",
+    "capacity": 4,
+    "rentPerDay": 2,
+    "minTiles": 9,
+    "furniture": [
+      {
+        "kind": "tag",
+        "ref": "bed",
+        "count": 3
+      }
+    ],
+    "foodVariety": 3,
+    "immigrantPrototypes": [
+      {
+        "prototypeId": "peasant",
+        "weight": 1
+      }
+    ],
+    "suppliedGoods": [
+      {
+        "materialIds": ["bread"],
+        "perResidentPerDay": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "level": "burgher_house",
+    "capacity": 6,
+    "rentPerDay": 4,
+    "minTiles": 16,
+    "furniture": [
+      {
+        "kind": "tag",
+        "ref": "bed",
+        "count": 4
+      }
+    ],
+    "foodVariety": 4,
+    "immigrantPrototypes": [
+      {
+        "prototypeId": "peasant",
+        "weight": 1
+      }
+    ],
+    "suppliedGoods": [
+      {
+        "materialIds": ["bread"],
+        "perResidentPerDay": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  }
+]

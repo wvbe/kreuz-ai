@@ -1,0 +1,37 @@
+[
+  {
+    "id": "idle_wander",
+    "root": {
+      "type": "action",
+      "id": "idle_wander"
+    }
+  },
+  {
+    "id": "basic_needs",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "any_need_below_critical"
+            },
+            {
+              "type": "action",
+              "id": "satisfy_critical_need"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "run_tree",
+          "params": {
+            "treeId": "idle_wander"
+          }
+        }
+      ]
+    }
+  }
+]

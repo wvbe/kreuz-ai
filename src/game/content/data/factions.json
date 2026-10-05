@@ -1,0 +1,14 @@
+[
+  {
+    "id": "guild_bakers",
+    "name": "Bakers' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Baker",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "baking",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  }
+]

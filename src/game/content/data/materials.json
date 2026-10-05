@@ -1,0 +1,116 @@
+[
+  {
+    "id": "silver_penny",
+    "name": "Silver penny",
+    "categories": ["currency", "valuable"],
+    "stackLimit": 1000,
+    "weight": 0.01,
+    "value": 1
+  },
+  {
+    "id": "oak_log",
+    "name": "Oak log",
+    "categories": ["raw", "wood", "building", "fuel"],
+    "stackLimit": 20,
+    "weight": 5,
+    "value": 1
+  },
+  {
+    "id": "oak_plank",
+    "name": "Oak plank",
+    "categories": ["processed", "wood", "building"],
+    "stackLimit": 40,
+    "weight": 2,
+    "value": 2
+  },
+  {
+    "id": "limestone",
+    "name": "Limestone",
+    "categories": ["raw", "stone"],
+    "stackLimit": 20,
+    "weight": 6,
+    "value": 1
+  },
+  {
+    "id": "stone_block",
+    "name": "Stone block",
+    "categories": ["processed", "stone", "building"],
+    "stackLimit": 20,
+    "weight": 8,
+    "value": 3
+  },
+  {
+    "id": "iron_ore",
+    "name": "Iron ore",
+    "categories": ["raw", "metal"],
+    "stackLimit": 20,
+    "weight": 6,
+    "value": 2
+  },
+  {
+    "id": "coal",
+    "name": "Coal",
+    "categories": ["raw", "fuel"],
+    "stackLimit": 40,
+    "weight": 2,
+    "value": 1
+  },
+  {
+    "id": "iron_ingot",
+    "name": "Iron ingot",
+    "categories": ["processed", "metal", "building"],
+    "stackLimit": 20,
+    "weight": 5,
+    "value": 6
+  },
+  {
+    "id": "nails",
+    "name": "Nails",
+    "categories": ["processed", "metal", "building"],
+    "stackLimit": 200,
+    "weight": 0.05,
+    "value": 0.2
+  },
+  {
+    "id": "wheat",
+    "name": "Wheat",
+    "categories": ["raw", "food", "grain"],
+    "stackLimit": 50,
+    "weight": 1,
+    "value": 0.5
+  },
+  {
+    "id": "flour",
+    "name": "Flour",
+    "categories": ["processed", "food", "flour"],
+    "stackLimit": 50,
+    "weight": 1,
+    "value": 1,
+    "perishability": 4320
+  },
+  {
+    "id": "bread",
+    "name": "Bread",
+    "categories": ["food"],
+    "stackLimit": 20,
+    "weight": 0.5,
+    "value": 2,
+    "perishability": 864
+  },
+  {
+    "id": "water",
+    "name": "Water",
+    "categories": ["drink"],
+    "stackLimit": 20,
+    "weight": 1,
+    "value": 0
+  },
+  {
+    "id": "iron_hammer",
+    "name": "Iron hammer",
+    "categories": ["tool"],
+    "stackLimit": 1,
+    "weight": 3,
+    "value": 8
+  }
+]

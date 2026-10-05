@@ -1,0 +1,114 @@
+[
+  {
+    "id": "farming",
+    "name": "Farming",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "output_bonus",
+        "value": 1
+      }
+    ],
+    "titleNoun": "Farmer"
+  },
+  {
+    "id": "woodcutting",
+    "name": "Woodcutting",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Woodcutter"
+  },
+  {
+    "id": "carpentry",
+    "name": "Carpentry",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Carpenter"
+  },
+  {
+    "id": "construction",
+    "name": "Construction",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Builder"
+  },
+  {
+    "id": "hauling",
+    "name": "Hauling",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Hauler"
+  },
+  {
+    "id": "baking",
+    "name": "Baking",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "output_bonus",
+        "value": 1
+      }
+    ],
+    "titleNoun": "Baker"
+  },
+  {
+    "id": "masonry",
+    "name": "Masonry",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "quality_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Mason"
+  },
+  {
+    "id": "smithing",
+    "name": "Smithing",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "quality_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Smith"
+  }
+]

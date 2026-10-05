@@ -1,0 +1,72 @@
+[
+  {
+    "id": "farm.sow",
+    "name": "Sow field",
+    "skillId": "farming",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "farm_field"
+    },
+    "recurrence": "one-time"
+  },
+  {
+    "id": "farm.harvest",
+    "name": "Harvest field",
+    "skillId": "farming",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "farm_field"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "wheat",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "fell.trees",
+    "name": "Fell trees",
+    "skillId": "woodcutting",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "forest_oak"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "oak_log",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "id": "haul.deliver",
+    "name": "Haul goods",
+    "skillId": "hauling",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time"
+  },
+  {
+    "id": "craft.produce",
+    "name": "Craft goods",
+    "skillId": null,
+    "zoneContext": {
+      "kind": "per_recipe"
+    },
+    "recurrence": "recurring"
+  },
+  {
+    "id": "build.construct",
+    "name": "Construct",
+    "skillId": "construction",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time",
+    "toolMaterialId": "iron_hammer"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "government_faction",
+    "components": {}
+  },
+  {
+    "id": "wall",
+    "components": {
+      "Position": {}
+    }
+  },
+  {
+    "id": "job_board",
+    "components": {
+      "Position": {}
+    }
+  }
+]

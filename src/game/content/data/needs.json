@@ -1,0 +1,56 @@
+[
+  {
+    "id": "hunger",
+    "name": "Hunger",
+    "decayPerTick": 0.1,
+    "criticalThreshold": 20,
+    "satisfactionMethods": [
+      {
+        "kind": "item",
+        "ref": "bread",
+        "amount": 30
+      }
+    ]
+  },
+  {
+    "id": "rest",
+    "name": "Rest",
+    "decayPerTick": 0.08,
+    "criticalThreshold": 20,
+    "satisfactionMethods": [
+      {
+        "kind": "furniture",
+        "ref": "wooden_bed",
+        "amount": 1.2
+      }
+    ]
+  },
+  {
+    "id": "safety",
+    "name": "Safety",
+    "decayPerTick": 0.02,
+    "criticalThreshold": 20,
+    "satisfactionMethods": []
+  },
+  {
+    "id": "social",
+    "name": "Social",
+    "decayPerTick": 0.04,
+    "criticalThreshold": 20,
+    "satisfactionMethods": []
+  },
+  {
+    "id": "comfort",
+    "name": "Comfort",
+    "decayPerTick": 0.03,
+    "criticalThreshold": 20,
+    "satisfactionMethods": []
+  },
+  {
+    "id": "faith",
+    "name": "Faith",
+    "decayPerTick": 0.02,
+    "criticalThreshold": 30,
+    "satisfactionMethods": []
+  }
+]

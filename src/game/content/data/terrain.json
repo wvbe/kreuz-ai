@@ -1,0 +1,87 @@
+[
+  {
+    "id": "grassland",
+    "name": "Grassland",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true
+  },
+  {
+    "id": "fertile_soil",
+    "name": "Fertile soil",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true
+  },
+  {
+    "id": "forest_oak",
+    "name": "Oak forest",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "oak_log",
+        "quantity": 3
+      }
+    ],
+    "clearsTo": "grassland"
+  },
+  {
+    "id": "water_shallow",
+    "name": "Shallow water",
+    "moveCost": 25,
+    "passable": false,
+    "blockReason": "water",
+    "buildable": false
+  },
+  {
+    "id": "stone_deposit",
+    "name": "Stone deposit",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "limestone",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "mountain",
+    "name": "Mountain",
+    "moveCost": 25,
+    "passable": false,
+    "blockReason": "impassable_cliff",
+    "buildable": false
+  },
+  {
+    "id": "rock_wall",
+    "name": "Rock wall",
+    "moveCost": 25,
+    "passable": false,
+    "blockReason": "impassable_cliff",
+    "buildable": false
+  },
+  {
+    "id": "floor_wood",
+    "name": "Wooden floor",
+    "moveCost": 7,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true
+  },
+  {
+    "id": "road_dirt",
+    "name": "Dirt road",
+    "moveCost": 7,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true
+  }
+]

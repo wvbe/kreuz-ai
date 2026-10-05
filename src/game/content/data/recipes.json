@@ -1,0 +1,80 @@
+[
+  {
+    "id": "saw_oak_planks",
+    "name": "Saw oak planks",
+    "inputs": [
+      {
+        "materialId": "oak_log",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "sawmill",
+    "skillId": "carpentry"
+  },
+  {
+    "id": "grind_flour",
+    "name": "Grind flour",
+    "inputs": [
+      {
+        "materialId": "wheat",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "flour",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "grinding_mill",
+    "skillId": "baking"
+  },
+  {
+    "id": "bake_bread",
+    "name": "Bake bread",
+    "inputs": [
+      {
+        "materialId": "flour",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 20,
+    "workstationTag": "oven",
+    "skillId": "baking",
+    "roomZoneId": "bakery",
+    "unlockTier": "village"
+  },
+  {
+    "id": "cut_stone_block",
+    "name": "Cut stone block",
+    "inputs": [
+      {
+        "materialId": "limestone",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "stone_block",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 36,
+    "workstationTag": "workbench",
+    "skillId": "masonry"
+  }
+]

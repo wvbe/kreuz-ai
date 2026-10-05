@@ -1,0 +1,20 @@
+[
+  {
+    "difficulty": "peaceful",
+    "decayMultiplier": 0.5,
+    "needDecayMultiplier": 0.7,
+    "factionHostilityMultiplier": 0.25
+  },
+  {
+    "difficulty": "steady",
+    "decayMultiplier": 1,
+    "needDecayMultiplier": 1,
+    "factionHostilityMultiplier": 1
+  },
+  {
+    "difficulty": "harsh",
+    "decayMultiplier": 1.5,
+    "needDecayMultiplier": 1.3,
+    "factionHostilityMultiplier": 1.5
+  }
+]

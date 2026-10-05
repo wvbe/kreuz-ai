@@ -1,0 +1,58 @@
+[
+  {
+    "id": "currency",
+    "name": "Currency"
+  },
+  {
+    "id": "raw",
+    "name": "Raw resource"
+  },
+  {
+    "id": "processed",
+    "name": "Processed good"
+  },
+  {
+    "id": "food",
+    "name": "Food"
+  },
+  {
+    "id": "drink",
+    "name": "Drink"
+  },
+  {
+    "id": "tool",
+    "name": "Tool"
+  },
+  {
+    "id": "building",
+    "name": "Building material"
+  },
+  {
+    "id": "wood",
+    "name": "Wood"
+  },
+  {
+    "id": "stone",
+    "name": "Stone"
+  },
+  {
+    "id": "metal",
+    "name": "Metal"
+  },
+  {
+    "id": "fuel",
+    "name": "Fuel"
+  },
+  {
+    "id": "grain",
+    "name": "Grain"
+  },
+  {
+    "id": "flour",
+    "name": "Flour"
+  },
+  {
+    "id": "valuable",
+    "name": "Valuable"
+  }
+]

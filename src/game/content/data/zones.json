@@ -1,0 +1,83 @@
+[
+  {
+    "id": "stockpile",
+    "name": "Stockpile",
+    "requiresRoom": false,
+    "minTiles": 1
+  },
+  {
+    "id": "farm_field",
+    "name": "Farm field",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "cropOutputs": [
+      {
+        "materialId": "wheat",
+        "quantity": 4
+      }
+    ],
+    "skillAffinityId": "farming"
+  },
+  {
+    "id": "bakery",
+    "name": "Bakery",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "oven",
+          "count": 1
+        }
+      ]
+    ],
+    "unlockTier": "village",
+    "skillAffinityId": "baking"
+  },
+  {
+    "id": "bedroom",
+    "name": "Bedroom",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "bed",
+          "count": 1
+        }
+      ]
+    ]
+  },
+  {
+    "id": "dwelling",
+    "name": "Dwelling",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "bed",
+          "count": 1
+        }
+      ]
+    ]
+  },
+  {
+    "id": "throne_room",
+    "name": "Throne room",
+    "requiresRoom": true,
+    "minTiles": 9,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "table",
+          "count": 1
+        }
+      ]
+    ]
+  }
+]
