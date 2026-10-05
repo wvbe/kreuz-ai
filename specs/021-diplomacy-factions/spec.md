@@ -1,18 +1,13 @@
 # Feature Specification: Diplomacy & Factions
 
-**Feature Branch**: `021-diplomacy-factions`
 **Created**: 2026-05-03
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "the diplomacy & factions feature. Each faction has a leader, and diplomatic dispatches must be brought to that leader and not just into territory." Prior clarifications: Factions are ECS entities with multi-membership; player government is a faction; faction standing is a baseline bias on individual affinity; diplomatic actions = trade agreements, gifts, declarations, overtures; consequences = trade access + affinity baseline + labour access; dispatch via dedicated Diplomatic Envoy entity.
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Factions as ECS Entities (Priority: P1)
 
-A **Faction** is a standard ECS entity in the game world. It has components that declare its name, type (political, occupational, religious — open set), current standing with other factions, a reference to its **leader entity**, and a list of member entities. Entities may belong to multiple factions simultaneously. The player's government is itself a faction. Factions are created in world data or at runtime; they use the same entity prototype and component machinery as any other entity (feature 003).
+A **Faction** is a standard ECS entity in the game world. It has components that declare its name, type (political, occupational, religious — open set), current standing with other factions, and a reference to its **leader entity**. Its member entities are derived by query: membership is stored on the member entities only (their `Citizen.factions` field); a faction's member list is derived by query, never stored on the faction. Entities may belong to multiple factions simultaneously. The player's government is itself a faction. Factions are created in world data or at runtime; they use the same entity prototype and component machinery as any other entity (feature 003).
 
 **Why this priority**: Factions are the foundation of everything else in this spec. Without them, standing, diplomacy, and membership have no data structure to anchor to.
 
@@ -20,11 +15,11 @@ A **Faction** is a standard ECS entity in the game world. It has components that
 
 **Acceptance Scenarios**:
 
-1. **Given** a Faction entity "Baker's Guild" with type `occupational`, **When** queried, **Then** it has a name, type, leader reference, member list, and faction-standing map.
-2. **Given** a Citizen entity, **When** assigned to both "Baker's Guild" and "Stoneworkers' Union", **Then** querying the Citizen's `factions` component returns both faction IDs.
-3. **Given** an entity's `factions` component, **When** queried via the entity access system (feature 002) for `getEntitiesByProperty('Citizen.factions', { contains: factionId })`, **Then** only entities that are members of that faction are returned.
+1. **Given** a Faction entity "Baker's Guild" with type `occupational`, **When** queried, **Then** it has a name, type, leader reference, and faction-standing map, and its member list can be derived by querying `Citizen.factions`.
+2. **Given** a Citizen entity, **When** assigned to both "Baker's Guild" and "Stoneworkers' Union", **Then** querying the Citizen's `Citizen.factions` field returns both faction IDs.
+3. **Given** entities' `Citizen.factions` fields, **When** queried via the entity access system (feature 002) for `getEntitiesByProperty('Citizen.factions', { contains: factionId })`, **Then** only entities that are members of that faction are returned.
 4. **Given** the player's government Faction entity, **When** queried, **Then** it is indistinguishable in structure from any other faction entity (same component schema).
-5. **Given** a Faction entity is serialized and deserialized, **Then** all components (standing map, leader reference, member list) are fully preserved.
+5. **Given** a Faction entity is serialized and deserialized, **Then** all components (standing map, leader reference) are fully preserved, and members' `Citizen.factions` fields still derive the same member list.
 
 ---
 
@@ -48,7 +43,7 @@ Every Faction entity has a designated **leader**: a reference to a specific enti
 
 ### User Story 3 - Faction Standing (Priority: P1)
 
-Each Faction maintains a **standing** score with every other faction it has had diplomatic contact with. Standing is an integer in the range [-100, 100]: -100 = absolute hostility, 0 = neutral/unknown, 100 = full alliance. Standing shifts based on diplomatic acts (Q3 clarification: trade agreements, gifts, declarations, overtures) and passive events (completed trades, broken agreements, attacks). Standing is stored on the Faction entity as a component: a map of `{ factionId → standingValue }`. Factions with no recorded standing default to 0 (neutral).
+Each Faction maintains a **standing** score with every other faction it has had diplomatic contact with. Standing is an integer in the range [-100, 100]: -100 = absolute hostility, 0 = neutral/unknown, 100 = full alliance. Standing shifts based on diplomatic acts (trade agreements, gifts, declarations, overtures) and passive events (completed trades, broken agreements, attacks). Standing is stored on the Faction entity as a component: a map of `{ factionId → { value, tradeAgreement } }` (see FactionStanding). Factions with no recorded standing default to 0 (neutral).
 
 **Why this priority**: Standing is the measurable output of all diplomacy. Trade gating, affinity biases, and labour access all read from it. Without standing, consequences have nothing to read.
 
@@ -97,9 +92,9 @@ The player can initiate four types of diplomatic acts, each carried by a Diploma
 
 **Acceptance Scenarios**:
 
-1. **Given** the player issues a Gift of 500 currency to Faction B, **When** delivered, **Then** 500 currency is removed from the Throne Room treasury, placed in the faction leader's inventory, and Faction B's standing with the player's faction increases.
+1. **Given** the player issues a Gift of 500 currency to Faction B, **When** committed, **Then** 500 currency is removed from the Throne Room treasury before the Envoy is dispatched (FR-010); **When** delivered, **Then** it is placed in the faction leader's inventory, and Faction B's standing with the player's faction increases.
 2. **Given** the player proposes a Trade Agreement to Faction B (standing ≥ 20), **When** Faction B's AI evaluates it, **Then** if current standing is above the acceptance threshold, both factions gain `tradeAgreement: true` in their standing map entry; members can now trade freely.
-3. **Given** the player declares War on Faction B, **When** the Declaration is delivered, **Then** Faction B's standing with the player drops to ≤ -50; the faction AI sets a hostile disposition toward the player's colony.
+3. **Given** the player declares War on Faction B, **When** the Declaration is delivered, **Then** Faction B's standing with the player drops to ≤ -50, i.e. a hostile standing toward the player's colony (disposition is static prototype data and does not change).
 4. **Given** a Trade Agreement is active and the player later declares War, **When** the War declaration is delivered, **Then** the Trade Agreement is automatically cancelled (`tradeAgreement: false`); trade between members becomes blocked (spec 019).
 5. **Given** the player sends an Overture to Faction B (current standing: 0), **When** delivered, **Then** the faction AI responds based on standing and personality — neutral factions may respond with a counter-overture; hostile factions ignore it.
 
@@ -151,20 +146,21 @@ NPC factions (non-player factions) can also initiate diplomatic acts toward the 
 - What happens if the sender faction's leader is destroyed after dispatch but before delivery? → The Envoy continues and delivers; the sending faction's standing update still applies on delivery.
 - What happens if two factions simultaneously send hostile declarations to each other? → Both are delivered independently; standing drops on both sides; no "mutual war" special case needed.
 - What happens if the player's treasury cannot cover a promised Gift payment? → The diplomatic act is blocked at initiation time; no Envoy is dispatched until funds are available.
-- What happens if a faction is destroyed (all members gone, entity removed)? → All standing records pointing to that faction ID become stale; they are treated as neutral (0) on next read. Pending Envoys targeting that faction are recalled.
+- What happens if a faction is destroyed (all members gone, entity removed)? → Standing entries for the destroyed faction are removed from every other faction's standing map (no dangling references remain). Pending Envoys targeting that faction are recalled.
 - What happens if two entities belong to factions with conflicting standings (one faction friendly, another hostile with the same counterpart)? → The affinity baseline offset is the average across all relevant faction pair standings for those two entities. Conflicting signals average out.
 - What happens if a Diplomatic Envoy is attacked or destroyed en route? → `diplomacy.dispatch.failed` is emitted with reason `envoy-destroyed`; the act is not applied; the sender may re-dispatch.
+- **Open question:** When a Gift dispatch fails (leader unavailable, unreachable, envoy destroyed), what happens to the currency/goods already deducted from the treasury before dispatch (FR-010) — returned with the Envoy, or lost?
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
-- **FR-001**: System MUST support a Faction entity type in the entity prototype registry (feature 003). Each Faction entity MUST have components for: `name`, `factionType` (string, open set), `leaderId` (entity ID reference), `memberIds` (list of entity IDs), `standing` (map of `factionId → integer [-100, 100]`), and `disposition` (for NPC AI: `mercantile`, `aggressive`, `isolationist`, etc. — open set).
-- **FR-002**: Individual entities MUST have a `factions` component: a list of faction entity IDs. An entity may belong to any number of factions. The player's government entity MUST be a faction.
-- **FR-003**: Each Faction MUST have exactly one designated leader entity at any time. The leader reference is an entity ID stored in the Faction's `leaderId` field. A Faction with no living leader (`leaderId` points to a destroyed or missing entity) is considered **leaderless** and cannot receive diplomatic dispatches until a new leader is assigned.
+- **FR-001**: System MUST support a Faction entity type in the entity prototype registry (feature 003). Each Faction entity MUST have components for: `name`, `factionType` (string, open set), `leaderId` (entity ID reference, or null when leaderless — FR-003), `standing` (map of `factionId → { value: integer [-100, 100], tradeAgreement: boolean }`), and `disposition` (for NPC AI: `mercantile`, `aggressive`, `isolationist`, etc. — open set).
+- **FR-002**: Individual entities MUST store their faction membership in a `factions` field on their `Citizen` component (queried as `Citizen.factions`): a list of faction entity IDs. This is the only source of truth for membership; a faction's member list is derived by query (FR-015). An entity may belong to any number of factions. The player's government entity MUST be a faction. The `Citizen` component also carries `homeDwellingId` (dwelling zone entity ID or null) and `homeAssignedTick` (integer), the only source of truth for a citizen's home (spec 029 FR-005).
+- **FR-003**: Each Faction MUST have exactly one designated leader entity at any time. The leader reference is an entity ID stored in the Faction's `leaderId` field. When the leader entity is destroyed, `leaderId` is cleared to null; a Faction with `leaderId: null` is considered **leaderless** and cannot receive diplomatic dispatches until a new leader is assigned. When a Faction entity is destroyed, its entries are removed from all other factions' standing maps.
 - **FR-004**: System MUST support a **DiplomaticEnvoy** entity type (distinct from TownCrier, spec 017). A DiplomaticEnvoy entity carries a DiplomaticMessage payload and pathfinds to the target faction's current leader entity. The Envoy's destination updates dynamically if the leader moves.
-- **FR-005**: A DiplomaticMessage MUST declare: sender faction ID, target faction ID, act type (`gift` / `trade-agreement` / `declaration` / `overture`), payload (items/currency for gifts, sub-type for declarations, terms for trade agreements), and creation tick.
-- **FR-006**: On Envoy delivery (Envoy reaches leader entity), standing changes MUST be applied immediately to both faction standing maps (sender and receiver may update independently). `diplomacy.message.delivered` MUST be emitted.
+- **FR-005**: A DiplomaticMessage MUST declare: sender faction ID, target faction ID, act type (a `DiplomaticActType` enum: Gift, TradeAgreement, Declaration, Overture), payload (items/currency for gifts, sub-type for declarations, terms for trade agreements), and creation tick.
+- **FR-006**: On Envoy delivery (Envoy reaches leader entity), standing changes MUST be applied immediately to both faction standing maps (sender and receiver may update independently). `diplomacy.message.delivered` MUST be emitted. Negative standing deltas an NPC faction applies towards the player faction are scaled by the difficulty `factionHostilityMultiplier` (spec 027 FR-015).
 - **FR-007**: Standing values MUST be clamped to [-100, 100] at all times. Default standing between two factions with no prior contact is 0.
 - **FR-008**: Standing consequences MUST be enforced in the systems that read them:
   - Trade (spec 019): entities from factions with standing < -30 (configurable) refuse trade. Trade Agreements grant a configurable `priceMultiplier` discount.
@@ -172,20 +168,20 @@ NPC factions (non-player factions) can also initiate diplomatic acts toward the 
   - Labour (spec 017): entities from factions with standing < -30 do not accept jobs from the hostile faction.
 - **FR-009**: System MUST support four diplomatic act types: Gift (transfers items/currency from sender treasury to leader inventory), Trade Agreement (sets `tradeAgreement: true` on both factions' standing entries if accepted), Declaration (sets standing to a configured value; sub-types: war/peace/neutrality), Overture (triggers faction AI evaluation; may result in a counter-dispatch).
 - **FR-010**: Gift acts MUST deduct the gifted items/currency from the sending faction's treasury (Throne Room containers for the player faction) before dispatching the Envoy. If insufficient funds, the act is blocked.
-- **FR-011**: System MUST emit events: `diplomacy.act.initiated`, `diplomacy.dispatch.started`, `diplomacy.message.delivered`, `diplomacy.dispatch.failed` (with reason: `leader-unavailable`, `unreachable`, `envoy-destroyed`), `diplomacy.standing.changed`, `diplomacy.agreement.formed`, `diplomacy.agreement.cancelled`.
-- **FR-012**: NPC faction AI MUST evaluate diplomatic opportunities each tick based on disposition, current standing, and resource/need state. Evaluation results in 0 or 1 diplomatic acts per tick per faction (rate-limited by a configurable cooldown).
-- **FR-013**: Incoming Envoys from NPC factions arrive at the player's faction leader entity. The player (or player faction AI) may accept, counter-dispatch, or reject. Rejection applies a configurable small standing penalty.
-- **FR-014**: All faction state (standing maps, leader references, member lists, pending Envoy state) MUST serialize to GameState (feature 006) and resume identically on load.
-- **FR-015**: Entity queries (feature 002) MUST support multi-value membership queries: find all entities that are a member of a given faction ID via `factions` component list containment.
+- **FR-011**: System MUST emit events: `diplomacy.act.initiated`, `diplomacy.dispatch.started`, `diplomacy.message.delivered`, `diplomacy.dispatch.failed` (with a `DispatchFailureReason` enum reason: `leader-unavailable`, `unreachable`, `envoy-destroyed`), `diplomacy.standing.changed`, `diplomacy.agreement.formed`, `diplomacy.agreement.cancelled`.
+- **FR-012**: NPC faction AI MUST evaluate diplomatic opportunities each tick based on disposition, current standing, and resource/need state. Evaluation results in 0 or 1 diplomatic acts per tick per faction (rate-limited by a configurable cooldown). The selection weight NPC faction AI gives to hostile acts targeting the player faction is scaled by the difficulty `factionHostilityMultiplier` (spec 027 FR-015).
+- **FR-013**: Incoming Envoys from NPC factions arrive at the player's faction leader entity. The player (or player faction AI) may accept, counter-dispatch, or reject. Rejection applies a configurable small standing penalty. Negative standing deltas an NPC faction applies towards the player faction are scaled by the difficulty `factionHostilityMultiplier` (spec 027 FR-015).
+- **FR-014**: All faction state (standing maps, leader references, entity-side `Citizen.factions` membership, pending Envoy state) MUST serialize to GameState (feature 006) and resume identically on load.
+- **FR-015**: Entity queries (feature 002) MUST support multi-value membership queries: find all entities that are a member of a given faction ID via `Citizen.factions` list containment. This query is how a faction's member list is obtained.
 
 ### Key Entities
 
-- **Faction**: An ECS entity with components: name, factionType, leaderId, memberIds, standing map, disposition. The player's government is one. Open-ended set of types (political, occupational, religious, etc.).
+- **Faction**: An ECS entity with components: name, factionType, leaderId, standing map, disposition. Members are derived by query on `Citizen.factions` (not stored on the faction). The player's government is one. Open-ended set of types (political, occupational, religious, etc.). The player's government faction carries the `SettlementChronicle` component (spec 028 FR-018) and the `SettlementProgress` component (spec 027 FR-002).
 - **DiplomaticEnvoy**: An entity dispatched from the sender's government seat. Carries a DiplomaticMessage payload. Pathfinds to the target faction's current leader entity. Returns to base after delivery or failure.
 - **DiplomaticMessage**: A data payload on a DiplomaticEnvoy. Contains act type, sender/target faction IDs, payload data, and creation tick. Not a persistent entity — consumed on delivery.
 - **FactionStanding**: A component sub-record within the Faction entity's standing map: `{ factionId → { value: integer, tradeAgreement: boolean } }`.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
