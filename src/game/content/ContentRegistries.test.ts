@@ -4,6 +4,9 @@ import { NodeStatus } from "../behavior/behaviorTypes";
 import { aiStateComponent } from "../behavior/aiStateComponent";
 import { ComponentRegistry } from "../ecs/ComponentRegistry";
 import { PrototypeRegistry } from "../ecs/PrototypeRegistry";
+import { citizenComponent } from "../factions/citizenComponent";
+import { factionComponent } from "../factions/factionComponent";
+import { identityComponent } from "../identity/identityComponent";
 import { inventoryComponent } from "../inventory/inventoryComponent";
 import { positionComponent } from "../map/positionComponent";
 import { skillsComponent, traitsComponent } from "../skills/skillsComponent";
@@ -19,6 +22,9 @@ function components(): ComponentRegistry {
   registry.register(aiStateComponent);
   registry.register(skillsComponent);
   registry.register(traitsComponent);
+  registry.register(factionComponent);
+  registry.register(citizenComponent);
+  registry.register(identityComponent);
   return registry;
 }
 
@@ -38,6 +44,7 @@ describe("ContentRegistries", () => {
     expect(first.ids()).toEqual([
       "baker",
       "carpenter",
+      "faction",
       "farmer",
       "government_faction",
       "job_board",

@@ -15,5 +15,7 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [behavior](behavior/README.md) - JSON behavior trees: DSL schema, loader checks, interpreter with serialized running node.
 - [content](content/README.md) - content pack loader: Zod schemas, JSON data (vertical-slice pack v0), referential checks, per-engine `ContentRegistries`.
 - [skills](skills/README.md) - `Skills` / `Traits` components, growth, work speed, affinity, trait modifier hooks.
+- [factions](factions/README.md) - `Faction` / `Citizen` components, derived membership, leaders, standing data, dangling-reference clean-up.
+- [identity](identity/README.md) - names from the content lists, derived titles, offices, styled names.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).

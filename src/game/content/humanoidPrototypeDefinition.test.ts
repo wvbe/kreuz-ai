@@ -3,7 +3,7 @@ import { loadContent } from "./ContentLoader";
 import { humanoidPrototypeDefinition } from "./humanoidPrototypeDefinition";
 
 describe("humanoidPrototypeDefinition", () => {
-  it("builds Position, Inventory, TaskQueue, AiState, Skills and Traits components", () => {
+  it("builds Position, Inventory, TaskQueue, AiState, Skills, Traits, Citizen and Identity components", () => {
     const content = loadContent();
     const prototype = humanoidPrototypeDefinition(
       content.humanoids.require("baker"),
@@ -12,6 +12,8 @@ describe("humanoidPrototypeDefinition", () => {
     expect(prototype.id).toBe("baker");
     expect(Object.keys(prototype.components).sort()).toEqual([
       "AiState",
+      "Citizen",
+      "Identity",
       "Inventory",
       "Position",
       "Skills",
@@ -21,6 +23,8 @@ describe("humanoidPrototypeDefinition", () => {
     expect(prototype.components["AiState"]).toEqual({ treeId: "basic_needs" });
     expect(prototype.components["Skills"]).toEqual({ values: { baking: 30000 } });
     expect(prototype.components["Traits"]).toEqual({ ids: ["born_baker"] });
+    expect(prototype.components["Citizen"]).toEqual({});
+    expect(prototype.components["Identity"]).toEqual({ nameListId: "common_13c" });
   });
 
   it("stores equipment as stacks with fresh perishables and respects stack limits", () => {

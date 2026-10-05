@@ -28,8 +28,8 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 2.2 A* pathfinding (012)
 - [x] 2.3 Skills & traits (020)
 - [ ] 2.4 Needs, mood, utility+BT AI, movement (013)
-- [ ] 2.5 Factions core (021 part)
-- [ ] 2.6 Citizen identity (028 part)
+- [x] 2.5 Factions core (021 part)
+- [x] 2.6 Citizen identity (028 part)
 - [ ] **Checkpoint B:** settlers live autonomously, 1k-tick soak deterministic, save/load mid-soak identical
 
 ## Phase 3 — Economy

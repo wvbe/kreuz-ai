@@ -42,6 +42,10 @@ import { EventBus } from "./EventBus";
 import type { EventBusErrorReport, EventBusErrorSink, JsonValue } from "./EventBus";
 import { GameEngineError, GameEngineErrorKind } from "./GameEngineError";
 import { IdCounters } from "./IdCounters";
+import { registerFactions } from "../factions/registerFactions";
+import { factionsSystemId } from "../factions/factionTypes";
+import { registerIdentity } from "../identity/registerIdentity";
+import { identitySystemId } from "../identity/identityTypes";
 import { registerSkills, skillsSystemId } from "../skills/registerSkills";
 import { parseGameInitOptions } from "./options";
 import type { GameInitOptions } from "./options";
@@ -636,10 +640,14 @@ export class GameEngine {
         }
       },
     });
+    // Identity first: its before-delete hook must read the offices of a deleted leader before the
+    // factions hook empties `leaderId`.
+    registerIdentity(this);
+    registerFactions(this);
     registerSkills(this);
     this.registerSystem({
       id: "world.starting-map",
-      dependencies: [skillsSystemId],
+      dependencies: [skillsSystemId, factionsSystemId, identitySystemId],
       init: ({ engine, mode, options }) => {
         if (mode !== InitMode.NewGame || options.mapSize === null) {
           return;

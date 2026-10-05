@@ -8,7 +8,7 @@ import type { HumanoidPrototypeContent } from "./schemas/characterSchemas";
  * equipment as stacked items, perishables fresh), `TaskQueue`, `AiState` pointing at the
  * prototype's behavior tree, `Skills` (the starting skills, milli-percent) and `Traits` (the
  * authored `defaultTraitIds`; `initializeCharacter` of `../skills` draws them when none are
- * authored). Needs and factions stay content data until tasks 2.4 and 2.5 add their components.
+ * authored). `Citizen` (no factions yet) and `Identity` (name list; the name itself is drawn by `assignIdentity` at spawn). Needs stay content data until task 2.4 adds its component.
  *
  * @param humanoid - Validated humanoid record.
  * @param materials - Registry that supplies stack limits and perishability of the equipment.
@@ -43,6 +43,8 @@ export function humanoidPrototypeDefinition(
       AiState: { treeId: humanoid.behaviorTreeId },
       Skills: { values: { ...humanoid.startingSkills } },
       Traits: { ids: [...humanoid.defaultTraitIds].sort() },
+      Citizen: {},
+      Identity: { nameListId: humanoid.nameListId },
     },
   };
 }

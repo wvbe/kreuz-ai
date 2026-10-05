@@ -1,7 +1,20 @@
 [
   {
     "id": "government_faction",
-    "components": {}
+    "components": {
+      "Faction": {
+        "name": "Settlement",
+        "factionType": "political",
+        "leaderTitle": "Reeve",
+        "disposition": "none"
+      }
+    }
+  },
+  {
+    "id": "faction",
+    "components": {
+      "Faction": {}
+    }
   },
   {
     "id": "wall",

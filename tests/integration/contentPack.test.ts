@@ -7,6 +7,9 @@ import { ComponentRegistry } from "../../src/game/ecs/ComponentRegistry";
 import { requireComponent } from "../../src/game/ecs/Entity";
 import { EntityStore } from "../../src/game/ecs/EntityStore";
 import { IdCounters } from "../../src/game/engine/IdCounters";
+import { citizenComponent } from "../../src/game/factions/citizenComponent";
+import { factionComponent } from "../../src/game/factions/factionComponent";
+import { identityComponent } from "../../src/game/identity/identityComponent";
 import { inventoryComponent } from "../../src/game/inventory/inventoryComponent";
 import { getTotal } from "../../src/game/inventory/inventoryQueries";
 import { positionComponent } from "../../src/game/map/positionComponent";
@@ -35,6 +38,9 @@ describe("content pack v0 with the kernel", () => {
       aiStateComponent,
       skillsComponent,
       traitsComponent,
+      factionComponent,
+      citizenComponent,
+      identityComponent,
     ]) {
       components.register(definition);
     }
@@ -52,7 +58,7 @@ describe("content pack v0 with the kernel", () => {
     if (!baker) throw new Error("baker missing");
     expect(getTotal(baker, "silver_penny")).toBe(20);
     expect(requireComponent(baker, aiStateComponent).treeId).toBe("basic_needs");
-    expect(store.spawn("government_faction").components).toEqual({});
+    expect(Object.keys(store.spawn("government_faction").components)).toEqual(["Faction"]);
     expect(store.size).toBe(5);
   });
 
@@ -74,6 +80,9 @@ describe("content pack v0 with the kernel", () => {
     components.register(aiStateComponent);
     components.register(skillsComponent);
     components.register(traitsComponent);
+    components.register(factionComponent);
+    components.register(citizenComponent);
+    components.register(identityComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

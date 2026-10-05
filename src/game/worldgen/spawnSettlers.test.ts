@@ -49,6 +49,20 @@ describe("spawnSettlers", () => {
     expect(kinds).toEqual(["farmer", "farmer", "carpenter", "baker", "peasant", "peasant"]);
   });
 
+  it("makes the settlers named members of the government, led by the most skilled one", () => {
+    const { engine, mapId } = setup();
+    const spawned = spawnSettlers(engine, mapId, layout);
+    const government = engine.store.require(1).components["Faction"] as { leaderId: number | null };
+    for (const id of spawned.settlerIds) {
+      const components = engine.store.require(id).components;
+      expect((components["Citizen"] as { factions: number[] }).factions).toEqual([1]);
+      expect((components["Identity"] as { givenName: string }).givenName).not.toBe("");
+    }
+    expect(government.leaderId).toBe(spawned.settlerIds[2]);
+    const board = engine.store.require(spawned.jobBoardId ?? 0);
+    expect(board.components["Citizen"]).toBeUndefined();
+  });
+
   it("shares cells when the clearing is smaller than the settler count", () => {
     const { engine, mapId } = setup();
     const tiny: VillageLayout = { center: 10, clearing: [10, 11, 12], roads: [10], plots: [] };

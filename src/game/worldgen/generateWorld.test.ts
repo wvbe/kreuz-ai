@@ -3,6 +3,7 @@ import { bundledContentFiles, loadContent, loadContentPack } from "../content/Co
 import { ContentFile } from "../content/contentTypes";
 import { GameEngine } from "../engine/GameEngine";
 import { GameEngineError } from "../engine/GameEngineError";
+import { identityStreamName } from "../identity/identityTypes";
 import { MapSize } from "../map/mapSize";
 import { PathfindingService } from "../pathfinding/PathfindingService";
 import { PathResultKind } from "../pathfinding/pathTypes";
@@ -78,10 +79,11 @@ describe("generateWorld through newGame", () => {
     }
   });
 
-  it("only draws from the world.gen and content.traits streams", () => {
+  it("only draws from the world.gen, content.traits and identity.names streams", () => {
     const engine = start(42, MapSize.Small);
     expect(Object.keys(engine.prng.serialize().streams)).toEqual([
       traitStreamName,
+      identityStreamName,
       worldGenStreamName,
     ]);
   });
