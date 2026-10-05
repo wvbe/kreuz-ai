@@ -11,6 +11,7 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [task](task/README.md) - serializable task step machines: queue, priorities, interrupts, waits.
 - [map](map/README.md) - square and Voronoi maps, terrain registry, sub-maps and links, occupant index.
 - [inventory](inventory/README.md) - materials, stacked slots, weight, perishables, equipment, permissions, atomic transfers, money.
+- [save](save/README.md) - GameState root, canonical save/load, validation, migrations, state hash.
 - [behavior](behavior/README.md) - JSON behavior trees: DSL schema, loader checks, interpreter with serialized running node.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).
