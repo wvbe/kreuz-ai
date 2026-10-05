@@ -15,7 +15,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 1.2 ECS: entities/components/prototypes/access (003A, 002)
 - [x] 1.3 Task/step runtime + BT interpreter core — **highest risk, do first** (003B, 013 core)
 - [x] 1.4 Map & terrain: square + Voronoi, sub-maps (004)
-- [ ] 1.5 Inventory (005)
+- [x] 1.5 Inventory (005)
 - [ ] 1.6 Save format, migrations, round-trip (006)
 - [ ] 1.7 Content loader + registries + vertical-slice pack v0 (022 loader)
 - [ ] 1.8 Engine bootstrap + system registry (007)
