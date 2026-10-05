@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+package-lock.json
+specs
+tasks
+.claude
+.specify
+.github
+docs
+README.md

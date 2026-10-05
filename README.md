@@ -2,7 +2,7 @@
 
 A headless, deterministic colony/settlement simulation set in 13th-century Europe, with a React/Three.js renderer. The engine runs without a UI (in Node or the browser); renderers observe and control it.
 
-**Status**: specification only — there is no implementation yet.
+**Status**: foundations in place (scaffold, PRNG, event bus); engine under construction per [tasks/plan.md](tasks/plan.md). Run `npm install && npm run ci`.
 
 ## Documents
 

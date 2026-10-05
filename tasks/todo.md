@@ -5,10 +5,10 @@ Greenfield: the old implementation is deleted and not consulted (owner decision)
 Definition of Done for every task: lint + typecheck clean, a co-located test per exported function, TSDoc, folder README, JSON round-trip test for new state, `npm run ci` green.
 
 ## Phase 0 — Foundations
-- [ ] 0.1 Delete old code; scaffold per spec 023 (tsconfigs, ESLint incl. determinism bans, vitest, tsx, check scripts)
+- [x] 0.1 Delete old code; scaffold per spec 023 (tsconfigs, ESLint incl. determinism bans, vitest, vite-node, check scripts)
 - [ ] 0.2 `docs/DECISIONS.md` — resolve cross-spec conflicts, command/event catalogues, tick order, descopes (owner waived review; includes trader refined-credit ledger rule)
-- [ ] 0.3 PRNG & seed (011)
-- [ ] 0.4 Event bus (010)
+- [x] 0.3 PRNG & seed (011)
+- [x] 0.4 Event bus (010)
 
 ## Phase 1 — Kernel + headless shell
 - [ ] 1.1 Time, tick primitive, AutoRunner, TickPipeline (001)

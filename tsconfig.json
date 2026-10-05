@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "src/game" },
+    { "path": "src/renderers" },
+    { "path": "tsconfig.tools.json" }
+  ]
+}

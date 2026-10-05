@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "rootDir": ".",
+    "outDir": "build/tsc/tools",
+    "tsBuildInfoFile": "build/tsc/tools.tsbuildinfo"
+  },
+  "include": ["scripts/**/*.ts", "tests/**/*.ts", "vite.config.ts"]
+}
