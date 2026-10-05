@@ -1,13 +1,9 @@
 # Feature Specification: Game Map & Terrain System
 
-**Feature Branch**: `004-map-terrain`
 **Created**: 2026-05-02
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "Another framework level feature is the game map/terrain. Most scenes will contain persons, furniture, tools. I want to research if this must be grid-based or can be something else. Some entities will have hitboxes, some terrain will not be traversable for different reasons. There must be pathfinding. There is one 'main' game terrain, but the user can travel to other maps/rooms/dungeons in the same game, that run on the same game time (ie all their events keep happening). There will be different kinds of terrain, such as in open air, underground/excavated, or in an above-ground building. The helper classes for this provide an ergonomic way of altering this terrain, so that later different generators can generate different implementations of a building, hut, forest, field, market, cave, wine cellar, and so on. Procedurally generating this contents is out of scope for this feature, but the feature must allow it."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Implement Cell-Based Spatial Representation (Priority: P1)
 
@@ -92,7 +88,7 @@ The game supports diverse terrain types (open air, underground, buildings, etc.)
 **Acceptance Scenarios**:
 
 1. **Given** terrain type definitions (e.g., `{ type: "building", defaultFloor: "wood", defaultWalls: "stone" }`), **When** terrain instance is created from type, **Then** instance has correct default properties and can be altered.
-2. **Given** a terrain instance, **When** API call `terrain.addWall(location, orientation)` is executed, **Then** wall is placed at location and blocks traversal.
+2. **Given** a terrain instance, **When** the terrain alteration API places a wall entity in a cell (e.g. `placeWall(map, cellIndex)`), **Then** the wall entity occupies that whole cell and the cell becomes non-traversable; the cell's terrain type is unchanged. Walls and doors are cell-occupying entities; there are no edge walls and no wall orientation.
 3. **Given** a terrain instance, **When** API call `queryCell(map, cellIndex)` is executed, **Then** cell properties are returned (traversable, terrainType, occupants, zoneId, etc.).
 4. **Given** terrain alteration API, **When** used in a procedural generation script, **Then** script can generate building layouts (rooms, hallways), populate furniture, and create coherent spaces without procedural generator baked into terrain system.
 5. **Given** terrain alterations via API, **When** terrain is serialized to JSON and deserialized, **Then** all alterations are preserved and queries return identical results.
@@ -119,7 +115,7 @@ All terrain state (layout, obstacles, traversability, entity cell occupancy) and
 
 ### User Story 7 - Procedural Generation Support (Priority: P2)
 
-The terrain API and multi-map architecture are designed to support procedural generation of content (buildings, dungeons, forests, markets, wine cellars, etc.). While procedural generation algorithms themselves are out of scope for this feature, the terrain system must be extensible enough that generation scripts can: (a) create new maps with procedural layouts, (b) populate terrain with procedurally-placed entities, (c) define terrain variations (floor types, wall types, etc.). The system must not impose constraints that would prevent procedural generation.
+The terrain API and multi-map architecture are designed to support procedural generation of content (buildings, dungeons, forests, markets, wine cellars, etc.). Beyond the built-in map generators (User Story 8), the terrain system must be extensible enough that further generation scripts can: (a) create new maps with procedural layouts, (b) populate terrain with procedurally-placed entities, (c) define terrain variations (floor types, wall types, etc.). The system must not impose constraints that would prevent procedural generation.
 
 **Why this priority**: Not required for MVP, but must be architected for; retroactively adding procedural support would be expensive. P2 because core terrain works without it, but sets up future extensibility.
 
@@ -134,17 +130,35 @@ The terrain API and multi-map architecture are designed to support procedural ge
 
 ---
 
+### User Story 8 - Distinct Map Generators (Priority: P2)
+
+The engine ships with various distinct map generators so that the game world is rich: a voronoi outdoor world (biomes from an elevation × moisture lookup, rivers), square-tile caves (cellular automata), square-tile cellars (room partitioning), and a village layout pass on the voronoi map (roads along Delaunay edges). Every generator is deterministic and seed-driven: it uses only the game's seeded PRNG, returns a map/TileMap built through the terrain alteration API, and is testable headless.
+
+**Why this priority**: A varied world is what makes the colony interesting to explore and settle. P2 because the terrain system works with hand-made maps, but the default game map (voronoi outdoor world) and its sub-maps (caves, cellars) come from these generators.
+
+**Independent Test**: Can be fully tested headlessly by: running each generator twice with the same seed and verifying byte-identical serialized maps, running it with a different seed and verifying a different map, and verifying each generated map is valid (correct grid type, every cell has a terrain type, traversable areas are reachable by pathfinding where the generator promises connectivity).
+
+**Acceptance Scenarios**:
+
+1. **Given** a seed, **When** the voronoi outdoor generator runs, **Then** a voronoi map is returned whose cell biomes are derived from an elevation × moisture lookup and which contains rivers.
+2. **Given** a seed, **When** the cave generator runs, **Then** a square-tile map is returned whose open and rock areas are produced by cellular automata.
+3. **Given** a seed, **When** the cellar generator runs, **Then** a square-tile map is returned that is partitioned into rooms connected to each other.
+4. **Given** a generated voronoi outdoor map, **When** the village layout pass runs, **Then** a village is laid out on the map with roads following Delaunay edges between cells.
+5. **Given** the same seed and the same generator options, **When** any generator runs twice, **Then** the resulting maps are identical; no randomness other than the seeded PRNG is used.
+
+---
+
 ### Edge Cases
 
-- What happens if an entity is on a map that is deleted? → Must handle gracefully (move entity to main map or error clearly).
+- What happens if an entity is on a map that is deleted? → Must handle gracefully. **Open question:** move the entity to the main map, or reject the deletion / error clearly?
 - What happens if pathfinding is requested on a map the entity is not on? → Must error or return null clearly.
-- What happens if terrain is modified while entity is moving through it (wall appears)? → Movement should be re-evaluated or blocked.
-- What happens if entity travels to a map, then that map is unloaded? → Must be clear whether maps stay loaded or are unloaded; design choice must be explicit.
-- What happens if procedural generator tries to place entity at occupied location? → Error or displacement behavior must be defined.
+- What happens if terrain is modified while entity is moving through it (wall appears)? → Movement is re-evaluated: the entity never enters the now non-traversable cell and recomputes its path (spec 012 FR-006).
+- What happens if entity travels to a map, then that map is unloaded? → Not possible: all maps stay loaded and active for the whole game (see Assumptions: Maps Remain Loaded).
+- What happens if procedural generator tries to place entity at occupied location? → Placement succeeds; cells allow co-location (see below). Placing an entity into a non-traversable cell is rejected with a clear error.
 - What happens if many entities occupy the same cell? → System allows co-location; no upper limit on occupants per cell.
 - What happens in headless environments where there's no visual rendering? → Terrain queries and collision work identically.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
@@ -161,10 +175,11 @@ The terrain API and multi-map architecture are designed to support procedural ge
 - **FR-011**: System MUST share global game time across all maps (regardless of grid type); entities on different maps progress simultaneously.
 - **FR-012**: System MUST handle entity movement between maps seamlessly; entity state transitions correctly even when moving between maps with different grid types.
 - **FR-013**: System MUST support diverse terrain types (open air, underground, buildings, etc.) with customizable properties per cell.
-- **FR-014**: System MUST provide ergonomic API for terrain alteration (add/remove walls, place furniture, modify traversability). API is grid-type-agnostic; operations work identically on square and voronoi maps.
+- **FR-014**: System MUST provide ergonomic API for terrain alteration (add/remove wall and door entities, place furniture, modify traversability). Walls and doors are entities occupying a cell; they set that cell non-traversable (doors: passable per their state) and do not change the cell's terrain type. API is grid-type-agnostic; operations work identically on square and voronoi maps.
 - **FR-015**: System MUST provide terrain query API to determine properties at locations (traversable, terrain type, obstacles, etc.). Queries are grid-type-transparent.
 - **FR-016**: System MUST be extensible for procedural generation. Generators may be specialized for specific grid types (square grid generators for buildings; Voronoi generators for organic environments). Generators use terrain alteration API.
-- **FR-017**: System MUST serialize grid type explicitly: map JSON includes `"gridType": "square"` or `"gridType": "voronoi"`. Coordinates and region references are serialized in grid-type-specific format.
+- **FR-016a**: The engine MUST provide multiple deterministic, seed-driven map generators: a voronoi outdoor world (biomes from elevation × moisture lookup, rivers), square-tile caves (cellular automata), square-tile cellars (room partitioning), and a village layout pass on the voronoi map (roads along Delaunay edges). Each generator returns a map/TileMap, uses only the seeded PRNG, and is testable headless.
+- **FR-017**: System MUST serialize grid type explicitly: map JSON includes `"gridType": "square"` or `"gridType": "voronoi"`. Cells are serialized as a flat `cells[]` array indexed by cellIndex; dimensions are serialized only for square maps (spec 006).
 - **FR-018**: System MUST deserialize terrain state from JSON identically to original state. Grid type from save is enforced; maps with mismatched grid type are rejected on load.
 - **FR-019**: System MUST work identically in headless environments (no rendering layer).
 
@@ -174,11 +189,12 @@ The terrain API and multi-map architecture are designed to support procedural ge
 - **TerrainType**: Definition of terrain category (forest, cave, plains, etc.) with default properties and visual characteristics. Terrain type can be used with any grid type.
 - **Map**: A spatial region containing terrain and entities. Multiple maps coexist in same game world with unified time. Each map has an immutable grid type chosen at creation.
 - **GridType**: Enumeration of supported spatial representations (square, voronoi). Grid type is baked into map and immutable; determines coordinate semantics and pathfinding graph structure.
-- **Traversability**: Per-cell property indicating whether entities can enter (boolean plus reason string when blocked). Furniture and walls may set cells as non-traversable.
+- **Traversability**: Per-cell property indicating whether entities can enter (boolean plus reason string when blocked). Derived from the cell's terrain type and from entities occupying the cell: furniture and wall entities may set cells as non-traversable; door entities are passable per their state.
+- **MapGenerator**: A deterministic, seed-driven function that builds a map (voronoi outdoor world, cave, cellar) or applies a layout pass to one (village) through the terrain alteration API, using only the seeded PRNG.
 - **Path**: Sequence of cell indices from start to goal, computed by A\* pathfinding on the cell adjacency graph.
-- **Location**: Coordinate in a map. Discrete cell index depends on grid type: square maps use `{ cellX: int, cellY: int }` (or flat index); voronoi maps use `{ cellIndex: int }`. Game logic operates on cell-level positions only. The renderer interpolates between cells for smooth visual movement.
+- **Location**: Coordinate in a map. Discrete cell index `{ cellIndex: int }` on every grid type; square maps also accept `{ cellX: int, cellY: int }` as API sugar (`cellIndex = cellY × width + cellX`). Game logic operates on cell-level positions only. The renderer interpolates between cells for smooth visual movement.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
@@ -195,6 +211,7 @@ The terrain API and multi-map architecture are designed to support procedural ge
 - **SC-011**: Terrain queries execute in <5ms on maps with 1000+ cells, regardless of grid type.
 - **SC-012**: Terrain system operates identically in headless and browser environments across all grid types.
 - **SC-013**: Terrain alterations (add/remove walls, place furniture) persist through save/load cycles. Grid type is preserved in save and enforced on load.
+- **SC-014**: Each map generator (voronoi outdoor world, cave, cellar, village pass) produces identical maps for identical seed and options, and runs headless.
 
 ## Clarifications
 
@@ -210,7 +227,7 @@ The terrain API and multi-map architecture are designed to support procedural ge
 ### Session 2026-05-04 (Consolidation)
 
 - Q: Sub-cell precision model? → A: Cell-level for game logic; sub-cell for rendering interpolation only (renderer concern). No sub-cell data stored in game state.
-- Q: Hitbox/collision model? → A: Replaced by cell traversability. Cells are traversable or not. Furniture/walls set cells as non-traversable. No per-entity collision volumes.
+- Q: Hitbox/collision model? → A: Replaced by cell traversability. Cells are traversable or not. Furniture/walls set cells as non-traversable (walls and doors are entities occupying a cell; no edge walls). No per-entity collision volumes.
 
 ### Session 2026-05-02 (continued)
 
@@ -228,7 +245,7 @@ The terrain API and multi-map architecture are designed to support procedural ge
 - **Pathfinding Tie-Breaking via PRNG**: When multiple equally-valid paths exist, the game's seeded PRNG determines tie-breaking. Ensures deterministic pathfinding.
 - **Atomic Map Transitions**: Entity map transitions are atomic operations — entity is removed from source cell and added to destination cell in one step.
 - **Async Continuity During Travel**: Map transitions do not interrupt pending async operations.
-- **Cell Traversability**: Cells are traversable or not. Traversability can be changed by placing/removing walls and furniture. No per-entity collision volumes.
+- **Cell Traversability**: Cells are traversable or not. Traversability can be changed by placing/removing wall, door and furniture entities in a cell; the cell's terrain type is unchanged. No per-entity collision volumes. Other entities (citizens, animals) never block a cell.
 - **Maps Remain Loaded**: All maps in game world remain loaded and active simultaneously (no streaming/unloading).
 - **Single Authoritative Location**: Each entity exists at exactly one cell on exactly one map at any point in time.
 - **Global Entity IDs**: Entity IDs are unique game-wide and stable across serialization.
@@ -237,3 +254,4 @@ The terrain API and multi-map architecture are designed to support procedural ge
 - **No Dynamic Terrain Streaming**: All maps are loaded at game start.
 - **Entity Movement Discretized**: Entities move along cell paths; visual interpolation is handled by the renderer, not the game engine.
 - **Headless Parity**: Headless execution has full parity with browser execution across all grid types.
+- **Map Generator Defaults**: Suggested defaults (tunable options, not hard requirements): voronoi outdoor world ~600 cells with 2 Lloyd relaxation passes; caves 30×30 with an initial fill ratio of 0.45; cellars ~4 rooms.
