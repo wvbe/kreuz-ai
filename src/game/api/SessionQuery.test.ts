@@ -33,9 +33,12 @@ describe("SessionQuery", () => {
       "needs-of",
       "pending-commands",
       "reachable",
+      "reservations",
       "settlement",
       "skills-of",
       "state",
+      "stock",
+      "stockpiles",
       "time",
       "traits-of",
     ]);
@@ -66,7 +69,7 @@ describe("SessionQuery", () => {
     const session = startedSession();
     expect(session.query.map(9)).toBeNull();
     expect(session.query.cell(9, 0)).toBeNull();
-    expect(session.query.entity(9)).toBeNull();
+    expect(session.query.entity(99)).toBeNull();
     expect(session.query.run("nope")).toMatchObject({
       ok: false,
       error: { kind: ApiErrorKind.UnknownQuery },

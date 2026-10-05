@@ -312,7 +312,7 @@ describe("GameEngine query facade", () => {
     engine.newGame({ seed: 1, mapSize: MapSize.Small });
     engine.runTicks(300);
     const state = engine.getState();
-    expect(state.entityCount).toBe(8);
+    expect(state.entityCount).toBe(9);
     expect(state.mapCount).toBe(1);
     expect(state.time).toEqual({
       tick: 300,
@@ -390,7 +390,10 @@ describe("GameEngine registerSystem", () => {
       "members-of",
       "needs-of",
       "reachable",
+      "reservations",
       "skills-of",
+      "stock",
+      "stockpiles",
       "traits-of",
     ]);
     expect(engine.getCommandHandler("demo.none")).toBeUndefined();
@@ -398,6 +401,8 @@ describe("GameEngine registerSystem", () => {
       "PostCustomJob",
       "PostJob",
       "SetJobBoardPaused",
+      "SetStockpilePriority",
+      "SetStorageMaterialFilter",
       "demo.ping",
     ]);
     engine.newGame({ seed: 1 });

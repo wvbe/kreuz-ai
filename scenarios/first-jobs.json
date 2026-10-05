@@ -49,35 +49,13 @@
     },
     {
       "assert": {
-        "query": "entity",
+        "query": "stock",
         "args": {
-          "id": 4
+          "materialId": "oak_log"
         },
-        "path": "components.Inventory.slots.1.materialId",
-        "op": "eq",
-        "value": "oak_log"
-      }
-    },
-    {
-      "assert": {
-        "query": "entity",
-        "args": {
-          "id": 4
-        },
-        "path": "components.Inventory.slots.1.quantity",
+        "path": "total",
         "op": "gt",
         "value": 0
-      }
-    },
-    {
-      "assert": {
-        "query": "entity",
-        "args": {
-          "id": 4
-        },
-        "path": "components.Inventory.slots.2.materialId",
-        "op": "eq",
-        "value": "silver_penny"
       }
     },
     {

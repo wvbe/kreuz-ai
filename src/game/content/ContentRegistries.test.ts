@@ -17,6 +17,8 @@ import { healthComponent } from "../ai/needs/healthComponent";
 import { moodComponent } from "../ai/mood/moodComponent";
 import { needsComponent } from "../ai/needs/needsComponent";
 import { relationshipsComponent } from "../ai/relationships/relationshipsComponent";
+import { furnitureComponent } from "../storage/furnitureComponent";
+import { stockpileComponent } from "../storage/stockpileComponent";
 import { loadContent } from "./ContentLoader";
 
 function components(): ComponentRegistry {
@@ -36,6 +38,8 @@ function components(): ComponentRegistry {
     healthComponent,
     relationshipsComponent,
     jobBoardComponent,
+    furnitureComponent,
+    stockpileComponent,
   ]) {
     registry.register(definition);
   }
@@ -58,10 +62,12 @@ describe("ContentRegistries", () => {
     expect(first.ids()).toEqual([
       "baker",
       "carpenter",
+      "chest",
       "faction",
       "farmer",
       "government_faction",
       "job_board",
+      "loose_pile",
       "peasant",
       "wall",
     ]);

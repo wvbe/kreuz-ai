@@ -32,6 +32,10 @@ function logsHeld(engine: GameEngine): number {
   );
 }
 
+function logsStored(engine: GameEngine): number {
+  return getTotal(engine.store.require(9), "oak_log");
+}
+
 function coinsHeld(engine: GameEngine): number {
   const context = { materials: engine.materials, actor: null };
   return settlerIds(engine).reduce(
@@ -51,21 +55,28 @@ describe("first jobs (seed 42, Small)", () => {
     const engine = newGame();
     const completed = collect(engine, "jobboard.job.completed");
     const claimed = collect(engine, "jobboard.job.claimed");
-    const before = logsHeld(engine);
+    const before = logsHeld(engine) + logsStored(engine);
     const coinsBefore = coinsHeld(engine);
     engine.runTicks(dayTicks);
+    const felled = completed.filter(
+      (entry) => (entry as { jobTypeId: string }).jobTypeId === "fell.trees",
+    );
     expect(claimed.length).toBeGreaterThan(0);
-    expect(completed.length).toBeGreaterThan(0);
-    expect(logsHeld(engine) - before).toBe(3 * completed.length);
-    expect(coinsHeld(engine) - coinsBefore).toBe(2 * completed.length);
-    const first = completed[0] as { workerId: number; wage: number; jobTypeId: string };
+    expect(felled.length).toBeGreaterThan(0);
+    // The logs are in the settlers' inventories or in the chest (task 3.2 hauls them there).
+    expect(logsHeld(engine) + logsStored(engine) - before).toBe(3 * felled.length);
+    expect(logsStored(engine)).toBeGreaterThan(0);
+    expect(coinsHeld(engine) - coinsBefore).toBe(2 * felled.length);
+    const first = felled[0] as { workerId: number; wage: number; jobTypeId: string };
     expect(first.jobTypeId).toBe("fell.trees");
     expect(first.wage).toBe(2);
     expect(settlerIds(engine)).toHaveLength(6);
     const board = engine.store.require(2).components["JobBoard"] as {
-      history: { status: string; target: { cellIndex: number } }[];
+      history: { status: string; jobTypeId: string; target: { cellIndex: number } }[];
     };
-    const done = board.history.filter((posting) => posting.status === "done");
+    const done = board.history.filter(
+      (posting) => posting.status === "done" && posting.jobTypeId === "fell.trees",
+    );
     expect(done.length).toBeGreaterThan(0);
     const map = engine.maps.require(1);
     for (const posting of done) {

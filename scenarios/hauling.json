@@ -1,0 +1,62 @@
+{
+  "name": "hauling",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    { "assert": { "query": "stockpiles", "path": "length", "op": "eq", "value": 1 } },
+    {
+      "assert": {
+        "query": "stock",
+        "args": { "materialId": "oak_log" },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    { "step": 288 },
+    { "assertHash": { "label": "day1" } },
+    {
+      "assert": {
+        "query": "stock",
+        "args": { "materialId": "oak_log" },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    { "saveLoad": true },
+    { "step": 288 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 576 } },
+    {
+      "assert": {
+        "query": "stock",
+        "args": { "materialId": "oak_log" },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": { "materialId": "oak_log" },
+        "path": "holders.0.entityId",
+        "op": "eq",
+        "value": 9
+      }
+    },
+    {
+      "assert": {
+        "query": "stockpiles",
+        "path": "0.contents.0.materialId",
+        "op": "eq",
+        "value": "oak_log"
+      }
+    },
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    { "replay": true }
+  ]
+}
