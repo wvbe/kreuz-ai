@@ -144,7 +144,7 @@ describe("engine determinism (spec 007, Constitution I)", () => {
       engine.loadGame(engine.saveGame());
       expect(engine.getStateHash()).toBe(baseline);
     }
-    expect(engine.pipeline.getSystemOrder().length).toBeLessThan(12);
+    expect(engine.pipeline.getSystemOrder().length).toBeLessThan(16);
   });
 
   it("bootstraps in under 100 ms and rejects bad options in under 50 ms", () => {

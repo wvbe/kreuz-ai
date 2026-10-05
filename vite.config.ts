@@ -6,6 +6,9 @@ export default defineConfig({
   build: { outDir: "dist", emptyOutDir: true },
   test: {
     environment: "node",
+    // Scenario and determinism tests run whole games twice; under coverage and parallel load the
+    // default 5 s is too tight.
+    testTimeout: 30_000,
     include: ["src/**/*.test.ts", "src/**/*.test.tsx", "tests/**/*.test.ts"],
     coverage: {
       provider: "v8",
