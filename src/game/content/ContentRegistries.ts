@@ -144,13 +144,23 @@ export class ContentRegistries {
    */
   createPrototypeRegistry(components: ComponentRegistry): PrototypeRegistry {
     const prototypes = new PrototypeRegistry(components);
+    this.registerPrototypes(prototypes);
+    return prototypes;
+  }
+
+  /**
+   * Registers every engine prototype and every humanoid prototype into an existing registry (the
+   * engine fills its own registry lazily, once all systems have registered their components).
+   *
+   * @param prototypes - Registry to fill; it must not contain any of these ids yet.
+   */
+  registerPrototypes(prototypes: PrototypeRegistry): void {
     for (const prototype of this.enginePrototypes.all()) {
       prototypes.register(structuredClone(prototype));
     }
     for (const humanoid of this.humanoids.all()) {
       prototypes.register(humanoidPrototypeDefinition(humanoid, this.materials));
     }
-    return prototypes;
   }
 
   /**

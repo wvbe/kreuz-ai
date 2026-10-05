@@ -3,6 +3,7 @@ import { BehaviorHandlerRegistry } from "../behavior/BehaviorHandlerRegistry";
 import { NodeStatus } from "../behavior/behaviorTypes";
 import { aiStateComponent } from "../behavior/aiStateComponent";
 import { ComponentRegistry } from "../ecs/ComponentRegistry";
+import { PrototypeRegistry } from "../ecs/PrototypeRegistry";
 import { inventoryComponent } from "../inventory/inventoryComponent";
 import { positionComponent } from "../map/positionComponent";
 import { taskQueueComponent } from "../task/taskQueueComponent";
@@ -41,6 +42,14 @@ describe("ContentRegistries", () => {
       "wall",
     ]);
     expect(first.has(governmentFactionPrototypeId)).toBe(true);
+  });
+
+  it("registerPrototypes fills an existing registry", () => {
+    const content = loadContent();
+    const target = new PrototypeRegistry(components());
+    content.registerPrototypes(target);
+    expect(target.ids()).toEqual(content.createPrototypeRegistry(components()).ids());
+    expect(() => content.registerPrototypes(target)).toThrow();
   });
 
   it("creates a behavior tree registry once the handlers exist", () => {
