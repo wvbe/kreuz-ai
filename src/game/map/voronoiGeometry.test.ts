@@ -9,7 +9,7 @@ import {
   maxVoronoiCellCount,
   polygonCentroid,
 } from "./voronoiGeometry";
-import { buildSquareGeometry } from "./squareGeometry";
+import { buildSquareGeometry } from "./buildSquareGeometry";
 
 const small = { seed: 7, cellCount: 200, relaxPasses: 2 };
 

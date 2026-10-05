@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSquareGeometry } from "./squareGeometry";
+import { buildSquareGeometry } from "./buildSquareGeometry";
 import { GridType } from "./mapTypes";
 
 describe("buildSquareGeometry", () => {

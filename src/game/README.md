@@ -9,6 +9,7 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [time](time/README.md) - the simulation clock and calendar helpers.
 - [ecs](ecs/README.md) - entities, components, prototypes, queries, relationships.
 - [task](task/README.md) - serializable task step machines: queue, priorities, interrupts, waits.
+- [map](map/README.md) - square and Voronoi maps, terrain registry, sub-maps and links, occupant index.
 - [behavior](behavior/README.md) - JSON behavior trees: DSL schema, loader checks, interpreter with serialized running node.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).
