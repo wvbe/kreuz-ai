@@ -15,6 +15,11 @@ import type { VillageLayout } from "./layoutVillage";
 export const jobBoardPrototypeId = "job_board";
 
 /**
+ * Prototype id of the starting storage: a chest that is a stockpile (task 3.2).
+ */
+export const stockpilePrototypeId = "chest";
+
+/**
  * Prototypes of the starting settlers, in spawn order (DECISIONS D-06, spec 007/027): two farmers,
  * a carpenter, a baker and two peasants. Prototypes the content pack lacks are skipped.
  */
@@ -36,15 +41,20 @@ export type SpawnedSettlement = {
    */
   jobBoardId: EntityId | null;
   /**
+   * Entity id of the starting stockpile chest on the clearing, or null when the pack has no such
+   * prototype.
+   */
+  stockpileId: EntityId | null;
+  /**
    * Settler entity ids in spawn order.
    */
   settlerIds: EntityId[];
 };
 
 /**
- * Spawns the settlement kit on the village clearing: the job board on the center cell and the
+ * Spawns the settlement kit on the village clearing: the job board on the center cell, the
  * starting settlers on distinct clearing cells (nearest to the center first, never a starter
- * plot). Cells are registered with the map occupant index and written to `Position`; settlers get
+ * plot) and then the stockpile chest (task 3.2) on the next clearing cell. Cells are registered with the map occupant index and written to `Position`; settlers get
  * their traits and starting skill bonuses from `initializeCharacter`, join the government faction
  * and are named by `assignIdentity`; afterwards the settler with the greatest total skill (ties:
  * lowest id) becomes the government's leader.
@@ -82,9 +92,12 @@ export function spawnSettlers(
       settlerIds.push(place(prototypeId, cells[settlerIds.length % cells.length] as number));
     }
   }
+  const stockpileId = engine.prototypes.has(stockpilePrototypeId)
+    ? place(stockpilePrototypeId, cells[settlerIds.length % cells.length] as number)
+    : null;
   const government = governmentFactionId(engine);
   if (government !== null) {
     setFactionLeader(engine, government, pickLeaderCandidate(engine, government));
   }
-  return { jobBoardId, settlerIds };
+  return { jobBoardId, stockpileId, settlerIds };
 }

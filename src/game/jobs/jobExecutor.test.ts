@@ -175,6 +175,27 @@ describe("registerJobType", () => {
   });
 });
 
+describe("executor cancel hook", () => {
+  it("runs before the claim is released with the cancel token", () => {
+    const seen: string[] = [];
+    const waiting: JobExecutor = {
+      start: () => continueStep(),
+      step: () => continueStep(),
+      cancel: (_context, _record, token) => seen.push(token.reason),
+    };
+    const { world, worker, posting } = setup(waiting);
+    world.run(1);
+    world.engine.tasks.interrupt(worker.id, {
+      category: CancelCategory.Graceful,
+      reason: CancelReason.PlayerCancel,
+    });
+    world.run(1);
+    expect(seen).toEqual([CancelReason.PlayerCancel]);
+    const live = requireBoard(world.engine, world.boardId).data.postings[0];
+    expect(live).toMatchObject({ id: posting.id, status: PostingStatus.Open });
+  });
+});
+
 describe("childCompleted", () => {
   it("reads the outcome of a child wake", () => {
     const base = {

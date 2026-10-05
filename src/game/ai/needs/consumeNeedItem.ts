@@ -4,6 +4,7 @@ import { inventoryComponent } from "../../inventory/inventoryComponent";
 import type { GameEngine } from "../../engine/GameEngine";
 import { retrieve } from "../../inventory/inventoryOperations";
 import { getTotal } from "../../inventory/inventoryQueries";
+import { getAiService } from "../aiServiceRegistry";
 import { needItemConsumedEvent } from "../aiTypes";
 import type { NeedItemConsumed } from "../aiTypes";
 import { addMoodInfluenceTo } from "../mood/runMood";
@@ -24,7 +25,8 @@ export const consumeMoodMilli = 3000;
  * Consumes one item for a need (spec 013 FR-002/023): takes it out of the holder's general
  * storage, raises the need by `amountMilli` combined with the consumer's trait satisfaction bonus
  * (clamped at 100 percent), adds a short positive mood influence and emits `need.item.consumed`.
- * The caller has checked that the holder has the item.
+ * The caller has checked that the holder has the item; the call itself fails (nothing changes)
+ * when the holder has none the consumer may take (stock reserved by others, DECISIONS D-09).
  *
  * @param engine - The engine.
  * @param consumer - The entity whose need is satisfied (needs a `Needs` component).
@@ -44,7 +46,16 @@ export function consumeNeedItem(
   amountMilli: number,
   tick: number,
 ): boolean {
-  if (!hasComponent(holder, inventoryComponent) || getTotal(holder, materialId) < 1) {
+  if (
+    !hasComponent(holder, inventoryComponent) ||
+    getAiService(engine).itemsAvailable(
+      engine,
+      holder,
+      consumer,
+      materialId,
+      getTotal(holder, materialId),
+    ) < 1
+  ) {
     return false;
   }
   retrieve(

@@ -41,7 +41,7 @@ describe("AiService", () => {
     const second: NeedSourceFinder = () => null;
     service.registerNeedSource(first);
     service.registerNeedSource(second);
-    expect(service.needSources()).toEqual([first, second]);
+    expect(service.needSources().slice(-2)).toEqual([first, second]);
   });
 
   it("starts with the default factors, adds registered ones and rejects duplicates", () => {
@@ -60,5 +60,18 @@ describe("AiService", () => {
   it("exposes the pathfinding service of the engine", () => {
     const service = getAiService(createAiWorld().engine);
     expect(typeof service.pathfinding.findPath).toBe("function");
+  });
+
+  it("limits what a consumer may take from another entity with the availability hook", () => {
+    const world = createAiWorld();
+    const service = getAiService(world.engine);
+    const holder = world.spawn("peasant", 1);
+    const consumer = world.spawn("peasant", 2);
+    expect(service.itemsAvailable(world.engine, holder, consumer, "bread", 2)).toBe(2);
+    service.setItemAvailability(() => 1);
+    expect(service.itemsAvailable(world.engine, holder, consumer, "bread", 2)).toBe(1);
+    expect(service.itemsAvailable(world.engine, consumer, consumer, "bread", 2)).toBe(2);
+    service.setItemAvailability(null);
+    expect(service.itemsAvailable(world.engine, holder, consumer, "bread", 2)).toBe(2);
   });
 });

@@ -47,6 +47,9 @@ import { IdCounters } from "./IdCounters";
 import { registerFactions } from "../factions/registerFactions";
 import { jobsSystemId } from "../jobs/jobTypes";
 import { registerJobs } from "../jobs/registerJobs";
+import { registerStorage } from "../storage/registerStorage";
+import { getStorageService } from "../storage/storageServiceRegistry";
+import { storageSystemId } from "../storage/storageTypes";
 import { factionsSystemId } from "../factions/factionTypes";
 import { registerIdentity } from "../identity/registerIdentity";
 import { identitySystemId } from "../identity/identityTypes";
@@ -617,13 +620,18 @@ export class GameEngine {
       id: "inventory.decay",
       slot: TickSlot.Decay,
       run: () => {
-        const modifiers: DecayModifiers = {
-          zoneModifierMilli: 1000,
-          difficultyDecayMilli: this.content.difficultyModes.require(
-            this.initHolder.options.difficulty,
-          ).decayMultiplier,
-        };
-        decayInventories(this.store.entities(), this.bus, () => modifiers);
+        const difficultyDecayMilli = this.content.difficultyModes.require(
+          this.initHolder.options.difficulty,
+        ).decayMultiplier;
+        const storage = getStorageService(this);
+        decayInventories(
+          this.store.entities(),
+          this.bus,
+          (entity): DecayModifiers => ({
+            zoneModifierMilli: storage.decayModifierMilli(entity),
+            difficultyDecayMilli,
+          }),
+        );
       },
     });
     this.registerSystem({
@@ -651,9 +659,17 @@ export class GameEngine {
     registerSkills(this);
     registerAi(this);
     registerJobs(this);
+    registerStorage(this);
     this.registerSystem({
       id: "world.starting-map",
-      dependencies: [skillsSystemId, factionsSystemId, identitySystemId, aiSystemId, jobsSystemId],
+      dependencies: [
+        skillsSystemId,
+        factionsSystemId,
+        identitySystemId,
+        aiSystemId,
+        jobsSystemId,
+        storageSystemId,
+      ],
       init: ({ engine, mode, options }) => {
         if (mode !== InitMode.NewGame || options.mapSize === null) {
           return;

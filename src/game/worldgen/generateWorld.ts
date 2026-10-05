@@ -56,6 +56,10 @@ export type GeneratedWorld = {
    */
   jobBoardId: EntityId | null;
   /**
+   * Starting stockpile chest on the clearing, or null when the pack has no such prototype.
+   */
+  stockpileId: EntityId | null;
+  /**
    * Starting settlers in spawn order.
    */
   settlerIds: EntityId[];
@@ -148,6 +152,7 @@ export function generateWorld(
     attempts,
     repaired,
     jobBoardId: spawned.jobBoardId,
+    stockpileId: spawned.stockpileId,
     settlerIds: spawned.settlerIds,
   };
 }

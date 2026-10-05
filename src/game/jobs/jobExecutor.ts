@@ -53,6 +53,12 @@ export type JobExecutor = {
    * with `target_invalid` instead of completing).
    */
   complete?: (context: TaskContext, job: ActiveJob) => JobOutput[] | null;
+  /**
+   * Runs when the task is cancelled (a critical need, the player, deletion), before the claim is
+   * released: the place to give back what the job holds, such as a stock reservation. It also
+   * gets the cancel token. The executor's own failures must clean up before returning `failStep`.
+   */
+  cancel?: (context: TaskContext, record: TaskRecord, token: CancelToken) => void;
 };
 
 const jobDataSchema = z
@@ -125,8 +131,8 @@ function settle(
  *   the worker with the job type's skill;
  * - a failed step releases the claim with a back-off (the posting is open again,
  *   `jobboard.job.abandoned`), except `target_invalid` which fails the posting for good;
- * - cancelling the task (a critical need, the player, deletion) releases the claim, with a
- *   back-off only for `unreachable`.
+ * - cancelling the task (a critical need, the player, deletion) runs the executor's `cancel` hook,
+ *   then releases the claim, with a back-off only for `unreachable`.
  *
  * @param engine - The engine whose posting store and task handlers are used.
  * @param typeId - Job type id from the content pack.
@@ -149,6 +155,7 @@ export function registerJobType(engine: GameEngine, typeId: string, executor: Jo
         : settle(engine, executor, context, job, executor.step(context, record, job));
     },
     cancel: (context, record, token: CancelToken) => {
+      executor.cancel?.(context, record, token);
       const parsed = jobDataSchema.safeParse(record.data);
       if (parsed.success) {
         releasePosting(

@@ -4,6 +4,19 @@ import type { ContentRegistries } from "../content/ContentRegistries";
 import type { DecisionFactor } from "./decision/chooseAction";
 import { defaultDecisionFactors } from "./decision/decisionFactors";
 import type { NeedSourceFinder } from "./decision/needPlanTypes";
+import type { Entity } from "../ecs/Entity";
+import type { GameEngine } from "../engine/GameEngine";
+
+/**
+ * How many units of a material a consumer may take out of a holder's inventory right now: the
+ * storage system (task 3.2) answers it with the stock minus what others reserved (DECISIONS D-09).
+ */
+export type ItemAvailability = (
+  engine: GameEngine,
+  holder: Entity,
+  consumer: Entity,
+  materialId: string,
+) => number;
 
 /**
  * Per-engine AI state that is code, not game state: the extension hooks other tasks plug into
@@ -16,6 +29,7 @@ export class AiService {
   private readonly factors: DecisionFactor[] = [...defaultDecisionFactors];
   private decayMultiplierSource: (() => number) | null = null;
   private currentDifficulty: Difficulty | null = null;
+  private availabilityHook: ItemAvailability | null = null;
 
   /**
    * Creates the service.
@@ -70,6 +84,39 @@ export class AiService {
    */
   registerNeedSource(finder: NeedSourceFinder): void {
     this.finders.push(finder);
+  }
+
+  /**
+   * Replaces how many units a consumer may take from another entity's inventory (reservations of
+   * task 3.2 plug in here); `null` restores the default, everything the holder has. The settler's
+   * own inventory is never limited.
+   *
+   * @param hook - The availability function, or null.
+   */
+  setItemAvailability(hook: ItemAvailability | null): void {
+    this.availabilityHook = hook;
+  }
+
+  /**
+   * How many units of a material the consumer may take out of the holder's inventory now.
+   *
+   * @param engine - The engine.
+   * @param holder - The entity whose inventory is looked into.
+   * @param consumer - The entity that would consume the item.
+   * @param materialId - The material.
+   * @param held - What the holder has in total (the answer without a hook).
+   * @returns Claimable units.
+   */
+  itemsAvailable(
+    engine: GameEngine,
+    holder: Entity,
+    consumer: Entity,
+    materialId: string,
+    held: number,
+  ): number {
+    return this.availabilityHook === null || holder.id === consumer.id
+      ? held
+      : this.availabilityHook(engine, holder, consumer, materialId);
   }
 
   /**

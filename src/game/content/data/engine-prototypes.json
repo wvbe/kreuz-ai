@@ -28,5 +28,28 @@
       "JobBoard": {},
       "Position": {}
     }
+  },
+  {
+    "id": "chest",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 16,
+        "weightLimitMilli": 200000
+      },
+      "Furniture": {
+        "furnitureId": "chest"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "loose_pile",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 16
+      }
+    }
   }
 ]

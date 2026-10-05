@@ -8,8 +8,8 @@ import { PostingStatus, approachFailedReason, jobTaskPriority } from "./jobTypes
 import { createJobWorld, noAiOverride } from "./testJobWorld";
 import { createWorkAtLocationExecutor } from "./workAtLocation";
 
-// `haul.deliver` has no built-in executor yet; skill id `hauling` (a speed bonus), so the worker's skill speeds it up.
-const jobType = "haul.deliver";
+// `build.construct` has no built-in executor yet; skill id `construction` (a speed bonus), so the worker's skill speeds it up.
+const jobType = "build.construct";
 
 function setup(targetCell: number, baseTicks = 10) {
   const world = createJobWorld();
@@ -65,7 +65,7 @@ describe("createWorkAtLocationExecutor", () => {
     const slow = setup(55, 40);
     const skilled = setup(55, 40);
     const skills = skilled.worker.components["Skills"] as { values: { [skill: string]: number } };
-    skills.values["hauling"] = 100_000;
+    skills.values["construction"] = 100_000;
     slow.world.run(60);
     skilled.world.run(60);
     expect((skilled.completions[0] ?? 99) < (slow.completions[0] ?? 0)).toBe(true);
