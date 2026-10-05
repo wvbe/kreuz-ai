@@ -13,5 +13,6 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [inventory](inventory/README.md) - materials, stacked slots, weight, perishables, equipment, permissions, atomic transfers, money.
 - [save](save/README.md) - GameState root, canonical save/load, validation, migrations, state hash.
 - [behavior](behavior/README.md) - JSON behavior trees: DSL schema, loader checks, interpreter with serialized running node.
+- [content](content/README.md) - content pack loader: Zod schemas, JSON data (vertical-slice pack v0), referential checks, per-engine `ContentRegistries`.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).
