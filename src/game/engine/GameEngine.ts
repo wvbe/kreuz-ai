@@ -47,11 +47,12 @@ import type { GameInitOptions } from "./options";
 import { Prng } from "./Prng";
 import { InitMode } from "./engineSystemTypes";
 import type {
-  CommandHandler,
+  CommandRegistration,
   EngineSystemDefinition,
   EntityView,
   GameStateView,
   GameTimeView,
+  QueryRegistration,
   SystemInitContext,
 } from "./engineSystemTypes";
 import { SystemRegistry } from "./SystemRegistry";
@@ -143,7 +144,8 @@ export class GameEngine {
   private readonly systems = new SystemRegistry<SystemInitContext>();
   private readonly sections = new SaveSectionRegistry();
   private readonly sectionInitial = new Map<string, JsonValue>();
-  private readonly commandHandlerMap = new Map<string, CommandHandler>();
+  private readonly commandHandlerMap = new Map<string, CommandRegistration>();
+  private readonly queryMap = new Map<string, QueryRegistration>();
   private readonly prngHolder: { prng: Prng };
   private readonly initHolder: { options: InitOptionsData };
   private readonly parts: GameSnapshotParts;
@@ -279,6 +281,15 @@ export class GameEngine {
         );
       }
     }
+    const queryNames = Object.keys(definition.queries ?? {});
+    for (const name of queryNames) {
+      if (this.queryMap.has(name)) {
+        throw new GameEngineError(
+          GameEngineErrorKind.DuplicateQuery,
+          `query "${name}" is already registered`,
+        );
+      }
+    }
     // The registry validates the id and rejects duplicates before anything else is touched.
     this.systems.register({
       id: definition.id,
@@ -311,15 +322,21 @@ export class GameEngine {
         this.commandHandlerMap.set(kind, handler);
       }
     }
+    for (const name of queryNames) {
+      const query = definition.queries?.[name];
+      if (query) {
+        this.queryMap.set(name, query);
+      }
+    }
   }
 
   /**
-   * Looks up a registered command handler.
+   * Looks up a registered command.
    *
    * @param kind - Command kind.
-   * @returns The handler, or undefined.
+   * @returns The registration (schema, mode, handler), or undefined.
    */
-  getCommandHandler(kind: string): CommandHandler | undefined {
+  getCommandHandler(kind: string): CommandRegistration | undefined {
     return this.commandHandlerMap.get(kind);
   }
 
@@ -330,6 +347,25 @@ export class GameEngine {
    */
   commandKinds(): string[] {
     return [...this.commandHandlerMap.keys()].sort();
+  }
+
+  /**
+   * Looks up a registered query.
+   *
+   * @param name - Query name.
+   * @returns The registration, or undefined.
+   */
+  getQuery(name: string): QueryRegistration | undefined {
+    return this.queryMap.get(name);
+  }
+
+  /**
+   * Lists the registered query names.
+   *
+   * @returns Names, sorted.
+   */
+  queryNames(): string[] {
+    return [...this.queryMap.keys()].sort();
   }
 
   /**

@@ -1,3 +1,4 @@
+import type { z } from "zod";
 import type { ComponentDefinition } from "../ecs/ComponentRegistry";
 import type { Entity } from "../ecs/Entity";
 import type { InitOptionsData } from "../save/initOptions";
@@ -35,10 +36,63 @@ export type SystemInitContext = {
 };
 
 /**
- * A command handler (provisional shape; task 1.9 builds the dispatcher). The payload is the
- * command's JSON; the return value becomes `CommandResult.data`.
+ * How a registered command is executed (DECISIONS D-23, section 3).
+ */
+export enum CommandMode {
+  /**
+   * Validated at dispatch, queued FIFO and applied at pipeline slot 1 of the next tick.
+   */
+  Queued = "queued",
+  /**
+   * Applied at dispatch, between ticks, bypassing the queue (session and time controls, debug).
+   */
+  Immediate = "immediate",
+}
+
+/**
+ * A command handler: receives the validated payload (the command JSON without `kind`) and the
+ * engine; the returned JSON becomes `CommandResult.data`. Throwing rejects the command.
  */
 export type CommandHandler = (payload: JsonValue, engine: GameEngine) => JsonValue;
+
+/**
+ * One command kind as registered through `EngineSystemDefinition.commandHandlers`; build it with
+ * `defineCommand` (`src/game/api/defineCommand.ts`) to get a typed payload.
+ */
+export type CommandRegistration = {
+  /**
+   * Validates the payload (the command object without `kind`). Its output must be JSON.
+   */
+  schema: z.ZodType;
+  /**
+   * Execution mode; default {@link CommandMode.Queued}.
+   */
+  mode?: CommandMode;
+  /**
+   * False for commands that make sense without a running game (NewGame, LoadGame). Default true.
+   */
+  requiresGame?: boolean;
+  /**
+   * Applies the command.
+   */
+  handler: CommandHandler;
+};
+
+/**
+ * One named query (view) as registered through `EngineSystemDefinition.queries`; build it with
+ * `defineQuery` (`src/game/api/defineQuery.ts`).
+ */
+export type QueryRegistration = {
+  /**
+   * Validates the arguments (`undefined` is passed when the caller gave none). Output must be JSON.
+   */
+  schema: z.ZodType;
+  /**
+   * Computes the view. It must be read-only and return plain JSON that shares nothing with the
+   * engine (copy before returning).
+   */
+  run: (args: JsonValue, engine: GameEngine) => JsonValue;
+};
 
 /**
  * Everything a later task needs to add a system, in one object for
@@ -79,9 +133,14 @@ export type EngineSystemDefinition = {
    */
   components?: readonly ComponentDefinition[];
   /**
-   * Command handlers by command kind (provisional, see {@link CommandHandler}).
+   * Commands by command kind, see {@link CommandRegistration}. The session facade validates and
+   * dispatches them; kinds must be unique per engine.
    */
-  commandHandlers?: { [commandKind: string]: CommandHandler };
+  commandHandlers?: { [commandKind: string]: CommandRegistration };
+  /**
+   * Named queries (views) by name, see {@link QueryRegistration}; names must be unique per engine.
+   */
+  queries?: { [queryName: string]: QueryRegistration };
 };
 
 /**

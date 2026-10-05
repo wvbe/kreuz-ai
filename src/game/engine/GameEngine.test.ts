@@ -368,10 +368,16 @@ describe("GameEngine registerSystem", () => {
           ledger.total = ledgerSchema.parse(saved).total;
         },
       },
-      commandHandlers: { "demo.ping": () => "pong" },
+      commandHandlers: {
+        "demo.ping": { schema: z.object({}).strict(), handler: () => "pong" },
+      },
+      queries: { "demo.total": { schema: z.undefined(), run: () => ledger.total } },
     });
     expect(engine.components.has("Counter")).toBe(true);
-    expect(engine.getCommandHandler("demo.ping")?.(null, engine)).toBe("pong");
+    expect(engine.getCommandHandler("demo.ping")?.handler(null, engine)).toBe("pong");
+    expect(engine.getQuery("demo.total")?.run(null, engine)).toBe(0);
+    expect(engine.getQuery("demo.none")).toBeUndefined();
+    expect(engine.queryNames()).toEqual(["demo.total"]);
     expect(engine.getCommandHandler("demo.none")).toBeUndefined();
     expect(engine.commandKinds()).toEqual(["demo.ping"]);
     engine.newGame({ seed: 1 });
@@ -443,9 +449,18 @@ describe("GameEngine registerSystem", () => {
 
   it("rejects a duplicate command handler and a duplicate pipeline or section key", () => {
     const engine = createEngine();
-    engine.registerSystem({ id: "one.system", commandHandlers: { "x.cmd": () => null } });
+    const command = { schema: z.object({}).strict(), handler: () => null };
+    const query = { schema: z.undefined(), run: () => null };
+    engine.registerSystem({
+      id: "one.system",
+      commandHandlers: { "x.cmd": command },
+      queries: { "x.query": query },
+    });
     expect(() =>
-      engine.registerSystem({ id: "two.system", commandHandlers: { "x.cmd": () => null } }),
+      engine.registerSystem({ id: "two.system", commandHandlers: { "x.cmd": command } }),
+    ).toThrow(GameEngineError);
+    expect(() =>
+      engine.registerSystem({ id: "four.system", queries: { "x.query": query } }),
     ).toThrow(GameEngineError);
     expect(engine.pipeline.getSystemOrder().some((entry) => entry.id === "two.system")).toBe(false);
     const section = {

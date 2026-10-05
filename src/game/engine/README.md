@@ -11,7 +11,7 @@ Engine kernel building blocks.
 
 - `GameEngine.ts` - the per-engine host (spec 007, D-06, D-38): `new GameEngine(content, {entropy?, errorSink?, migrations?})`, instance `newGame(options?)` / `loadGame(save)` / `saveGame()` (`save()` alias) / `tick()` / `runTicks(n)`, query facade (`getTime`, `getState`, `getEntity`, `getEntities`, `getComponents`, `getMap`, all copies) and `registerSystem`. The subsystems are public readonly fields (`bus`, `time`, `store`, `maps`, `tasks`, `taskHandlers`, `behavior`, `behaviorHandlers`, `components`, `prototypes`, `relationships`, `counters`, `pipeline`, `content`, `errors`, `warnings`; `prng` is a getter because load replaces it) for systems and the session facade (1.9); hosts should use the query methods.
 - `SystemRegistry.ts` - generic dependency-ordered init registry (topological sort, ties by registration order, `SystemRegistryError` for cycles, missing dependencies, duplicates).
-- `engineSystemTypes.ts` - `EngineSystemDefinition`, `SystemInitContext`, `InitMode`, `CommandHandler` (provisional until 1.9), view types.
+- `engineSystemTypes.ts` - `EngineSystemDefinition`, `SystemInitContext`, `InitMode`, `CommandRegistration` / `CommandMode` / `QueryRegistration` (consumed by the session facade in `../api`, build them with `defineCommand` / `defineQuery`), view types.
 - `options.ts` - `GameInitOptions`, `parseGameInitOptions` (Zod, exact messages, `InvalidOptionsError`).
 - `GameEngineError.ts`, `SystemRegistryError.ts`, `InvalidOptionsError.ts` - typed errors.
 
@@ -29,7 +29,8 @@ engine.registerSystem({
   init: ({ engine, mode, options }) => {}, // synchronous; NewGame and LoadGame
   components: [needsComponent], // registered with engine.components
   saveSection: { key, location, schema, serialize, restore }, // see ../save
-  commandHandlers: { "needs.set": (payload, engine) => null }, // provisional, 1.9
+  commandHandlers: { "needs.set": defineCommand({ schema, handler }) }, // see ../api
+  queries: { "needs.table": defineQuery({ schema, run }) }, // named views, see ../api
 });
 ```
 

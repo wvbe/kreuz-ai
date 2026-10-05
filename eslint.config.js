@@ -96,7 +96,8 @@ export default defineConfig(
         {
           min: 3,
           properties: "always",
-          exceptions: ["id", "x", "y", "z", "dx", "dy", "T", "K", "V", "U", "_"],
+          // "ok": the `{ ok: true | false }` discriminant of CommandResult/QueryResult (DECISIONS section 3).
+          exceptions: ["id", "x", "y", "z", "dx", "dy", "ok", "T", "K", "V", "U", "_"],
         },
       ],
       "@typescript-eslint/naming-convention": [

@@ -15,6 +15,10 @@ export enum GameEngineErrorKind {
    */
   DuplicateCommandHandler = "duplicate-command-handler",
   /**
+   * A query name is registered twice.
+   */
+  DuplicateQuery = "duplicate-query",
+  /**
    * An init hook threw; the previous game was restored.
    */
   InitFailed = "init-failed",

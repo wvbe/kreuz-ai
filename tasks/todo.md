@@ -19,7 +19,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 1.6 Save format, migrations, round-trip (006)
 - [x] 1.7 Content loader + registries + vertical-slice pack v0 (022 loader)
 - [x] 1.8 Engine bootstrap + system registry (007)
-- [ ] 1.9 `GameSession` facade, commands, queries, command log/replay
+- [x] 1.9 `GameSession` facade, commands, queries, command log/replay
 - [ ] 1.10 CLI renderer v0 + JSONL protocol + scenario runner + child-process e2e
 - [ ] **Checkpoint A:** `npm run ci` green; CLI new/step/save/load works; determinism e2e passes in-process and via child process
 
