@@ -1,4 +1,6 @@
+import { z } from "zod";
 import type { EventRecord } from "../../game/api/CommandResult";
+import type { JsonValue } from "../../game/engine/EventBus";
 import type { EntityDetailView, EntityListView, StateView } from "../../game/api/Views";
 
 /**
@@ -83,4 +85,42 @@ export function formatEntityDetail(detail: EntityDetailView | null, id: number):
     `#${detail.id} ${detail.prototype}`,
     ...names.map((name) => `  ${name}: ${JSON.stringify(detail.components[name])}`),
   ];
+}
+
+const skillsSummarySchema = z.object({
+  dominantSkill: z.string().nullable(),
+  skills: z.array(z.object({ skillId: z.string(), level: z.number() })),
+});
+
+const traitsSummarySchema = z.object({
+  traits: z.array(z.object({ name: z.string(), effects: z.array(z.string()) })),
+});
+
+/**
+ * Formats the `skills-of` and `traits-of` query results for `inspect`: one line with the skills
+ * above level 0 (and the dominant one) and one line with the traits and their effects. Results
+ * that are not those views (entity without skills, query failure) print nothing.
+ *
+ * @param skills - Data of the `skills-of` query, or null.
+ * @param traits - Data of the `traits-of` query, or null.
+ * @returns Output lines, possibly none.
+ */
+export function formatCharacter(skills: JsonValue, traits: JsonValue): string[] {
+  const lines: string[] = [];
+  const parsedSkills = skillsSummarySchema.safeParse(skills);
+  if (parsedSkills.success) {
+    const known = parsedSkills.data.skills.filter((row) => row.level > 0);
+    const list =
+      known.length === 0 ? "none" : known.map((row) => `${row.skillId} ${row.level}`).join(", ");
+    const dominant = parsedSkills.data.dominantSkill;
+    lines.push(`  skills: ${list}${dominant === null ? "" : ` (dominant: ${dominant})`}`);
+  }
+  const parsedTraits = traitsSummarySchema.safeParse(traits);
+  if (parsedTraits.success) {
+    const list = parsedTraits.data.traits.map(
+      (trait) => `${trait.name} (${trait.effects.join("; ")})`,
+    );
+    lines.push(`  traits: ${list.length === 0 ? "none" : list.join(", ")}`);
+  }
+  return lines;
 }

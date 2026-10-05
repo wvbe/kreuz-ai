@@ -14,5 +14,6 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [save](save/README.md) - GameState root, canonical save/load, validation, migrations, state hash.
 - [behavior](behavior/README.md) - JSON behavior trees: DSL schema, loader checks, interpreter with serialized running node.
 - [content](content/README.md) - content pack loader: Zod schemas, JSON data (vertical-slice pack v0), referential checks, per-engine `ContentRegistries`.
+- [skills](skills/README.md) - `Skills` / `Traits` components, growth, work speed, affinity, trait modifier hooks.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).

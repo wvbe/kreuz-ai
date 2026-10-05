@@ -12,6 +12,7 @@ import {
   outdoorGeneratorName,
   worldGenStreamName,
 } from "./generateWorld";
+import { traitStreamName } from "../skills/skillTypes";
 import { terrainHash } from "./terrainHash";
 import { WorldGenError, WorldGenErrorKind } from "./WorldGenError";
 import { WorldTerrain } from "./WorldTerrain";
@@ -77,9 +78,12 @@ describe("generateWorld through newGame", () => {
     }
   });
 
-  it("only draws from the world.gen stream", () => {
+  it("only draws from the world.gen and content.traits streams", () => {
     const engine = start(42, MapSize.Small);
-    expect(Object.keys(engine.prng.serialize().streams)).toEqual([worldGenStreamName]);
+    expect(Object.keys(engine.prng.serialize().streams)).toEqual([
+      traitStreamName,
+      worldGenStreamName,
+    ]);
   });
 });
 

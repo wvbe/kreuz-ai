@@ -22,7 +22,7 @@ Exit codes: 0 ok, 1 a scenario step failed, 2 bad arguments / unreadable or inva
 | `status` | Tick, day, hour, pause/speed, seed, difficulty, counts. |
 | `map [mapId]` | ASCII map (default: first map): one glyph per terrain (`.` grassland, `,` fertile soil, `T` forest, `~` water, `^` mountain, `#` rock wall, `_` wood floor, `=` road, `o` stone deposit; unknown terrains show their first letter), `@` for entities, and a legend. Square maps draw one character per tile; Voronoi maps are rasterized onto 72x36 characters, each taking the terrain of the nearest cell site (deterministic). |
 | `entities [prototype] [limit]` | List entities. |
-| `inspect <id>` | One entity and its components. |
+| `inspect <id>` | One entity and its components; characters also get a `skills:` and a `traits:` line. |
 | `events [n]` | The last n events (default 20). |
 | `save <file>`, `load <file>` | Write / read a save file. |
 | `help [verb]`, `quit` | Help and exit. |

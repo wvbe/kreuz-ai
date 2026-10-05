@@ -378,7 +378,7 @@ describe("GameEngine registerSystem", () => {
     expect(engine.getCommandHandler("demo.ping")?.handler(null, engine)).toBe("pong");
     expect(engine.getQuery("demo.total")?.run(null, engine)).toBe(0);
     expect(engine.getQuery("demo.none")).toBeUndefined();
-    expect(engine.queryNames()).toEqual(["demo.total"]);
+    expect(engine.queryNames()).toEqual(["demo.total", "skills-of", "traits-of"]);
     expect(engine.getCommandHandler("demo.none")).toBeUndefined();
     expect(engine.commandKinds()).toEqual(["demo.ping"]);
     engine.newGame({ seed: 1 });

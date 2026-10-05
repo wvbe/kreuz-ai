@@ -10,6 +10,7 @@ import { IdCounters } from "../../src/game/engine/IdCounters";
 import { inventoryComponent } from "../../src/game/inventory/inventoryComponent";
 import { getTotal } from "../../src/game/inventory/inventoryQueries";
 import { positionComponent } from "../../src/game/map/positionComponent";
+import { skillsComponent, traitsComponent } from "../../src/game/skills/skillsComponent";
 import { taskQueueComponent } from "../../src/game/task/taskQueueComponent";
 
 // Pack v0 plugs into the kernel registries of one engine: components, prototypes, materials,
@@ -32,6 +33,8 @@ describe("content pack v0 with the kernel", () => {
       inventoryComponent,
       taskQueueComponent,
       aiStateComponent,
+      skillsComponent,
+      traitsComponent,
     ]) {
       components.register(definition);
     }
@@ -69,6 +72,8 @@ describe("content pack v0 with the kernel", () => {
     components.register(inventoryComponent);
     components.register(taskQueueComponent);
     components.register(aiStateComponent);
+    components.register(skillsComponent);
+    components.register(traitsComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

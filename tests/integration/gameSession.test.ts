@@ -319,8 +319,10 @@ describe("GameSession end to end", () => {
         "maps",
         "pending-commands",
         "settlement",
+        "skills-of",
         "state",
         "time",
+        "traits-of",
       ]),
     );
     const views: unknown[] = [
@@ -347,7 +349,9 @@ describe("GameSession end to end", () => {
             ? { mapId: 1 }
             : name === "cell"
               ? { mapId: 1, cell: 0 }
-              : {},
+              : name === "skills-of" || name === "traits-of"
+                ? { entityId: 3 }
+                : {},
       );
       expect(result.ok).toBe(true);
       expect(JSON.parse(JSON.stringify(result))).toEqual(result);

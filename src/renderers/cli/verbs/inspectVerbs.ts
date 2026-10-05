@@ -1,5 +1,10 @@
 import { collectEntityMarkers } from "../collectEntityMarkers";
-import { formatEntityDetail, formatEntityList, formatEvents } from "../formatViews";
+import {
+  formatCharacter,
+  formatEntityDetail,
+  formatEntityList,
+  formatEvents,
+} from "../formatViews";
 import { renderAsciiMap } from "../renderAsciiMap";
 import { parseCount, verbDone, verbFailed } from "./Verb";
 import type { Verb } from "./Verb";
@@ -53,7 +58,13 @@ export const inspectVerbs: readonly Verb[] = [
       if (id === null || id < 1) {
         return verbFailed("usage: inspect <id>");
       }
-      return verbDone(formatEntityDetail(session.query.entity(id), id));
+      const detail = session.query.entity(id);
+      const skills = session.query.run("skills-of", { entityId: id });
+      const traits = session.query.run("traits-of", { entityId: id });
+      return verbDone([
+        ...formatEntityDetail(detail, id),
+        ...formatCharacter(skills.ok ? skills.data : null, traits.ok ? traits.data : null),
+      ]);
     },
   },
   {

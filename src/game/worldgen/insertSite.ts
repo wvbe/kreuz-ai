@@ -1,6 +1,7 @@
 import type { EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { BlockReason, GridType } from "../map/mapTypes";
+import { initializeCharacter } from "../skills/traitAssignment";
 import type { GeneratedSite } from "./SiteGenerator";
 import { WorldTerrain } from "./WorldTerrain";
 
@@ -53,6 +54,7 @@ export function insertSite(engine: GameEngine, site: GeneratedSite): InsertedSit
   for (const entity of site.entities) {
     const id = place(entity.prototypeId, entity.cell);
     engine.maps.placeEntity(id, map.id, entity.cell);
+    initializeCharacter(engine, id);
     entityIds.push(id);
   }
   return { mapId: map.id, wallIds, entityIds };

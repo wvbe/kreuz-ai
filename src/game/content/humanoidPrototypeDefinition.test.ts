@@ -3,7 +3,7 @@ import { loadContent } from "./ContentLoader";
 import { humanoidPrototypeDefinition } from "./humanoidPrototypeDefinition";
 
 describe("humanoidPrototypeDefinition", () => {
-  it("builds Position, Inventory, TaskQueue and AiState components", () => {
+  it("builds Position, Inventory, TaskQueue, AiState, Skills and Traits components", () => {
     const content = loadContent();
     const prototype = humanoidPrototypeDefinition(
       content.humanoids.require("baker"),
@@ -14,9 +14,13 @@ describe("humanoidPrototypeDefinition", () => {
       "AiState",
       "Inventory",
       "Position",
+      "Skills",
       "TaskQueue",
+      "Traits",
     ]);
     expect(prototype.components["AiState"]).toEqual({ treeId: "basic_needs" });
+    expect(prototype.components["Skills"]).toEqual({ values: { baking: 30000 } });
+    expect(prototype.components["Traits"]).toEqual({ ids: ["born_baker"] });
   });
 
   it("stores equipment as stacks with fresh perishables and respects stack limits", () => {

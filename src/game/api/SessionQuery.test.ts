@@ -23,8 +23,10 @@ describe("SessionQuery", () => {
       "maps",
       "pending-commands",
       "settlement",
+      "skills-of",
       "state",
       "time",
+      "traits-of",
     ]);
   });
 

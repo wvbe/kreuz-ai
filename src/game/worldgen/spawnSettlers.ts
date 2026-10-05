@@ -1,5 +1,6 @@
 import type { EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
+import { initializeCharacter } from "../skills/traitAssignment";
 import type { VillageLayout } from "./layoutVillage";
 
 /**
@@ -37,7 +38,8 @@ export type SpawnedSettlement = {
 /**
  * Spawns the settlement kit on the village clearing: the job board on the center cell and the
  * starting settlers on distinct clearing cells (nearest to the center first, never a starter
- * plot). Cells are registered with the map occupant index and written to `Position`.
+ * plot). Cells are registered with the map occupant index and written to `Position`; settlers get
+ * their traits and starting skill bonuses from `initializeCharacter`.
  *
  * @param engine - The engine whose store and maps are used.
  * @param mapId - Id of the generated outdoor map.
@@ -52,6 +54,7 @@ export function spawnSettlers(
   const place = (prototypeId: string, cell: number): EntityId => {
     const entity = engine.store.spawn(prototypeId, { Position: { mapId, cellIndex: cell } });
     engine.maps.placeEntity(entity.id, mapId, cell);
+    initializeCharacter(engine, entity.id);
     return entity.id;
   };
   const jobBoardId = engine.prototypes.has(jobBoardPrototypeId)

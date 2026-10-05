@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { EventRecord } from "../../game/api/CommandResult";
 import type { StateView } from "../../game/api/Views";
 import {
+  formatCharacter,
   formatClock,
   formatEntityDetail,
   formatEntityList,
@@ -96,5 +97,37 @@ describe("formatEntityDetail", () => {
 
   it("handles a missing entity", () => {
     expect(formatEntityDetail(null, 8)).toEqual(["no entity #8"]);
+  });
+});
+
+describe("formatCharacter", () => {
+  const skills = {
+    dominantSkill: "baking",
+    skills: [
+      { skillId: "baking", level: 40 },
+      { skillId: "farming", level: 0 },
+      { skillId: "hauling", level: 5 },
+    ],
+  };
+  const traits = {
+    traits: [{ name: "Strong", effects: ["hauling performance x1.3"] }],
+  };
+
+  it("lists non-zero skills, the dominant one and the traits with effects", () => {
+    expect(formatCharacter(skills, traits)).toEqual([
+      "  skills: baking 40, hauling 5 (dominant: baking)",
+      "  traits: Strong (hauling performance x1.3)",
+    ]);
+  });
+
+  it("says none for an empty character", () => {
+    expect(formatCharacter({ dominantSkill: null, skills: [] }, { traits: [] })).toEqual([
+      "  skills: none",
+      "  traits: none",
+    ]);
+  });
+
+  it("prints nothing for entities without the views", () => {
+    expect(formatCharacter(null, null)).toEqual([]);
   });
 });

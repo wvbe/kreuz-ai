@@ -9,7 +9,7 @@ Content pack loading (spec 022 FR-015/018/019, DECISIONS AD8, D-15, D-37): JSON 
 - `checkReferences.ts` - referential integrity: every referenced id exists, enum-complete tables have every key, currency material exists, bynames differ from title nouns, starting equipment fits the inventory.
 - `ContentValidationError.ts` - thrown with all issues; each names file, record id and field.
 - `contentTypes.ts` - `ContentFile`, `ContentPackFiles`, `ContentIssue` and the closed vocabularies (enums) of the schemas.
-- `humanoidPrototypeDefinition.ts` - turns a humanoid record into an entity prototype (`Position`, `Inventory`, `TaskQueue`, `AiState`).
+- `humanoidPrototypeDefinition.ts` - turns a humanoid record into an entity prototype (`Position`, `Inventory`, `TaskQueue`, `AiState`, `Skills` from `startingSkills`, `Traits` from `defaultTraitIds`; `../skills` finishes a spawned character).
 - [schemas](schemas/README.md) - Zod schemas of every category. [data](data/README.md) - the JSON files (pack v0).
 
 ## Rules

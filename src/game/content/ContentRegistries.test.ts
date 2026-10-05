@@ -6,6 +6,7 @@ import { ComponentRegistry } from "../ecs/ComponentRegistry";
 import { PrototypeRegistry } from "../ecs/PrototypeRegistry";
 import { inventoryComponent } from "../inventory/inventoryComponent";
 import { positionComponent } from "../map/positionComponent";
+import { skillsComponent, traitsComponent } from "../skills/skillsComponent";
 import { taskQueueComponent } from "../task/taskQueueComponent";
 import { governmentFactionPrototypeId } from "./ContentRegistries";
 import { loadContent } from "./ContentLoader";
@@ -16,6 +17,8 @@ function components(): ComponentRegistry {
   registry.register(inventoryComponent);
   registry.register(taskQueueComponent);
   registry.register(aiStateComponent);
+  registry.register(skillsComponent);
+  registry.register(traitsComponent);
   return registry;
 }
 

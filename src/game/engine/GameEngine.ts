@@ -42,6 +42,7 @@ import { EventBus } from "./EventBus";
 import type { EventBusErrorReport, EventBusErrorSink, JsonValue } from "./EventBus";
 import { GameEngineError, GameEngineErrorKind } from "./GameEngineError";
 import { IdCounters } from "./IdCounters";
+import { registerSkills, skillsSystemId } from "../skills/registerSkills";
 import { parseGameInitOptions } from "./options";
 import type { GameInitOptions } from "./options";
 import { Prng } from "./Prng";
@@ -635,8 +636,10 @@ export class GameEngine {
         }
       },
     });
+    registerSkills(this);
     this.registerSystem({
       id: "world.starting-map",
+      dependencies: [skillsSystemId],
       init: ({ engine, mode, options }) => {
         if (mode !== InitMode.NewGame || options.mapSize === null) {
           return;

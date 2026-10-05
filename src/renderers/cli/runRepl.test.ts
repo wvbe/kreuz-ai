@@ -65,6 +65,20 @@ describe("executeReplLine", () => {
     expect(run(context, "entities government_faction 5")).toContain("#1 government_faction");
   });
 
+  it("inspect shows the skills and traits of a settler (spec 020)", () => {
+    const { context } = createContext();
+    run(context, "new 5 steady small");
+    const bakerLine = run(context, "entities baker")
+      .split("\n")
+      .find((line) => line.includes("baker"));
+    const bakerId = Number(/#(\d+)/.exec(bakerLine ?? "")?.[1]);
+    const lines = run(context, `inspect ${bakerId}`).split("\n");
+    expect(lines).toContain("  skills: baking 40 (dominant: baking)");
+    expect(lines.find((line) => line.startsWith("  traits:"))).toContain("Born baker");
+    expect(lines.some((line) => line.startsWith("  Skills: "))).toBe(true);
+    expect(run(context, "inspect 1")).not.toContain("skills:");
+  });
+
   it("uses the injected entropy for a seedless new", () => {
     const { context } = createContext();
     expect(run(context, "new")).toContain('"seed":99');
