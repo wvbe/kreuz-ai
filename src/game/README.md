@@ -23,5 +23,6 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [zones](zones/README.md) - zones and rooms: `Zone`, the furniture requirement grammar, status and `zone.*` events, merge and split, skill affinity, board pausing, zone hooks of storage.
 - [production](production/README.md) - production and crafting: workstations with `ProductionOrders`, order commands, the `craft.produce` job (fetch, lock, craft, consume), output hauling, cancel semantics and blocked-reason reporting for 025.
 - [construction](construction/README.md) - construction (016): blueprints as `build_site` entities, placement validation, supply and build jobs, walls and doors that obstruct cells, cancel and deconstruction.
+- [status](status/README.md) - status explanations and production flow (025): derived statuses with structured reasons from per-system providers, `explain` with cause chains, the settle tracker and `status.*` events, the Idle & Blocked list and the per-day flow ledger.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).
