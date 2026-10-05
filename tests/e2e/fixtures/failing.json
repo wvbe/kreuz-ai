@@ -1,0 +1,9 @@
+{
+  "name": "deliberately-failing",
+  "seed": 3,
+  "steps": [
+    { "step": 5 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 6 } },
+    { "step": 5 }
+  ]
+}

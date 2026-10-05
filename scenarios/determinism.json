@@ -1,0 +1,20 @@
+{
+  "name": "determinism",
+  "seed": 42,
+  "options": { "difficulty": "harsh", "mapSize": 1 },
+  "steps": [
+    { "step": 120 },
+    { "assertHash": { "label": "t120" } },
+    { "command": { "kind": "set-speed", "speed": 500 }, "atTick": 150 },
+    { "command": { "kind": "pause" }, "atTick": 200 },
+    { "command": { "kind": "step", "ticks": 10 } },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 200 } },
+    { "command": { "kind": "resume" } },
+    { "step": 300 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 500 } },
+    { "assertHash": { "label": "t500" } },
+    { "replay": true },
+    { "saveLoad": true },
+    { "replay": true }
+  ]
+}

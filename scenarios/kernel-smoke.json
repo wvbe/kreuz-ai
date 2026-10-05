@@ -1,0 +1,32 @@
+{
+  "name": "kernel-smoke",
+  "seed": 1,
+  "options": { "difficulty": "steady", "mapSize": 0 },
+  "steps": [
+    { "assert": { "query": "state", "path": "hasGame", "op": "eq", "value": true } },
+    { "assert": { "query": "state", "path": "seed", "op": "eq", "value": 1 } },
+    { "assert": { "query": "entities", "path": "total", "op": "gte", "value": 1 } },
+    { "assert": { "query": "maps", "path": "maps.length", "op": "eq", "value": 1 } },
+    { "step": 200 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 200 } },
+    { "assert": { "query": "time", "path": "paused", "op": "eq", "value": false } },
+    { "command": { "kind": "pause" } },
+    { "assert": { "query": "time", "path": "paused", "op": "eq", "value": true } },
+    { "step": 5 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 200 } },
+    { "command": { "kind": "resume" } },
+    { "assert": { "query": "time", "path": "paused", "op": "eq", "value": false } },
+    { "step": 10 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 210 } },
+    { "command": { "kind": "set-speed", "speed": 2000 } },
+    { "assert": { "query": "time", "path": "speed", "op": "eq", "value": 2000 } },
+    { "command": { "kind": "set-speed", "speed": 3 }, "expectError": "invalid-payload" },
+    { "saveLoad": true },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 210 } },
+    { "assert": { "query": "time", "path": "speed", "op": "eq", "value": 2000 } },
+    { "assertHash": { "label": "after-load" } },
+    { "step": 50 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 260 } },
+    { "replay": true }
+  ]
+}
