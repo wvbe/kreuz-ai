@@ -40,7 +40,7 @@ Inputs: 28 specs (~840 KB), `docs/CONSTITUTION.md`, `docs/ROADMAP.md` (out of sc
 | AD7 | A\* tie-break is pure (lowest cell index), never the PRNG | 012 vs its SC-001 and 011 |
 | AD8 | Registries/prototypes are **per-engine instances**, not global singletons; loaded from a JSON content pack validated by Zod; count minima are content-pack tests, not loader errors | 007 FR-014 isolation; lets a vertical-slice pack load before full 022 |
 | AD9 | Voronoi/square geometry is a pure function of (map params, map seed) and is regenerated on load; saves keep `cells[].terrain` + params + `nextId` counters (adds missing ID counters to 006) | 004/006 gap |
-| AD10 | Stack: TypeScript 5, Node ≥ 22, **vitest** (runner + coverage), **tsx** (CLI runner; not Node native type-stripping because enums are mandated), Zod, ESLint 9 flat, Prettier (existing config), Vite + React 19 + three/R3F for UI | 023 names no runner/TS runner |
+| AD10 | Stack: TypeScript 5, Node ≥ 22, **vitest** (runner + coverage), **vite-node** (CLI/script runner, replaces tsx; not Node native type-stripping because enums are mandated), Zod, ESLint 9 flat, Prettier (existing config), Vite + React 19 + three/R3F for UI | 023 names no runner/TS runner |
 | AD11 | 023 carve-outs: `unknown` allowed only at JSON/Zod/catch boundaries (`// eslint-disable` with reason); `.json` extension allowed for content imports; extra lint bans in `src/game`: `Date`, `Math.random`, `setTimeout/Interval`, DOM lib | 023 vs 022 conflicts; Constitution II |
 | AD12 | Delivery is **vertical**: each phase ends with a headless e2e that a player-equivalent script can pass, in the terminal first | Skill guidance; fail fast |
 
@@ -78,7 +78,7 @@ Full content(022) ‖ (parallel once loader + schemas stable)        React UI(02
 ## Task List (detail in the sections below; checklist in `tasks/todo.md`)
 
 ### Phase 0 — Foundations
-- [ ] 0.1 Clean slate + scaffold (023): package.json, tsconfigs, ESLint, vitest, tsx, check scripts, README gates
+- [ ] 0.1 Clean slate + scaffold (023): package.json, tsconfigs, ESLint, vitest, vite-node, check scripts, README gates
 - [ ] 0.2 `docs/DECISIONS.md`: resolve the cross-spec conflicts above (**human review gate**)
 - [ ] 0.3 PRNG & seed (011)
 - [ ] 0.4 Event bus (010)
@@ -96,7 +96,7 @@ Full content(022) ‖ (parallel once loader + schemas stable)        React UI(02
 - [ ] 1.10 CLI renderer v0 + JSONL protocol + scenario runner (e2e harness)
 
 ### Checkpoint A — Kernel
-- [ ] Fresh clone: `npm run ci` green; `tsx src/renderers/cli/main.ts` can new/step/save/load; same-seed determinism e2e passes in-process and via child process
+- [ ] Fresh clone: `npm run ci` green; `vite-node src/renderers/cli/main.ts` can new/step/save/load; same-seed determinism e2e passes in-process and via child process
 
 ### Phase 2 — A living world
 - [ ] 2.1 Map generators: outdoor Voronoi, village layout, cave/cellar, quick room/site (004 gens, 009)
@@ -247,7 +247,7 @@ Deps 1.8 · M–L. `src/game/api/{GameSession,Command,Views}.ts`.
 
 ### 1.10 CLI renderer v0 + e2e harness
 Deps 1.9 · M. `src/renderers/cli/{main,Repl,Jsonl,AsciiMap,ScenarioRunner}.ts`.
-- [ ] `tsx src/renderers/cli/main.ts --jsonl`: one JSON command per line in, one JSON result (+ events) per line out; `--script scenario.json` runs and exits non-zero on assertion failure
+- [ ] `vite-node src/renderers/cli/main.ts --jsonl`: one JSON command per line in, one JSON result (+ events) per line out; `--script scenario.json` runs and exits non-zero on assertion failure
 - [ ] Interactive REPL prints ASCII map and entity inspect
 - [ ] Child-process e2e test: spawn CLI, pipe a scenario, assert stdout (no browser, no network)
 - Verify: `npm run test` includes `e2e/cli.test.ts`.

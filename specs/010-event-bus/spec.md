@@ -137,9 +137,15 @@ The system defines standard event types organized into categories (e.g., `game.*
 - **FR-008**: EventBus MUST provide an `unsubscribe(eventName, callback)` method to remove a specific subscriber. Subscription cleanup is the caller's responsibility; entities track their own handles and call `unsubscribe` during deletion.
 - **FR-009**: Events emitted during a tick MUST be queued, not processed immediately. All queued events MUST be processed at the tick boundary in FIFO order.
 - **FR-009a**: Events emitted by subscribers while the queue is being processed (nested emits) MUST be appended to the queue and delivered within the same tick boundary in FIFO order. Nesting depth (an event emitted by a subscriber of an event emitted by a subscriber, …) MUST be limited by a fixed engine-defined depth cap; an emit beyond the cap MUST NOT be queued and MUST raise an error that is caught and logged (FR-017), so runaway chains cannot loop forever. The queue MUST be empty at the end of each tick.
+
+> **Amended by DECISIONS.md D-02**: depth cap = 16; over-cap emits are reported to the injected error sink (no `error.system-failed` event). `tick.begin` is emitted and flushed immediately at the start of each tick.
 - **FR-010**: Multiple subscribers to the same event MUST be called in registration order (FIFO): first subscriber registered = first called. This ordering is deterministic and stable across ticks and save/load cycles.
 - **FR-011**: A subscriber registered after an event has already been queued (same tick, before boundary) MUST NOT receive that queued event. Late subscribers receive only events emitted after their registration.
+
+> **Amended by DECISIONS.md D-02**: the delivery set is resolved when an event is PROCESSED, not when it is emitted: any subscriber registered before processing (including after `load`) receives it. This replaces the future-only rule below.
 - **FR-012**: EventBus MUST expose a `waitFor<T>(eventName, predicate?)` method returning a Promise that resolves at tick boundary when the next matching event fires. Optional predicate allows filtering (e.g., `e => e.entityId === 5`). Pending `waitFor` Promises are native promises and are NOT serialized to GameState; a behavior script awaiting an event records that wait in its serialized task checkpoint (feature 003) and re-issues the `waitFor` when it resumes after load.
+
+> **Amended by DECISIONS.md D-02/D-01**: `waitFor` and promises are removed. Serialized task records wait via `WaitCondition` (event pattern + optional payload field match); `subscribe` returns a numeric `SubscriptionHandle` and `unsubscribe(handle)` replaces FR-008's callback form.
 - **FR-013**: EventBus MUST be a global singleton per game instance. All events from all maps flow through the single bus; subscribers receive events regardless of which map the emitter is on.
 - **FR-014**: EventBus MUST expose a `getQueue()` method to inspect pending events (for debugging and serialization).
 - **FR-015**: All events in the queue at save time (feature 006) MUST serialize to JSON in the GameState, including event name and payload.

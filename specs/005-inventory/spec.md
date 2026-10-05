@@ -231,6 +231,8 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 - **FR-025**: System MUST support ownership (owner entity ID) and permission rules for access restrictions. Permission rules are defined as `{ type, targetEntityId | faction | role, operation }`, where `type` is a `PermissionType` enum (Grant, Deny) and `operation` is an `InventoryOperation` enum (Store, Retrieve, Transfer, Equip). Unauthorized access rejects with `AccessDeniedError`.
 - **FR-025a**: Permission checks occur at call time (not cached). Inventories default to open-access (no restrictions) unless explicitly configured. Permission evaluation is deterministic: first matching rule (in order) determines access; no caching allows dynamic permission updates.
 - **FR-026**: System MUST serialize full inventory state (slots, material IDs, quantities, stack limits, remaining perishable time and decay rates, weight, equipment slots, ownership, access rules) to JSON without loss.
+
+> **Amended by DECISIONS.md D-07**: slots do not serialize `stackLimit` (registry is the source of truth); weight is in milli-units; mutating functions take an actor context; the US3 `canStore` example numbers are corrected (fits=true, maxFittable=142).
 - **FR-026a**: Material slots in JSON MUST store the material's string content ID, not its display name, to ensure deterministic saves and future-proof material rebalancing.
 - **FR-027**: System MUST deserialize inventory state from JSON and produce identical inventory state.
 - **FR-028**: System MUST operate identically in headless environments (no renderer).

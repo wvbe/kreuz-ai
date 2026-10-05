@@ -137,6 +137,8 @@ The PRNG implementation is identical across all platforms (web browser, Node.js,
 - **FR-008**: PRNG state (seed, position, any internal counters) MUST serialize to JSON and include in GameState (feature 006).
 - **FR-009**: When a game is loaded from a save file, PRNG state MUST be restored; subsequent `random()` calls resume the pre-save sequence exactly.
 - **FR-010**: PRNG MUST support `derive(name)` to create independent sub-PRNGs with deterministic but separate sequences.
+
+> **Amended by DECISIONS.md D-03**: `derive(name)` is replaced by `stream(name)`: get-or-create, persisted, independent of other draws. PCG32 XSH-RR with 64-bit state as two uint32 halves. The API is integer-only (`nextU32, nextInt, chancePermille, choice, weighted, shuffle`); `random()` and fractional weights are removed; `PrngState = {seed, streams:[{name,state,inc}]}`.
 - **FR-011**: Derived PRNGs MUST serialize as part of GameState; on load, derived PRNGs are reconstructed with identical state.
 - **FR-012**: PRNG MUST support `setSeed(newSeed)` to reset to a new sequence during gameplay, for tests and debug tooling only (gameplay code MUST NOT call it). Re-seeding resets all derived PRNGs (re-derived from the new seed).
 - **FR-013**: PRNG implementation MUST be pure deterministic code (no platform-specific APIs like Math.random() or crypto); must work identically on all platforms.

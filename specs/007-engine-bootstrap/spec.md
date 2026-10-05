@@ -109,6 +109,8 @@ The bootstrap process supports pure headless operation: no renderer, no UI, no w
 ### Functional Requirements
 
 - **FR-001**: GameEngine MUST expose a `newGame(options?)` method that initializes and starts a fresh game with the provided parameters or sensible defaults. The method returns an idle engine instance ready to accept `tick()` calls; the game loop does NOT run automatically.
+
+> **Amended by DECISIONS.md D-06**: `new GameEngine(content)` plus instance methods `newGame(options?)` / `loadGame(save)` (validate into a temporary state, then swap). Accessors: `getTime`, `getState`, `getEntity`, `getEntities`, `getMap`, `getComponents`. `OutOfMemoryError` and the "starting entity counts" option are removed.
 - **FR-002**: `newGame()` MUST initialize the game loop infrastructure, set game time to 0, create an entity collection holding exactly one entity — the player government faction (spec 021 FR-002), carrying `SettlementProgress` (spec 027 FR-002) and `SettlementChronicle` (spec 028 FR-018) — and return the engine. Bootstrap creates no other entities. Caller MUST explicitly call `engine.tick()` to advance the game loop; bootstrap does not start automatic ticking.
 - **FR-003**: `newGame()` MUST completely unload any previously running game before starting the new game (no state leakage).
 - **FR-004**: GameEngine MUST expose a `loadGame(save)` method that loads a saved game from its JSON (string or parsed object) and resumes from that state. The engine performs no file I/O; the host reads the save. The engine returns idle; caller must call `engine.tick()` to resume gameplay.
@@ -125,6 +127,8 @@ The bootstrap process supports pure headless operation: no renderer, no UI, no w
 - **FR-015**: Bootstrap MUST expose a system initialization hook allowing systems to register initialization functions with dependency declarations. Bootstrap topologically sorts registered functions and executes them in dependency order. If a system declares a dependency that doesn't exist, bootstrap rejects with a clear error.
 - **FR-016**: After `newGame()` returns, GameEngine MUST expose query methods: `getEntities()`, `getState()`, `getTime()`, `getEntityAt(id)`, `getMap(id)`, `getComponents(entityId)` to allow systems and external code to query the initialized game state.
 - **FR-017**: If a required prototype (e.g., 'Citizen') is not registered before `newGame()` is called, bootstrap MUST start the game anyway (no validation); failure occurs at runtime when code attempts to instantiate the missing prototype.
+
+> **Amended by DECISIONS.md D-06**: FR-017 is withdrawn. Bootstrap requires the government faction prototype; a missing prototype raises `ContentValidationError`.
 
 ### Key Entities
 

@@ -109,6 +109,8 @@ Each entity spawned in the room has a starter inventory with currency and basic 
 ### Functional Requirements
 
 - **FR-001**: RoomGenerator MUST expose a `generate(options?)` method that returns a fully populated room with entities, objects, and terrain.
+
+> **Amended by DECISIONS.md D-11**: the term "Room" in this spec is renamed `Site` (`SiteGenerator`, `GeneratedSite`) to avoid the collision with spec 015. `objectCount` is not a parameter.
 - **FR-002**: Generated rooms MUST be **square grid** maps with floor cells and walls (wall entities occupying a cell and making it non-traversable, per spec 004), dimensions based on the `size` parameter (small: ~15x15, medium: ~25x25, large: ~40x40). The quick room generator does NOT support Voronoi or hexagonal grid types; those require a dedicated generator.
 - **FR-003**: Each generated room MUST contain 10–20 entities (citizens, NPCs) by default; `entityCount` overrides this (minimum 1), with randomized positions on walkable tiles; no two entities on the same tile.
 - **FR-004**: Each generated room MUST contain 5–10 objects (furniture, containers, resources) by default, scaled by `objectDensity`, placed on walkable tiles and reachable by pathfinding.

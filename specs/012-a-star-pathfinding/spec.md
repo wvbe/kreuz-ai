@@ -126,5 +126,7 @@ Pathfinding can prefer different terrain types based on travel cost (e.g., roads
 - **Static Costs**: Terrain costs are static within a game tick; paths don't need to account for probabilities
 - **Heuristic**: Manhattan distance is the admissible heuristic for 4-connected square maps. On voronoi maps the heuristic is the straight-line distance between cell centroids, scaled to integers and rounded down, so it is a lower bound of the integer path cost. Both are multiplied by the minimum per-step terrain cost so they never overestimate.
 - **Tie-Breaking**: When multiple equally-valid paths exist, ties are broken deterministically using the game's seeded PRNG (spec 004).
+
+> **Amended by DECISIONS.md D-21**: tie-breaking is a pure function `(f, h, cellIndex)` ascending; the PRNG is never used by pathfinding. Results use an explicit `PathResult` (`Found | AlreadyThere | NoPath`).
 - **Memory**: Pathfinding can maintain open/closed sets in memory; no disk-based search needed
 - **No Multiplayer Sync**: Pathfinding is client-side/server-side deterministic; no real-time multiplayer synchronization issues

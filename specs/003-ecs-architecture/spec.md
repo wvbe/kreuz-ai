@@ -114,6 +114,8 @@ All entity state, including active tasks, component state, and async operation s
 - **FR-007**: System MUST execute tasks in priority order (highest priority first) each game tick.
 - **FR-008**: System MUST support task interruption that cancels remaining tasks and leaves entity in consistent state.
 - **FR-009**: System MUST enable high-level behavior code to use `async/await` syntax with promises that resolve based on tick progression, not real-world time. A tick-driven state machine advances operations and resolves promises when complete.
+
+> **Amended by DECISIONS.md D-01**: no JS async/await in the simulation. Behaviours are serializable step-machine task handlers; `walkTo`/`craft`/`purchase` are task types. FR-009, FR-012 and FR-015 read accordingly (sequential chains = parent task with child tasks).
 - **FR-010**: System MUST coordinate async behaviors: `await walkTo(entity, targetCell)` resolves when the entity's pathfinding state machine reaches the target cell.
 - **FR-011**: System MUST coordinate complex interactions: `await purchase(entity, seller, item, count, price)` resolves after entity walks to seller and exchanges inventory/money over multiple ticks.
 - **FR-012**: System MUST support sequential async chains without explicit state machines in behavior code (e.g., `await a(); await b(); await c();`). Multiple awaits execute sequentially; the task queue enforces ordering.
