@@ -12,7 +12,15 @@
         "materialId": "nails",
         "quantity": 4
       }
-    ]
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "hamlet"
   },
   {
     "id": "oven",
@@ -24,7 +32,14 @@
         "quantity": 6
       }
     ],
-    "unlockTier": "village"
+    "unlockTier": "village",
+    "constructionTicks": 48,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 3
+      }
+    ]
   },
   {
     "id": "grinding_mill",
@@ -43,6 +58,17 @@
         "materialId": "nails",
         "quantity": 4
       }
+    ],
+    "constructionTicks": 48,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 1
+      }
     ]
   },
   {
@@ -58,7 +84,15 @@
         "materialId": "nails",
         "quantity": 8
       }
-    ]
+    ],
+    "constructionTicks": 48,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      }
+    ],
+    "unlockTier": "hamlet"
   },
   {
     "id": "workbench",
@@ -73,7 +107,15 @@
         "materialId": "nails",
         "quantity": 4
       }
-    ]
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "hamlet"
   },
   {
     "id": "chest",
@@ -93,7 +135,15 @@
       "slotCount": 16,
       "weightLimit": 200,
       "categoryFilter": []
-    }
+    },
+    "constructionTicks": 18,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "hamlet"
   },
   {
     "id": "table",
@@ -104,6 +154,56 @@
         "materialId": "oak_plank",
         "quantity": 3
       }
-    ]
+    ],
+    "constructionTicks": 12,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "wall",
+    "name": "Wall",
+    "tags": ["wall", "structure"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 16,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "door",
+    "name": "Door",
+    "tags": ["door", "structure"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 12,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "hamlet"
   }
 ]

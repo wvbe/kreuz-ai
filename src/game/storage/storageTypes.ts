@@ -143,6 +143,10 @@ export enum ReservationKind {
    * Goods or coins promised in a trade (019).
    */
   Payment = "payment",
+  /**
+   * Goods a supplier is about to carry to a build site (016).
+   */
+  Supply = "supply",
 }
 
 /**

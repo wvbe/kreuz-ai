@@ -36,6 +36,18 @@
     }
   },
   {
+    "id": "build_site",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 16,
+        "weightLimitMilli": 400000,
+        "queryable": false
+      },
+      "BuildSite": {}
+    }
+  },
+  {
     "id": "zone",
     "components": {
       "Zone": {}

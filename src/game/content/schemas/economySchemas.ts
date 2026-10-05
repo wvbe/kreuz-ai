@@ -106,7 +106,11 @@ const furnitureStorageSchema = z
 
 /**
  * Authored furniture prototype (spec 022 furniture record). `tags` are what recipes
- * (`workstationTag`) and zones refer to; `storage` is present when the piece holds items.
+ * (`workstationTag`) and zones refer to; `storage` is present when the piece holds items. The
+ * build definition (spec 016, plan 3.5) is `constructionMaterials`, `constructionTicks` (base work
+ * ticks at skill 0, default 24), `unlockTier`, `deconstructionYield` (what taking it down gives
+ * back, default nothing) and `removable` (default true). Walls and doors (`wall`, `door`) are
+ * records of the same table.
  */
 export const furnitureSchema = z
   .object({
@@ -117,6 +121,9 @@ export const furnitureSchema = z
     storage: furnitureStorageSchema.optional(),
     effects: z.array(effectSchema).default([]),
     unlockTier: unlockTierSchema,
+    constructionTicks: positiveSchema.default(24),
+    deconstructionYield: z.array(materialAmountSchema).default([]),
+    removable: z.boolean().default(true),
   })
   .strict();
 

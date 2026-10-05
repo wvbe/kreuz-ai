@@ -61,6 +61,15 @@
     "recurrence": "recurring"
   },
   {
+    "id": "build.supply",
+    "name": "Supply a build site",
+    "skillId": "hauling",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time"
+  },
+  {
     "id": "build.construct",
     "name": "Construct",
     "skillId": "construction",

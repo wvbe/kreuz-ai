@@ -14,16 +14,16 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `needs.json` | the 6 needs; only hunger (bread) and rest (wooden_bed) have satisfaction methods | all methods |
 | `skills.json` | 8 skills | 20+ |
 | `traits.json` | 7 traits | 24+ |
-| `furniture.json` | 7 pieces | 50+ |
+| `furniture.json` | 9 records: 7 pieces plus `wall` and `door`; each has the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); bed, workbench, chest, table, sawmill, wall and door unlock at `hamlet`, the oven at `village` | 50+ |
 | `zones.json` | 7 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
-| `jobs.json` | 6 jobs | 20+ |
+| `jobs.json` | 7 jobs (task 3.5 added `build.supply`) | 20+ |
 | `factions.json` | 1 guild (`guild_bakers`) | 9 guilds + 3 religious |
 | `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |
 | `name-lists.json` | `common_13c`: 62 given names, 41 bynames (meets the 60/40 minimum) | keep, extend |
 | `humanoid-prototypes.json` | peasant, farmer, carpenter, baker | 20+ |
 | `animal-prototypes.json` | empty | 6 livestock + 5 wild |
-| `engine-prototypes.json` | `government_faction` (no components yet), `wall`, `door`, `zone`, `furniture_piece` (test and construction stand-in: `Position` + `Furniture`), `job_board`, `chest` (furniture storage and stockpile), `loose_pile` | add `build_site`, `diplomatic_envoy` with their components |
+| `engine-prototypes.json` | `government_faction` (no components yet), `wall`, `door`, `zone`, `furniture_piece` (test and construction stand-in: `Position` + `Furniture`), `job_board`, `chest` (furniture storage and stockpile), `loose_pile`, `build_site` (task 3.5: `Position`, a non-queryable 16-slot staging `Inventory`, `BuildSite`) | add `diplomatic_envoy` with its components |
 | `dwelling-levels.json` | 4 levels, placeholder numbers | tuned (spec 029) |
 | `settlement-tiers.json` | 4 tiers with the 027 default requirements | tuned, more zone requirements |
 | `difficulty-modes.json` | 3 modes with the 027 multipliers | final |

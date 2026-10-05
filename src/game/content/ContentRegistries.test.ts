@@ -18,6 +18,7 @@ import { moodComponent } from "../ai/mood/moodComponent";
 import { needsComponent } from "../ai/needs/needsComponent";
 import { relationshipsComponent } from "../ai/relationships/relationshipsComponent";
 import { furnitureComponent } from "../storage/furnitureComponent";
+import { buildSiteComponent } from "../construction/buildSiteComponent";
 import { stockpileComponent } from "../storage/stockpileComponent";
 import { productionOrdersComponent } from "../production/productionOrdersComponent";
 import { zoneComponent } from "../zones/zoneComponent";
@@ -44,6 +45,7 @@ function components(): ComponentRegistry {
     stockpileComponent,
     zoneComponent,
     productionOrdersComponent,
+    buildSiteComponent,
   ]) {
     registry.register(definition);
   }
@@ -65,6 +67,7 @@ describe("ContentRegistries", () => {
     expect(first).not.toBe(second);
     expect(first.ids()).toEqual([
       "baker",
+      "build_site",
       "carpenter",
       "chest",
       "door",
