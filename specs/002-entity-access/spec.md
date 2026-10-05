@@ -1,14 +1,9 @@
 # Feature Specification: Entity Access & Query Helpers
 
-**Feature Branch**: `002-entity-access`
 **Created**: 2026-05-02
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "Another important framework-level functionality is the access to game entities. The game design relies on the entity/component/system paradigm, so there should be efficient helper methods to get entities by their properties, or to get entities that are related to another in-game entity, object or event. This feature should include somewhat of a benchmarking test. This product of this feature is a set of reusable helper classes that will be in use throughout the rest of the game design."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Query Entities by Component Type (Priority: P1)
 
@@ -37,9 +32,9 @@ Game systems need to find entities matching specific property criteria (e.g., "a
 
 **Acceptance Scenarios**:
 
-1. **Given** 200 citizens with varied job types, **When** query `getEntitiesByProperty('Citizen.jobType', 'farmer')` is called, **Then** all entities with jobType = "farmer" are returned, no others.
+1. **Given** 200 citizens with varied current jobs, **When** query `getEntitiesByProperty('Citizen.currentJob', 'farm.sow')` is called, **Then** all entities with currentJob = "farm.sow" are returned, no others.
 2. **Given** entities with numeric component fields (e.g., `Faction.alignment`, `Citizen.wealth`), **When** query with range filter `getEntitiesByProperty('Faction.alignment', { min: -50, max: 0 })` is called, **Then** only entities within that range are returned.
-3. **Given** a query combining multiple component fields, **When** query `getEntitiesByProperties({ 'Citizen.faction': 'red', 'Citizen.status': 'active' })` is called, **Then** only entities matching ALL fields are returned (AND logic).
+3. **Given** a query combining multiple component fields, **When** query `getEntitiesByProperties({ 'Citizen.currentJob': 'farm.sow', 'Citizen.status': 'active' })` is called, **Then** only entities matching ALL fields are returned (AND logic).
 4. **Given** saved game state with specific property values, **When** game is loaded and queries execute, **Then** queries return identical results (deterministic).
 
 ---
@@ -54,7 +49,7 @@ Game developers need to find entities related to a given entity through defined 
 
 **Acceptance Scenarios**:
 
-1. **Given** a faction entity with 50 member citizen entities linked via `factionId` property, **When** query `getRelatedEntities(factionEntity, "members")` is called, **Then** all 50 member citizens are returned.
+1. **Given** a faction entity with 50 member citizen entities whose entity-side faction membership list (`Citizen.factions`) contains the faction's ID, **When** query `getRelatedEntities(factionEntity, "members")` is called, **Then** all 50 member citizens are returned (the faction's members are derived by query; the faction does not store a member list).
 2. **Given** a citizen entity with assigned job entity, **When** query `getRelatedEntity(citizenEntity, "currentJob")` is called, **Then** the job entity is returned (single entity).
 3. **Given** a circular relationship (citizen → job → resource → produced by citizen), **When** traversal queries execute, **Then** infinite loops are prevented and queries complete successfully.
 4. **Given** headless game state with relationships serialized in JSON, **When** game is loaded and relationship queries execute, **Then** relationships are correctly reconstructed and queries return identical results.
@@ -101,20 +96,21 @@ The feature must include benchmarking tests that measure query performance under
 - What happens if a query specifies a component type that no entity has? → Should return empty result.
 - What happens if relationship target entities are deleted while relationship queries execute? → System throws an error. Dangling relationships are treated as data integrity violations, not gracefully skipped.
 - What happens if property filter value doesn't match any entity? → Should return empty result.
-- What happens if multiple related entities exist for a query expecting single entity? → Should either return first match or error with clear message (design choice).
+- What happens if multiple related entities exist for a query expecting single entity? → **Open question:** return the first match (insertion order, FR-007) or throw an error with a clear message? Not yet decided.
 - What happens during high-frequency queries (e.g., 1000+ queries per tick)? → The framework performs full scans; no built-in caching. Callers that require cache behavior must implement it themselves.
 - What happens if entity state is modified during query iteration? → Queries return a live view; callers are responsible for not modifying the entity collection mid-iteration. Behavior is undefined if violated. No snapshot is taken.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
 - **FR-001**: System MUST provide `getEntitiesByComponent(componentType)` method that returns all entities possessing the specified component type.
-- **FR-002**: System MUST provide `getEntitiesByProperty('Component.field', value)` method that returns all entities where the named component field equals the given value. Property paths use dot notation: `'Citizen.jobType'` targets field `jobType` inside the `Citizen` component.
+- **FR-002**: System MUST provide `getEntitiesByProperty('Component.field', value)` method that returns all entities where the named component field equals the given value. Property paths use dot notation: `'Citizen.currentJob'` targets field `currentJob` inside the `Citizen` component.
 - **FR-003**: System MUST support property filtering with range operators (min/max for numeric properties, e.g., `{ min: 0, max: 100 }`).
 - **FR-004**: System MUST provide `getEntitiesByProperties(filterObject)` method that returns entities matching ALL specified property filters (AND logic). Filters use the same component-scoped path syntax.
 - **FR-005**: System MUST provide `getRelatedEntities(entity, relationshipName)` method that returns all entities related to a given entity by a defined relationship. If a relationship references a deleted entity, the method MUST throw an error (dangling relationship is a data integrity violation).
 - **FR-006**: System MUST provide `getRelatedEntity(entity, relationshipName)` method that returns a single related entity (or null if no relationship exists). If the referenced entity has been deleted, the method MUST throw an error.
+- **FR-006a**: Systems that own entity references (relationship fields) MUST clear them when the referenced entity is destroyed (e.g., a faction's `leaderId` set to null and standing entries removed, spec 021). A dangling reference therefore indicates a bug, which is why FR-005/FR-006 throw rather than skip.
 - **FR-007**: Query results MUST be deterministic: identical query on identical game state returns identical results in insertion order (the order entities were added to the game state). Insertion order is the canonical sort for all queries.
 - **FR-008**: All query operations MUST be serialization-safe: queries work identically on live game state and on deserialized game state from JSON save files.
 - **FR-009**: System MUST provide reusable helper classes (e.g., `CitizenQueries`, `FactionQueries`, `ResourceQueries`) that encapsulate common query patterns.
@@ -127,11 +123,11 @@ The feature must include benchmarking tests that measure query performance under
 
 - **Entity**: An object with an ID, a collection of named components. Queryable by component type, component-field values (via dot-path), and relationships.
 - **Component**: A typed container for entity data (e.g., `Citizen` component, `Position` component). Component fields are queryable using `'ComponentName.fieldName'` path syntax.
-- **Relationship**: A named link between entities (e.g., "faction members", "assigned job"). Stored as a component field referencing one or more entity IDs. A dangling relationship (target entity deleted) is a data integrity error.
+- **Relationship**: A named link between entities (e.g., "faction members", "assigned job"). Stored as a component field referencing one or more entity IDs. Membership-style relationships are stored on the member side only (e.g., faction membership is a list of faction IDs on the member entity); the inverse (a faction's members) is derived by query, never stored. A dangling relationship (target entity deleted) is a data integrity error.
 - **QueryHelper**: A reusable class providing encapsulated query methods for a specific domain (e.g., `CitizenQueries` for citizen-related queries).
 - **BenchmarkResult**: Captures query performance metrics: entity count, query type, execution time (ms), memory usage (optional).
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
@@ -152,7 +148,7 @@ The feature must include benchmarking tests that measure query performance under
 
 - Q: Are entity IDs unique globally (game-wide) or locally (per-map)? → A: Global game-wide IDs. Each entity has a unique ID across the entire loaded game world. Loading a new game fully unloads all current entities and IDs; the new game's entities have their own independent IDs.
 - Q: What is the JSON serialization structure for entities with components? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "components": { "Inventory": {...}, "Position": {...} } }`. Each component is a named key under `components`.
-- Q: Where do queryable properties live — on the entity or inside a component? → A: Inside components. Property queries use dot-path syntax: `'Citizen.jobType'` targets `jobType` inside the `Citizen` component. Top-level entity fields (id, prototype) are not queryable via property queries.
+- Q: Where do queryable properties live — on the entity or inside a component? → A: Inside components. Property queries use dot-path syntax: `'Citizen.currentJob'` targets `currentJob` inside the `Citizen` component. Top-level entity fields (id, prototype) are not queryable via property queries.
 - Q: What happens if entities are added/removed during query iteration? → A: Queries return a live view; caller must not mutate the collection mid-iteration. Behavior is undefined if violated. No snapshot semantics.
 - Q: When a relationship points to a deleted entity, what should the query return? → A: Throw an error. Dangling relationships are a data integrity violation, not a graceful-skip case.
 - Q: What ordering should query results use for determinism (FR-007)? → A: Insertion order — the order entities were added to the game state. Canonical for all queries.
@@ -160,7 +156,7 @@ The feature must include benchmarking tests that measure query performance under
 
 ### Session 2026-05-03 (Cross-cutting: Diplomacy & Factions)
 
-- Q: What is a Faction and how does entity membership work? → A: A Faction is a first-class ECS entity (consistent with spec 003). Entities may belong to multiple factions simultaneously (political, occupational, religious, etc.). The player's government is itself a faction. Faction membership is stored as a component on the individual entity (list of faction entity IDs). Queries like `getEntitiesByProperty('Citizen.factions', ...)` must support multi-value membership (entity belongs to faction X AND/OR faction Y).
+- Q: What is a Faction and how does entity membership work? → A: A Faction is a first-class ECS entity (consistent with spec 003). Entities may belong to multiple factions simultaneously (political, occupational, religious, etc.). The player's government is itself a faction. Faction membership is stored as a component on the individual entity (list of faction entity IDs); a faction's member list (`memberIds`) is derived by query, not stored on the faction. Queries like `getEntitiesByProperty('Citizen.factions', ...)` must support multi-value membership (entity belongs to faction X AND/OR faction Y).
 
 ## Assumptions
 
