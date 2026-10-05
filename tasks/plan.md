@@ -91,7 +91,7 @@ Full content(022) ‖ (parallel once loader + schemas stable)        React UI(02
 - [ ] 1.5 Inventory (005)
 - [ ] 1.6 Save format, migrations, round-trip (006)
 - [ ] 1.7 Content loader + registries + vertical-slice pack v0 (022-loader, FR-018/019)
-- [ ] 1.8 GameEngine bootstrap + system registry (007)
+- [x] 1.8 GameEngine bootstrap + system registry (007)
 - [ ] 1.9 `GameSession` facade + `Command`/query/view types + command log/replay
 - [ ] 1.10 CLI renderer v0 + JSONL protocol + scenario runner (e2e harness)
 

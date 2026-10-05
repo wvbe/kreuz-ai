@@ -9,4 +9,32 @@ Engine kernel building blocks.
 - `IdCounters.ts` - persisted, never-reused monotonic ID counters (`CounterName` = the root `counters` keys of DECISIONS D-05). IDs start at 1.
 - `fixedPoint.ts` - `FixedUnit`, exact `decimalToFixed` for authored decimals, `fixedPointSchema`, `floorDiv/ceilDiv/truncDiv` (spec 006 FR-014).
 
+- `GameEngine.ts` - the per-engine host (spec 007, D-06, D-38): `new GameEngine(content, {entropy?, errorSink?, migrations?})`, instance `newGame(options?)` / `loadGame(save)` / `saveGame()` (`save()` alias) / `tick()` / `runTicks(n)`, query facade (`getTime`, `getState`, `getEntity`, `getEntities`, `getComponents`, `getMap`, all copies) and `registerSystem`. The subsystems are public readonly fields (`bus`, `time`, `store`, `maps`, `tasks`, `taskHandlers`, `behavior`, `behaviorHandlers`, `components`, `prototypes`, `relationships`, `counters`, `pipeline`, `content`, `errors`, `warnings`; `prng` is a getter because load replaces it) for systems and the session facade (1.9); hosts should use the query methods.
+- `SystemRegistry.ts` - generic dependency-ordered init registry (topological sort, ties by registration order, `SystemRegistryError` for cycles, missing dependencies, duplicates).
+- `engineSystemTypes.ts` - `EngineSystemDefinition`, `SystemInitContext`, `InitMode`, `CommandHandler` (provisional until 1.9), view types.
+- `options.ts` - `GameInitOptions`, `parseGameInitOptions` (Zod, exact messages, `InvalidOptionsError`).
+- `GameEngineError.ts`, `SystemRegistryError.ts`, `InvalidOptionsError.ts` - typed errors.
+
+## Registering a system (the one extension point)
+
+Later tasks add behavior with a single call, before the first `newGame` / `loadGame` (or between games):
+
+```ts
+engine.registerSystem({
+  id: "needs.decay", // unique, dotted lowercase; also the dependency name
+  slot: TickSlot.NeedsAndMood, // with `run`
+  order: 0, // inside the slot, default 0
+  run: (context) => {}, // once per tick
+  dependencies: ["world.starting-map"], // init order; may name systems registered later
+  init: ({ engine, mode, options }) => {}, // synchronous; NewGame and LoadGame
+  components: [needsComponent], // registered with engine.components
+  saveSection: { key, location, schema, serialize, restore }, // see ../save
+  commandHandlers: { "needs.set": (payload, engine) => null }, // provisional, 1.9
+});
+```
+
+Everything is validated before anything is changed. `init` runs after the world is reset and the government faction is spawned (`NewGame`: generators go here) or after all saved state is restored (`LoadGame`: rebuild derived indexes). Task handlers, behavior handlers and wait predicates are registered directly on `engine.taskHandlers` / `engine.behaviorHandlers` before the first game. The engine itself registers `task.execution` (slot 6), `inventory.decay` (slot 3), `entities.removal` (slot 17: flush deletions, free map cells, `clearReferencesTo` for every relationship registered on `engine.relationships`) and `world.starting-map` (init; creates the main Voronoi map of the requested `mapSize`, a placeholder for the world generator of task 2.1). The bus drain at slot 20 belongs to the pipeline.
+
+Prototypes and behavior trees of the content pack are registered on the first game start, after systems had the chance to register components and handlers. Trees whose handlers are not registered yet are skipped with an entry in `engine.warnings` (until task 2.4 registers them).
+
 Depends on `../time` for the clock. Used by every other folder under `src/game`.
