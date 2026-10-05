@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "../../dist/game",
-    "rootDir": ".",
-    "composite": true
-  },
-  "include": ["**/*.ts"]
-}
