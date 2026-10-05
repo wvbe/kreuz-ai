@@ -11,8 +11,8 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 0.4 Event bus (010)
 
 ## Phase 1 — Kernel + headless shell
-- [ ] 1.1 Time, tick primitive, AutoRunner, TickPipeline (001)
-- [ ] 1.2 ECS: entities/components/prototypes/access (003A, 002)
+- [x] 1.1 Time, tick primitive, AutoRunner, TickPipeline (001)
+- [x] 1.2 ECS: entities/components/prototypes/access (003A, 002)
 - [ ] 1.3 Task/step runtime + BT interpreter core — **highest risk, do first** (003B, 013 core)
 - [ ] 1.4 Map & terrain: square + Voronoi, sub-maps (004)
 - [ ] 1.5 Inventory (005)
