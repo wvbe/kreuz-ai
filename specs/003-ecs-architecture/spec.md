@@ -1,13 +1,9 @@
 # Feature Specification: ECS Architecture & Entity Interaction API
 
-**Feature Branch**: `003-ecs-architecture`
 **Created**: 2026-05-02
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "Another framework-level feature/design is the entity-component-system architecture of the game world, and how to programmatically interact with it. There will be a large number of systems, with very many components, that can lead to a wide range of entity prototypes. The product of this feature is an API that is an ergonomic way to specify what those entities are, and to interact with the helper methods that are given to entities with a related component. Those helper methods must themselves also be an ergonomic API. There will be a few high-reuse systems/components, such as being able to perform a series of prioritized tasks, or being able interrupt a series of tasks that the entity is performing. All asynchronous events, including timeouts and async/await promises are ultimately governed by other game events and the game time helper."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Define Entity Prototypes with Component Composition (Priority: P1)
 
@@ -28,7 +24,7 @@ Game developers need an ergonomic, declarative way to define what entities are b
 
 ### User Story 2 - Ergonomic System Functions Operating on Entity Data (Priority: P1)
 
-Entities are **pure data objects** (component maps). Game systems provide typed helper functions that operate on entity data. Developers call system functions with the entity as a parameter (e.g., `getMoneyBalance(entity)`, `addToInventory(entity, item)`). TypeScript's type system ensures only entities with the required components can be passed to functions that need them (via type predicates or branded types).
+Entities are **pure data objects** (component maps). Game systems provide typed helper functions that operate on entity data. Developers call system functions with the entity as a parameter (e.g., `getBalance(entity)`, `store(entity, material, quantity)`, per spec 005). TypeScript's type system ensures only entities with the required components can be passed to functions that need them (via type predicates or branded types).
 
 **Why this priority**: Core to ergonomic API design. Developers interact with entities frequently; typed system functions must be frictionless and type-safe.
 
@@ -36,9 +32,9 @@ Entities are **pure data objects** (component maps). Game systems provide typed 
 
 **Acceptance Scenarios**:
 
-1. **Given** an entity with `Inventory` component data, **When** developer calls `getMoneyBalance(entity)`, **Then** function returns current money balance from the entity's inventory data.
-2. **Given** an entity WITHOUT `Inventory` component, **When** developer attempts to call `getMoneyBalance(entity)`, **Then** TypeScript reports a compile-time error (type mismatch).
-3. **Given** system functions, **When** developer calls `addToInventory(entity, item)`, **Then** function returns a new entity state with the item added (pure transformation).
+1. **Given** an entity with `Inventory` component data, **When** developer calls `getBalance(entity)`, **Then** function returns current money balance from the entity's inventory data.
+2. **Given** an entity WITHOUT `Inventory` component, **When** developer attempts to call `getBalance(entity)`, **Then** TypeScript reports a compile-time error (type mismatch).
+3. **Given** system functions, **When** developer calls `store(entity, material, quantity)`, **Then** the function updates that entity's inventory data in the central game state, and the change is immediately visible to subsequent queries (spec 005 FR-029).
 4. **Given** multiple entities with same components, **When** same function is called on each, **Then** functions operate independently with no shared mutable state.
 
 ---
@@ -74,28 +70,11 @@ High-level entity behavior is written using `async/await` for readability (e.g.,
 2. **Given** an entity already at a workstation, **When** `await craft(entity, recipe)` is called, **Then** promise resolves after the recipe's duration in ticks has elapsed and outputs are produced.
 3. **Given** a composed behavior `await walkTo(entity, shop); await purchase(entity, item); await walkTo(entity, home)`, **When** game loop progresses, **Then** each step executes sequentially, resolving at the correct tick.
 4. **Given** multiple entities executing async behaviors concurrently, **When** game loop progresses, **Then** all entities' state machines advance independently and deterministically each tick.
-5. **Given** an in-progress async operation, **When** the game is saved and reloaded, **Then** the operation's state machine resumes from its current phase (async promises are re-created from serialized task state).
+5. **Given** an in-progress async operation, **When** the game is saved and reloaded, **Then** the operation's state machine resumes from its current phase (native promises are never serialized; the behavior script resumes from its serialized task checkpoint).
 
 ---
 
-### User Story 5 - Component-Provided Helper Methods as Reusable High-Level Abstractions (Priority: P2)
-
-Common entity behaviors (moving, trading, working, resting) are encapsulated as helper methods provided by components. These methods abstract away low-level state management and game time coordination. For example, `Merchant` component provides `getAdvertisedPriceFor(item)`, `acceptTrade(buyer, item, amount)`. `Citizen` component provides `performJob(job)`, `travelTo(location)`. Methods are discoverable and self-documenting.
-
-**Why this priority**: Improves developer experience and maintainability. High-reuse components (Merchant, Citizen, Faction) drive significant gameplay; ergonomic abstractions pay dividends. P2 because task queue (User Story 3) is prerequisite.
-
-**Independent Test**: Can be fully tested by implementing 3+ high-reuse component families (Merchant, Citizen, Faction), writing gameplay scenarios using component methods, verifying: (a) methods are intuitive and chainable, (b) methods coordinate with task queue and async patterns, (c) developers can express complex interactions with minimal boilerplate. Delivers abstraction layer.
-
-**Acceptance Scenarios**:
-
-1. **Given** a `Merchant` component with `getAdvertisedPriceFor(item)` and `acceptTrade(buyer, item, count, payment)` methods, **When** developer code calls these methods, **Then** prices are returned, trades execute, and inventory updates correctly.
-2. **Given** a `Citizen` component with `performJob(jobType)` and `travelTo(location)` methods, **When** citizen's task queue prioritizes job over travel, **Then** job executes first, travel is queued, and citizen lifecycle is maintained.
-3. **Given** component methods provided by multiple components on same entity, **When** developer calls methods in sequence, **Then** methods coordinate correctly (e.g., travel then work then rest) without state conflicts.
-4. **Given** gameplay scenario with 10+ concurrent entities using component methods, **When** game loop progresses, **Then** all entities execute correctly, promises resolve at appropriate times, and game state remains consistent.
-
----
-
-### User Story 6 - Entity State Serialization and Deserialization (Priority: P1)
+### User Story 5 - Entity State Serialization and Deserialization (Priority: P1)
 
 All entity state, including active tasks, component state, and async operation state, must serialize to JSON and deserialize identically. When a game is saved mid-interaction (e.g., during an async trade sequence), the entity can be deserialized and the sequence resumes correctly from the saved game time. This is critical for save/load functionality and scenario testing.
 
@@ -114,22 +93,22 @@ All entity state, including active tasks, component state, and async operation s
 
 ### Edge Cases
 
-- What happens if an entity's required component is removed mid-interaction? → Error or graceful degradation must be defined; async operations shouldn't crash.
-- What happens if task priority is changed while task is executing? → Decision: execute to completion or interrupt immediately? Define clearly.
+- What happens if an entity's required component is removed mid-interaction? → The pending operation rejects with a descriptive error (the same fail-fast semantics as a provably unachievable operation); async operations must not crash the game loop.
+- What happens if task priority is changed while task is executing? → **Open question:** does the executing task run to completion (only its queue position changes, as in US3 scenario 3), or is it interrupted immediately? Not yet decided.
 - What happens if async operation involves two entities that diverge in game state? → Synchronization via entity IDs and game time guarantees consistency.
 - What happens if entity is deleted while async operation is pending? → Promise should reject with clear error message.
 - What happens if multiple async operations are stacked (nested awaits)? → Should compose cleanly without deadlocking or state conflicts.
-- What happens if a component method throws an error? → Error handling should propagate correctly and leave entity in consistent state.
+- What happens if a system function throws an error? → Error handling should propagate correctly and leave entity in consistent state.
 - What happens during headless execution where no rendering occurs? → All operations should work identically (entity interactions don't depend on renderer).
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
 - **FR-001**: System MUST provide declarative syntax for defining entity prototypes by specifying component lists (e.g., `{ id: "Citizen", components: ["Position", "Inventory", "Job"] }`).
 - **FR-002**: System MUST instantiate entities from prototypes, initializing all specified components with default values.
 - **FR-003**: System MUST allow each entity instance to exist independently with separate state (modifications to one entity don't affect instances of same prototype).
-- **FR-004**: System MUST expose typed system functions that operate on entity data (e.g., `getMoneyBalance(entity)` for entities with `Inventory` component). Entities are pure data; behavior lives in system functions.
+- **FR-004**: System MUST expose typed system functions that operate on entity data (e.g., `getBalance(entity)` for entities with `Inventory` component). Entities are pure data; behavior lives in system functions.
 - **FR-005**: System MUST use TypeScript's type system to prevent passing entities without required components to system functions (compile-time enforcement via type predicates or branded types).
 - **FR-006**: System MUST provide `TaskQueue` component for high-reuse priority-based task management with enqueue, dequeue, prioritize, and interrupt operations.
 - **FR-007**: System MUST execute tasks in priority order (highest priority first) each game tick.
@@ -140,7 +119,7 @@ All entity state, including active tasks, component state, and async operation s
 - **FR-012**: System MUST support sequential async chains without explicit state machines in behavior code (e.g., `await a(); await b(); await c();`). Multiple awaits execute sequentially; the task queue enforces ordering.
 - **FR-013**: System MUST provide high-reuse system function families (inventory helpers, movement helpers, trade helpers) with ergonomic, composable APIs.
 - **FR-014**: System MUST serialize all entity state (prototype, components, task queue, in-progress async operation phase) to JSON without loss of information.
-- **FR-015**: System MUST deserialize entity state from JSON and resume async operations from their saved phase at the correct tick.
+- **FR-015**: System MUST deserialize entity state from JSON and resume async operations from their saved phase at the correct tick. Only tick-level state machines and task records are authoritative and serialized; native promises are never serialized. After load, behavior scripts resume from their serialized task checkpoints.
 - **FR-016**: System MUST work identically in headless environments (no renderer) as in browser environments.
 - **FR-017**: System MUST support dynamic entity component composition: components can be added to or removed from entities after instantiation. Entity version increments with each composition change to track evolution. Version is runtime-only (not serialized); reset to 0 on load.
 
@@ -148,26 +127,26 @@ All entity state, including active tasks, component state, and async operation s
 
 - **Entity**: Instance of an entity prototype with instantiated components, task queue, and properties. Has entity ID, component instances, version (runtime-only; incremented when composition changes; reset to 0 on load), and state.
 - **EntityPrototype**: Declarative definition of entity composition: ID, component list, default values. Reusable template for creating entities. Prototypes define initial composition; actual entities may evolve composition at runtime.
-- **Component**: Typed container for entity behavior and data. Provides methods callable on entity. Examples: Inventory, Position, Job, TaskQueue.
+- **Component**: Typed container for entity data. Has no methods; behavior lives in system functions that accept the entity. Examples: Inventory, Position, Job, TaskQueue.
 - **TaskQueue**: Special component providing priority-based task management. Stores pending tasks, current task, and execution history.
-- **Task**: Unit of work in entity's task queue. Has ID, priority, status (pending/executing/completed), and associated promise for async coordination.
-- **AsyncOperation**: Pending promise awaiting game time progression. Resolves when game time condition is met (travel complete, item acquired, exchange finished). Promise registers once; game loop invokes evaluation only when relevant game events occur (entity moved, inventory changed, etc.).
+- **Task**: Unit of work in entity's task queue. Has ID, priority, status (pending/executing/completed), and a task checkpoint (serialized). The promise used for async coordination is runtime-only and never serialized.
+- **AsyncOperation**: Tick-level state machine (serialized as part of the task record) awaiting game time progression; behavior code awaits it through a runtime-only promise. Resolves when game time condition is met (travel complete, item acquired, exchange finished). Promise registers once; game loop invokes evaluation only when relevant game events occur (entity moved, inventory changed, etc.).
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
 - **SC-001**: Entity prototype definitions are human-readable; developers can understand entity composition at a glance without documentation.
 - **SC-002**: Entity instantiation from prototype is deterministic; identical prototypes create identical entities every time.
-- **SC-003**: Component-specific method dispatch is zero-overhead; method availability checked in O(1) time (no iteration or expensive lookups).
+- **SC-003**: Component presence checks (deciding whether an entity can be passed to a system function at runtime) are O(1) (no iteration or expensive lookups).
 - **SC-004**: Task queue executes highest-priority task each tick and maintains consistent ordering.
 - **SC-005**: Task interruption completes within one game tick; entity is in known clean state after interruption.
-- **SC-006**: Async entity methods resolve at correct game time; time is never advanced too early or too late.
+- **SC-006**: Async behavior functions resolve at correct game time; time is never advanced too early or too late.
 - **SC-007**: Sequential async chains (nested awaits) complete without deadlocks or state inconsistencies.
 - **SC-008**: Entity state serialization to JSON and deserialization produces bit-for-bit identical entity state.
 - **SC-009**: Deserialized entities resume async operations correctly and complete at same game time as un-interrupted version.
 - **SC-010**: 100% of entity behavior works identically in headless environments as in browser with renderer.
-- **SC-011**: High-reuse component methods are discoverable (IDEs can provide autocomplete; methods are documented).
+- **SC-011**: High-reuse system functions are discoverable (IDEs can provide autocomplete; functions are documented).
 - **SC-012**: Complex entity interactions (trade sequences, multi-step travel + work) can be expressed in <50 lines of clear, async/await code.
 - **SC-013**: Multiple nested awaits on an entity execute sequentially via task queue; each await completes before next begins. Sequential ordering is deterministic.
 
@@ -176,7 +155,7 @@ All entity state, including active tasks, component state, and async operation s
 ### Session 2026-05-02
 
 - Q: What exactly is an 'async boundary'? → A: First await. Task executes until it hits an `await` statement, then yields control. Execution resumes after await resolves on subsequent game tick(s).
-- Q: How are component-specific operations accessed? → A: (Updated 2026-05-04) Entities are pure data objects. System functions accept entities with the required component data as typed parameters (e.g., `getBalance(entity)` where entity must have Inventory component). TypeScript type predicates or branded types enforce component requirements at compile time. No methods on entity objects.
+- Q: How are component-specific operations accessed? → A: Entities are pure data objects. System functions accept entities with the required component data as typed parameters (e.g., `getBalance(entity)` where entity must have Inventory component). TypeScript type predicates or branded types enforce component requirements at compile time. No methods on entity objects.
 - Q: What happens when an async entity operation is provably unachievable? → A: Promise rejects immediately with a descriptive error (e.g., `InsufficientFundsError`). Fail-fast semantics; caller is responsible for catching and handling.
 - Q: How do task queue tasks execute relative to game ticks? → A: Tasks run to their first await within a tick. Tasks can resolve, reject, or be cancelled externally via CancellationToken. Cancellation has two categories: graceful (entity performs quit-animations or cleanup before stopping) and ungraceful (entity stops immediately). Entity code inspects the cancellation type to decide cleanup behavior.
 - Q: What is the JSON serialization structure for entities? → A: Nested by component name — `{ "id": 42, "prototype": "Citizen", "components": { "Inventory": {...}, "Position": {...}, "TaskQueue": {...} } }`. Each component is a named key under `components`. Version is NOT serialized (runtime-only, reset to 0 on load; used for cache invalidation and reactive queries).
