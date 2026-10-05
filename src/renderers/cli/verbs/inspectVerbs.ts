@@ -1,4 +1,5 @@
 import { collectEntityMarkers } from "../collectEntityMarkers";
+import { collectZoneMarks } from "../collectZoneMarks";
 import {
   formatCharacter,
   formatEntityDetail,
@@ -23,7 +24,7 @@ export const inspectVerbs: readonly Verb[] = [
   {
     name: "map",
     usage: "map [mapId]",
-    summary: "draw a map as ASCII with entity markers (default: the first map)",
+    summary: "draw a map as ASCII with zones and entity markers (default: the first map)",
     run: (args, { session }) => {
       const mapId = args[0] === undefined ? session.query.maps().maps[0]?.id : parseCount(args[0]);
       if (mapId === undefined || mapId === null) {
@@ -33,7 +34,11 @@ export const inspectVerbs: readonly Verb[] = [
       if (view === null) {
         return verbFailed(`map ${mapId} does not exist`);
       }
-      return verbDone(renderAsciiMap(view, collectEntityMarkers(session, mapId)));
+      return verbDone(
+        renderAsciiMap(view, collectEntityMarkers(session, mapId), {
+          zones: collectZoneMarks(session, mapId),
+        }),
+      );
     },
   },
   {

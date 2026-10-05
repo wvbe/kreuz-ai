@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { MapView } from "../../game/api/Views";
-import { entityGlyph, renderAsciiMap, terrainGlyph } from "./renderAsciiMap";
+import { entityGlyph, renderAsciiMap, terrainGlyph, zoneGlyph } from "./renderAsciiMap";
 
 function squareMap(): MapView {
   const terrain = ["grassland", "grassland", "water_shallow", "rock_wall", "forest_oak", "mystery"];
@@ -50,7 +50,39 @@ describe("terrainGlyph", () => {
   });
 });
 
+describe("zoneGlyph", () => {
+  it("is uppercase while active, lowercase otherwise, with a first-letter fallback", () => {
+    expect(zoneGlyph("stockpile", true)).toBe("S");
+    expect(zoneGlyph("stockpile", false)).toBe("s");
+    expect(zoneGlyph("quarry", true)).toBe("Q");
+    expect(zoneGlyph("quarry", false)).toBe("q");
+    expect(zoneGlyph("", true)).toBe("");
+  });
+});
+
 describe("renderAsciiMap", () => {
+  it("draws zones over the terrain, with a legend, and keeps markers on top", () => {
+    const zones = [
+      { cells: [0, 1], zoneTypeId: "stockpile", active: true },
+      { cells: [3], zoneTypeId: "bakery", active: false },
+    ];
+    expect(renderAsciiMap(squareMap(), [], { zones })).toEqual([
+      "map 2 (square, 6 cells, 3x2 characters)",
+      "SS~",
+      "bTm",
+      "legend: T forest_oak  m mystery  ~ water_shallow",
+      "zones: b bakery (inactive)  S stockpile",
+    ]);
+    expect(renderAsciiMap(squareMap(), [{ cell: 0 }], { zones })[1]).toBe(`${entityGlyph}S~`);
+  });
+
+  it("draws zones on a voronoi map by the nearest site", () => {
+    const zones = [{ cells: [0, 1, 2, 3], zoneTypeId: "farm_field", active: true }];
+    const lines = renderAsciiMap(voronoiMap(), [], { columns: 8, rows: 4, zones });
+    expect(lines.slice(1, 5).join("")).toContain("F");
+    expect(lines.at(-1)).toContain("F farm_field");
+  });
+
   it("draws a square map one character per tile", () => {
     expect(renderAsciiMap(squareMap())).toEqual([
       "map 2 (square, 6 cells, 3x2 characters)",

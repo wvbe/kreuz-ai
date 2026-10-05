@@ -80,6 +80,41 @@ describe("executeReplLine", () => {
     expect(run(context, "jobs x")).toBe("error: usage: jobs [boardId]");
   });
 
+  it("designates, lists and inspects zones, and draws them on the map (plan 3.4)", () => {
+    const { context } = createContext();
+    expect(run(context, "zones")).toBe("no zones");
+    run(context, "new 42 steady small");
+    expect(run(context, "zones")).toBe("no zones");
+    const chestCell = /#9 chest at cell (\d+)/.exec(run(context, "stock"))?.[1] ?? "0";
+    expect(run(context, `zone designate stockpile 1 ${chestCell}`)).toContain(
+      "queued DesignateZone",
+    );
+    run(context, "step 1");
+    expect(run(context, "zones")).toMatch(/^#\d+ stockpile on map 1: active, 1 tiles$/);
+    const zoneId = /^#(\d+)/.exec(run(context, "zones"))?.[1] ?? "0";
+    const detail = run(context, `zone ${zoneId}`).split("\n");
+    expect(detail[0]).toMatch(/^zone #\d+ stockpile on map 1: active, created tick 0$/);
+    expect(detail).toContain(`  tiles (1): ${chestCell}`);
+    expect(detail).toContain("  gaps: none");
+    expect(run(context, "map")).toContain("zones: S stockpile");
+    expect(run(context, "zones 1")).toMatch(/stockpile/);
+    expect(run(context, `zone delete ${zoneId}`)).toContain("queued DeleteZone");
+    run(context, "step 1");
+    expect(run(context, "zones")).toBe("no zones");
+    expect(run(context, "zone 9999")).toBe("zone 9999 does not exist");
+  });
+
+  it("explains zone verb mistakes", () => {
+    const { context } = createContext();
+    run(context, "new 42 steady small");
+    expect(run(context, "zones x")).toBe("error: usage: zones [mapId]");
+    expect(run(context, "zone")).toMatch(/^error: usage: zone </);
+    expect(run(context, "zone designate stockpile")).toMatch(/^error: usage: zone </);
+    expect(run(context, "zone designate stockpile 1 x")).toMatch(/^error: usage: zone </);
+    expect(run(context, "zone delete")).toMatch(/^error: usage: zone </);
+    expect(run(context, "zone 1 2")).toMatch(/^error: usage: zone </);
+  });
+
   it("shows the storage and the stock of a material (plan 3.2)", () => {
     const { context } = createContext();
     expect(run(context, "stock")).toContain("stock: 0 storages");

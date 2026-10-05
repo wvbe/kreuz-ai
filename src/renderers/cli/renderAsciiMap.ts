@@ -24,6 +24,41 @@ export const terrainGlyphs: ReadonlyMap<string, string> = new Map([
 ]);
 
 /**
+ * Glyph per zone type id of the bundled content pack (uppercase while the zone is active,
+ * lowercase otherwise); other zone types use the first letter of their id.
+ */
+export const zoneGlyphs: ReadonlyMap<string, string> = new Map([
+  ["stockpile", "S"],
+  ["pantry", "P"],
+  ["farm_field", "F"],
+  ["bakery", "B"],
+  ["bedroom", "R"],
+  ["dwelling", "D"],
+  ["throne_room", "H"],
+]);
+
+/**
+ * The cells of one zone for the overlay of {@link renderAsciiMap}.
+ */
+export type ZoneMark = {
+  cells: readonly number[];
+  zoneTypeId: string;
+  active: boolean;
+};
+
+/**
+ * The glyph of a zone type: the table glyph, uppercase while active and lowercase while not.
+ *
+ * @param zoneTypeId - Zone type id from the content pack.
+ * @param active - Whether the zone is active.
+ * @returns One character (`?` for an empty id).
+ */
+export function zoneGlyph(zoneTypeId: string, active: boolean): string {
+  const glyph = zoneGlyphs.get(zoneTypeId) ?? zoneTypeId.charAt(0).toUpperCase();
+  return active ? glyph : glyph.toLowerCase();
+}
+
+/**
  * A cell that carries an entity marker.
  */
 export type MapMarker = {
@@ -45,6 +80,11 @@ export type AsciiMapOptions = {
    * Character rows for voronoi maps (square maps use one row per tile). Default 36.
    */
   rows?: number;
+  /**
+   * Zones to draw over the terrain (zone glyphs, see {@link zoneGlyph}); entity markers stay on
+   * top.
+   */
+  zones?: readonly ZoneMark[];
 };
 
 /**
@@ -61,7 +101,9 @@ export function terrainGlyph(terrainId: string): string {
  * Renders a map as ASCII, deterministically. Square maps get one character per tile. Voronoi maps
  * are rasterized onto a `columns x rows` grid: every character takes the terrain of the cell
  * whose site is nearest to the character's centre (ties go to the lower cell index). Entity
- * markers overwrite the character that contains their cell's site. A legend follows the grid.
+ * markers overwrite the character that contains their cell's site. Zones given in the options
+ * replace the terrain glyph of their cells (a later zone wins a shared character). A legend
+ * follows the grid.
  *
  * @param map - The map view (`centers`, `extent` and `terrain` are what is read).
  * @param markers - Cells that carry entities.
@@ -78,6 +120,13 @@ export function renderAsciiMap(
   const rows = square ? (map.height ?? 1) : (options.rows ?? 36);
   const grid: string[][] = [];
   const used = new Set<string>();
+  const overlay = new Map<number, ZoneMark>();
+  for (const zone of options.zones ?? []) {
+    for (const cell of zone.cells) {
+      overlay.set(cell, zone);
+    }
+  }
+  const usedZones = new Map<string, string>();
   for (let row = 0; row < rows; row += 1) {
     const line: string[] = [];
     const pointY = Math.floor(((2 * row + 1) * map.extent.y) / (2 * rows));
@@ -85,8 +134,15 @@ export function renderAsciiMap(
       const pointX = Math.floor(((2 * column + 1) * map.extent.x) / (2 * columns));
       const cell = nearestCell(map, pointX, pointY);
       const terrainId = map.terrain[cell] ?? "";
-      used.add(terrainId);
-      line.push(terrainGlyph(terrainId));
+      const zone = overlay.get(cell);
+      if (zone === undefined) {
+        used.add(terrainId);
+        line.push(terrainGlyph(terrainId));
+      } else {
+        const glyph = zoneGlyph(zone.zoneTypeId, zone.active);
+        usedZones.set(glyph, `${zone.zoneTypeId}${zone.active ? "" : " (inactive)"}`);
+        line.push(glyph);
+      }
     }
     grid.push(line);
   }
@@ -108,10 +164,15 @@ export function renderAsciiMap(
     .sort()
     .map((terrainId) => `${terrainGlyph(terrainId)} ${terrainId}`)
     .join("  ");
+  const zoneLegend = [...usedZones]
+    .sort((left, right) => left[0].localeCompare(right[0]))
+    .map(([glyph, name]) => `${glyph} ${name}`)
+    .join("  ");
   return [
     `map ${map.id} (${map.gridType}, ${map.cellCount} cells, ${columns}x${rows} characters)`,
     ...grid.map((line) => line.join("")),
     `legend: ${legend}${markerCount > 0 ? `  ${entityGlyph} entity (${markerCount})` : ""}`,
+    ...(zoneLegend === "" ? [] : [`zones: ${zoneLegend}`]),
   ];
 }
 

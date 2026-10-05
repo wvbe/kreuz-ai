@@ -10,7 +10,7 @@ Run: `npm run cli` (interactive), `npm run cli -- --jsonl`, `npm run cli -- --sc
 - `runRepl.ts` - `executeReplLine`, `runRepl` (readline-driven loop, no timers).
 - `renderAsciiMap.ts` - pure ASCII rendering of square and Voronoi maps (deterministic nearest-site rasterization), terrain glyph table.
 - `collectEntityMarkers.ts` - finds entity cells through the query facade.
-- `formatViews.ts` - pure text formatting of views and events. `formatJobs.ts` - the `jobs` verb output. `formatStock.ts` - the `stock` verb output.
+- `formatViews.ts` - pure text formatting of views and events. `formatJobs.ts` - the `jobs` verb output. `formatStock.ts` - the `stock` verb output. `formatZones.ts` - the `zones` / `zone` verb output. `collectZoneMarks.ts` - the zone overlay of the `map` verb (`renderAsciiMap` option `zones`).
 - [verbs](verbs/README.md) - the REPL verbs and how to add one.
 
 Formatting and rendering are pure functions, so they are unit-tested without a process; `tests/e2e/cli.test.ts` spawns the real CLI.

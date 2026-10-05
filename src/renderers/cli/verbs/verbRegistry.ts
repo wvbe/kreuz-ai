@@ -3,6 +3,7 @@ import { jobVerbs } from "./jobVerbs";
 import { kernelVerbs } from "./kernelVerbs";
 import { metaVerbs } from "./metaVerbs";
 import { storageVerbs } from "./storageVerbs";
+import { zoneVerbs } from "./zoneVerbs";
 import type { Verb } from "./Verb";
 
 /**
@@ -14,6 +15,7 @@ export const verbGroups: readonly (readonly Verb[])[] = [
   inspectVerbs,
   jobVerbs,
   storageVerbs,
+  zoneVerbs,
   metaVerbs,
 ];
 
