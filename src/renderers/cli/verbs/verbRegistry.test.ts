@@ -24,6 +24,8 @@ describe("createVerbRegistry", () => {
         "zone",
         "orders",
         "order",
+        "sites",
+        "build",
         "save",
         "load",
         "help",
@@ -37,7 +39,7 @@ describe("createVerbRegistry", () => {
     expect(() => createVerbRegistry([[verb], [verb]])).toThrow('duplicate CLI verb "dup"');
   });
 
-  it("registers the kernel, inspect, job, storage, zone, production and meta groups", () => {
-    expect(verbGroups).toHaveLength(7);
+  it("registers the kernel, inspect, job, storage, zone, production, construction and meta groups", () => {
+    expect(verbGroups).toHaveLength(8);
   });
 });

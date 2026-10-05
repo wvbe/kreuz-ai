@@ -1,0 +1,53 @@
+{
+  "name": "build-bakery",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0,
+    "startingTier": "village"
+  },
+  "steps": [
+    {
+      "debugSpawn": {
+        "prototypeId": "chest",
+        "mapId": 1,
+        "cells": [295],
+        "inventory": [
+          { "materialId": "stone_block", "quantity": 18 },
+          { "materialId": "oak_plank", "quantity": 2 },
+          { "materialId": "nails", "quantity": 2 }
+        ]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    { "command": { "kind": "PlaceDoor", "mapId": 1, "cell": 325 } },
+    { "command": { "kind": "PlaceFurniture", "furnitureId": "oven", "mapId": 1, "cell": 326 } },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    { "step": 3 },
+    { "assert": { "query": "construction-queue", "path": "jobs.length", "op": "eq", "value": 8 } },
+    { "assert": { "query": "zones", "path": "0.status", "op": "eq", "value": "inactive" } },
+    { "assert": { "query": "workstations", "path": "length", "op": "eq", "value": 0 } },
+    { "step": 300 },
+    { "assertHash": { "label": "building" } },
+    { "saveLoad": true },
+    { "step": 500 },
+    { "assert": { "query": "construction-queue", "path": "jobs.length", "op": "eq", "value": 0 } },
+    { "assert": { "query": "workstations", "path": "length", "op": "eq", "value": 1 } },
+    { "assert": { "query": "zones", "path": "0.zoneTypeId", "op": "eq", "value": "bakery" } },
+    { "assert": { "query": "zones", "path": "0.status", "op": "eq", "value": "active" } },
+    { "replay": true }
+  ]
+}
