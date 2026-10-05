@@ -1,14 +1,9 @@
 # Feature Specification: Stockpiles & Storage
 
-**Feature Branch**: `018-stockpiles-storage`
 **Created**: 2026-05-03
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "I want to specify stockpiles and storages. There are furniture entities that can have inventories, including but not limited to boxes, cabinets, bookcases. These entities work the same as other entities. There are many kinds of zones/rooms, as specified before, and amongst those is a 'pantry' room (enclosed) that has an effect on inventories within it that make items decay less."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Storage Furniture as Inventory-Bearing Entities (Priority: P1)
 
@@ -57,7 +52,7 @@ Storage furniture entities can have **material filters**: rules that restrict wh
 **Acceptance Scenarios**:
 
 1. **Given** a chest with filter `{ categories: ["food"] }`, **When** a hauler attempts to deposit Wood, **Then** the deposit is rejected and the hauler seeks another storage location that accepts Wood.
-2. **Given** a chest with filter `{ materialIds: ["iron-ingot", "copper-ingot"] }`, **When** a hauler deposits Iron Ingot, **Then** it is accepted; depositing Stone is rejected.
+2. **Given** a chest with filter `{ materialIds: ["iron_ingot", "copper_ingot"] }`, **When** a hauler deposits Iron Ingot, **Then** it is accepted; depositing Stone is rejected.
 3. **Given** a storage entity with no filter, **When** any material is deposited, **Then** it is accepted (subject only to the inventory capacity limits from feature 005).
 4. **Given** a Stockpile zone with a category filter and furniture inside it that has no per-furniture filter, **When** a hauler evaluates deposit targets in that zone, **Then** the zone filter governs which materials are routed to that furniture.
 5. **Given** a Stockpile zone with a category filter and furniture inside it that has its own explicit filter, **When** a hauler evaluates deposit targets, **Then** the furniture's own filter takes precedence over the zone filter.
@@ -80,13 +75,13 @@ The **Pantry** is a zone type that requires a Room (enclosed, feature 015). When
 2. **Given** a Pantry zone that becomes inactive (wall removed, zone loses Room status), **When** items were previously benefiting from the decay reduction, **Then** the decay reduction stops immediately; items decay at the normal rate going forward.
 3. **Given** a Pantry zone, **When** a non-perishable material (Wood) is stored in it, **Then** no decay-related change occurs (decay reduction only applies to perishable items).
 4. **Given** two chest entities in the same Pantry zone, **When** the Pantry is active, **Then** perishable items in both chests benefit from the decay reduction.
-5. **Given** a Pantry zone effect specifying `{ type: "entity.modifier", modifier: "inventory.decay.rate", value: 0.5 }` (50% decay rate), **When** a perishable item in the zone would normally expire in 48 game hours, **Then** it expires in 96 game hours instead.
+5. **Given** a Pantry zone effect specifying `{ type: "entity.modifier", modifier: "inventory.decay.rate", value: 500 }` (fixed-point ×1000, i.e. 50% decay rate), **When** a perishable item in the zone would normally expire in 48 game hours, **Then** it expires in 96 game hours instead.
 
 ---
 
 ### User Story 5 - Storage Priority and Hauling Routing (Priority: P2)
 
-When a hauler needs to deposit a material, it selects the best storage destination based on a priority order: (1) filtered furniture inside a profession-affinity zone matching the material, (2) any explicitly filtered furniture matching the material, (3) any compatible open furniture with available capacity. Nearest valid destination wins within each tier. All deposit targets are storage furniture entities; the zone context influences routing priority but the item always ends up in a furniture inventory.
+When a hauler needs to deposit a material, it selects the best storage destination based on a priority order: (1) filtered furniture inside a profession-affinity zone matching the material (and the hauler's skill-derived affinity, spec 020), (2) any explicitly filtered furniture matching the material, (3) compatible furniture inside a Stockpile zone, (4) any other compatible open furniture with available capacity. Nearest valid destination wins within each tier. All deposit targets are storage furniture entities; the zone context influences routing priority but the item always ends up in a furniture inventory.
 
 **Why this priority**: Routing determines whether materials end up in sensible locations. Without tiered priority, all materials go to the nearest available spot, defeating the purpose of profession zones and material filters. P2 because basic hauling works without it, but organisation collapses quickly.
 
@@ -131,7 +126,7 @@ Systems that need materials (production, construction, AI) query a unified stora
 - What happens if a hauler is carrying materials and the game is saved? → The hauler's inventory (including carried materials) is serialized. On load, the hauler continues its delivery route.
 - What happens if storage furniture inside a Pantry holds a mix of perishable and non-perishable items? → Only perishable items are affected by the decay modifier. Non-perishables are unaffected.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
@@ -141,15 +136,15 @@ Systems that need materials (production, construction, AI) query a unified stora
 - **FR-004**: A Stockpile zone MAY carry a material filter that governs which materials haulers will route to furniture within that zone. Per-furniture filters override the zone filter. Filters are configurable by the player after zone designation.
 - **FR-005**: Material filters on storage furniture MUST be enforceable at deposit time. Haulers MUST check both zone-level and furniture-level filters before depositing. Rejected materials are redirected to a compatible alternative storage location.
 - **FR-006**: Filters MUST NOT evict existing inventory contents that no longer match an updated filter. Filtering is deposit-time only; existing contents remain until retrieved.
-- **FR-007**: System MUST define a Pantry zone type in the zone type registry. Requirements: `requiresRoom: true`, minimum tile size (game balance constant). Effects: `{ type: "entity.modifier", modifier: "inventory.decay.rate", value: <multiplier> }` applied to perishable items in inventories of furniture entities located on Pantry zone tiles.
+- **FR-007**: System MUST define a Pantry zone type in the zone type registry. Requirements: `requiresRoom: true`, minimum tile size (game balance constant). Effects: `{ type: "entity.modifier", modifier: "inventory.decay.rate", value: <multiplier> }` (multiplier stored as a fixed-point integer, ×1000) applied to perishable items in inventories of furniture entities located on Pantry zone tiles. The Pantry multiplier combines with the difficulty `decayMultiplier` per spec 027 FR-015 (Pantry first, then difficulty).
 - **FR-008**: The Pantry decay modifier MUST apply to all perishable items in inventories of furniture entities whose position is on a tile within an active Pantry zone. Non-perishable items and entities outside the zone are unaffected.
 - **FR-009**: The Pantry decay modifier MUST be applied and removed dynamically as the zone activates/deactivates and as storage entities move in/out of the zone tiles.
-- **FR-010**: Hauler routing MUST follow a tiered priority: (1) profession-affinity zone storage matching the material, (2) explicitly filtered storage matching the material, (3) any compatible open storage. Within each tier, nearest accessible destination wins.
+- **FR-010**: Hauler routing MUST follow a tiered priority: (0) for outputs of runs carrying `deliverToZoneId` (spec 026 FR-020), compatible storage in that zone, (1) profession-affinity zone storage matching the material, where the zone's affinity matches the hauler's skill-derived affinity (e.g. dominant skill or skill above a threshold, spec 020; there is no profession component), (2) explicitly filtered storage matching the material, (3) generic storage tier: compatible furniture inside a Stockpile zone (the zone's preferred-deposit designation, FR-003), (4) any other compatible open storage. Within each tier, nearest accessible destination wins. Storage furniture on a dwelling's tiles (spec 029) is excluded from every routing tier (spec 029 FR-017).
 - **FR-011**: System MUST provide a unified material query interface: given a material ID and quantity, return all accessible inventory-bearing entities on the current map containing that material, sorted by proximity to the requesting entity.
-- **FR-012**: Material queries MUST exclude inaccessible storage (locked, unreachable by pathfinding). Accessibility is checked at query time.
+- **FR-012**: Material queries MUST exclude inaccessible storage (locked, unreachable by pathfinding). Accessibility is checked at query time. Storage furniture on a dwelling's tiles is accessible only to that dwelling's residents (spec 029 FR-017).
 - **FR-013**: Material queries MUST support multi-source fulfilment: return a list of sources whose combined quantity meets the requested amount, even if no single source has enough.
 - **FR-014**: All storage state (furniture inventories, material filters) MUST serialize to GameState (feature 006) and resume identically on load.
-- **FR-015**: System MUST emit `storage.no-compatible-destination` when a hauler cannot find any valid storage for a carried material.
+- **FR-015**: System MUST emit `storage.no-compatible-destination` when a hauler cannot find any valid storage for a carried material. The same condition is reported as the spec 025 `BlockedReason` `NoStorageDestination { materialId }` on the hauler or the loose pile.
 
 ### Key Entities
 
@@ -159,7 +154,7 @@ Systems that need materials (production, construction, AI) query a unified stora
 - **PantryZone**: An instance of the Pantry zone type. Active when fully enclosed (Room status) and minimum size met. Delivers an `inventory.decay.rate` modifier to perishable items in inventories of furniture entities on its tiles while active.
 - **StorageQuery**: A query object representing a request for N units of material X from nearby accessible sources. Returns an ordered list of (source entity, quantity, distance) tuples.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
@@ -175,7 +170,7 @@ Systems that need materials (production, construction, AI) query a unified stora
 
 - **Storage furniture is just inventory-bearing entities**: No separate "storage system" is needed. The inventory system (feature 005), entity prototype system (feature 003), and construction system (feature 016) together fully cover storage furniture. This spec defines the data configuration and player-facing behaviour, not new engine mechanics.
 - **Stockpile zones are routing designations only**: A Stockpile zone has no inventory of its own. Capacity of a stockpile is determined entirely by the combined inventories of furniture entities placed within it. Players increase stockpile capacity by building and placing more furniture.
-- **Pantry effect value is a game balance constant**: The exact decay multiplier (e.g., 0.5 = half decay rate) is defined in the Pantry zone type data, not hardcoded. Game designers tune it via data.
+- **Pantry effect value is a game balance constant**: The exact decay multiplier (e.g., 500 = half decay rate, fixed-point ×1000; content data may author 0.5, converted to fixed-point at load) is defined in the Pantry zone type data, not hardcoded. Game designers tune it via data.
 - **Pantry applies to tile location of storage entity**: The decay modifier is applied based on where the storage entity is placed on the map. If a chest is on a Pantry tile, its contents benefit. If moved off the tile, they stop benefiting.
 - **Material filters are player-configurable but not mandatory**: All storage works without filters. Filters are an optional player-organisation tool. Default state (no filter) accepts all materials.
 - **Unified query interface is synchronous within a tick**: Material queries are evaluated eagerly within the tick they are requested. There is no async or lazy evaluation of storage queries.
