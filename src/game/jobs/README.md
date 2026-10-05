@@ -4,7 +4,7 @@ Job boards and claiming (spec 017, DECISIONS D-08 and D-46, plan task 3.1 parts 
 
 - `jobTypes.ts` - data types and constants: `JobPosting`, `JobBoardData`, `Eligibility`, the enums `PostingStatus`, `JobBoardMode`, `PauseSource`, `EligibilityKind`, event names and payloads, `jobTaskPriority` (50), `claimBackoffTicks` (144).
 - `jobBoardComponent.ts` - the `JobBoard` component (mode, two pause flags, active postings ascending by id, bounded history of 16) with strict Zod schemas. It lives in the entities save section; the worldgen `job_board` prototype carries it.
-- `JobService.ts` / `jobServiceRegistry.ts` - the per-engine hooks (`setWagePayer`, `setTierSource`) and the claim back-off list, saved in the section `systems.jobboard`. `getJobService(engine)` finds it.
+- `JobService.ts` / `jobServiceRegistry.ts` - the per-engine hooks (`setWagePayer`, `setTierSource`; without a tier source the tier in force is the game's `startingTier` option, until the tier system of 5.x sets one) and the claim back-off list, saved in the section `systems.jobboard`. `getJobService(engine)` finds it.
 - `jobBoards.ts` - lookups: `listBoards`, `getBoard`, `requireBoard`, `findPosting`, `offeredPostings`, `isBoardPaused`, `activePostingsOfType`.
 - `jobPostings.ts` - the lifecycle: `postJob`, `claimPosting`, `releasePosting`, `completePosting`, `failPosting`, `cancelPosting`. `boardPause.ts` - `pauseBoard` / `resumeBoard` per `PauseSource`.
 - `eligibility.ts` - `defaultEligibility`, `satisfiesEligibility`, `isEligible` (evaluated at claim time).

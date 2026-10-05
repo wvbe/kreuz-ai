@@ -16,7 +16,7 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `traits.json` | 7 traits | 24+ |
 | `furniture.json` | 7 pieces | 50+ |
 | `zones.json` | 7 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
-| `recipes.json` | 4 recipes | 55+ |
+| `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
 | `jobs.json` | 6 jobs | 20+ |
 | `factions.json` | 1 guild (`guild_bakers`) | 9 guilds + 3 religious |
 | `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |

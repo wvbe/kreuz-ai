@@ -7,9 +7,10 @@ The scenario format and runner shared by the e2e tests, the CLI (`--script`) and
 - `formatScenarioResult.ts` - the `PASS`/`FAIL` text the CLI prints.
 - `scenarioStep.ts` - `defineScenarioStep({key, schema, run})`, `StepContext`, `StepFailure`.
 - `builtinScenarioSteps.ts` - the built-in step types (below).
+- `createScenarioSession.ts` - `createScenarioSession(content?)`: a `GameSession` plus the debug-only command `DebugSpawn`; the default session of `runScenario`. `createDebugSpawnSystem.ts` - the system that defines `DebugSpawn {prototypeId, mapId, cells[], overrides?, inventory?}` (not registered by the engine or a real session, so it is scenario and test only).
 - `assertion.ts` - `AssertOp`, `getPathValue` (dotted paths, array indices, `length`), `jsonEquals`, `evaluateAssertion`.
 
-Built-in steps: `{command, atTick?, expectError?}`, `{step: n}`, `{assert: {query, args?, path, op: eq|gt|gte|lt|lte|exists|includes, value?}}`, `{assertHash: {label?, equals?, matches?}}`, `{saveLoad: true}`, `{replay: true}`.
+Built-in steps: `{command, atTick?, expectError?}`, `{step: n}`, `{assert: {query, args?, path, op: eq|gt|gte|lt|lte|exists|includes, value?}}`, `{assertHash: {label?, equals?, matches?}}`, `{saveLoad: true}`, `{replay: true}`, `{debugSpawn: {prototypeId, mapId, cells[], overrides?, inventory?}}` (scenario/test only: it spawns entities such as walls, workstations or stocked chests through the queued command `DebugSpawn`, which exists only in `createScenarioSession`; against a plain `GameSession` the step fails).
 
 ## Adding a step type (later phases)
 

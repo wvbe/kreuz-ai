@@ -35,7 +35,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 ## Phase 3 — Economy
 - [ ] 3.1 Job boards & claiming, Town Crier (017) - parts a (board/posting data, lifecycle, pause), b (claim order, eligibility, wage, executor registry, `fell.trees`) and e (system vs player pause, `claim_job` in `basic_needs`) done, D-46; still open: c (Town Crier fleet delivering postings to user-managed boards), d (job-type content hooks for the other job types)
 - [x] 3.2 Stockpiles & storage (018) - reservations, `Furniture`/`Stockpile`, tiered routing, `haul.deliver` + poster, stock queries, storage decay, `stock` verb, D-47; zones (tier 0/1, Pantry) wait for 3.4
-- [ ] 3.3 Production & crafting (014)
+- [x] 3.3 Production & crafting (014) - workstation prototypes + `ProductionOrders`, order commands, `craft.produce` (fetch, lock, craft, consume), output hauling, D-10 cancel rules, `explainOrder` for 025, `orders`/`order` verbs, `debugSpawn` + `scenarios/bakery.json`, D-49
 - [x] 3.4 Zones & rooms (015) - `Zone` entities, requirement grammar + status/`zone.*` events (D-11 timing), merge/split commands, skill affinity, storage tiers 0/1 + zone filter, board pausing, `zones`/`zone` verbs + map overlay, D-48
 - [ ] 3.5 Construction (016)
 - [ ] 3.6 Status explanations & flow (025)

@@ -28,6 +28,8 @@ Exit codes: 0 ok, 1 a scenario step failed, 2 bad arguments / unreadable or inva
 | `stock [materialId]` | What the storages hold: storage and slot counts, one line per material (total, reserved, available, room for more) and the stockpiles (`#id chest at cell prio accepts filter, free slots: contents`); with a material, its totals and which storage holds it. Carried goods and construction sites are not counted. |
 | `zones [mapId]` | The zones: `#id type on map N: status, tiles[, room][ (first gap)]`. |
 | `zone <id>` | One zone: status, tiles, storage filter, workers with the affinity bucket and every gap. `zone designate <type> <mapId> <cell>...` and `zone delete <id>` queue the commands `DesignateZone` / `DeleteZone` (applied on the next tick). |
+| `orders [workstationId]` | The production orders: `#id recipe done/quantity at workstation #N: status, priority[, crafting progress/duration by #crafter]`, each unfinished order followed by its first blocked reason. |
+| `order <id>` | One order with its posting and every blocked reason (`MissingInput materialId=flour required=1 available=0 noProducer=true`). `order create <recipeId> <quantity> [workstationId] [priority]`, `order cancel <id>`, `order pause <id>`, `order resume <id>`, `order priority <id> <0-100>` and `order interrupt <workstationId>` queue `CreateProductionOrder`, `CancelProductionOrder`, `SetProductionOrderPaused`, `SetProductionOrderPriority` and `CancelCraft` (applied on the next tick). |
 | `save <file>`, `load <file>` | Write / read a save file. |
 | `help [verb]`, `quit` | Help and exit. |
 
@@ -57,6 +59,7 @@ A scenario is a JSON file `{ "name": string, "seed": 0..4294967295, "options"?: 
 | `{"assertHash": {"label"?: s, "equals"?: hash, "matches"?: label}}` | Check the state hash against a literal and/or an earlier labelled hash; `label` records it. |
 | `{"saveLoad": true}` | Save, load the save back, require an identical state hash. |
 | `{"replay": true}` | Replay the session's command log into a fresh session and require the identical hash. |
+| `{"debugSpawn": {"prototypeId", "mapId", "cells": [..], "overrides"?, "inventory"?: [{"materialId", "quantity"}]}}` | **Scenario and test use only.** Spawn one entity of a prototype on every cell (component overrides, starting items), queued like a command (applied by the next tick, replays). It needs the command `DebugSpawn`, which only `createScenarioSession` (the default of `runScenario`) registers; against a real game session the step fails. Used to build what construction (3.5) will build, such as walls, a door, an oven and a stocked chest. |
 
 Failure output (`--script` prints it on stderr, exit 1):
 

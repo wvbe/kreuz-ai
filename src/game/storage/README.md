@@ -8,7 +8,7 @@ Stockpiles, reservations and hauling (spec 018, DECISIONS D-09, D-26 and D-47, p
 - `ReservationService.ts` - reserve / reserveUpTo / release / releaseHolder / releaseInventory / commit, `availableTo`, `reservedQuantity`, `reconcile`; save section `systems.reservations`.
 - `StorageService.ts` / `storageServiceRegistry.ts` - per-engine state: the reservations, the no-destination marks (section `systems.storage`) and the decay hook (`decayModifierMilli`, `addDecayModifierSource`). `getStorageService(engine)` finds it.
 - `storageQueries.ts` - `isStorageEntity`, `listStorage`, `canRetrieveFrom`, `canDepositInto`, `stockOf`, `findSources`. `storageRouting.ts` - `routeCandidates`, `chooseRoute`, `compareRoutes`, `RouteTier`.
-- `haulDeliver.ts` - the `haul.deliver` executor (`createHaulExecutor`, `registerHauling`). `haulPoster.ts` - `postHaulJob`, `postHaulJobs` (the auto-poster), `findLooseGoods`, `haulableMaterialIds`, `releaseOrphanedHaulReservations`.
+- `haulDeliver.ts` - the `haul.deliver` executor (`createHaulExecutor`, `registerHauling`). `haulPoster.ts` - `postHaulJob`, `postHaulJobs` (the auto-poster), `nearestRunningBoard` (where system postings go, also used by production), `findLooseGoods`, `haulableMaterialIds`, `releaseOrphanedHaulReservations`.
 - `storageNeedSource.ts` - the need source finder (hungry settlers eat bread from stockpiles). `storageViews.ts` - the views behind the queries. `registerStorage.ts` - `registerStorage(engine)`: components, sections, system `storage` (slot 10), commands and queries.
 - `StorageError.ts` - `StorageError` / `StorageErrorKind`. `testStorageWorld.ts` - test helper: a job test world with `chest`, `pile`, `give`, `count`.
 
