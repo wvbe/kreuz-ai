@@ -1,0 +1,63 @@
+{
+  "name": "zones",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    { "assert": { "query": "zones", "path": "length", "op": "eq", "value": 0 } },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [255, 256, 257, 258]
+      }
+    },
+    { "step": 1 },
+    { "assert": { "query": "zones", "path": "length", "op": "eq", "value": 1 } },
+    { "assert": { "query": "zones", "path": "0.zoneTypeId", "op": "eq", "value": "stockpile" } },
+    { "assert": { "query": "zones", "path": "0.status", "op": "eq", "value": "active" } },
+    { "assert": { "query": "zones", "path": "0.active", "op": "eq", "value": true } },
+    { "assert": { "query": "zones", "path": "0.tiles.2", "op": "eq", "value": 257 } },
+    {
+      "assert": {
+        "query": "zone-at",
+        "args": { "mapId": 1, "cellIndex": 257 },
+        "path": "status",
+        "op": "eq",
+        "value": "active"
+      }
+    },
+    {
+      "command": {
+        "kind": "SetZoneMaterialFilter",
+        "zoneId": 10,
+        "filter": { "categories": ["wood"] }
+      }
+    },
+    { "step": 287 },
+    { "assertHash": { "label": "day1" } },
+    { "saveLoad": true },
+    { "assert": { "query": "zones", "path": "0.status", "op": "eq", "value": "active" } },
+    {
+      "assert": { "query": "zones", "path": "0.filter.categories.0", "op": "eq", "value": "wood" }
+    },
+    { "step": 288 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 576 } },
+    { "assert": { "query": "zones", "path": "0.status", "op": "eq", "value": "active" } },
+    {
+      "assert": {
+        "query": "stockpiles",
+        "path": "0.filter.categories.0",
+        "op": "eq",
+        "value": "wood"
+      }
+    },
+    { "command": { "kind": "DeleteZone", "zoneId": 10 } },
+    { "step": 1 },
+    { "assert": { "query": "zones", "path": "length", "op": "eq", "value": 0 } },
+    { "replay": true }
+  ]
+}

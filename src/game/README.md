@@ -20,5 +20,6 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [ai](ai/README.md) - settler AI: needs, mood, utility decisions, behavior handlers, movement task, starvation.
 - [jobs](jobs/README.md) - job boards, postings, claim order, job type executors, `fell.trees`, wages.
 - [storage](storage/README.md) - reservations, `Furniture` / `Stockpile`, tiered routing, hauling (`haul.deliver`), stock queries, storage decay.
+- [zones](zones/README.md) - zones and rooms: `Zone`, the furniture requirement grammar, status and `zone.*` events, merge and split, skill affinity, board pausing, zone hooks of storage.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).
