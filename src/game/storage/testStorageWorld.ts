@@ -1,8 +1,9 @@
 import type { Entity } from "../ecs/Entity";
-import { hasComponent } from "../ecs/Entity";
+import { getComponent, hasComponent } from "../ecs/Entity";
 import { inventoryComponent } from "../inventory/inventoryComponent";
 import { store } from "../inventory/inventoryOperations";
 import { getTotal } from "../inventory/inventoryQueries";
+import type { PermissionRule } from "../inventory/inventoryTypes";
 import { createJobWorld } from "../jobs/testJobWorld";
 import type { JobTestWorld, JobTestWorldOptions } from "../jobs/testJobWorld";
 import type { SpawnOverrides } from "../ai/testAiWorld";
@@ -62,4 +63,18 @@ export function createStorageWorld(options: JobTestWorldOptions = {}): StorageTe
       return pile;
     },
   };
+}
+
+/**
+ * Replaces the permission rules of an entity's inventory (a "locked chest" is a chest whose rules
+ * deny an actor, DECISIONS D-09).
+ *
+ * @param entity - Entity with an inventory.
+ * @param rules - The new rules.
+ */
+export function setRules(entity: Entity, rules: PermissionRule[]): void {
+  const data = getComponent(entity, inventoryComponent);
+  if (data !== undefined) {
+    data.rules = rules;
+  }
 }

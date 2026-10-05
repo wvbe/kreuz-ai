@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { Entity } from "../ecs/Entity";
 import {
   InventoryOperation,
   PermissionTargetKind,
@@ -15,16 +16,16 @@ import {
   stockOf,
 } from "./storageQueries";
 import { ReservationKind } from "./storageTypes";
-import { createStorageWorld } from "./testStorageWorld";
+import { createStorageWorld, setRules } from "./testStorageWorld";
 
-function deny(entity: { components: { [name: string]: unknown } }, actorId: number, op: InventoryOperation) {
-  (entity.components["Inventory"] as { rules: unknown[] }).rules = [
+function deny(entity: Entity, actorId: number, operation: InventoryOperation): void {
+  setRules(entity, [
     {
       type: PermissionType.Deny,
       target: { kind: PermissionTargetKind.Entity, entityId: actorId },
-      operation: op,
+      operation,
     },
-  ];
+  ]);
 }
 
 describe("isLoosePile and isStorageEntity and listStorage", () => {

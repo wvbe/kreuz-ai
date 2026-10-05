@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { materialFilterSchema, stockpileComponent, stockpileDataSchema } from "./stockpileComponent";
+import {
+  materialFilterSchema,
+  stockpileComponent,
+  stockpileDataSchema,
+} from "./stockpileComponent";
 
 describe("stockpileComponent", () => {
   it("defaults to priority 50 and no filter", () => {
@@ -18,9 +22,9 @@ describe("stockpileComponent", () => {
     expect(stockpileDataSchema.safeParse({ priority: 5, filter: null, extra: 1 }).success).toBe(
       false,
     );
-    expect(
-      materialFilterSchema.safeParse({ categories: ["Food"], materialIds: [] }).success,
-    ).toBe(false);
+    expect(materialFilterSchema.safeParse({ categories: ["Food"], materialIds: [] }).success).toBe(
+      false,
+    );
     expect(materialFilterSchema.safeParse({ categories: [] }).success).toBe(false);
   });
 });

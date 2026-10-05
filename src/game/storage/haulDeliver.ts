@@ -122,6 +122,11 @@ function deposit(
   const destination: Entity | undefined =
     state.destinationId === null ? undefined : engine.store.get(state.destinationId);
   const held = Math.min(state.carried, getTotal(context.entity, materialId));
+  if (held < 1) {
+    // The goods are gone (eaten, expired): nothing left to deliver.
+    writeState(context, state);
+    return doneStep();
+  }
   let amount = 0;
   if (
     destination !== undefined &&
@@ -167,7 +172,12 @@ function approachSource(
   const source = sourceId === null ? undefined : engine.store.get(sourceId);
   const place = source === undefined ? undefined : getComponent(source, positionComponent);
   const here = getComponent(context.entity, positionComponent);
-  if (source === undefined || place === undefined || here === undefined || place.mapId !== here.mapId) {
+  if (
+    source === undefined ||
+    place === undefined ||
+    here === undefined ||
+    place.mapId !== here.mapId
+  ) {
     return abort(engine, state, sourceGoneReason);
   }
   if (place.cellIndex !== here.cellIndex) {
@@ -181,7 +191,10 @@ function approachSource(
     return abort(engine, state, sourceGoneReason);
   }
   try {
-    const moved = getStorageService(engine).reservations.commit(state.reservationId, context.entity);
+    const moved = getStorageService(engine).reservations.commit(
+      state.reservationId,
+      context.entity,
+    );
     state.reservationId = null;
     state.carried = moved.quantity;
   } catch {

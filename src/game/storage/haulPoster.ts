@@ -55,9 +55,7 @@ export function haulableMaterialIds(engine: GameEngine): string[] {
 }
 
 function hasHaulTask(engine: GameEngine, entityId: EntityId): boolean {
-  return (
-    engine.tasks.getQueue(entityId)?.tasks.some((task) => task.type === haulJobId) ?? false
-  );
+  return engine.tasks.getQueue(entityId)?.tasks.some((task) => task.type === haulJobId) ?? false;
 }
 
 /**

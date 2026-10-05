@@ -1,6 +1,6 @@
 # src/game/jobs
 
-Job boards and claiming (spec 017, DECISIONS D-08 and D-46, plan task 3.1 parts a, b, e). Settlers get new work only by walking to a board entity and claiming a posting. This folder has the board data and lifecycle, the claim algorithm, the job type executor registry, one real job type (`fell.trees`) and its auto-poster. The Town Crier fleet (3.1c) and the content hooks of the other job types (3.1d) come later.
+Job boards and claiming (spec 017, DECISIONS D-08 and D-46, plan task 3.1 parts a, b, e). Settlers get new work only by walking to a board entity and claiming a posting. This folder has the board data and lifecycle, the claim algorithm, the job type executor registry, one real job type (`fell.trees`) and its auto-poster. The Town Crier fleet (3.1c) and the content hooks of the other job types (3.1d) come later. `haul.deliver` is registered by `../storage`.
 
 - `jobTypes.ts` - data types and constants: `JobPosting`, `JobBoardData`, `Eligibility`, the enums `PostingStatus`, `JobBoardMode`, `PauseSource`, `EligibilityKind`, event names and payloads, `jobTaskPriority` (50), `claimBackoffTicks` (144).
 - `jobBoardComponent.ts` - the `JobBoard` component (mode, two pause flags, active postings ascending by id, bounded history of 16) with strict Zod schemas. It lives in the entities save section; the worldgen `job_board` prototype carries it.
@@ -10,7 +10,7 @@ Job boards and claiming (spec 017, DECISIONS D-08 and D-46, plan task 3.1 parts 
 - `eligibility.ts` - `defaultEligibility`, `satisfiesEligibility`, `isEligible` (evaluated at claim time).
 - `claimOrder.ts` - the pure order `compareClaimCandidates` / `sortClaimCandidates`. `claimJob.ts` - `reachCostsOf`, `rankPostings`, `findBoardToVisit`, `claimBestPosting`.
 - `jobBehavior.ts` - the behavior handlers `jobs_available` (condition) and `claim_job` (action) that `basic_needs` runs before `idle_wander`. `jobVisitTask.ts` - the `jobboard.visit` task.
-- `jobExecutor.ts` - `registerJobType(engine, typeId, executor)`, `jobTaskData`, `childCompleted`. `workAtLocation.ts` - `createWorkAtLocationExecutor`, the generic walk-and-work executor. `fellTrees.ts` - `fell.trees`: executor, `postFellJobs` auto-poster, `woodStock`.
+- `jobExecutor.ts` - `registerJobType(engine, typeId, executor)` (an executor may also have a `cancel` hook that runs before the claim is released, used by hauling to give back its reservation), `jobTaskData`, `childCompleted`. `workAtLocation.ts` - `createWorkAtLocationExecutor`, the generic walk-and-work executor. `fellTrees.ts` - `fell.trees`: executor, `postFellJobs` auto-poster, `woodStock`.
 - `payWage.ts` - `payWage` (mint into the worker, or the custom payer). `jobViews.ts` - the views behind the queries. `registerJobs.ts` - `registerJobs(engine)` (the engine does it for itself): component, save section, tasks, handlers, slot-7 system `jobboard`, the commands `SetJobBoardPaused`, `PostJob`, `PostCustomJob` and the queries `job-boards`, `jobs-on {boardId}`, `job {postingId}`.
 - `JobError.ts` - `JobError` / `JobErrorKind`. `testJobWorld.ts` - test helper: an AI test world with a board.
 

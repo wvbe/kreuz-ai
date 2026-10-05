@@ -142,7 +142,12 @@ export function routeCandidates(engine: GameEngine, request: RouteRequest): Stor
         : stockpile !== undefined
           ? RouteTier.Stockpile
           : RouteTier.Open;
-    const free = canStore(engine.materials, entity, request.materialId, request.quantity).maxFittable;
+    const free = canStore(
+      engine.materials,
+      entity,
+      request.materialId,
+      request.quantity,
+    ).maxFittable;
     if (free < 1 || (isCurrency && tier === RouteTier.Open)) {
       continue;
     }

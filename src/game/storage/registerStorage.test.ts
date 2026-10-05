@@ -43,10 +43,10 @@ describe("registerStorage", () => {
       materialId: "bread",
       quantity: 2,
     });
-    const ai = getAiService(world.engine);
-    expect(ai.needSources().length).toBeGreaterThan(0);
-    expect(ai.itemsAvailable(world.engine, chest, settler, "bread", 2)).toBe(0);
-    expect(ai.itemsAvailable(world.engine, chest, other, "bread", 2)).toBe(2);
+    const service = getAiService(world.engine);
+    expect(service.needSources().length).toBeGreaterThan(0);
+    expect(service.itemsAvailable(world.engine, chest, settler, "bread", 2)).toBe(0);
+    expect(service.itemsAvailable(world.engine, chest, other, "bread", 2)).toBe(2);
   });
 
   it("releases the reservations of a deleted holder", () => {
@@ -76,7 +76,9 @@ describe("registerStorage", () => {
       postings: { jobTypeId: string }[];
       history: { jobTypeId: string }[];
     };
-    expect([...board.postings, ...board.history].some((entry) => entry.jobTypeId === "haul.deliver")).toBe(true);
+    expect(
+      [...board.postings, ...board.history].some((entry) => entry.jobTypeId === "haul.deliver"),
+    ).toBe(true);
   });
 });
 

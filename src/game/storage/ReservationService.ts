@@ -256,7 +256,8 @@ export class ReservationService {
     const kept: Reservation[] = [];
     for (const reservation of this.list) {
       const key = `${reservation.inventoryOwnerId}:${reservation.materialId}`;
-      const room = this.held(reservation.inventoryOwnerId, reservation.materialId) - (seen.get(key) ?? 0);
+      const room =
+        this.held(reservation.inventoryOwnerId, reservation.materialId) - (seen.get(key) ?? 0);
       const alive =
         this.engine.store.has(reservation.holderId) &&
         this.engine.store.has(reservation.inventoryOwnerId);

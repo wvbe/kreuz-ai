@@ -143,7 +143,9 @@ export function buildStockpileViews(engine: GameEngine): StockpileView[] {
         freeSlots: availableSlots(entity),
         weightLimitMilli: inventory.weightLimitMilli,
         contents: getAllItems(entity),
-        reservations: reservations.filter((reservation) => reservation.inventoryOwnerId === entity.id),
+        reservations: reservations.filter(
+          (reservation) => reservation.inventoryOwnerId === entity.id,
+        ),
       },
     ];
   });

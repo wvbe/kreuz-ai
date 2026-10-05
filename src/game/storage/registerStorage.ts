@@ -55,9 +55,9 @@ export function registerStorage(engine: GameEngine): StorageService {
   const service = new StorageService(engine);
   bindStorageService(engine, service);
   registerHauling(engine);
-  const ai = getAiService(engine);
-  ai.registerNeedSource(storageNeedSource);
-  ai.setItemAvailability((target, holder, consumer, materialId) =>
+  const aiService = getAiService(engine);
+  aiService.registerNeedSource(storageNeedSource);
+  aiService.setItemAvailability((target, holder, consumer, materialId) =>
     Math.min(
       getTotal(holder, materialId),
       service.reservations.availableTo(holder.id, materialId, consumer.id),
@@ -74,7 +74,10 @@ export function registerStorage(engine: GameEngine): StorageService {
       throw new StorageError(StorageErrorKind.UnknownEntity, `entity ${entityId} does not exist`);
     }
     if (getComponent(entity, stockpileComponent) === undefined) {
-      throw new StorageError(StorageErrorKind.NotAStockpile, `entity ${entityId} is not a stockpile`);
+      throw new StorageError(
+        StorageErrorKind.NotAStockpile,
+        `entity ${entityId} is not a stockpile`,
+      );
     }
     return entity;
   };

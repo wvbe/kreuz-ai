@@ -624,14 +624,10 @@ export class GameEngine {
           this.initHolder.options.difficulty,
         ).decayMultiplier;
         const storage = getStorageService(this);
-        decayInventories(
-          this.store.entities(),
-          this.bus,
-          (entity): DecayModifiers => ({
-            zoneModifierMilli: storage.decayModifierMilli(entity),
-            difficultyDecayMilli,
-          }),
-        );
+        decayInventories(this.store.entities(), this.bus, (entity): DecayModifiers => ({
+          zoneModifierMilli: storage.decayModifierMilli(entity),
+          difficultyDecayMilli,
+        }));
       },
     });
     this.registerSystem({

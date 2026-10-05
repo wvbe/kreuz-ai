@@ -13,7 +13,7 @@ import { createHaulExecutor, registerHauling } from "./haulDeliver";
 import { postHaulJob } from "./haulPoster";
 import { getStorageService } from "./storageServiceRegistry";
 import { haulJobId, ReservationKind } from "./storageTypes";
-import { createStorageWorld } from "./testStorageWorld";
+import { createStorageWorld, setRules } from "./testStorageWorld";
 import type { StorageTestWorld } from "./testStorageWorld";
 
 function totalLogs(world: StorageTestWorld): number {
@@ -71,7 +71,11 @@ describe("createHaulExecutor and registerHauling", () => {
     expect(getStorageService(world.engine).reservations.all()).toEqual([]);
     expect(postingStatus(world, posting.id)).toBe(PostingStatus.Done);
     expect(completed).toMatchObject([
-      { jobTypeId: haulJobId, workerId: hauler.id, outputs: [{ materialId: "oak_log", quantity: 12 }] },
+      {
+        jobTypeId: haulJobId,
+        workerId: hauler.id,
+        outputs: [{ materialId: "oak_log", quantity: 12 }],
+      },
     ]);
   });
 
@@ -148,7 +152,7 @@ describe("createHaulExecutor and registerHauling", () => {
     // The only storage is full by slots after the hauler picked the goods up.
     const { posting } = startHaul(world, pile, hauler);
     world.run(1);
-    (chest.components["Inventory"] as { rules: unknown[] }).rules = [];
+    setRules(chest, []);
     world.give(chest, "limestone", 20);
     (chest.components["Inventory"] as { slotCount: number }).slotCount = 1;
     world.run(100);

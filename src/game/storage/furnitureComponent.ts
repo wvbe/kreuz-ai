@@ -10,8 +10,6 @@ import type { FurnitureData } from "./storageTypes";
  */
 export const furnitureComponent = defineComponent<"Furniture", FurnitureData>(
   "Furniture",
-  z
-    .object({ furnitureId: z.string().regex(/^[a-z][a-z0-9]*(_[a-z0-9]+)*$/) })
-    .strict(),
+  z.object({ furnitureId: z.string().regex(/^[a-z][a-z0-9]*(_[a-z0-9]+)*$/) }).strict(),
   () => ({ furnitureId: "chest" }),
 );

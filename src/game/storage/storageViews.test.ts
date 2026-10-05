@@ -22,8 +22,22 @@ describe("buildStockView", () => {
     const view = buildStockView(world.engine, "oak_log");
     expect(view).toMatchObject({ total: 7, reserved: 2, available: 5 });
     expect(view.holders).toEqual([
-      { entityId: chest.id, prototype: "chest", mapId: world.mapId, cellIndex: 5, quantity: 4, reserved: 2 },
-      { entityId: pile.id, prototype: "loose_pile", mapId: world.mapId, cellIndex: 6, quantity: 3, reserved: 0 },
+      {
+        entityId: chest.id,
+        prototype: "chest",
+        mapId: world.mapId,
+        cellIndex: 5,
+        quantity: 4,
+        reserved: 2,
+      },
+      {
+        entityId: pile.id,
+        prototype: "loose_pile",
+        mapId: world.mapId,
+        cellIndex: 6,
+        quantity: 3,
+        reserved: 0,
+      },
     ]);
   });
 });

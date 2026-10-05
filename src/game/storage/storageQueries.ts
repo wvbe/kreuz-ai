@@ -99,7 +99,11 @@ export function canDepositInto(
   const data = getComponent(entity, inventoryComponent);
   return (
     data !== undefined &&
-    isOperationAllowed({ materials: engine.materials, actor: actorId }, data, InventoryOperation.Store) &&
+    isOperationAllowed(
+      { materials: engine.materials, actor: actorId },
+      data,
+      InventoryOperation.Store,
+    ) &&
     filterAccepts(engine.materials, effectiveFilter(engine, entity), materialId)
   );
 }
@@ -153,6 +157,29 @@ export function findSources(
   if (position === undefined) {
     return [];
   }
+  const reservations = getStorageService(engine).reservations;
+  const holders: { entityId: EntityId; quantity: number; mapId: number; cellIndex: number }[] = [];
+  for (const entity of listStorage(engine)) {
+    const place = getComponent(entity, positionComponent);
+    const available = reservations.availableTo(entity.id, materialId, requester.id);
+    if (
+      place !== undefined &&
+      place.mapId === position.mapId &&
+      available >= 1 &&
+      canRetrieveFrom(engine, entity, requester.id)
+    ) {
+      holders.push({
+        entityId: entity.id,
+        quantity: available,
+        mapId: place.mapId,
+        cellIndex: place.cellIndex,
+      });
+    }
+  }
+  if (holders.length === 0) {
+    // Nothing to walk to: skip the reachability search (hungry settlers ask every tick).
+    return [];
+  }
   const costs = new Map<number, number>();
   for (const reachable of getAiService(engine).pathfinding.reachable(
     position.mapId,
@@ -160,31 +187,17 @@ export function findSources(
   )) {
     costs.set(reachable.cell, reachable.cost);
   }
-  const reservations = getStorageService(engine).reservations;
   const candidates: StockSource[] = [];
-  for (const entity of listStorage(engine)) {
-    const place = getComponent(entity, positionComponent);
-    const distance = place === undefined ? undefined : costs.get(place.cellIndex);
-    const available = reservations.availableTo(entity.id, materialId, requester.id);
-    if (
-      place === undefined ||
-      place.mapId !== position.mapId ||
-      distance === undefined ||
-      available < 1 ||
-      !canRetrieveFrom(engine, entity, requester.id)
-    ) {
-      continue;
+  for (const holder of holders) {
+    const distance = costs.get(holder.cellIndex);
+    if (distance !== undefined) {
+      candidates.push({ ...holder, distance });
     }
-    candidates.push({
-      entityId: entity.id,
-      quantity: available,
-      distance,
-      mapId: place.mapId,
-      cellIndex: place.cellIndex,
-    });
   }
   candidates.sort((left, right) =>
-    left.distance === right.distance ? left.entityId - right.entityId : left.distance - right.distance,
+    left.distance === right.distance
+      ? left.entityId - right.entityId
+      : left.distance - right.distance,
   );
   const sources: StockSource[] = [];
   let missing = quantity;

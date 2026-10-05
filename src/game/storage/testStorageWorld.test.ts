@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getTotal } from "../inventory/inventoryQueries";
-import { createStorageWorld } from "./testStorageWorld";
+import {
+  InventoryOperation,
+  PermissionTargetKind,
+  PermissionType,
+} from "../inventory/inventoryTypes";
+import { createStorageWorld, setRules } from "./testStorageWorld";
 
 describe("createStorageWorld", () => {
   it("spawns chests, piles and gives items", () => {
@@ -20,5 +25,19 @@ describe("createStorageWorld", () => {
     const world = createStorageWorld();
     const chest = world.chest(5, { Stockpile: { priority: 80, filter: null } });
     expect(chest.components["Stockpile"]).toEqual({ priority: 80, filter: null });
+  });
+
+  it("setRules replaces the permission rules of an inventory", () => {
+    const world = createStorageWorld();
+    const chest = world.chest(5);
+    const rule = {
+      type: PermissionType.Deny,
+      target: { kind: PermissionTargetKind.Anyone },
+      operation: InventoryOperation.Store,
+    } as const;
+    setRules(chest, [rule]);
+    expect(chest.components["Inventory"]).toMatchObject({ rules: [rule] });
+    setRules(chest, []);
+    expect(chest.components["Inventory"]).toMatchObject({ rules: [] });
   });
 });

@@ -1,15 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { InventoryOperation, PermissionTargetKind, PermissionType } from "../inventory/inventoryTypes";
+import {
+  InventoryOperation,
+  PermissionTargetKind,
+  PermissionType,
+} from "../inventory/inventoryTypes";
 import { RouteTier, chooseRoute, compareRoutes, routeCandidates } from "./storageRouting";
 import type { StorageRoute, RouteRequest } from "./storageRouting";
-import { createStorageWorld } from "./testStorageWorld";
+import { createStorageWorld, setRules } from "./testStorageWorld";
 import type { StorageTestWorld } from "./testStorageWorld";
 
 // Hauler stands on cell 55 of the 10x10 test map (column 5, row 5). Cells 35 and 75 are both two
 // steps away, cell 45 is one step away, cell 58 is three steps away.
 const hauler = 55;
 
-function request(world: StorageTestWorld, materialId = "oak_log", extra: Partial<RouteRequest> = {}) {
+function request(
+  world: StorageTestWorld,
+  materialId = "oak_log",
+  extra: Partial<RouteRequest> = {},
+) {
   return {
     materialId,
     quantity: 1,
@@ -138,21 +146,28 @@ describe("routeCandidates and chooseRoute", () => {
       Stockpile: { priority: 50, filter: { categories: ["food"], materialIds: [] } },
     });
     const locked = world.chest(47);
-    (locked.components["Inventory"] as { rules: unknown[] }).rules = [
+    setRules(locked, [
       {
         type: PermissionType.Deny,
         target: { kind: PermissionTargetKind.Anyone },
         operation: InventoryOperation.Store,
       },
-    ];
+    ]);
     const lockedFor = world.spawn("peasant", 0);
     const open = world.chest(48);
-    expect(routeCandidates(world.engine, request(world, "oak_log", { actorId: lockedFor.id })).map((entry) => entry.entityId)).toEqual([open.id]);
     expect(
-      chooseRoute(world.engine, request(world, "oak_log", { excludeIds: [open.id] })),
-    ).toEqual(expect.objectContaining({ entityId: locked.id }));
+      routeCandidates(world.engine, request(world, "oak_log", { actorId: lockedFor.id })).map(
+        (entry) => entry.entityId,
+      ),
+    ).toEqual([open.id]);
+    expect(chooseRoute(world.engine, request(world, "oak_log", { excludeIds: [open.id] }))).toEqual(
+      expect.objectContaining({ entityId: locked.id }),
+    );
     expect(
-      chooseRoute(world.engine, request(world, "oak_log", { actorId: lockedFor.id, excludeIds: [open.id] })),
+      chooseRoute(
+        world.engine,
+        request(world, "oak_log", { actorId: lockedFor.id, excludeIds: [open.id] }),
+      ),
     ).toBeNull();
   });
 

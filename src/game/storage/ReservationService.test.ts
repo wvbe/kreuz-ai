@@ -2,11 +2,15 @@ import { describe, expect, it } from "vitest";
 import { inventoryComponent } from "../inventory/inventoryComponent";
 import { getTotal } from "../inventory/inventoryQueries";
 import { retrieve } from "../inventory/inventoryOperations";
-import { InventoryOperation, PermissionTargetKind, PermissionType } from "../inventory/inventoryTypes";
+import {
+  InventoryOperation,
+  PermissionTargetKind,
+  PermissionType,
+} from "../inventory/inventoryTypes";
 import { StorageError, StorageErrorKind } from "./StorageError";
 import { getStorageService } from "./storageServiceRegistry";
 import { ReservationKind } from "./storageTypes";
-import { createStorageWorld } from "./testStorageWorld";
+import { createStorageWorld, setRules } from "./testStorageWorld";
 
 function setup() {
   const world = createStorageWorld();
@@ -114,13 +118,13 @@ describe("ReservationService.commit", () => {
 
   it("is all or nothing: a refused move keeps the reservation", () => {
     const { reservations, chest, holderA, request } = setup();
-    (chest.components["Inventory"] as { rules: unknown[] }).rules = [
+    setRules(chest, [
       {
         type: PermissionType.Deny,
         target: { kind: PermissionTargetKind.Entity, entityId: holderA.id },
         operation: InventoryOperation.Retrieve,
       },
-    ];
+    ]);
     const reservation = reservations.reserve(request(holderA.id, 3));
     expect(() => reservations.commit(reservation.id, holderA)).toThrow();
     expect(getTotal(chest, "oak_log")).toBe(10);
@@ -147,16 +151,19 @@ describe("ReservationService.commit", () => {
 describe("ReservationService get, all, ofHolder", () => {
   it("returns copies ascending by id", () => {
     const { reservations, holderA, holderB, request } = setup();
-    const a = reservations.reserve(request(holderA.id, 1));
-    const b = reservations.reserve(request(holderB.id, 1));
-    const c = reservations.reserve(request(holderA.id, 1));
-    expect(reservations.all().map((entry) => entry.id)).toEqual([a.id, b.id, c.id]);
-    expect(reservations.ofHolder(holderA.id).map((entry) => entry.id)).toEqual([a.id, c.id]);
-    const copy = reservations.get(a.id);
+    const first = reservations.reserve(request(holderA.id, 1));
+    const second = reservations.reserve(request(holderB.id, 1));
+    const third = reservations.reserve(request(holderA.id, 1));
+    expect(reservations.all().map((entry) => entry.id)).toEqual([first.id, second.id, third.id]);
+    expect(reservations.ofHolder(holderA.id).map((entry) => entry.id)).toEqual([
+      first.id,
+      third.id,
+    ]);
+    const copy = reservations.get(first.id);
     if (copy !== null) {
       copy.quantity = 99;
     }
-    expect(reservations.get(a.id)?.quantity).toBe(1);
+    expect(reservations.get(first.id)?.quantity).toBe(1);
   });
 });
 
@@ -214,7 +221,12 @@ describe("ReservationService.createSection", () => {
       createdTick: 0,
     };
     expect(() =>
-      section.restore({ reservations: [{ id: 2, ...entry }, { id: 1, ...entry }] }),
+      section.restore({
+        reservations: [
+          { id: 2, ...entry },
+          { id: 1, ...entry },
+        ],
+      }),
     ).toThrow();
   });
 });
