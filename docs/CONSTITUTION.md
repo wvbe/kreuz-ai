@@ -8,7 +8,7 @@ The game engine MUST be entirely decoupled from any rendering layer. The game si
 
 ### II. Deterministic State & JSON Serialization (NON-NEGOTIABLE)
 
-All game state MUST be fully serializable to and deserializable from JSON without loss of information. The game world, including all citizens, factions, resources, relationships, and simulation state, MUST produce identical results when given an identical seed and initial save state. Randomness is controlled exclusively through seeded PRNG; external non-deterministic sources (system time, network, etc.) MUST NOT influence game outcomes. This enables save/load functionality, regression testing, and scenario replay.
+All game state MUST be fully serializable to and deserializable from JSON without loss of information. The game world, including all citizens, factions, resources, relationships, and simulation state, MUST produce identical results when given an identical seed and initial save state. Randomness is controlled exclusively through seeded PRNG; external non-deterministic sources (system time, network, etc.) MUST NOT influence game outcomes. Seed carve-out: if no seed is supplied, the engine generates one exactly once at bootstrap and records it in the game state (and therefore in every save); thereafter all randomness derives from it. Mid-game re-seeding is limited to tests and debug tooling. Numbers in game state and saves are fixed-point integers: scale ×1000 ("milli-units") unless a spec defines a better integer unit (e.g., ticks); content data files may author decimals, which are converted to fixed-point at load (canonical rule: spec 006 FR-014). This enables save/load functionality, regression testing, and scenario replay.
 
 ### III. Headless-First Development
 
@@ -25,8 +25,8 @@ Game systems—Citizens, Jobs, Economy, Factions, Politics, Research, Trading—
 ## Architectural Constraints
 
 - **Browser Integration**: The HTML/DOM browser layer is a view-only consumer of game state. State flows from engine → browser; browser input becomes commands fed into the engine.
-- **Testability Mandate**: Every game system must be unit-testable in isolation; the entire game must be integration-testable with no external dependencies (no network, no timers, no browser APIs). All tests must contain minimal abstraction, minimal harnassing.
-- **Seed-Based Randomness**: All randomness must derive from a single project seed, ensuring identical play-throughs are reproducible.
+- **Testability Mandate**: Every game system must be unit-testable in isolation; the entire game must be integration-testable with no external dependencies (no network, no timers, no browser APIs). All tests must contain minimal abstraction, minimal harnessing.
+- **Seed-Based Randomness**: All randomness must derive from a single project seed, ensuring identical play-throughs are reproducible. If no seed is supplied, the engine generates one exactly once at bootstrap and records it in the game state/save (the only permitted non-deterministic input); mid-game re-seeding is limited to tests and debug tooling.
 - **State Transparency**: Game state must be inspectable, queryable, and loggable at any point; opaque or hidden state is prohibited.
 
 ## Development Workflow
@@ -48,4 +48,4 @@ Constitution changes (amendments) require:
 - Updated version per semantic versioning (MAJOR for principle removals, MINOR for additions, PATCH for clarifications)
 - Scenario test verification that no regressions are introduced
 
-**Version**: 1.0.0 | **Ratified**: 2026-05-02 | **Last Amended**: 2026-05-02
+**Version**: 1.1.0 | **Ratified**: 2026-05-02 | **Last Amended**: 2026-10-05
