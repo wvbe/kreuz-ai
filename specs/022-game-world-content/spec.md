@@ -1,13 +1,11 @@
 # Feature Specification: Game World Content — 13th-Century European Setting
 
-**Feature Branch**: `023-game-world-content`
 **Created**: 2026-05-03
-**Status**: Draft
 **Input**: User description: "The setting for the game and all the content that belongs in this game world, including materials, entity prototypes, jobs, terrain types, behavior trees, needs, traits, crafting recipes, furniture, room types, zones, guild factions, religion factions. The setting is a European 13th-century setting, but in no specific country. There should be depth and variability to the game content catalogs."
 
 ---
 
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 — Material Catalog (Priority: P1)
 
@@ -131,8 +129,8 @@ The game world uses a rich set of materials grounded in 13th-century European li
 
 **Acceptance Scenarios**:
 
-1. **Given** the material registry is loaded, **When** queried for all materials with category `food`, **Then** at least 15 entries are returned, each with valid `perishability` durations.
-2. **Given** a material with category `raw`, **When** cross-referenced with the recipe registry, **Then** at least one recipe exists that uses it as an input (no orphan raw materials).
+1. **Given** the material registry is loaded, **When** queried for all materials with category `food`, **Then** at least 15 entries are returned, each declaring its perishability (a valid `perishability` duration, or non-perishable, e.g. Honey).
+2. **Given** a material with category `raw`, **When** cross-referenced with the recipe registry, **Then** at least one recipe exists that uses it as an input, unless the material is consumed directly (e.g. eaten, like Eggs, or used as medicine, like Herbs) (no orphan raw materials).
 3. **Given** all tool materials, **When** checked against construction and crafting recipe restrictions, **Then** each tool is required by at least one recipe or construction job as a non-consumed tool.
 4. **Given** the currency material "Silver Penny", **When** used in trade (spec 019), **Then** it functions identically to any other stackable material with `stackLimit: 1000`.
 5. **Given** perishable materials, **When** stored in a Pantry zone (spec 018), **Then** their decay rate is reduced by the zone's configured modifier.
@@ -229,7 +227,7 @@ The production system (spec 014) is populated with multi-tier crafting recipes t
 | Grind Flour     | 2 Wheat                   | 3 Flour           | Grinding Mill | 12 ticks | —       |
 | Grind Rye Flour | 2 Rye                     | 3 Flour           | Grinding Mill | 12 ticks | —       |
 | Bake Bread      | 2 Flour                   | 2 Bread           | Oven          | 20 ticks | Baking  |
-| Bake Rye Bread  | 2 Flour (from Rye)        | 2 Rye Bread       | Oven          | 20 ticks | Baking  |
+| Bake Rye Bread  | 2 Flour                   | 2 Rye Bread       | Oven          | 20 ticks | Baking  |
 | Malt Barley     | 3 Barley                  | 2 Malt            | Malting Floor | 24 ticks | Brewing |
 | Brew Ale        | 3 Malt                    | 2 Ale             | Brewing Vat   | 36 ticks | Brewing |
 | Brew Mead       | 2 Honey                   | 2 Mead            | Brewing Vat   | 40 ticks | Brewing |
@@ -295,9 +293,9 @@ The game world contains a variety of placeable furniture entities. Each has a de
 | Salting Table   | workstation, food    | Yes           | Fish salting                 | 4 Oak Plank, 2 Nails         |
 | Mason's Bench   | workstation, stone   | Yes           | Stonecutting recipes         | 4 Oak Plank, 2 Iron Chisel   |
 | Kiln            | workstation, ceramic | Yes           | Brick firing, glassblowing   | 8 Brick, 2 Iron Ingot        |
-| Charcoal Kiln   | workstation, fuel    | No            | Charcoal burning             | 6 Clay, 4 Stone Block        |
+| Charcoal Kiln   | workstation, fuel    | Yes           | Charcoal burning             | 6 Clay, 4 Stone Block        |
 | Candle Mold     | workstation, utility | Yes           | Candle making                | 2 Iron Ingot                 |
-| Rope Walk       | workstation, fiber   | No            | Rope twisting                | 4 Oak Plank                  |
+| Rope Walk       | workstation, fiber   | Yes           | Rope twisting                | 4 Oak Plank                  |
 | Butcher's Block | workstation, food    | Yes           | Butchering carcasses         | 2 Oak Plank, 1 Iron Ingot    |
 | Apiary          | workstation, food    | No            | Honey & beeswax production   | 4 Pine Plank, 1 Rope         |
 
@@ -320,17 +318,17 @@ The game world contains a variety of placeable furniture entities. Each has a de
 
 **Comfort & Living Furniture**:
 
-| Prototype    | Category               | Effect                                            | Construction Materials                            |
-| ------------ | ---------------------- | ------------------------------------------------- | ------------------------------------------------- |
-| Straw Pallet | bed, comfort, basic    | Rest satisfaction (low quality)                   | 4 Flax, 2 Pine Plank                              |
-| Wooden Bed   | bed, comfort           | Rest satisfaction (standard)                      | 6 Oak Plank, 4 Nails, 1 Wool Cloth                |
-| Noble Bed    | bed, comfort, luxury   | Rest satisfaction (high quality) + mood bonus     | 8 Oak Plank, 6 Nails, 2 Wool Cloth, 2 Linen Cloth |
-| Bench        | seating, comfort       | Minor comfort, social gathering point             | 3 Oak Plank, 2 Nails                              |
-| Chair        | seating, comfort       | Comfort satisfaction                              | 3 Oak Plank, 4 Nails                              |
-| Table        | surface, social        | Social gathering, dining                          | 4 Oak Plank, 4 Nails                              |
-| Long Table   | surface, social, large | Feast/communal dining, higher social satisfaction | 8 Oak Plank, 8 Nails                              |
-| Hearth       | warmth, comfort        | Comfort bonus to room occupants                   | 6 Stone Block, 2 Iron Ingot                       |
-| Throne       | seating, governance    | Marks seat of government; leader furniture        | 6 Oak Plank, 4 Stone Block, 2 Iron Ingot          |
+| Prototype    | Category               | Effect                                                   | Construction Materials                            |
+| ------------ | ---------------------- | -------------------------------------------------------- | ------------------------------------------------- |
+| Straw Pallet | bed, comfort, basic    | Rest satisfaction (low quality)                          | 4 Flax, 2 Pine Plank                              |
+| Wooden Bed   | bed, comfort           | Rest satisfaction (standard)                             | 6 Oak Plank, 4 Nails, 1 Wool Cloth                |
+| Noble Bed    | bed, comfort, luxury   | Rest satisfaction (high quality) + mood bonus            | 8 Oak Plank, 6 Nails, 2 Wool Cloth, 2 Linen Cloth |
+| Bench        | seating, comfort       | Minor comfort, social gathering point                    | 3 Oak Plank, 2 Nails                              |
+| Chair        | seating, comfort       | Comfort satisfaction                                     | 3 Oak Plank, 4 Nails                              |
+| Table        | surface, social        | Social gathering, dining                                 | 4 Oak Plank, 4 Nails                              |
+| Long Table   | surface, social, large | Feast/communal dining, higher social satisfaction        | 8 Oak Plank, 8 Nails                              |
+| Hearth       | warmth, comfort        | Comfort bonus to room occupants                          | 6 Stone Block, 2 Iron Ingot                       |
+| Throne       | seating, governance    | Marks seat of government (Throne Room); leader furniture | 6 Oak Plank, 4 Stone Block, 2 Iron Ingot          |
 
 **Religious Furniture**:
 
@@ -345,17 +343,18 @@ The game world contains a variety of placeable furniture entities. Each has a de
 
 **Utility & Decorative Furniture**:
 
-| Prototype     | Category                    | Effect                           | Construction Materials       |
-| ------------- | --------------------------- | -------------------------------- | ---------------------------- |
-| Well          | utility, water              | Water access point               | 8 Stone Block, 2 Rope        |
-| Trough        | utility, animal             | Animal feeding point             | 4 Oak Plank, 2 Nails         |
-| Hitching Post | utility, animal             | Animal tethering                 | 2 Oak Plank, 1 Rope          |
-| Torch Sconce  | light, utility              | Illumination                     | 1 Iron Ingot                 |
-| Chandelier    | light, luxury               | Strong illumination + mood bonus | 4 Iron Ingot, 6 Candle       |
-| Tapestry      | decorative, textile, luxury | Mood bonus                       | 3 Wool Cloth, 2 Linen Thread |
-| Banner        | decorative, textile         | Faction identity, minor mood     | 1 Linen Cloth, 1 Pine Plank  |
-| Gravestone    | decorative, stone           | Memorial for deceased            | 2 Stone Block                |
-| Signpost      | utility, wood               | Way marker                       | 2 Pine Plank, 2 Nails        |
+| Prototype     | Category                    | Effect                                                                                                                   | Construction Materials       |
+| ------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| Well          | utility, water              | Water access point                                                                                                       | 8 Stone Block, 2 Rope        |
+| Trough        | utility, animal             | Animal feeding point                                                                                                     | 4 Oak Plank, 2 Nails         |
+| Hitching Post | utility, animal             | Animal tethering                                                                                                         | 2 Oak Plank, 1 Rope          |
+| Torch Sconce  | light, utility              | Illumination                                                                                                             | 1 Iron Ingot                 |
+| Chandelier    | light, luxury               | Strong illumination + mood bonus                                                                                         | 4 Iron Ingot, 6 Candle       |
+| Tapestry      | decorative, textile, luxury | Mood bonus                                                                                                               | 3 Wool Cloth, 2 Linen Thread |
+| Banner        | decorative, textile         | Faction identity, minor mood                                                                                             | 1 Linen Cloth, 1 Pine Plank  |
+| Gravestone    | decorative, stone           | Memorial for deceased                                                                                                    | 2 Stone Block                |
+| Signpost      | utility, wood               | Way marker                                                                                                               | 2 Pine Plank, 2 Nails        |
+| Notice Post   | utility, governance         | Lets a Town Crier serve nearby user-managed job boards from one stop (spec 026 FR-021); `unlockTier`: village (spec 027) | 2 Pine Plank, 2 Nails        |
 
 **Acceptance Scenarios**:
 
@@ -369,7 +368,7 @@ The game world contains a variety of placeable furniture entities. Each has a de
 
 ### User Story 4 — Zone & Room Type Catalog (Priority: P1)
 
-The game world has a rich set of zone types that define the functional identity of spaces. Zones are either rooms (enclosed, detected per spec 015) or open-air zones (unenclosed). Each zone type declares its furniture requirements, minimum tile count, any effects on entities or items within it, and its profession affinity. The variety of zones drives the player's colony layout decisions and gates different production chains and activities.
+The game world has a rich set of zone types that define the functional identity of spaces. Zones are either rooms (enclosed, detected per spec 015) or open-air zones (unenclosed). Each zone type declares its furniture requirements, minimum tile count, any effects on entities or items within it, and its skill affinity. The player assigns the zone type (spec 015); the definitions below are the requirements a zone must meet once assigned. The variety of zones drives the player's colony layout decisions and gates different production chains and activities.
 
 **Why this priority**: Zones activate production recipes, storage behaviors, and need satisfaction. Without zone type definitions, the physical layout has no meaning.
 
@@ -377,74 +376,80 @@ The game world has a rich set of zone types that define the functional identity 
 
 **Production Zones (Rooms)**:
 
-| Zone Type        | Requires Room | Min Tiles | Furniture Requirements              | Effect                          | Profession Affinity |
-| ---------------- | ------------- | --------- | ----------------------------------- | ------------------------------- | ------------------- |
-| Bakery           | Yes           | 6         | 1× Oven                             | activity.unlock: baking         | Baker               |
-| Smithy           | Yes           | 8         | 1× Forge + 1× Anvil                 | activity.unlock: smithing       | Blacksmith          |
-| Carpentry        | Yes           | 6         | 1× Sawmill + 1× Workbench           | activity.unlock: woodworking    | Carpenter           |
-| Tannery          | Yes           | 6         | 1× Tanning Rack                     | activity.unlock: leatherworking | Tanner              |
-| Pottery          | Yes           | 6         | 1× Kiln                             | activity.unlock: pottery        | Potter              |
-| Brewery          | Yes           | 8         | 1× Brewing Vat + 1× Malting Floor   | activity.unlock: brewing        | Brewer              |
-| Weaving Hall     | Yes           | 6         | 1× Loom + 1× Spinning Wheel         | activity.unlock: weaving        | Weaver              |
-| Kitchen          | Yes           | 6         | 1× Cooking Pot + 1× Butcher's Block | activity.unlock: cooking        | Cook                |
-| Smokehouse       | Yes           | 4         | 1× Drying Rack                      | activity.unlock: preserving     | Cook                |
-| Mason's Workshop | Yes           | 6         | 1× Mason's Bench                    | activity.unlock: masonry        | Mason               |
-| Scriptorium      | Yes           | 6         | 1× Bookcase + 1× Lectern            | activity.unlock: scholarship    | Scholar             |
+| Zone Type        | Requires Room | Min Tiles | Furniture Requirements              | Effect                          | Skill Affinity | Unlock Tier    |
+| ---------------- | ------------- | --------- | ----------------------------------- | ------------------------------- | -------------- | -------------- |
+| Bakery           | Yes           | 6         | 1× Oven                             | activity.unlock: baking         | baking         | village        |
+| Smithy           | Yes           | 8         | 1× Forge + 1× Anvil                 | activity.unlock: smithing       | smithing       | village        |
+| Carpentry        | Yes           | 6         | 1× Sawmill + 1× Workbench           | activity.unlock: woodworking    | carpentry      | hamlet         |
+| Tannery          | Yes           | 6         | 1× Tanning Rack                     | activity.unlock: leatherworking | leatherworking | village        |
+| Pottery          | Yes           | 6         | 1× Kiln                             | activity.unlock: pottery        | masonry        | village        |
+| Brewery          | Yes           | 8         | 1× Brewing Vat + 1× Malting Floor   | activity.unlock: brewing        | brewing        | village        |
+| Weaving Hall     | Yes           | 6         | 1× Loom + 1× Spinning Wheel         | activity.unlock: weaving        | weaving        | market_town    |
+| Kitchen          | Yes           | 6         | 1× Cooking Pot + 1× Butcher's Block | activity.unlock: cooking        | cooking        | hamlet         |
+| Smokehouse       | Yes           | 4         | 1× Drying Rack                      | activity.unlock: preserving     | cooking        | village        |
+| Mason's Workshop | Yes           | 6         | 1× Mason's Bench                    | activity.unlock: masonry        | masonry        | hamlet         |
+| Scriptorium      | Yes           | 6         | 1× Bookcase + 1× Lectern            | activity.unlock: scholarship    | —              | chartered_town |
+
+_Unlock tier_: the lowest settlement tier (spec 027 `SettlementTier`: `hamlet`, `village`, `market_town`, `chartered_town`) at which the zone type can be designated (FR-022). The assignment follows the proposed slices of spec 027 Assumptions; furniture, recipes and job types used only by a zone follow that zone's tier, and their final assignment is content work.
+
+_Skill affinity_: there is no profession/occupation component (spec 020). An entity's affinity for a zone is derived from its skills (e.g. dominant skill, or the listed skill above a threshold). Labels such as "Baker" are descriptive only.
 
 **Storage & Utility Zones (Rooms)**:
 
-| Zone Type   | Requires Room | Min Tiles | Furniture Requirements          | Effect                                      | Notes                        |
-| ----------- | ------------- | --------- | ------------------------------- | ------------------------------------------- | ---------------------------- |
-| Pantry      | Yes           | 4         | 1× Pantry Shelf                 | entity.modifier: inventory.decay.rate × 0.5 | Halves food decay            |
-| Wine Cellar | Yes           | 4         | 1× Wine Rack + 1× Barrel        | entity.modifier: inventory.decay.rate × 0.3 | Best preservation for drinks |
-| Warehouse   | Yes           | 8         | 2× Crate or 2× Chest            | —                                           | General bulk storage         |
-| Armory      | Yes           | 6         | 1× Weapon Rack + 1× Armor Stand | —                                           | Military equipment storage   |
+| Zone Type   | Requires Room | Min Tiles | Furniture Requirements          | Effect                                      | Notes                        | Unlock Tier |
+| ----------- | ------------- | --------- | ------------------------------- | ------------------------------------------- | ---------------------------- | ----------- |
+| Pantry      | Yes           | 4         | 1× Pantry Shelf                 | entity.modifier: inventory.decay.rate × 0.5 | Halves food decay            | village     |
+| Wine Cellar | Yes           | 4         | 1× Wine Rack + 1× Barrel        | entity.modifier: inventory.decay.rate × 0.3 | Best preservation for drinks | market_town |
+| Warehouse   | Yes           | 8         | 2× Crate or 2× Chest            | —                                           | General bulk storage         | village     |
+| Armory      | Yes           | 6         | 1× Weapon Rack + 1× Armor Stand | —                                           | Military equipment storage   | market_town |
 
 **Living & Social Zones (Rooms)**:
 
-| Zone Type   | Requires Room | Min Tiles | Furniture Requirements          | Effect                                           | Notes                                            |
-| ----------- | ------------- | --------- | ------------------------------- | ------------------------------------------------ | ------------------------------------------------ |
-| Bedroom     | Yes           | 4         | 1× (any bed type)               | —                                                | Rest satisfaction location                       |
-| Dormitory   | Yes           | 8         | 3× (any bed type)               | —                                                | Shared sleeping quarters                         |
-| Great Hall  | Yes           | 12        | 1× Long Table + 1× Hearth       | entity.modifier: mood.bonus +5, social.bonus +10 | Feasting, social hub                             |
-| Tavern      | Yes           | 8         | 1× Table + 1× Bench + 1× Barrel | entity.modifier: social.bonus +5                 | Drink and conversation                           |
-| Throne Room | Yes           | 10        | 1× Throne                       | —                                                | Seat of government; treasury location (spec 019) |
+| Zone Type   | Requires Room | Min Tiles | Furniture Requirements          | Effect                                           | Notes                                                 | Unlock Tier |
+| ----------- | ------------- | --------- | ------------------------------- | ------------------------------------------------ | ----------------------------------------------------- | ----------- |
+| Bedroom     | Yes           | 4         | 1× (any bed type)               | —                                                | Rest satisfaction location                            | hamlet      |
+| Dormitory   | Yes           | 8         | 3× (any bed type)               | —                                                | Shared sleeping quarters                              | hamlet      |
+| Great Hall  | Yes           | 12        | 1× Long Table + 1× Hearth       | entity.modifier: mood.bonus +5, social.bonus +10 | Feasting, social hub                                  | market_town |
+| Tavern      | Yes           | 8         | 1× Table + 1× Bench + 1× Barrel | entity.modifier: social.bonus +5                 | Drink and conversation                                | village     |
+| Throne Room | Yes           | 10        | 1× Throne                       | —                                                | Seat of government; treasury location (spec 019)      | hamlet      |
+| Dwelling    | Yes           | 4         | 1× (any bed type)               | —                                                | Household home; level, capacity and rent per spec 029 | hamlet      |
 
 **Religious Zones (Rooms)**:
 
-| Zone Type | Requires Room | Min Tiles | Furniture Requirements                                  | Effect                                         | Notes                  |
-| --------- | ------------- | --------- | ------------------------------------------------------- | ---------------------------------------------- | ---------------------- |
-| Chapel    | Yes           | 8         | 1× Altar + 1× Candelabra                                | entity.modifier: faith.bonus +10               | Small worship space    |
-| Church    | Yes           | 16        | 1× Altar + 2× Candelabra + 1× Lectern + 2× Prayer Bench | entity.modifier: faith.bonus +20               | Full worship space     |
-| Cloister  | Yes           | 10        | 1× Prayer Bench + 1× Bookcase                           | entity.modifier: faith.bonus +5, mood.bonus +3 | Monastic contemplation |
+| Zone Type | Requires Room | Min Tiles | Furniture Requirements                                  | Effect                                         | Notes                  | Unlock Tier    |
+| --------- | ------------- | --------- | ------------------------------------------------------- | ---------------------------------------------- | ---------------------- | -------------- |
+| Chapel    | Yes           | 8         | 1× Altar + 1× Candelabra                                | entity.modifier: faith.bonus +10               | Small worship space    | hamlet         |
+| Church    | Yes           | 16        | 1× Altar + 2× Candelabra + 1× Lectern + 2× Prayer Bench | entity.modifier: faith.bonus +20               | Full worship space     | market_town    |
+| Cloister  | Yes           | 10        | 1× Prayer Bench + 1× Bookcase                           | entity.modifier: faith.bonus +5, mood.bonus +3 | Monastic contemplation | chartered_town |
 
 **Military Zones (Rooms)**:
 
-| Zone Type  | Requires Room | Min Tiles | Furniture Requirements           | Effect                                   | Notes             |
-| ---------- | ------------- | --------- | -------------------------------- | ---------------------------------------- | ----------------- |
-| Barracks   | Yes           | 8         | 2× Straw Pallet + 1× Weapon Rack | —                                        | Guard housing     |
-| Guard Post | No            | 2         | —                                | entity.modifier: safety.bonus +10 (area) | Small watch point |
+| Zone Type  | Requires Room | Min Tiles | Furniture Requirements           | Effect                                   | Notes             | Unlock Tier |
+| ---------- | ------------- | --------- | -------------------------------- | ---------------------------------------- | ----------------- | ----------- |
+| Barracks   | Yes           | 8         | 2× Straw Pallet + 1× Weapon Rack | —                                        | Guard housing     | market_town |
+| Guard Post | No            | 2         | —                                | entity.modifier: safety.bonus +10 (area) | Small watch point | hamlet      |
 
 **Open-Air Zones**:
 
-| Zone Type     | Requires Room | Min Tiles | Furniture Requirements | Effect                            | Notes                       |
-| ------------- | ------------- | --------- | ---------------------- | --------------------------------- | --------------------------- |
-| Farm Field    | No            | 9         | —                      | activity.unlock: farming          | Crop planting and harvest   |
-| Pasture       | No            | 12        | 1× Trough              | activity.unlock: animal.husbandry | Livestock grazing           |
-| Orchard       | No            | 9         | —                      | activity.unlock: orcharding       | Fruit trees                 |
-| Herb Garden   | No            | 6         | —                      | activity.unlock: herbalism        | Medicinal plant cultivation |
-| Vineyard      | No            | 9         | —                      | activity.unlock: viticulture      | Grape cultivation           |
-| Quarry        | No            | 6         | —                      | activity.unlock: quarrying        | Stone extraction            |
-| Charcoal Yard | No            | 4         | 1× Charcoal Kiln       | activity.unlock: charcoal.burning | Charcoal production         |
-| Fishing Dock  | No            | 4         | —                      | activity.unlock: fishing          | Requires adjacent water     |
-| Apiary Yard   | No            | 4         | 1× Apiary              | activity.unlock: beekeeping       | Honey and beeswax           |
-| Market        | No            | 8         | 1× Table               | —                                 | Open-air trading area       |
-| Cemetery      | No            | 6         | —                      | entity.modifier: faith.bonus +3   | Burial and mourning         |
-| Stockpile     | No            | 4         | —                      | —                                 | General material staging    |
+| Zone Type     | Requires Room | Min Tiles | Furniture Requirements | Effect                            | Notes                                                            | Unlock Tier |
+| ------------- | ------------- | --------- | ---------------------- | --------------------------------- | ---------------------------------------------------------------- | ----------- |
+| Farm Field    | No            | 9         | —                      | activity.unlock: farming          | Crop planting and harvest                                        | hamlet      |
+| Pasture       | No            | 12        | 1× Trough              | activity.unlock: animal_husbandry | Livestock grazing                                                | hamlet      |
+| Orchard       | No            | 9         | —                      | activity.unlock: orcharding       | Fruit trees                                                      | village     |
+| Herb Garden   | No            | 6         | —                      | activity.unlock: herbalism        | Medicinal plant cultivation                                      | hamlet      |
+| Vineyard      | No            | 9         | —                      | activity.unlock: viticulture      | Grape cultivation                                                | market_town |
+| Quarry        | No            | 6         | —                      | activity.unlock: quarrying        | Stone extraction                                                 | hamlet      |
+| Charcoal Yard | No            | 4         | 1× Charcoal Kiln       | activity.unlock: charcoal_burning | Charcoal production                                              | hamlet      |
+| Fishing Dock  | No            | 4         | —                      | activity.unlock: fishing          | Requires adjacent water                                          | hamlet      |
+| Apiary Yard   | No            | 4         | 1× Apiary              | activity.unlock: beekeeping       | Honey and beeswax                                                | village     |
+| Market        | No            | 8         | 1× Table               | —                                 | Open-air trading area                                            | village     |
+| Cemetery      | No            | 6         | —                      | entity.modifier: faith.bonus +3   | Burial and mourning                                              | village     |
+| Stockpile     | No            | 4         | —                      | —                                 | General material staging                                         | hamlet      |
+| Bell Tower    | No            | 1         | 1× Church Bell         | —                                 | Rings canonical hours; applies board updates in range (spec 026) | market_town |
 
 **Acceptance Scenarios**:
 
-1. **Given** a fully enclosed room with 1 Oven placed on its tiles and at least 6 tiles, **When** zone detection runs, **Then** it qualifies as a Bakery zone.
+1. **Given** a fully enclosed room with 1 Oven placed on its tiles and at least 6 tiles, **When** the player assigns it the Bakery zone type (spec 015), **Then** the zone meets the Bakery requirements and becomes active.
 2. **Given** a Pantry zone with a Pantry Shelf containing perishable Cheese, **When** the decay system ticks, **Then** the Cheese decays at half the normal rate.
 3. **Given** a Great Hall zone with Long Table and Hearth, **When** entities gather in the zone, **Then** they receive a +5 mood bonus and +10 social satisfaction bonus.
 4. **Given** a Farm Field zone (open-air, no room required), **When** a farming job is posted, **Then** the zone's `activity.unlock: farming` enables crop work.
@@ -488,6 +493,8 @@ The game world is populated by a variety of humanoid entity types, each with def
 | Scholar    | Preaching 10, Trading 5                    | Fine Clothing, Parchment                           | (none)             | Literate, record-keeping               |
 | Noble      | Trading 15, Combat 10                      | Fine Clothing, Silver Penny ×200                   | (none)             | Wealthy, governing class               |
 
+_Naming_ (spec 028 FR-002): a humanoid prototype MAY declare `nameListId` (a name-list ID, FR-021; absent means `common_13c`). Prototype or scenario data MAY declare a fixed `givenName` and optional `byname`, in which case no name is drawn.
+
 **Acceptance Scenarios**:
 
 1. **Given** a Blacksmith prototype is instantiated, **When** its skill profile is queried, **Then** Smithing = 30, Mining = 10, all others = 0.
@@ -508,35 +515,41 @@ The game defines a set of skills (spec 020) grounded in 13th-century occupations
 
 **Skill Registry**:
 
-| Skill ID         | Name             | Base Growth | Dim. Threshold | Dim. Factor | Outcome Effects                                    |
-| ---------------- | ---------------- | ----------- | -------------- | ----------- | -------------------------------------------------- |
-| farming          | Farming          | 3.0         | 50             | 0.5         | speedMultiplier: 0.6 at 100                        |
-| mining           | Mining           | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100, outputBonus: +1 ore   |
-| woodcutting      | Woodcutting      | 3.0         | 50             | 0.5         | speedMultiplier: 0.6 at 100                        |
-| masonry          | Masonry          | 2.0         | 50             | 0.5         | speedMultiplier: 0.5 at 100, outputBonus: +1 block |
-| smithing         | Smithing         | 2.0         | 60             | 0.4         | speedMultiplier: 0.5 at 100, outputBonus: +1 item  |
-| carpentry        | Carpentry        | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| weaving          | Weaving          | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| tailoring        | Tailoring        | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| leatherworking   | Leatherworking   | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| baking           | Baking           | 3.0         | 50             | 0.5         | speedMultiplier: 0.6 at 100, outputBonus: +1 loaf  |
-| brewing          | Brewing          | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| cooking          | Cooking          | 3.0         | 50             | 0.5         | speedMultiplier: 0.6 at 100                        |
-| fishing          | Fishing          | 3.0         | 40             | 0.5         | speedMultiplier: 0.5 at 100, outputBonus: +1 fish  |
-| herbalism        | Herbalism        | 2.0         | 50             | 0.5         | speedMultiplier: 0.5 at 100, outputBonus: +1 herb  |
-| animal_husbandry | Animal Husbandry | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| trading          | Trading          | 2.0         | 60             | 0.4         | Improved trade evaluation accuracy                 |
-| combat           | Combat           | 2.0         | 60             | 0.4         | speedMultiplier: 0.5 at 100                        |
-| construction     | Construction     | 2.5         | 50             | 0.5         | speedMultiplier: 0.5 at 100                        |
-| hauling          | Hauling          | 3.5         | 40             | 0.5         | speedMultiplier: 0.4 at 100                        |
-| preaching        | Preaching        | 2.0         | 60             | 0.4         | faith.bonus +5 at 100                              |
-| glassblowing     | Glassblowing     | 1.5         | 60             | 0.4         | speedMultiplier: 0.4 at 100, outputBonus: +1 pane  |
+Outcome effects follow spec 020: `maxSpeedBonus` is the work-duration reduction reached at skill 100 (interpolated linearly from 0 at skill 0), so duration = baseDuration × (1 − bonus). Growth values are authored as decimals and stored as fixed-point integers (×1000) at load; the queried skill level is floor(value / 1000), in the range 0–100.
+
+| Skill ID         | Name             | Base Growth | Dim. Threshold | Dim. Factor | Outcome Effects                                  | Title Noun  |
+| ---------------- | ---------------- | ----------- | -------------- | ----------- | ------------------------------------------------ | ----------- |
+| farming          | Farming          | 3.0         | 50             | 0.5         | maxSpeedBonus: 0.6 at 100                        | Farmer      |
+| mining           | Mining           | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100, outputBonus: +1 ore   | Miner       |
+| woodcutting      | Woodcutting      | 3.0         | 50             | 0.5         | maxSpeedBonus: 0.6 at 100                        | Woodcutter  |
+| masonry          | Masonry          | 2.0         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100, outputBonus: +1 block | Mason       |
+| smithing         | Smithing         | 2.0         | 60             | 0.4         | maxSpeedBonus: 0.5 at 100, outputBonus: +1 item  | Smith       |
+| carpentry        | Carpentry        | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Carpenter   |
+| weaving          | Weaving          | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Weaver      |
+| tailoring        | Tailoring        | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Tailor      |
+| leatherworking   | Leatherworking   | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Tanner      |
+| baking           | Baking           | 3.0         | 50             | 0.5         | maxSpeedBonus: 0.6 at 100, outputBonus: +1 loaf  | Baker       |
+| brewing          | Brewing          | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Brewer      |
+| cooking          | Cooking          | 3.0         | 50             | 0.5         | maxSpeedBonus: 0.6 at 100                        | Cook        |
+| fishing          | Fishing          | 3.0         | 40             | 0.5         | maxSpeedBonus: 0.5 at 100, outputBonus: +1 fish  | Fisher      |
+| herbalism        | Herbalism        | 2.0         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100, outputBonus: +1 herb  | Herbalist   |
+| animal_husbandry | Animal Husbandry | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Herdsman    |
+| trading          | Trading          | 2.0         | 60             | 0.4         | Improved trade evaluation accuracy               | Merchant    |
+| combat           | Combat           | 2.0         | 60             | 0.4         | maxSpeedBonus: 0.5 at 100                        | Man-at-Arms |
+| construction     | Construction     | 2.5         | 50             | 0.5         | maxSpeedBonus: 0.5 at 100                        | Builder     |
+| hauling          | Hauling          | 3.5         | 40             | 0.5         | maxSpeedBonus: 0.4 at 100                        | Porter      |
+| preaching        | Preaching        | 2.0         | 60             | 0.4         | faith.bonus +5 at 100                            | Preacher    |
+| glassblowing     | Glassblowing     | 1.5         | 60             | 0.4         | maxSpeedBonus: 0.4 at 100, outputBonus: +1 pane  | Glazier     |
+
+_Title noun_ (`titleNoun`, required): the descriptive noun used for citizen titles such as "Ansel the Baker" or "Master Baker" (spec 028 FR-006/FR-007). It is a label derived from skills, not a profession (spec 020).
+
+**Open question:** The `trading` outcome effect ("Improved trade evaluation accuracy") and the `preaching` outcome effect ("faith.bonus +5 at 100") are not effect types allowed by spec 020 FR-007 (`maxSpeedBonus`, `outputBonus`, `qualityBonus`). Each needs either to be expressed with a valid 020 effect type or new effect types must be added to 020 FR-007.
 
 **Acceptance Scenarios**:
 
-1. **Given** an entity with Smithing 0 completing a smithing job, **When** skill growth is applied, **Then** the skill increases by `baseGrowthPerCompletion × aptitudeMultiplier` (3.0 × 1.0 = 2.0 before trait modifiers).
+1. **Given** an entity with Smithing 0 completing a smithing job, **When** skill growth is applied, **Then** the skill increases by `baseGrowthPerCompletion × aptitudeMultiplier` (2.0 × 1.0 = 2.0 before trait modifiers).
 2. **Given** an entity with Smithing 65 (above diminishing threshold 60), **When** completing a smithing job, **Then** growth is reduced by the diminishing factor (0.4).
-3. **Given** an entity with Baking 100, **When** performing a baking recipe, **Then** the recipe duration is reduced by 60% (speedMultiplier 0.6) and output may include +1 bonus loaf.
+3. **Given** an entity with Baking 100, **When** performing a baking recipe, **Then** the recipe duration is reduced by 60% (`maxSpeedBonus: 0.6`; Bake Bread 20 ticks → 8 ticks) and output may include +1 bonus loaf.
 4. **Given** every recipe skill requirement in the recipe catalog, **When** cross-referenced with this registry, **Then** every referenced skill ID exists.
 5. **Given** the full skill set, **When** counted, **Then** at least 20 distinct skills exist, covering agriculture, crafting, combat, trade, and social domains.
 
@@ -544,7 +557,7 @@ The game defines a set of skills (spec 020) grounded in 13th-century occupations
 
 ### User Story 7 — Trait Catalog (Priority: P1)
 
-Traits (spec 020) add personality and mechanical differentiation to entities. Each trait provides one or more modifiers: skill aptitudes (growth rate and starting bonus), performance modifiers (work speed, output), and need modifiers (hunger/rest/social decay rates). Traits are assigned at entity creation (1-3 per procedurally generated entity) and remain fixed. The catalog provides enough variety that two entities of the same prototype feel distinct.
+Traits (spec 020) add personality and mechanical differentiation to entities. Each trait provides one or more modifiers: skill aptitudes (growth rate and starting bonus), performance modifiers (work speed, output), and need modifiers (hunger/rest/social decay rates). Traits are assigned at entity creation (1–3 per procedurally generated entity, the prototype's trait slot count) and remain fixed. The catalog provides enough variety that two entities of the same prototype feel distinct.
 
 **Why this priority**: Traits are the primary source of entity individuality. Without them, all Blacksmiths are identical.
 
@@ -616,6 +629,8 @@ Every humanoid entity has a set of needs that decay over time and must be satisf
 
 **Need Registry**:
 
+Decay and restoration rates are authored as decimals in content files and converted to fixed-point integers (×1000) at load; all game state uses the fixed-point values.
+
 | Need ID | Name    | Decay Rate (per tick) | Critical Threshold | Satisfaction Methods                                                                                                                                                             |
 | ------- | ------- | --------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | hunger  | Hunger  | 0.15                  | 20%                | Consume any `food` category item; quality varies by item (Bread = +30, Stew = +50, Pottage = +35, Roast Meat = +55, Porridge = +25, Cheese = +20, Dried Meat = +20, Fruit = +15) |
@@ -625,9 +640,9 @@ Every humanoid entity has a set of needs that decay over time and must be satisf
 | comfort | Comfort | 0.06                  | 15%                | Sitting in Chair/Bench (+10/+5); presence near Hearth (+8); sleeping in quality bed (Noble Bed +5 bonus); room with Tapestry (+3)                                                |
 | faith   | Faith   | 0.04                  | 10%                | Prayer at Altar (+20); attending preaching at Lectern (+25); presence in Chapel (+10 passive); presence in Church (+20 passive)                                                  |
 
-**Need Satisfaction Priority** (default, per spec 013):
+**Need Satisfaction Priority** (default, per spec 013). There is no occupation component (spec 020): the default order applies to all entities, and the overrides below are declared on humanoid prototypes (and may be adjusted by traits):
 
-| Occupation    | Priority Order (highest first)                    |
+| Prototype     | Priority Order (highest first)                    |
 | ------------- | ------------------------------------------------- |
 | Default (all) | Hunger > Rest > Safety > Social > Comfort > Faith |
 | Guard         | Safety > Rest > Hunger > Social > Comfort > Faith |
@@ -642,7 +657,7 @@ Every humanoid entity has a set of needs that decay over time and must be satisf
 2. **Given** an entity consuming Bread, **When** the food is consumed, **Then** Hunger need increases by +30 (clamped to 100%).
 3. **Given** an entity sleeping in a Wooden Bed, **When** rest ticks, **Then** Rest need recovers at +1.2 per tick until full.
 4. **Given** an entity in a Chapel zone with an Altar, **When** the entity prays, **Then** Faith need increases by +20.
-5. **Given** a Priest entity, **When** its need priority order is queried, **Then** Faith is the highest priority, followed by Social.
+5. **Given** an entity instantiated from the Priest prototype, **When** its need priority order is queried, **Then** Faith is the highest priority, followed by Social.
 
 ---
 
@@ -656,30 +671,33 @@ The job system (spec 017) uses job types to define what work entities can perfor
 
 **Job Type Registry**:
 
-| Job Type ID        | Name               | Skill Domain     | Tool Required | Zone Context          | Recurrence          | Notes                               |
-| ------------------ | ------------------ | ---------------- | ------------- | --------------------- | ------------------- | ----------------------------------- |
-| farm.sow           | Sow Crops          | farming          | Hoe           | Farm Field            | One-time per season | Plant seeds in tilled soil          |
-| farm.tend          | Tend Crops         | farming          | —             | Farm Field            | Recurring           | Water, weed, care for growing crops |
-| farm.harvest       | Harvest Crops      | farming          | Sickle        | Farm Field            | One-time per season | Collect mature crops                |
-| mine.ore           | Mine Ore           | mining           | Pickaxe       | — (terrain: ore_vein) | Recurring           | Extract iron, copper, tin, coal     |
-| quarry.stone       | Quarry Stone       | masonry          | Pickaxe       | Quarry                | Recurring           | Extract limestone, granite          |
-| fell.trees         | Fell Trees         | woodcutting      | Axe           | — (terrain: forest)   | Recurring           | Harvest wood logs                   |
-| fish.catch         | Catch Fish         | fishing          | Fishing Rod   | Fishing Dock          | Recurring           | Catch raw fish                      |
-| gather.herbs       | Gather Herbs       | herbalism        | —             | Herb Garden           | Recurring           | Collect medicinal herbs             |
-| tend.animals       | Tend Livestock     | animal_husbandry | —             | Pasture               | Recurring           | Feed, shear, milk animals           |
-| tend.bees          | Tend Apiary        | animal_husbandry | —             | Apiary Yard           | Recurring           | Harvest honey and beeswax           |
-| craft.produce      | Craft / Produce    | (per recipe)     | (per recipe)  | (per recipe zone)     | Recurring           | Execute any crafting recipe         |
-| haul.deliver       | Haul Materials     | hauling          | —             | Any                   | Recurring           | Move items between inventories      |
-| build.construct    | Build Structure    | construction     | Iron Hammer   | Any                   | One-time            | Execute construction job (spec 016) |
-| build.deconstruct  | Deconstruct        | construction     | Iron Hammer   | Any                   | One-time            | Remove structure (spec 016)         |
-| guard.patrol       | Patrol Area        | combat           | (any weapon)  | Guard Post            | Recurring           | Walk patrol route, detect threats   |
-| guard.watch        | Stand Watch        | combat           | (any weapon)  | Guard Post            | Recurring           | Stationary guard duty               |
-| trade.sell         | Sell Goods         | trading          | —             | Market                | Recurring           | Merchant sells to buyers            |
-| trade.buy          | Purchase Goods     | trading          | —             | Market                | One-time            | Buyer-initiated trade (spec 019)    |
-| preach.sermon      | Deliver Sermon     | preaching        | —             | Chapel / Church       | Recurring           | Priest preaches to congregation     |
-| preach.pray        | Personal Prayer    | preaching        | —             | Chapel / Church       | Recurring           | Individual devotion                 |
-| diplomacy.dispatch | Diplomatic Mission | trading          | —             | Throne Room           | One-time            | Envoy delivery (spec 021)           |
-| haul.bury          | Bury Deceased      | hauling          | —             | Cemetery              | One-time            | Transport body to gravesite         |
+| Job Type ID             | Name               | Skill Domain     | Tool Required | Zone Context          | Recurrence          | Notes                                                                                                                 |
+| ----------------------- | ------------------ | ---------------- | ------------- | --------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| farm.sow                | Sow Crops          | farming          | Hoe           | Farm Field            | One-time per season | Plant seeds in tilled soil                                                                                            |
+| farm.tend               | Tend Crops         | farming          | —             | Farm Field            | Recurring           | Water, weed, care for growing crops                                                                                   |
+| farm.harvest            | Harvest Crops      | farming          | Sickle        | Farm Field            | One-time per season | Collect mature crops                                                                                                  |
+| mine.ore                | Mine Ore           | mining           | Pickaxe       | — (terrain: ore_vein) | Recurring           | Extract iron, copper, tin, coal                                                                                       |
+| quarry.stone            | Quarry Stone       | masonry          | Pickaxe       | Quarry                | Recurring           | Extract limestone, granite                                                                                            |
+| fell.trees              | Fell Trees         | woodcutting      | Axe           | — (terrain: forest)   | Recurring           | Harvest wood logs                                                                                                     |
+| fish.catch              | Catch Fish         | fishing          | Fishing Rod   | Fishing Dock          | Recurring           | Catch raw fish                                                                                                        |
+| gather.herbs            | Gather Herbs       | herbalism        | —             | Herb Garden           | Recurring           | Collect medicinal herbs                                                                                               |
+| tend.animals            | Tend Livestock     | animal_husbandry | —             | Pasture               | Recurring           | Feed, shear, milk animals                                                                                             |
+| tend.bees               | Tend Apiary        | animal_husbandry | —             | Apiary Yard           | Recurring           | Harvest honey and beeswax                                                                                             |
+| craft.produce           | Craft / Produce    | (per recipe)     | (per recipe)  | (per recipe zone)     | Recurring           | Execute any crafting recipe                                                                                           |
+| haul.deliver            | Haul Materials     | hauling          | —             | Any                   | Recurring           | Move items between inventories                                                                                        |
+| build.construct         | Build Structure    | construction     | Iron Hammer   | Any                   | One-time            | Execute construction job (spec 016)                                                                                   |
+| build.deconstruct       | Deconstruct        | construction     | Iron Hammer   | Any                   | One-time            | Remove structure (spec 016)                                                                                           |
+| guard.patrol            | Patrol Area        | combat           | (any weapon)  | Guard Post            | Recurring           | Walk patrol route, detect threats                                                                                     |
+| guard.watch             | Stand Watch        | combat           | (any weapon)  | Guard Post            | Recurring           | Stationary guard duty                                                                                                 |
+| trade.sell              | Sell Goods         | trading          | —             | Market                | Recurring           | Merchant sells to buyers                                                                                              |
+| trade.buy               | Purchase Goods     | trading          | —             | Market                | One-time            | Buyer-initiated trade (spec 019)                                                                                      |
+| preach.sermon           | Deliver Sermon     | preaching        | —             | Chapel / Church       | Recurring           | Priest preaches to congregation                                                                                       |
+| preach.pray             | Personal Prayer    | preaching        | —             | Chapel / Church       | Recurring           | Individual devotion                                                                                                   |
+| diplomacy.dispatch      | Diplomatic Mission | trading          | —             | Throne Room           | One-time            | Envoy delivery (spec 021); not a job-board job — Envoys are dispatched directly (spec 021)                            |
+| haul.bury               | Bury Deceased      | hauling          | —             | Cemetery              | One-time            | Transport body to gravesite                                                                                           |
+| govern.steward_audience | Steward's Audience | —                | —             | Throne Room           | Recurring (daily)   | Steward's daily audience at the Throne Room (spec 026 FR-015); not a job-board job — assigned directly to the Steward |
+
+**Open question:** "One-time per season" recurrence depends on a calendar/season system that no spec defines yet.
 
 **Acceptance Scenarios**:
 
@@ -701,29 +719,29 @@ The game map (spec 004) uses terrain types that define traversability, visual id
 
 **Terrain Type Registry**:
 
-| Terrain ID    | Name          | Traversable     | Buildable       | Harvestable Resource                | Notes                                      |
-| ------------- | ------------- | --------------- | --------------- | ----------------------------------- | ------------------------------------------ |
-| grassland     | Grassland     | Yes             | Yes             | —                                   | Default open terrain; suitable for farming |
-| fertile_soil  | Fertile Soil  | Yes             | Yes             | Wheat, Barley, Rye, Vegetables      | Required for Farm Field zones              |
-| forest_oak    | Oak Forest    | Yes (slow)      | No (must clear) | Oak Log, Oak Bark                   | Dense; reduces movement speed              |
-| forest_pine   | Pine Forest   | Yes (slow)      | No (must clear) | Pine Log                            | Dense; reduces movement speed              |
-| forest_birch  | Birch Forest  | Yes (slow)      | No (must clear) | Birch Log                           | Lighter forest                             |
-| rocky         | Rocky Ground  | Yes             | Yes             | —                                   | Rough terrain, no farming                  |
-| stone_deposit | Stone Deposit | Yes             | No              | Limestone, Granite                  | Quarry source                              |
-| ore_vein      | Ore Vein      | Yes             | No              | Iron Ore, Copper Ore, Tin Ore, Coal | Mine source                                |
-| water_shallow | Shallow Water | No              | No              | Raw Fish                            | Fishing source; impassable                 |
-| water_deep    | Deep Water    | No              | No              | —                                   | Impassable                                 |
-| marsh         | Marshland     | Yes (very slow) | No              | Herbs                               | Difficult terrain; herb gathering          |
-| road_dirt     | Dirt Road     | Yes (fast)      | No              | —                                   | Faster movement                            |
-| road_stone    | Stone Road    | Yes (fast)      | No              | —                                   | Fastest movement; requires construction    |
-| sand          | Sandy Ground  | Yes             | Yes             | Sand                                | Beach or riverbank                         |
-| vineyard_soil | Vineyard Soil | Yes             | Yes             | Grapes                              | Required for Vineyard zones                |
-| orchard_soil  | Orchard Soil  | Yes             | Yes             | Fruit                               | Required for Orchard zones                 |
-| clay_deposit  | Clay Deposit  | Yes             | No              | Clay                                | Ceramic material source                    |
-| mountain      | Mountain      | No              | No              | —                                   | Impassable; map boundary                   |
-| wall          | Wall (built)  | No              | No              | —                                   | Constructed barrier                        |
-| floor_wood    | Wooden Floor  | Yes             | Yes             | —                                   | Interior construction                      |
-| floor_stone   | Stone Floor   | Yes             | Yes             | —                                   | Interior construction                      |
+| Terrain ID    | Name              | Traversable     | Buildable       | Harvestable Resource                | Notes                                                                             |
+| ------------- | ----------------- | --------------- | --------------- | ----------------------------------- | --------------------------------------------------------------------------------- |
+| grassland     | Grassland         | Yes             | Yes             | —                                   | Default open terrain; suitable for farming                                        |
+| fertile_soil  | Fertile Soil      | Yes             | Yes             | Wheat, Barley, Rye, Vegetables      | Required for Farm Field zones                                                     |
+| forest_oak    | Oak Forest        | Yes (slow)      | No (must clear) | Oak Log, Oak Bark                   | Dense; reduces movement speed                                                     |
+| forest_pine   | Pine Forest       | Yes (slow)      | No (must clear) | Pine Log                            | Dense; reduces movement speed                                                     |
+| forest_birch  | Birch Forest      | Yes (slow)      | No (must clear) | Birch Log                           | Lighter forest                                                                    |
+| rocky         | Rocky Ground      | Yes             | Yes             | —                                   | Rough terrain, no farming                                                         |
+| stone_deposit | Stone Deposit     | Yes             | No              | Limestone, Granite                  | Quarry source                                                                     |
+| ore_vein      | Ore Vein          | Yes             | No              | Iron Ore, Copper Ore, Tin Ore, Coal | Mine source                                                                       |
+| water_shallow | Shallow Water     | No              | No              | Raw Fish                            | Fishing source; impassable                                                        |
+| water_deep    | Deep Water        | No              | No              | —                                   | Impassable                                                                        |
+| marsh         | Marshland         | Yes (very slow) | No              | Herbs                               | Difficult terrain; herb gathering                                                 |
+| road_dirt     | Dirt Road         | Yes (fast)      | No              | —                                   | Faster movement                                                                   |
+| road_stone    | Stone Road        | Yes (fast)      | No              | —                                   | Fastest movement; requires construction                                           |
+| sand          | Sandy Ground      | Yes             | Yes             | Sand                                | Beach or riverbank                                                                |
+| vineyard_soil | Vineyard Soil     | Yes             | Yes             | Grapes                              | Required for Vineyard zones                                                       |
+| orchard_soil  | Orchard Soil      | Yes             | Yes             | Fruit                               | Required for Orchard zones                                                        |
+| clay_deposit  | Clay Deposit      | Yes             | No              | Clay                                | Ceramic material source                                                           |
+| mountain      | Mountain          | No              | No              | —                                   | Impassable; map boundary                                                          |
+| rock_wall     | Natural Rock Wall | No              | No              | —                                   | Natural rock face; built walls and doors are entities occupying a cell (spec 016) |
+| floor_wood    | Wooden Floor      | Yes             | Yes             | —                                   | Interior construction                                                             |
+| floor_stone   | Stone Floor       | Yes             | Yes             | —                                   | Interior construction                                                             |
 
 **Acceptance Scenarios**:
 
@@ -786,23 +804,25 @@ The 13th-century setting features a guild system (spec 021) where craftsmen orga
 
 **Guild Faction Catalog**:
 
-| Faction ID       | Name               | Type         | Membership Criterion          | Leader Title     | Disposition  | Notes                             |
-| ---------------- | ------------------ | ------------ | ----------------------------- | ---------------- | ------------ | --------------------------------- |
-| guild_bakers     | Baker's Guild      | occupational | Baking skill ≥ 15             | Master Baker     | mercantile   | Controls bread production quality |
-| guild_smiths     | Blacksmith's Guild | occupational | Smithing skill ≥ 15           | Master Smith     | mercantile   | Metalwork and toolmaking          |
-| guild_masons     | Mason's Guild      | occupational | Masonry skill ≥ 15            | Master Mason     | isolationist | Stonework and construction        |
-| guild_carpenters | Carpenter's Guild  | occupational | Carpentry skill ≥ 15          | Master Carpenter | mercantile   | Woodwork and building             |
-| guild_weavers    | Weaver's Guild     | occupational | Weaving skill ≥ 15            | Master Weaver    | mercantile   | Textiles and cloth                |
-| guild_tanners    | Tanner's Guild     | occupational | Leatherworking skill ≥ 15     | Master Tanner    | isolationist | Leather processing                |
-| guild_brewers    | Brewer's Guild     | occupational | Brewing skill ≥ 15            | Master Brewer    | mercantile   | Ale, mead, wine production        |
-| guild_merchants  | Merchant's Guild   | occupational | Trading skill ≥ 15            | Guildmaster      | mercantile   | Trade and commerce                |
-| guild_potters    | Potter's Guild     | occupational | Masonry skill ≥ 10 (ceramics) | Master Potter    | mercantile   | Pottery and brickwork             |
+| Faction ID       | Name               | Type         | Membership Criterion          | Leader Title     | Disposition  | Notes                             | Master Skill Threshold |
+| ---------------- | ------------------ | ------------ | ----------------------------- | ---------------- | ------------ | --------------------------------- | ---------------------- |
+| guild_bakers     | Baker's Guild      | occupational | Baking skill ≥ 15             | Master Baker     | mercantile   | Controls bread production quality | 60                     |
+| guild_smiths     | Blacksmith's Guild | occupational | Smithing skill ≥ 15           | Master Smith     | mercantile   | Metalwork and toolmaking          | 60                     |
+| guild_masons     | Mason's Guild      | occupational | Masonry skill ≥ 15            | Master Mason     | isolationist | Stonework and construction        | 60                     |
+| guild_carpenters | Carpenter's Guild  | occupational | Carpentry skill ≥ 15          | Master Carpenter | mercantile   | Woodwork and building             | 60                     |
+| guild_weavers    | Weaver's Guild     | occupational | Weaving skill ≥ 15            | Master Weaver    | mercantile   | Textiles and cloth                | 60                     |
+| guild_tanners    | Tanner's Guild     | occupational | Leatherworking skill ≥ 15     | Master Tanner    | isolationist | Leather processing                | 60                     |
+| guild_brewers    | Brewer's Guild     | occupational | Brewing skill ≥ 15            | Master Brewer    | mercantile   | Ale, mead, wine production        | 60                     |
+| guild_merchants  | Merchant's Guild   | occupational | Trading skill ≥ 15            | Guildmaster      | mercantile   | Trade and commerce                | 60                     |
+| guild_potters    | Potter's Guild     | occupational | Masonry skill ≥ 10 (ceramics) | Master Potter    | mercantile   | Pottery and brickwork             | 60                     |
 
 **Guild Mechanics** (how guilds interact with existing systems):
 
 - **Trade benefit**: Members of the same guild trading with each other receive a `priceMultiplier` discount (e.g., 0.85×) on top of any faction standing bonus.
 - **Job boards**: Each guild may sponsor a job board in the settlement, posting guild-specific jobs (e.g., Baker's Guild posts baking jobs with familiarity tags).
 - **Membership**: Entities automatically qualify for guild membership when their relevant skill crosses the threshold. Joining is a choice (the entity or player assigns faction membership), not automatic.
+- **Mastery**: `masterSkillThreshold` is the skill level (in the skill of the membership criterion) at which a member counts as a Master (spec 027 FR-019 `FirstMasterCraftsman`, spec 028 "Master" titles). It MUST be greater than the membership threshold.
+- **Founding**: a guild counts as founded in the settlement per spec 027 FR-018.
 - **Standing**: Guilds start at neutral (0) standing with each other. Trade and cooperation raise standing; competition or resource conflicts may lower it.
 
 **Acceptance Scenarios**:
@@ -829,13 +849,13 @@ Religious life is central to 13th-century Europe. The game includes religious fa
 | ---------------- | ---------------- | --------- | ------------- | ------------ | ----------------------------------- | -------------------------------------- | ------------------------------------------------------------- |
 | parish_church    | The Parish       | religious | Parish Priest | mercantile   | Priest entities; any devout citizen | Chapel, Church                         | Local spiritual authority; community worship; collects tithes |
 | monastic_order   | Monastic Order   | religious | Abbot         | isolationist | Monk entities                       | Cloister, Church, Brewery, Herb Garden | Scholarly, brewing, herbalism; cloistered life                |
-| mendicant_friars | Mendicant Friars | religious | Prior         | mercantile   | Friar entities (variant of Priest)  | Chapel (traveling), Market             | Traveling preachers; charity to poor; no fixed monastery      |
+| mendicant_friars | Mendicant Friars | religious | Prior         | mercantile   | Priest entities                     | Chapel (traveling), Market             | Traveling preachers; charity to poor; no fixed monastery      |
 
 **Religious Faction Mechanics**:
 
 - **Faith bonus**: Entities who are members of a religious faction receive an additional faith satisfaction bonus when worshipping in that faction's associated zones. A member of The Parish gains extra faith in a Church; a Monk gains extra faith in a Cloister.
 - **Tithes**: The Parish may collect periodic currency from members (configurable tithe rate) deposited into the faction leader's inventory or a designated Coffer in the Church.
-- **Charity**: Mendicant Friars distribute food or currency to entities whose mood or wealth is critically low. This is a job type (`charity.distribute`) posted on their faction board.
+- **Charity**: Mendicant Friars distribute food or currency to entities whose mood or wealth is critically low. This is a job type (`charity.distribute`) posted on their faction board. **Open question:** `charity.distribute` is not in the Job Type Registry and no faction job board is defined; it must be added to the registry (or mapped to an existing job type) before this mechanic is valid under FR-015.
 - **Scholarship**: Monastic Order members may produce Parchment and maintain the Scriptorium, providing a scholarship activity that could unlock future content.
 - **Diplomacy**: Religious factions participate in the diplomacy system (spec 021). The Parish is typically aligned with the player's government. The Monastic Order is self-sufficient and neutral. Mendicant Friars are friendly to all but may conflict with wealthy guilds.
 
@@ -843,7 +863,7 @@ Religious life is central to 13th-century Europe. The game includes religious fa
 
 1. **Given** a Priest entity who is a member of The Parish, **When** praying at a Church Altar, **Then** faith satisfaction includes a faction membership bonus on top of the base Altar bonus.
 2. **Given** the Monastic Order faction, **When** its `disposition` is checked, **Then** it is `isolationist`, making it less likely to initiate diplomatic overtures.
-3. **Given** a Mendicant Friar entity, **When** an entity in the settlement has mood below 15%, **Then** the Friar's behavior tree triggers a charity distribution job.
+3. **Given** a Priest entity who is a member of the Mendicant Friars, **When** an entity in the settlement has mood below 15%, **Then** the Priest's behavior tree triggers a charity distribution job.
 4. **Given** three religious factions loaded, **When** the faction registry is queried for `factionType: religious`, **Then** exactly three entries are returned.
 5. **Given** The Parish faction's leader (Parish Priest) is located in the Church, **When** a Diplomatic Envoy from another faction is dispatched to The Parish, **Then** the Envoy pathfinds to the Parish Priest's current location.
 
@@ -851,13 +871,15 @@ Religious life is central to 13th-century Europe. The game includes religious fa
 
 ### User Story 14 — Behavior Tree Templates (Priority: P2)
 
-The behavior system (spec 013) uses behavior trees combined with utility scoring. This catalog defines the standard behavior tree templates that drive daily life in the settlement. Each template is a named tree of sequence, selector, and action nodes. Templates cover the universal daily routine, work cycles, need satisfaction, guard duties, and social interactions. These are loaded as behavior plugins and assigned to entity prototypes.
+The behavior system (spec 013) uses behavior trees combined with utility scoring. This catalog defines the standard behavior tree templates that drive daily life in the settlement. Each template is a named tree of selector, sequence, condition, and action nodes. Templates cover the universal daily routine, work cycles, need satisfaction, guard duties, and social interactions. These are loaded as behavior plugins and assigned to entity prototypes.
 
 **Why this priority**: Behavior trees are the bridge between entity needs/skills and world actions. P2 because a minimal tree (need satisfaction + work) is sufficient for an MVP; the full set adds richness.
 
-**Independent Test**: Load all behavior tree templates. Verify each has valid node structure (depth ≤ 5 levels). Verify all referenced actions (e.g., `consumeFood`, `sleepInBed`) correspond to defined system actions.
+**Independent Test**: Load all behavior tree templates. Verify each has valid node structure (depth ≤ 5 levels). Verify all referenced condition and action names (e.g., `satisfy_critical_need`, `perform_work`) correspond to engine-registered handlers.
 
 **Behavior Tree Templates**:
+
+**Open question:** `Fallback: daily_routine` and sub-trees "called by" another template (e.g. `worker_cycle`) reference another template by name; how a template reference is expressed with only selector | sequence | condition | action nodes (e.g. as an engine-registered action) is not yet defined.
 
 **1. `daily_routine` — Universal Daily Cycle** (assigned to all humanoids)
 
@@ -871,6 +893,9 @@ Selector
 │   ├── Action: travel_to_worksite
 │   ├── Action: gather_materials (if needed)
 │   └── Action: perform_work
+├── Sequence: Household Chores (spec 029 FR-016)
+│   ├── Condition: household_needs_goods (no claimed job; household stock below householdStockDays)
+│   └── Action: fetch_household_goods (fetch from non-household storage into the dwelling's storage)
 ├── Sequence: Social & Comfort
 │   ├── Condition: social or comfort below 40%
 │   └── Selector
@@ -983,7 +1008,8 @@ Selector
 ├── Sequence: Territorial
 │   ├── Condition: humanoid entity within territory
 │   └── Selector
-│       ├── Condition: aggressive (Bear, cornered Boar)
+│       ├── Sequence
+│       │   ├── Condition: aggressive (Bear, cornered Boar)
 │       │   └── Action: attack_intruder
 │       └── Action: flee_from_intruder (Wolf retreats from groups)
 └── Action: wander_territory
@@ -1001,55 +1027,69 @@ Selector
 
 ### Edge Cases
 
-- What if a material is referenced by a recipe but missing from the catalog? → The recipe fails validation at load time; the game logs an error and the recipe is disabled.
-- What if a workstation required by a recipe does not exist in the furniture catalog? → Same as above; recipe disabled with error log.
-- What if an entity prototype references a skill or trait that does not exist? → The entity loads with that skill/trait silently defaulted to 0/empty. A validation warning is logged.
+- What if a material is referenced by a recipe but missing from the catalog? → Content loading fails with a validation error (FR-015); all validation errors are reported in one pass.
+- What if a workstation required by a recipe does not exist in the furniture catalog? → Same as above; a load validation error.
+- What if an entity prototype references a skill or trait that does not exist? → Content loading fails with a validation error (FR-015); no silent defaults.
 - What if all livestock of a type are butchered and no more can be obtained? → The player must trade with merchants or other factions who may sell livestock. No spontaneous generation of animals.
 - What if a guild has no members (all members died or left)? → The guild faction entity persists but is functionally inactive (no job board postings, no trade discount). A new entity meeting the skill threshold can be assigned.
 - What if a religious faction's leader dies? → The faction becomes leaderless (spec 021); no diplomatic dispatches received; a new leader must be assigned by the player or faction AI.
 - What if two recipes produce the same output material? → Both are valid. The production system selects based on workstation availability, material availability, and player preference.
 - What if a terrain type is cleared (forest → grassland) but no replacement terrain type is defined? → Forest clearing yields Grassland terrain by default. The cleared terrain becomes buildable.
+- **Open question:** The catalog has no Wall, Door, JobBoard, TownCrier or DiplomaticEnvoy prototypes, although specs 016 (walls/doors as built entities), 017 (JobBoard, Town Crier) and 021 (Diplomatic Envoy) require them.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
 - **FR-001**: The material registry MUST contain at least 70 distinct material entries spanning categories: raw, processed, food, drink, tool, weapon, armor, clothing, currency, building, textile, fuel, metal, animal, plant, and religious.
 - **FR-002**: The recipe registry MUST contain at least 55 distinct crafting recipes forming multi-tier production chains (minimum 3 tiers from raw resource to finished good for at least 3 chains: metal, textile, food).
 - **FR-003**: The furniture catalog MUST contain at least 50 distinct entity prototypes across categories: workstation, storage, comfort, religious, utility, and decorative. Every workstation referenced by any recipe MUST have a corresponding prototype.
-- **FR-004**: The zone type catalog MUST contain at least 25 distinct zone types, including at least 10 production zones (rooms), at least 4 storage zones, at least 4 living/social zones, at least 3 religious zones, and at least 6 open-air zones.
+- **FR-004**: The zone type catalog MUST contain at least 25 distinct zone types, including at least 10 production zones (rooms), at least 4 storage zones, at least 5 living/social zones (including `dwelling`, spec 029), at least 3 religious zones, and at least 6 open-air zones.
 - **FR-005**: The humanoid entity prototype catalog MUST contain at least 20 distinct prototypes with differentiated starting skills, default equipment, and optional faction membership.
-- **FR-006**: The skill registry MUST contain at least 20 distinct skills, each with valid growth parameters, diminishing returns configuration, and at least one outcome effect.
+- **FR-006**: The skill registry MUST contain at least 20 distinct skills, each with valid growth parameters, diminishing returns configuration, at least one outcome effect, and a `titleNoun` (spec 028 FR-006).
 - **FR-007**: The trait registry MUST contain at least 24 distinct traits across three modifier types: `skillAptitude`, `performanceModifier`, and `needModifier`.
 - **FR-008**: The need registry MUST define at least 6 needs (hunger, rest, safety, social, comfort, faith), each with configurable decay rate, critical threshold, and satisfaction methods tied to consumable items, furniture, or zones in this catalog.
 - **FR-009**: The job type registry MUST contain at least 20 distinct job types covering farming, mining, crafting, hauling, construction, guarding, trading, and religious activities. Each job type MUST reference valid skill IDs and tool material IDs from this catalog.
 - **FR-010**: The terrain type registry MUST contain at least 15 distinct terrain types with defined traversability, buildability, and optional harvestable resources.
 - **FR-011**: The animal prototype catalog MUST contain at least 6 livestock types and at least 5 wild animal types, each with defined products/drops, habitat terrain, and behavior tree reference.
-- **FR-012**: The guild faction catalog MUST contain at least 8 occupational faction prototypes with defined skill-based membership criteria, leader titles, and disposition.
+- **FR-012**: The guild faction catalog MUST contain at least 8 occupational faction prototypes with defined skill-based membership criteria, leader titles, disposition, and a `masterSkillThreshold` (integer 0–100, greater than the membership threshold; default 60; spec 027 FR-019, spec 028 FR-006/FR-007).
 - **FR-013**: The religious faction catalog MUST contain at least 3 religious faction prototypes with distinct dispositions, associated zone types, and faith-related mechanics.
-- **FR-014**: The behavior tree template catalog MUST contain at least 6 templates: a universal daily routine, a work cycle, a guard behavior, a merchant behavior, a religious leader behavior, and a livestock behavior. All trees MUST respect the depth limit (≤ 5 levels).
-- **FR-015**: All catalog entries MUST cross-reference consistently — no material, skill, trait, zone, furniture, or faction ID may be referenced without a corresponding definition in its registry.
-- **FR-016**: All numeric values (stack limits, decay rates, growth rates, recipe durations, need thresholds) MUST be defined as game configuration data, not hardcoded. Designers MUST be able to tune them without code changes.
+- **FR-014**: The behavior tree template catalog MUST contain at least 6 templates: a universal daily routine, a work cycle, a guard behavior, a merchant behavior, a religious leader behavior, and a livestock behavior. All trees MUST respect the depth limit (≤ 5 levels). Templates are JSON node trees of `selector` | `sequence` | `condition` | `action`; condition/action names reference engine-registered handlers, and an unknown name is a load-validation error. The engine registers the condition `household_needs_goods` and the action `fetch_household_goods` for the household fetch chore of spec 029 FR-016, used by `daily_routine`.
+- **FR-015**: All catalog entries MUST cross-reference consistently — no material, skill, trait, zone, furniture, or faction ID may be referenced without a corresponding definition in its registry. A dangling reference is a load error. Registries are read-only after loading. Duplicate IDs are load errors. The settlement-tier consistency rules of spec 027 FR-010 and FR-011 are load errors. Validation reports every error in one pass.
+- **FR-016**: All numeric values (stack limits, decay rates, growth rates, recipe durations, need thresholds) MUST be defined as game configuration data, not hardcoded. Designers MUST be able to tune them without code changes. Content files may author human-friendly decimals; they are converted to fixed-point integers (×1000) at load.
 - **FR-017**: All content MUST be thematically consistent with a European 13th-century setting without reference to a specific country. No anachronistic items (gunpowder, printing press, potatoes, etc.).
+- **FR-018**: Content is authored as JSON data files, validated by Zod schemas from which TS types are inferred, loaded via static imports in a fixed order (no filesystem scanning). Content is organized into 13 ID-keyed registries: materials, skills, needs, terrain, traits, furniture, zones, factions (guild and religious), jobs, recipes, behavior trees, entity prototypes (humanoid and animal), and name lists (spec 028). Separately from the registries, content includes fixed-key configuration tables, whose keys are enum members or constant names rather than content IDs: dwelling levels (`dwelling-levels.json`, spec 029 FR-003), settlement tiers (`settlement-tiers.json`, spec 027 FR-003), difficulty modes (`difficulty-modes.json`, spec 027 FR-013), content constants (FR-023), and moment and name-format templates (spec 028 FR-011, FR-016). A duplicate or unknown key in any fixed-key table is a load error; tables that need one entry per enum member (dwelling levels, spec 029 FR-003; moment templates, spec 028 FR-016) also reject a missing key.
+- **FR-019**: Content IDs (materials, terrain, skills, traits, recipes, zones, furniture, factions, needs, behavior trees, prototypes) MUST be lowercase snake_case strings (e.g. `iron_ingot`, `forest_oak`); job-type, activity and modifier IDs are dot-namespaced snake_case segments (e.g. `farm.sow`, `animal_husbandry`, `inventory.decay.rate`). Saves use the same string IDs. Content data files are named in kebab-case (e.g. `raw-resources.json`).
+- **FR-020**: Content field constraints: `perishability` (a positive integer duration in ticks) is required when a material is perishable; skill levels and `diminishingReturnsThreshold` are integers 0–100; a humanoid prototype's trait slot count (traits assigned at procedural generation) is 1–3.
+- **FR-021**: The name-list registry MUST contain the default list `common_13c` with at least 60 given names and 40 bynames (spec 028 FR-001). Bynames MUST NOT equal any skill `titleNoun`; duplicates within a list are load errors.
+- **FR-022**: Furniture prototypes, zone types, recipes, job types and dwelling levels (spec 029 FR-003) MAY declare an optional `unlockTier` (a spec 027 `SettlementTier` value; absent means `hamlet`). Validation applies spec 027 FR-010 and FR-011. Locked content stays loaded and browsable (spec 027 FR-008). The shipped zone assignment is the Unlock Tier column of User Story 4; the Notice Post carries `unlockTier: "village"` and the Bell Tower `unlockTier: "market_town"` (spec 026 FR-021/FR-022).
+- **FR-023**: Content MUST include a content-constants table, validated by Zod (FR-016); out-of-range values are load errors. It holds at least:
+  - Standing orders (spec 026 FR-027): `stewardReviewTickOfDay`, `stewardAudienceTicks`, `maxOpenRunsPerOrder`, `maxStandingOrders`, `defaultRestockFraction`, `noticePostRadius`, `bellRadius`, `bellRingTicksOfDay`.
+  - Housing (spec 029): `housingEvaluationTickOfDay` (72), `upgradeGraceDays` (3), `downgradeGraceDays` (7, MUST be greater than `upgradeGraceDays`), `foodVarietyWindowDays` (3), `householdStockDays` (2), `maxImmigrantsPerDay` (2).
+  - Settlement (spec 027 FR-018): `minFoundingMembers` (3).
+  - Citizen identity (spec 028): `titleThreshold`, `titleSwitchMargin`, `finestMinimumLevel`, `finestCooldownDays`, `bynameChance`, `nameRedrawLimit`, `journalCapacity`, `chronicleCapacity`.
+- **FR-024**: Gathering job types (e.g. `fell.trees`, `quarry.stone`, `fish.catch`, `gather.herbs`, `tend.animals`, `tend.bees`) MAY declare an optional `outputs: { materialId, quantity }[]` field: the materials one completed job yields (integer quantities; every `materialId` MUST exist, FR-015). It is the source of the `outputs` payload of `jobboard.job.completed` (spec 017 FR-015) and of job-type producers (spec 025 FR-009, spec 026). **Open question:** the per-job-type output values (which materials and how many per completed job) still need authoring; the Job Type Registry of User Story 9 does not list them yet.
 
 ### Key Entities
 
 - **Material**: An entry in the material registry. Defines a type of item that can be stored, traded, consumed, or used in crafting. Characterized by name, categories, stack limit, weight, optional perishability, and base trade value.
-- **Recipe**: A crafting transformation entry. Defines inputs, outputs, duration, workstation/room/skill restrictions, and skill experience awarded on completion.
-- **Furniture Prototype**: An entity prototype for a placeable world object. Has Position, optional Inventory, category tags, construction material requirements, and functional effects.
-- **Zone Type**: A spatial definition that designates a set of tiles as a functional area. Declares room requirements, minimum size, furniture prerequisites, effects, and profession affinity.
-- **Humanoid Prototype**: An entity prototype for a person. Has Position, Inventory, TaskQueue, starting skills, default traits, equipment, faction membership, and needs.
+- **Recipe**: A crafting transformation entry. Defines inputs, outputs, duration, workstation/room/skill restrictions, and optional `unlockTier` (FR-022). Skill growth on completion comes from the skill registry's `baseGrowthPerCompletion` (spec 020), not from the recipe.
+- **Furniture Prototype**: An entity prototype for a placeable world object. Has Position, optional Inventory, category tags, construction material requirements, functional effects, and optional `unlockTier` (FR-022).
+- **Zone Type**: A spatial definition that designates a set of tiles as a functional area. Declares room requirements, minimum size, furniture prerequisites, effects, skill affinity, and optional `unlockTier` (FR-022).
+- **Humanoid Prototype**: An entity prototype for a person. Has Position, Inventory, TaskQueue, starting skills, default traits, equipment, faction membership, needs, and optional `nameListId`, `givenName` and `byname` (spec 028).
 - **Animal Prototype**: An entity prototype for livestock or wild animals. Has Position, optional Inventory (products), behavior tree, products/drops, and habitat terrain.
-- **Skill Entry**: A skill registry record defining growth parameters, diminishing returns, and outcome effects.
+- **Skill Entry**: A skill registry record defining growth parameters, diminishing returns, outcome effects, and the `titleNoun` used for citizen titles (spec 028).
 - **Trait Entry**: A trait registry record defining one or more modifiers (skill aptitude, performance, need).
 - **Need Entry**: A need registry record defining decay rate, critical threshold, and satisfaction methods.
-- **Job Type Entry**: A job type registry record defining activity, skill domain, tool requirements, zone context, and recurrence.
+- **Job Type Entry**: A job type registry record defining activity, skill domain, tool requirements, zone context, recurrence, optional `outputs` for gathering job types (FR-024), and optional `unlockTier` (FR-022).
 - **Terrain Type Entry**: A terrain type registry record defining traversability, buildability, and harvestable resources.
-- **Guild Faction**: A Faction entity prototype with type `occupational`, membership criteria, leader role, and disposition.
+- **Guild Faction**: A Faction entity prototype with type `occupational`, membership criteria, leader role, disposition, and `masterSkillThreshold`.
 - **Religious Faction**: A Faction entity prototype with type `religious`, associated zones, leader role, and spiritual mechanics.
-- **Behavior Tree Template**: A named, loadable behavior tree definition with sequence/selector/action nodes.
+- **Behavior Tree Template**: A named, loadable behavior tree definition with selector/sequence/condition/action nodes.
+- **Name List**: A name-list registry entry (spec 028 FR-001): `id`, weighted `givenNames` and `bynames`.
+- **Fixed-key configuration table**: A content table keyed by enum members or constant names rather than content IDs (FR-018): dwelling levels, settlement tiers, difficulty modes, content constants, moment and name-format templates.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
@@ -1067,11 +1107,11 @@ Selector
 ### Session 2026-05-04
 
 - Q: What library should define and validate content data schemas? → A: Zod (enables runtime validation at startup + JSON Schema generation for tooling)
-- Q: Which job types use zoneContext: undefined (terrain-based) vs. actual zone IDs? → A: fell.trees and mine.ore are terrain-based (no zone); gather.herbs uses Herb Garden zone only; guard.patrol uses Guard Post zone only; diplomacy.dispatch uses Throne Room as origin zone only
+- Q: Which job types use zoneContext: undefined (terrain-based) vs. actual zone IDs? → A: fell.trees and mine.ore are terrain-based (no zone); gather.herbs uses Herb Garden zone only; guard.patrol uses Guard Post zone only; diplomacy.dispatch uses Throne Room as origin zone only (it is not posted on a job board; Envoys are dispatched directly, spec 021)
 
 ## Assumptions
 
-- **This catalog defines the initial content set, not a closed set**: All registries are open (per their respective system specs). Future content can extend every catalog without changing this spec. This spec defines the baseline that ships at launch.
+- **This catalog defines the initial content set, not a closed set**: Future content can extend every catalog by adding data files, without changing this spec. Registries are read-only once loaded at bootstrap. This spec defines the baseline that ships at launch.
 - **Numeric values are representative, not final**: Stack limits, decay rates, growth rates, recipe durations, need thresholds, and standing effects are designer-tunable game data (FR-016). The values in this spec are informed starting points.
 - **No specific country**: The setting draws broadly from 13th-century Western European culture — English, French, German, and Italian influences blended. No named countries, cities, or historical figures.
 - **No magic or supernatural elements**: The setting is grounded in historical realism. Religious faith is a social and psychological need, not a source of supernatural power.
@@ -1080,4 +1120,4 @@ Selector
 - **Guild membership is voluntary**: Entities qualify by skill threshold but must be assigned (by player or AI) to join. Guilds do not enforce monopolies — non-guild entities can perform guild trades, but without guild trade discounts.
 - **Religious factions are all Christian variants**: Consistent with 13th-century Western Europe. No pagan or non-Christian religions in the initial catalog, though the open set allows future expansion.
 - **Animal breeding is out of scope**: Livestock are placed or traded, not bred. Population dynamics for animals may be a future feature.
-- **Seasons are implicit**: Farm jobs reference "per season" recurrence but the seasonal cycle system itself is not defined in this spec. Farming jobs assume a grow → harvest cycle exists.
+- **Seasons are implicit**: Farm jobs reference "per season" recurrence but the seasonal cycle system itself is not defined in this spec. Farming jobs assume a grow → harvest cycle exists. **Open question:** no calendar/season spec exists yet.
