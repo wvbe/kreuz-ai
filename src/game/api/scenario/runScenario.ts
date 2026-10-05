@@ -1,6 +1,6 @@
-import { loadContent } from "../../content/ContentLoader";
-import { GameSession } from "../GameSession";
+import type { GameSession } from "../GameSession";
 import { builtinScenarioSteps } from "./builtinScenarioSteps";
+import { createScenarioSession } from "./createScenarioSession";
 import type { Scenario } from "./Scenario";
 import type { ScenarioStepObject, ScenarioStepType, StepFailure } from "./scenarioStep";
 
@@ -23,7 +23,8 @@ export type ScenarioResult =
  */
 export type RunScenarioOptions = {
   /**
-   * Builds the session (default: a `GameSession` over the bundled content). Later phases that
+   * Builds the session (default: `createScenarioSession()`, a `GameSession` over the bundled
+   * content that also knows the debug command `DebugSpawn`). Later phases that
    * register systems in a constructor-time factory pass it here.
    */
   createSession?: () => GameSession;
@@ -71,8 +72,7 @@ export function runScenario(scenario: Scenario, options: RunScenarioOptions = {}
     }
     resolved.push({ type, step });
   }
-  const createSession =
-    options.createSession ?? ((): GameSession => new GameSession(loadContent()));
+  const createSession = options.createSession ?? ((): GameSession => createScenarioSession());
   const session = createSession();
   const started = session.newGame({ ...scenario.options, seed: scenario.seed });
   if (!started.ok) {

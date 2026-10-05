@@ -1,0 +1,102 @@
+{
+  "name": "bakery",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0,
+    "startingTier": "village"
+  },
+  "steps": [
+    {
+      "debugSpawn": {
+        "prototypeId": "wall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    { "debugSpawn": { "prototypeId": "door", "mapId": 1, "cells": [325] } },
+    { "debugSpawn": { "prototypeId": "oven", "mapId": 1, "cells": [326] } },
+    { "debugSpawn": { "prototypeId": "grinding_mill", "mapId": 1, "cells": [324] } },
+    {
+      "debugSpawn": {
+        "prototypeId": "chest",
+        "mapId": 1,
+        "cells": [295],
+        "inventory": [{ "materialId": "wheat", "quantity": 8 }]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    { "step": 3 },
+    { "assert": { "query": "workstations", "path": "length", "op": "eq", "value": 2 } },
+    { "assert": { "query": "zones", "path": "0.zoneTypeId", "op": "eq", "value": "bakery" } },
+    { "assert": { "query": "zones", "path": "0.status", "op": "eq", "value": "active" } },
+    { "command": { "kind": "CreateProductionOrder", "recipeId": "grind_flour", "quantity": 4 } },
+    { "command": { "kind": "CreateProductionOrder", "recipeId": "bake_bread", "quantity": 4 } },
+    { "step": 1 },
+    { "assert": { "query": "production-orders", "path": "length", "op": "eq", "value": 2 } },
+    {
+      "assert": {
+        "query": "stock",
+        "args": { "materialId": "bread" },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    { "step": 573 },
+    { "assertHash": { "label": "day2" } },
+    { "saveLoad": true },
+    {
+      "assert": {
+        "query": "order",
+        "args": { "orderId": 1 },
+        "path": "status",
+        "op": "eq",
+        "value": "completed"
+      }
+    },
+    {
+      "assert": {
+        "query": "order",
+        "args": { "orderId": 2 },
+        "path": "status",
+        "op": "eq",
+        "value": "completed"
+      }
+    },
+    {
+      "assert": {
+        "query": "order",
+        "args": { "orderId": 2 },
+        "path": "remaining",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": { "materialId": "bread" },
+        "path": "total",
+        "op": "gte",
+        "value": 8
+      }
+    },
+    {
+      "assert": {
+        "query": "workstations",
+        "path": "0.blocked.0.kind",
+        "op": "eq",
+        "value": "NoOrders"
+      }
+    },
+    { "replay": true }
+  ]
+}

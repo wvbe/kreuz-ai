@@ -3,6 +3,7 @@ import { jsonValueSchema } from "../../ecs/jsonData";
 import { maxStepTicks } from "../Command";
 import type { CommandResult } from "../CommandResult";
 import { AssertOp, evaluateAssertion, getPathValue } from "./assertion";
+import { debugSpawnCommandKind } from "./createDebugSpawnSystem";
 import { defineScenarioStep } from "./scenarioStep";
 import type { ScenarioStepType, StepContext, StepFailure } from "./scenarioStep";
 
@@ -221,7 +222,46 @@ const replayStep = defineScenarioStep({
 });
 
 /**
- * The step types every scenario can use: command, step, assert, assertHash, saveLoad, replay.
+ * `{debugSpawn: {prototypeId, mapId, cells[], overrides?, inventory?}}`: spawns one entity of a
+ * prototype on every listed cell, with component overrides and starting items (queued like a
+ * command, so it is applied by the next tick and replays). **Scenario and test use only**: it
+ * needs the command `DebugSpawn`, which only `createScenarioSession` registers, so against a real
+ * game session the step fails with an unknown command.
+ */
+const debugSpawnStep = defineScenarioStep({
+  key: "debugSpawn",
+  schema: z
+    .object({
+      debugSpawn: z
+        .object({
+          prototypeId: z.string().min(1),
+          mapId: z.number().int().min(1),
+          cells: z.array(z.number().int().min(0)).min(1),
+          overrides: z.record(z.string(), z.record(z.string(), jsonValueSchema)).optional(),
+          inventory: z
+            .array(
+              z
+                .object({ materialId: z.string().min(1), quantity: z.number().int().min(1) })
+                .strict(),
+            )
+            .optional(),
+        })
+        .strict(),
+    })
+    .strict(),
+  run: (step, context) => {
+    const result = context.session.dispatch({ kind: debugSpawnCommandKind, ...step.debugSpawn });
+    return result.ok
+      ? null
+      : {
+          message: `debugSpawn failed (it needs a scenario session): ${describeFailure(result)}`,
+        };
+  },
+});
+
+/**
+ * The step types every scenario can use: command, step, assert, assertHash, saveLoad, replay and
+ * the scenario-only debugSpawn.
  */
 export const builtinScenarioSteps: readonly ScenarioStepType[] = [
   commandStep,
@@ -230,4 +270,5 @@ export const builtinScenarioSteps: readonly ScenarioStepType[] = [
   assertHashStep,
   saveLoadStep,
   replayStep,
+  debugSpawnStep,
 ];

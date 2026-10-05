@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { GameSession } from "../GameSession";
 import { runScenario } from "./runScenario";
 import type { ScenarioResult } from "./runScenario";
 import type { Scenario } from "./Scenario";
@@ -155,5 +156,39 @@ describe("runScenario", () => {
     expect(
       failureOf(runScenario(scenario([{ hello: "moon" }]), { stepTypes: [hello] })).message,
     ).toBe("wrong greeting");
+  });
+
+  it("debugSpawn spawns entities in a scenario session and replays, but fails on a plain session", () => {
+    const spawn = {
+      debugSpawn: {
+        prototypeId: "chest",
+        mapId: 1,
+        cells: [300],
+        inventory: [{ materialId: "wheat", quantity: 3 }],
+      },
+    };
+    const good: Scenario = {
+      name: "spawn",
+      seed: 42,
+      options: { mapSize: 0 },
+      steps: [
+        spawn,
+        { step: 1 },
+        {
+          assert: {
+            query: "stock",
+            args: { materialId: "wheat" },
+            path: "total",
+            op: "eq",
+            value: 3,
+          },
+        },
+        { replay: true },
+      ],
+    };
+    expect(runScenario(good).ok).toBe(true);
+    const plain = runScenario(good, { createSession: () => new GameSession() });
+    expect(failureOf(plain)).toMatchObject({ stepIndex: 0 });
+    expect(failureOf(plain).message).toContain("scenario session");
   });
 });
