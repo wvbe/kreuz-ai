@@ -2,6 +2,7 @@ import { z } from "zod";
 import { defineCommand } from "../api/defineCommand";
 import { defineQuery } from "../api/defineQuery";
 import { aiSystemId } from "../ai/aiTypes";
+import { SettlementTier } from "../content/contentTypes";
 import { getComponent } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { TickSlot } from "../engine/TickPipeline";
@@ -84,6 +85,8 @@ export function registerJobs(engine: GameEngine): JobService {
   }
   registered.add(engine);
   const service = new JobService();
+  // Until the settlement tier system (5.x) takes over, the tier in force is the starting tier.
+  service.setTierSource(() => engine.getState().initOptions.startingTier ?? SettlementTier.Hamlet);
   bindJobService(engine, service);
   engine.taskHandlers.register(createVisitTask(engine));
   registerFellTrees(engine);

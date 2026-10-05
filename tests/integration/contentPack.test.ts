@@ -18,6 +18,7 @@ import { relationshipsComponent } from "../../src/game/ai/relationships/relation
 import { inventoryComponent } from "../../src/game/inventory/inventoryComponent";
 import { furnitureComponent } from "../../src/game/storage/furnitureComponent";
 import { stockpileComponent } from "../../src/game/storage/stockpileComponent";
+import { productionOrdersComponent } from "../../src/game/production/productionOrdersComponent";
 import { zoneComponent } from "../../src/game/zones/zoneComponent";
 import { getTotal } from "../../src/game/inventory/inventoryQueries";
 import { positionComponent } from "../../src/game/map/positionComponent";
@@ -59,6 +60,7 @@ describe("content pack v0 with the kernel", () => {
       furnitureComponent,
       stockpileComponent,
       zoneComponent,
+      productionOrdersComponent,
     ]) {
       components.register(definition);
     }
@@ -109,6 +111,7 @@ describe("content pack v0 with the kernel", () => {
     components.register(furnitureComponent);
     components.register(stockpileComponent);
     components.register(zoneComponent);
+    components.register(productionOrdersComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

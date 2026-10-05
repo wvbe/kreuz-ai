@@ -19,6 +19,7 @@ import { needsComponent } from "../ai/needs/needsComponent";
 import { relationshipsComponent } from "../ai/relationships/relationshipsComponent";
 import { furnitureComponent } from "../storage/furnitureComponent";
 import { stockpileComponent } from "../storage/stockpileComponent";
+import { productionOrdersComponent } from "../production/productionOrdersComponent";
 import { zoneComponent } from "../zones/zoneComponent";
 import { loadContent } from "./ContentLoader";
 
@@ -42,6 +43,7 @@ function components(): ComponentRegistry {
     furnitureComponent,
     stockpileComponent,
     zoneComponent,
+    productionOrdersComponent,
   ]) {
     registry.register(definition);
   }
@@ -70,10 +72,14 @@ describe("ContentRegistries", () => {
       "farmer",
       "furniture_piece",
       "government_faction",
+      "grinding_mill",
       "job_board",
       "loose_pile",
+      "oven",
       "peasant",
+      "sawmill",
       "wall",
+      "workbench",
       "zone",
     ]);
     expect(first.has(governmentFactionPrototypeId)).toBe(true);

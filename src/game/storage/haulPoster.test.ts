@@ -9,6 +9,7 @@ import { noAiOverride } from "../jobs/testJobWorld";
 import {
   findLooseGoods,
   haulableMaterialIds,
+  nearestRunningBoard,
   postHaulJob,
   postHaulJobs,
   releaseOrphanedHaulReservations,
@@ -70,6 +71,19 @@ describe("findLooseGoods", () => {
     world.give(chest, "oak_log", 3);
     world.spawn("peasant", 12, noAiOverride);
     expect(findLooseGoods(world.engine)).toEqual([]);
+  });
+});
+
+describe("nearestRunningBoard", () => {
+  it("finds the nearest reachable board and skips a paused one", () => {
+    const world = createStorageWorld();
+    const pile = world.pile(55, [{ materialId: "oak_log", quantity: 1 }]);
+    const near = world.spawn("job_board", 56);
+    expect(nearestRunningBoard(world.engine, pile)).toBe(near.id);
+    pauseBoard(world.engine, near.id, PauseSource.Player);
+    expect(nearestRunningBoard(world.engine, pile)).toBe(world.boardId);
+    pauseBoard(world.engine, world.boardId, PauseSource.Player);
+    expect(nearestRunningBoard(world.engine, pile)).toBeNull();
   });
 });
 

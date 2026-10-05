@@ -163,7 +163,8 @@ export type ZoneTypeContent = z.infer<typeof zoneTypeSchema>;
 
 /**
  * Authored production recipe (spec 022 recipe record, DECISIONS D-10). `workstationTag` is the
- * furniture tag of the station; `toolMaterialIds` are tools that are required but not consumed.
+ * furniture tag of the station; `toolMaterialIds` are tools that are required but not consumed;
+ * `minSkillLevel` (0 = anyone, task 3.3) is the least level of the recipe's skill a crafter needs.
  */
 export const recipeSchema = z
   .object({
@@ -176,6 +177,7 @@ export const recipeSchema = z
     skillId: contentIdSchema.nullable().default(null),
     toolMaterialIds: z.array(contentIdSchema).default([]),
     roomZoneId: contentIdSchema.optional(),
+    minSkillLevel: z.number().int().min(0).max(100).default(0),
     unlockTier: unlockTierSchema,
   })
   .strict();

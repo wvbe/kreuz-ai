@@ -70,5 +70,65 @@
         "slotCount": 16
       }
     }
+  },
+  {
+    "id": "oven",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "oven"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "grinding_mill",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "grinding_mill"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "sawmill",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "sawmill"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "workbench",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "workbench"
+      },
+      "ProductionOrders": {}
+    }
   }
 ]

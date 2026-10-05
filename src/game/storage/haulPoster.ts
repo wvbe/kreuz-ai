@@ -91,7 +91,15 @@ export function findLooseGoods(engine: GameEngine): LooseGoods[] {
   return found;
 }
 
-function nearestBoard(engine: GameEngine, source: Entity): EntityId | null {
+/**
+ * The nearest running (not paused) job board that can be reached from an entity on its map: lowest
+ * path cost, ties lowest entity id. System postings (haul, craft) go there at once (D-08).
+ *
+ * @param engine - The engine.
+ * @param source - An entity with a `Position`.
+ * @returns The board's entity id, or null when none is reachable.
+ */
+export function nearestRunningBoard(engine: GameEngine, source: Entity): EntityId | null {
   const position = getComponent(source, positionComponent);
   if (position === undefined) {
     return null;
@@ -249,7 +257,7 @@ export function postHaulJobs(engine: GameEngine, tick: number): number[] {
       }
       continue;
     }
-    const boardId = nearestBoard(engine, source);
+    const boardId = nearestRunningBoard(engine, source);
     if (boardId !== null) {
       created.push(postHaulJob(engine, boardId, goods.entityId, goods.materialId, tick).id);
     }

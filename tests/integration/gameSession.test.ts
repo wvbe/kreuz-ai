@@ -367,11 +367,15 @@ describe("GameSession end to end", () => {
                           ? { mapId: 1, from: 0 }
                           : name === "members-of"
                             ? { factionId: 1 }
-                            : name === "zone"
-                              ? { zoneId: 1 }
-                              : name === "zone-at"
-                                ? { mapId: 1, cellIndex: 0 }
-                                : {},
+                            : name === "order"
+                              ? { orderId: 1 }
+                              : name === "recipes-for"
+                                ? { workstationId: 1 }
+                                : name === "zone"
+                                  ? { zoneId: 1 }
+                                  : name === "zone-at"
+                                    ? { mapId: 1, cellIndex: 0 }
+                                    : {},
       );
       expect(result.ok).toBe(true);
       expect(JSON.parse(JSON.stringify(result))).toEqual(result);
