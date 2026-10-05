@@ -355,15 +355,19 @@ describe("GameSession end to end", () => {
                   name === "faction-of" ||
                   name === "needs-of"
                 ? { entityId: 3 }
-                : name === "find-path"
-                  ? { mapId: 1, from: 0, target: 1 }
-                  : name === "find-route"
-                    ? { from: { mapId: 1, cellIndex: 0 }, target: { mapId: 1, cellIndex: 1 } }
-                    : name === "reachable"
-                      ? { mapId: 1, from: 0 }
-                      : name === "members-of"
-                        ? { factionId: 1 }
-                        : {},
+                : name === "jobs-on"
+                  ? { boardId: 2 }
+                  : name === "job"
+                    ? { postingId: 1 }
+                    : name === "find-path"
+                      ? { mapId: 1, from: 0, target: 1 }
+                      : name === "find-route"
+                        ? { from: { mapId: 1, cellIndex: 0 }, target: { mapId: 1, cellIndex: 1 } }
+                        : name === "reachable"
+                          ? { mapId: 1, from: 0 }
+                          : name === "members-of"
+                            ? { factionId: 1 }
+                            : {},
       );
       expect(result.ok).toBe(true);
       expect(JSON.parse(JSON.stringify(result))).toEqual(result);

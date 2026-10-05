@@ -45,6 +45,8 @@ import type { EventBusErrorReport, EventBusErrorSink, JsonValue } from "./EventB
 import { GameEngineError, GameEngineErrorKind } from "./GameEngineError";
 import { IdCounters } from "./IdCounters";
 import { registerFactions } from "../factions/registerFactions";
+import { jobsSystemId } from "../jobs/jobTypes";
+import { registerJobs } from "../jobs/registerJobs";
 import { factionsSystemId } from "../factions/factionTypes";
 import { registerIdentity } from "../identity/registerIdentity";
 import { identitySystemId } from "../identity/identityTypes";
@@ -648,9 +650,10 @@ export class GameEngine {
     registerFactions(this);
     registerSkills(this);
     registerAi(this);
+    registerJobs(this);
     this.registerSystem({
       id: "world.starting-map",
-      dependencies: [skillsSystemId, factionsSystemId, identitySystemId, aiSystemId],
+      dependencies: [skillsSystemId, factionsSystemId, identitySystemId, aiSystemId, jobsSystemId],
       init: ({ engine, mode, options }) => {
         if (mode !== InitMode.NewGame || options.mapSize === null) {
           return;

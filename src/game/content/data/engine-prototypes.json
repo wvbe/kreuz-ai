@@ -25,6 +25,7 @@
   {
     "id": "job_board",
     "components": {
+      "JobBoard": {},
       "Position": {}
     }
   }

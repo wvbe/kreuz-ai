@@ -384,6 +384,9 @@ describe("GameEngine registerSystem", () => {
       "find-path",
       "find-route",
       "identity-of",
+      "job",
+      "job-boards",
+      "jobs-on",
       "members-of",
       "needs-of",
       "reachable",
@@ -391,7 +394,12 @@ describe("GameEngine registerSystem", () => {
       "traits-of",
     ]);
     expect(engine.getCommandHandler("demo.none")).toBeUndefined();
-    expect(engine.commandKinds()).toEqual(["demo.ping"]);
+    expect(engine.commandKinds()).toEqual([
+      "PostCustomJob",
+      "PostJob",
+      "SetJobBoardPaused",
+      "demo.ping",
+    ]);
     engine.newGame({ seed: 1 });
     engine.runTicks(4);
     expect(ledger.total).toBe(4);

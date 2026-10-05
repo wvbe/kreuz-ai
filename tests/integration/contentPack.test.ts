@@ -8,6 +8,7 @@ import { requireComponent } from "../../src/game/ecs/Entity";
 import { EntityStore } from "../../src/game/ecs/EntityStore";
 import { IdCounters } from "../../src/game/engine/IdCounters";
 import { citizenComponent } from "../../src/game/factions/citizenComponent";
+import { jobBoardComponent } from "../../src/game/jobs/jobBoardComponent";
 import { factionComponent } from "../../src/game/factions/factionComponent";
 import { identityComponent } from "../../src/game/identity/identityComponent";
 import { healthComponent } from "../../src/game/ai/needs/healthComponent";
@@ -28,6 +29,8 @@ function createHandlers(): BehaviorHandlerRegistry {
   handlers.registerCondition("any_need_below_critical", () => NodeStatus.Failure);
   handlers.registerAction("satisfy_critical_need", () => NodeStatus.Success);
   handlers.registerAction("idle_wander", () => NodeStatus.Success);
+  handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
+  handlers.registerAction("claim_job", () => NodeStatus.Failure);
   return handlers;
 }
 
@@ -49,6 +52,7 @@ describe("content pack v0 with the kernel", () => {
       moodComponent,
       healthComponent,
       relationshipsComponent,
+      jobBoardComponent,
     ]) {
       components.register(definition);
     }
@@ -95,6 +99,7 @@ describe("content pack v0 with the kernel", () => {
     components.register(moodComponent);
     components.register(healthComponent);
     components.register(relationshipsComponent);
+    components.register(jobBoardComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

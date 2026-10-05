@@ -5,6 +5,7 @@ import { aiStateComponent } from "../behavior/aiStateComponent";
 import { ComponentRegistry } from "../ecs/ComponentRegistry";
 import { PrototypeRegistry } from "../ecs/PrototypeRegistry";
 import { citizenComponent } from "../factions/citizenComponent";
+import { jobBoardComponent } from "../jobs/jobBoardComponent";
 import { factionComponent } from "../factions/factionComponent";
 import { identityComponent } from "../identity/identityComponent";
 import { inventoryComponent } from "../inventory/inventoryComponent";
@@ -34,6 +35,7 @@ function components(): ComponentRegistry {
     moodComponent,
     healthComponent,
     relationshipsComponent,
+    jobBoardComponent,
   ]) {
     registry.register(definition);
   }
@@ -81,6 +83,8 @@ describe("ContentRegistries", () => {
     handlers.registerCondition("any_need_below_critical", () => NodeStatus.Failure);
     handlers.registerAction("satisfy_critical_need", () => NodeStatus.Success);
     handlers.registerAction("idle_wander", () => NodeStatus.Success);
+    handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
+    handlers.registerAction("claim_job", () => NodeStatus.Failure);
     const trees = content.createBehaviorTreeRegistry(handlers);
     expect(trees.ids()).toEqual(["basic_needs", "idle_wander"]);
     expect(content.createBehaviorTreeRegistry(handlers)).not.toBe(trees);

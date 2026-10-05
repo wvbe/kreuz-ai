@@ -39,7 +39,8 @@
         "materialId": "oak_log",
         "quantity": 3
       }
-    ]
+    ],
+    "wage": 2
   },
   {
     "id": "haul.deliver",

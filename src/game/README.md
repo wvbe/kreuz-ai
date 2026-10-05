@@ -18,5 +18,6 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [factions](factions/README.md) - `Faction` / `Citizen` components, derived membership, leaders, standing data, dangling-reference clean-up.
 - [identity](identity/README.md) - names from the content lists, derived titles, offices, styled names.
 - [ai](ai/README.md) - settler AI: needs, mood, utility decisions, behavior handlers, movement task, starvation.
+- [jobs](jobs/README.md) - job boards, postings, claim order, job type executors, `fell.trees`, wages.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).

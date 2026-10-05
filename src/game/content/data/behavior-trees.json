@@ -25,6 +25,19 @@
           ]
         },
         {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "jobs_available"
+            },
+            {
+              "type": "action",
+              "id": "claim_job"
+            }
+          ]
+        },
+        {
           "type": "action",
           "id": "run_tree",
           "params": {

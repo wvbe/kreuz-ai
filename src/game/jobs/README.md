@@ -1,0 +1,25 @@
+# src/game/jobs
+
+Job boards and claiming (spec 017, DECISIONS D-08 and D-46, plan task 3.1 parts a, b, e). Settlers get new work only by walking to a board entity and claiming a posting. This folder has the board data and lifecycle, the claim algorithm, the job type executor registry, one real job type (`fell.trees`) and its auto-poster. The Town Crier fleet (3.1c) and the content hooks of the other job types (3.1d) come later.
+
+- `jobTypes.ts` - data types and constants: `JobPosting`, `JobBoardData`, `Eligibility`, the enums `PostingStatus`, `JobBoardMode`, `PauseSource`, `EligibilityKind`, event names and payloads, `jobTaskPriority` (50), `claimBackoffTicks` (144).
+- `jobBoardComponent.ts` - the `JobBoard` component (mode, two pause flags, active postings ascending by id, bounded history of 16) with strict Zod schemas. It lives in the entities save section; the worldgen `job_board` prototype carries it.
+- `JobService.ts` / `jobServiceRegistry.ts` - the per-engine hooks (`setWagePayer`, `setTierSource`) and the claim back-off list, saved in the section `systems.jobboard`. `getJobService(engine)` finds it.
+- `jobBoards.ts` - lookups: `listBoards`, `getBoard`, `requireBoard`, `findPosting`, `offeredPostings`, `isBoardPaused`, `activePostingsOfType`.
+- `jobPostings.ts` - the lifecycle: `postJob`, `claimPosting`, `releasePosting`, `completePosting`, `failPosting`, `cancelPosting`. `boardPause.ts` - `pauseBoard` / `resumeBoard` per `PauseSource`.
+- `eligibility.ts` - `defaultEligibility`, `satisfiesEligibility`, `isEligible` (evaluated at claim time).
+- `claimOrder.ts` - the pure order `compareClaimCandidates` / `sortClaimCandidates`. `claimJob.ts` - `reachCostsOf`, `rankPostings`, `findBoardToVisit`, `claimBestPosting`.
+- `jobBehavior.ts` - the behavior handlers `jobs_available` (condition) and `claim_job` (action) that `basic_needs` runs before `idle_wander`. `jobVisitTask.ts` - the `jobboard.visit` task.
+- `jobExecutor.ts` - `registerJobType(engine, typeId, executor)`, `jobTaskData`, `childCompleted`. `workAtLocation.ts` - `createWorkAtLocationExecutor`, the generic walk-and-work executor. `fellTrees.ts` - `fell.trees`: executor, `postFellJobs` auto-poster, `woodStock`.
+- `payWage.ts` - `payWage` (mint into the worker, or the custom payer). `jobViews.ts` - the views behind the queries. `registerJobs.ts` - `registerJobs(engine)` (the engine does it for itself): component, save section, tasks, handlers, slot-7 system `jobboard`, the commands `SetJobBoardPaused`, `PostJob`, `PostCustomJob` and the queries `job-boards`, `jobs-on {boardId}`, `job {postingId}`.
+- `JobError.ts` - `JobError` / `JobErrorKind`. `testJobWorld.ts` - test helper: an AI test world with a board.
+
+## Rules
+
+- A posting is single-claimant and one-time: `Open` -> `Claimed` -> `Done`, or back to `Open` on release; `Failed` and `Cancelled` are terminal. Terminal postings leave the active list for the board's history. Ids come from the persisted `nextPostingId`, claim ids from `nextClaimId`.
+- Claim order (D-08): priority desc, urgent first, familiarity bucket desc, path cost asc, posting id asc. The order is total, so there is no random tie-break.
+- An idle settler (queue empty, no critical need it can serve) runs `claim_job`: nearest reachable board first, the first board with a claimable posting wins, a `jobboard.visit` task (priority 50) walks there and claims on arrival. Settlers are served in ascending entity id within a tick and `claimPosting` checks and changes the posting in one call, so a posting never has two claimants. A posting is claimable by a worker when its board is running, it is open, the worker passes its eligibility, is not backed off from it, the target is reachable and the job type has a registered executor.
+- The claimed job becomes a task of type = job type id (priority 50) wrapped by `registerJobType`: it checks the claim every step, completes the posting (wage paid, `jobboard.job.completed {workerId, wage, outputs}`, then `skill.work.completed` for the job type's skill), releases the claim with a back-off when a step fails (`jobboard.job.abandoned`), and fails the posting for good on `target_invalid`. A task cancelled by a critical need releases without back-off.
+- Pause: the player pause (`SetJobBoardPaused`) and the system pause (zones, task 3.4) are separate flags; a paused board offers nothing, claimed jobs finish, resuming creates no backlog.
+- Wages: `posting.wage` defaults to the job type's `wage`. Without a treasury (task 4.1) the coins are minted into the worker's inventory; 4.1 replaces that through `JobService.setWagePayer`.
+- `fell.trees`: the auto-poster runs every 12 ticks, posts the nearest forest cells (path cost <= 300 from a running board) while the oak log stock in all inventories is below 40 and fewer than 4 `fell.trees` postings are active. The job turns the forest cell into its `clearsTo` terrain (grassland) after `24` base ticks scaled by `workDuration` and gives the worker the job's `outputs` (oak_log x3).
