@@ -4,17 +4,27 @@ import type { EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { canStore } from "../inventory/inventoryQueries";
 import { positionComponent } from "../map/positionComponent";
+import { skillLevel } from "../skills/skillLevels";
 import { furnitureComponent } from "./furnitureComponent";
 import { effectiveFilter, filterAccepts } from "./materialFilter";
 import { canDepositInto, listStorage } from "./storageQueries";
 import { stockpileComponent } from "./stockpileComponent";
+import { getStorageService } from "./storageServiceRegistry";
+import { affinityMinLevel } from "./storageTypes";
 
 /**
- * The routing tiers of spec 018 FR-010 that exist without zones; a lower number is tried first.
- * Tier 0 (a run with `deliverToZoneId`) and tier 1 (zone skill affinity) arrive with the zones of
- * task 3.4.
+ * The routing tiers of spec 018 FR-010; a lower number is tried first.
  */
 export enum RouteTier {
+  /**
+   * A run with `deliverToZoneId`: storage inside that zone.
+   */
+  Zone = 0,
+  /**
+   * Storage in a zone whose skill affinity matches the hauler (skill level at least
+   * `affinityMinLevel`, DECISIONS D-26); the zone needs no active effects.
+   */
+  Affinity = 1,
   /**
    * Storage with an own or default filter that accepts the material (even inside a stockpile).
    */
@@ -51,6 +61,10 @@ export type RouteRequest = {
    * Storages that must not be offered (a full one just visited).
    */
   excludeIds?: readonly EntityId[];
+  /**
+   * The zone a run must deliver to (`deliverToZoneId`, tier 0), or absent.
+   */
+  zoneId?: EntityId;
 };
 
 /**
@@ -120,6 +134,8 @@ export function routeCandidates(engine: GameEngine, request: RouteRequest): Stor
     costs.set(reachable.cell, reachable.cost);
   }
   const isCurrency = request.materialId === engine.materials.currencyId;
+  const service = getStorageService(engine);
+  const actor = request.actorId === null ? undefined : engine.store.get(request.actorId);
   const routes: StorageRoute[] = [];
   for (const entity of listStorage(engine)) {
     const place = getComponent(entity, positionComponent);
@@ -135,13 +151,25 @@ export function routeCandidates(engine: GameEngine, request: RouteRequest): Stor
     ) {
       continue;
     }
+    const zone = service.zoneRouteAt(place.mapId, place.cellIndex);
+    if (zone?.excluded === true) {
+      continue;
+    }
     const filter = effectiveFilter(engine, entity);
+    const isStockpile = stockpile !== undefined || zone?.stockpile === true;
     const tier =
-      filter !== null && filterAccepts(engine.materials, filter, request.materialId)
-        ? RouteTier.Filtered
-        : stockpile !== undefined
-          ? RouteTier.Stockpile
-          : RouteTier.Open;
+      request.zoneId !== undefined && zone?.zoneId === request.zoneId
+        ? RouteTier.Zone
+        : zone?.skillId !== null &&
+            zone?.skillId !== undefined &&
+            actor !== undefined &&
+            skillLevel(actor, zone.skillId) >= affinityMinLevel
+          ? RouteTier.Affinity
+          : filter !== null && filterAccepts(engine.materials, filter, request.materialId)
+            ? RouteTier.Filtered
+            : isStockpile
+              ? RouteTier.Stockpile
+              : RouteTier.Open;
     const free = canStore(
       engine.materials,
       entity,

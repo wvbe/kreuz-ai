@@ -18,6 +18,7 @@ import { relationshipsComponent } from "../../src/game/ai/relationships/relation
 import { inventoryComponent } from "../../src/game/inventory/inventoryComponent";
 import { furnitureComponent } from "../../src/game/storage/furnitureComponent";
 import { stockpileComponent } from "../../src/game/storage/stockpileComponent";
+import { zoneComponent } from "../../src/game/zones/zoneComponent";
 import { getTotal } from "../../src/game/inventory/inventoryQueries";
 import { positionComponent } from "../../src/game/map/positionComponent";
 import { skillsComponent, traitsComponent } from "../../src/game/skills/skillsComponent";
@@ -57,6 +58,7 @@ describe("content pack v0 with the kernel", () => {
       jobBoardComponent,
       furnitureComponent,
       stockpileComponent,
+      zoneComponent,
     ]) {
       components.register(definition);
     }
@@ -106,6 +108,7 @@ describe("content pack v0 with the kernel", () => {
     components.register(jobBoardComponent);
     components.register(furnitureComponent);
     components.register(stockpileComponent);
+    components.register(zoneComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

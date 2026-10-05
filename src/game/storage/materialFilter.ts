@@ -2,9 +2,11 @@ import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import type { MaterialRegistry } from "../inventory/MaterialRegistry";
+import { positionComponent } from "../map/positionComponent";
 import { furnitureComponent } from "./furnitureComponent";
 import { StorageError, StorageErrorKind } from "./StorageError";
 import { stockpileComponent } from "./stockpileComponent";
+import { getStorageService } from "./storageServiceRegistry";
 import type { MaterialFilter } from "./storageTypes";
 
 /**
@@ -85,7 +87,9 @@ export function filterAccepts(
 /**
  * The filter in force for a storage entity (DECISIONS D-26): the `Stockpile` filter when one is
  * set (it replaces, never merges with, the default), otherwise the default filter of the
- * furniture content (`storage.categoryFilter`, an empty list is no filter), otherwise none.
+ * furniture content (`storage.categoryFilter`, an empty list is no filter), otherwise the filter
+ * of the zone the storage stands in (spec 018 FR-004: the furniture's own filter overrides the
+ * zone's), otherwise none.
  *
  * @param engine - The engine with the content.
  * @param entity - The storage entity.
@@ -101,5 +105,12 @@ export function effectiveFilter(engine: GameEngine, entity: Entity): MaterialFil
     furniture === undefined
       ? []
       : (engine.content.furniture.find(furniture.furnitureId)?.storage?.categoryFilter ?? []);
-  return normalizeFilter({ categories });
+  const defaultFilter = normalizeFilter({ categories });
+  if (defaultFilter !== null) {
+    return defaultFilter;
+  }
+  const place = getComponent(entity, positionComponent);
+  return place === undefined
+    ? null
+    : (getStorageService(engine).zoneRouteAt(place.mapId, place.cellIndex)?.filter ?? null);
 }

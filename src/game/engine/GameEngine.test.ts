@@ -395,14 +395,24 @@ describe("GameEngine registerSystem", () => {
       "stock",
       "stockpiles",
       "traits-of",
+      "zone",
+      "zone-at",
+      "zone-merge-offers",
+      "zones",
     ]);
     expect(engine.getCommandHandler("demo.none")).toBeUndefined();
     expect(engine.commandKinds()).toEqual([
+      "AddZoneTiles",
+      "ConfirmZoneMerge",
+      "DeleteZone",
+      "DesignateZone",
       "PostCustomJob",
       "PostJob",
+      "RemoveZoneTiles",
       "SetJobBoardPaused",
       "SetStockpilePriority",
       "SetStorageMaterialFilter",
+      "SetZoneMaterialFilter",
       "demo.ping",
     ]);
     engine.newGame({ seed: 1 });

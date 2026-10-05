@@ -1,4 +1,5 @@
 import { loadContent } from "../content/ContentLoader";
+import type { ContentRegistries } from "../content/ContentRegistries";
 import type { Entity, EntityId } from "../ecs/Entity";
 import type { JsonValue } from "../engine/EventBus";
 import { GameEngine } from "../engine/GameEngine";
@@ -36,6 +37,10 @@ export type AiTestWorldOptions = {
   height?: number;
   difficulty?: Difficulty;
   seed?: number;
+  /**
+   * Content registries of the engine (default: the bundled pack).
+   */
+  content?: ContentRegistries;
 };
 
 /**
@@ -47,7 +52,7 @@ export type AiTestWorldOptions = {
  * @returns The engine, the map id and helpers.
  */
 export function createAiWorld(options: AiTestWorldOptions = {}): AiTestWorld {
-  const engine = new GameEngine(loadContent(), { entropy: () => 1 });
+  const engine = new GameEngine(options.content ?? loadContent(), { entropy: () => 1 });
   engine.newGame({
     seed: options.seed ?? 7,
     difficulty: options.difficulty ?? Difficulty.Steady,

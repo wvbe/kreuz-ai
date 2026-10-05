@@ -23,6 +23,25 @@
     }
   },
   {
+    "id": "door",
+    "components": {
+      "Position": {}
+    }
+  },
+  {
+    "id": "furniture_piece",
+    "components": {
+      "Position": {},
+      "Furniture": {}
+    }
+  },
+  {
+    "id": "zone",
+    "components": {
+      "Zone": {}
+    }
+  },
+  {
     "id": "job_board",
     "components": {
       "JobBoard": {},

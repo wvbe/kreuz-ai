@@ -48,6 +48,8 @@ import { registerFactions } from "../factions/registerFactions";
 import { jobsSystemId } from "../jobs/jobTypes";
 import { registerJobs } from "../jobs/registerJobs";
 import { registerStorage } from "../storage/registerStorage";
+import { registerZones } from "../zones/registerZones";
+import { zonesSystemId } from "../zones/zoneTypes";
 import { getStorageService } from "../storage/storageServiceRegistry";
 import { storageSystemId } from "../storage/storageTypes";
 import { factionsSystemId } from "../factions/factionTypes";
@@ -656,6 +658,7 @@ export class GameEngine {
     registerAi(this);
     registerJobs(this);
     registerStorage(this);
+    registerZones(this);
     this.registerSystem({
       id: "world.starting-map",
       dependencies: [
@@ -665,6 +668,7 @@ export class GameEngine {
         aiSystemId,
         jobsSystemId,
         storageSystemId,
+        zonesSystemId,
       ],
       init: ({ engine, mode, options }) => {
         if (mode !== InitMode.NewGame || options.mapSize === null) {

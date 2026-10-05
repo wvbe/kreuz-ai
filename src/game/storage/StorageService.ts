@@ -9,6 +9,7 @@ import type { SaveSection } from "../save/SaveSectionRegistry";
 import { furnitureComponent } from "./furnitureComponent";
 import { ReservationService } from "./ReservationService";
 import { decayRateModifierId } from "./storageTypes";
+import type { ZoneRouteInfo, ZoneRouteProvider } from "./storageTypes";
 
 /**
  * Extra decay rate source for the items in a storage entity (the Pantry zone of task 3.4 plugs in
@@ -50,6 +51,7 @@ export class StorageService {
   readonly reservations: ReservationService;
   private reportedList: ReportedGoods[] = [];
   private readonly decaySources: DecayModifierSource[] = [];
+  private zoneRoutes: ZoneRouteProvider | null = null;
 
   /**
    * Creates the service for one engine.
@@ -119,6 +121,28 @@ export class StorageService {
    */
   addDecayModifierSource(source: DecayModifierSource): void {
     this.decaySources.push(source);
+  }
+
+  /**
+   * Sets where the zone of a cell comes from (the zones of task 3.4 plug in here); `null` means
+   * there are no zones.
+   *
+   * @param provider - Cell to zone route info lookup, or null.
+   */
+  setZoneRouteProvider(provider: ZoneRouteProvider | null): void {
+    this.zoneRoutes = provider;
+  }
+
+  /**
+   * The zone that covers a cell, as far as routing cares (tiers 0 and 1, zone filter, stockpile
+   * zones, dwelling exclusion).
+   *
+   * @param mapId - Map id.
+   * @param cellIndex - Cell index.
+   * @returns The route info, or null when no zone covers the cell.
+   */
+  zoneRouteAt(mapId: number, cellIndex: number): ZoneRouteInfo | null {
+    return this.zoneRoutes === null ? null : this.zoneRoutes(mapId, cellIndex);
   }
 
   /**

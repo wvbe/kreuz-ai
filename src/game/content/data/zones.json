@@ -6,6 +6,18 @@
     "minTiles": 1
   },
   {
+    "id": "pantry",
+    "name": "Pantry",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "effects": [
+      {
+        "modifierId": "inventory.decay.rate",
+        "value": 0.5
+      }
+    ]
+  },
+  {
     "id": "farm_field",
     "name": "Farm field",
     "requiresRoom": false,

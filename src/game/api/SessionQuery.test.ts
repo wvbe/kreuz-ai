@@ -41,6 +41,10 @@ describe("SessionQuery", () => {
       "stockpiles",
       "time",
       "traits-of",
+      "zone",
+      "zone-at",
+      "zone-merge-offers",
+      "zones",
     ]);
   });
 

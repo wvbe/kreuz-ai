@@ -146,6 +146,42 @@ export enum ReservationKind {
 }
 
 /**
+ * Hauler skill level that makes a zone's skill affinity count for routing tier 1 (DECISIONS D-26,
+ * `affinityMinLevel`).
+ */
+export const affinityMinLevel = 20;
+
+/**
+ * What storage routing needs to know about the zone a storage entity stands in (spec 018 FR-004
+ * and FR-010, filled in by the zones of task 3.4 through `StorageService.setZoneRouteProvider`).
+ */
+export type ZoneRouteInfo = {
+  zoneId: EntityId;
+  zoneTypeId: string;
+  /**
+   * The zone is a stockpile zone: its furniture storage is routed to like a stockpile.
+   */
+  stockpile: boolean;
+  /**
+   * The storage must never be offered (furniture on dwelling tiles, spec 029 FR-017).
+   */
+  excluded: boolean;
+  /**
+   * The zone-level filter, used by storage that has no filter of its own.
+   */
+  filter: MaterialFilter | null;
+  /**
+   * Skill whose level makes the zone preferred for a matching hauler, or null.
+   */
+  skillId: string | null;
+};
+
+/**
+ * Finds the zone route info of a cell, or null when no zone covers it.
+ */
+export type ZoneRouteProvider = (mapId: number, cellIndex: number) => ZoneRouteInfo | null;
+
+/**
  * Reserved quantity of one material in one inventory, taken by one holder (DECISIONS D-09).
  */
 export type Reservation = {
