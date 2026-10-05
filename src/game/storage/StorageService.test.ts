@@ -116,3 +116,23 @@ describe("StorageService.decayModifierMilli and addDecayModifierSource", () => {
     expect(getComponent(slow, inventoryComponent)?.slots).toEqual([]);
   });
 });
+
+describe("StorageService.setZoneRouteProvider and zoneRouteAt", () => {
+  it("asks the provider for the zone of a cell; null means no zones", () => {
+    const world = createStorageWorld();
+    const service = getStorageService(world.engine);
+    const info = {
+      zoneId: 9,
+      zoneTypeId: "stockpile",
+      stockpile: true,
+      excluded: false,
+      filter: null,
+      skillId: null,
+    };
+    service.setZoneRouteProvider((mapId, cell) => (cell === 4 ? { ...info, zoneId: mapId } : null));
+    expect(service.zoneRouteAt(world.mapId, 4)).toEqual({ ...info, zoneId: world.mapId });
+    expect(service.zoneRouteAt(world.mapId, 5)).toBeNull();
+    service.setZoneRouteProvider(null);
+    expect(service.zoneRouteAt(world.mapId, 4)).toBeNull();
+  });
+});

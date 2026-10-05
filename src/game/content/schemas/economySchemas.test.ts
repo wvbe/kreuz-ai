@@ -57,6 +57,29 @@ describe("categorySchema, furnitureSchema, zoneTypeSchema", () => {
     expect(zoneTypeSchema.parse(zone).furnitureRequirements).toEqual([]);
     expect(zoneTypeSchema.safeParse({ ...zone, furnitureRequirements: [[]] }).success).toBe(false);
   });
+
+  it("zoneTypeSchema reads densities and the job board requirement", () => {
+    const zone = { id: "hall", name: "Hall", requiresRoom: true, minTiles: 4 };
+    const bed = { kind: "tag", ref: "bed", count: 1, perTiles: 4 };
+    const parsed = zoneTypeSchema.parse({
+      ...zone,
+      requiresJobBoard: true,
+      furnitureRequirements: [[bed]],
+    });
+    expect(parsed.requiresJobBoard).toBe(true);
+    expect(parsed.furnitureRequirements[0]?.[0]?.perTiles).toBe(4);
+    expect(zoneTypeSchema.parse(zone).requiresJobBoard).toBe(false);
+    for (const broken of [
+      { ...bed, perTiles: 0 },
+      { ...bed, count: 0 },
+      { ...bed, kind: "family" },
+      { ...bed, ref: "Big Bed" },
+    ]) {
+      expect(zoneTypeSchema.safeParse({ ...zone, furnitureRequirements: [[broken]] }).success).toBe(
+        false,
+      );
+    }
+  });
 });
 
 describe("recipeSchema", () => {
