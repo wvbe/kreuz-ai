@@ -61,7 +61,7 @@ describe("loadContent (vertical-slice pack v0)", () => {
     expect(content.needs.require("hunger").decayPerTick).toBe(100);
     expect(content.needs.require("hunger").criticalThreshold).toBe(20000);
     expect(content.needs.require("rest").satisfactionMethods[0]?.amount).toBe(1200);
-    expect(content.skills.require("farming").diminishingFactor).toBe(400);
+    expect(content.skills.require("farming").diminishingFactor).toBe(250);
     expect(content.humanoids.require("farmer").startingSkills).toEqual({
       farming: 30000,
       hauling: 10000,

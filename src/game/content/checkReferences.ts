@@ -149,6 +149,9 @@ export function checkReferences(content: ParsedContent): ContentIssue[] {
     });
   }
   for (const entry of content.traits) {
+    entry.conflictsWith.forEach((other, index) =>
+      need(traits, ContentFile.Traits, entry.id, `conflictsWith.${index}`, other, "trait"),
+    );
     entry.modifiers.forEach((modifier, index) => {
       const field = `modifiers.${index}`;
       if (modifier.kind === TraitModifierKind.NeedModifier) {

@@ -103,13 +103,15 @@ const traitModifierSchema = z.discriminatedUnion("kind", [
 ]);
 
 /**
- * Authored trait (spec 022 trait record, DECISIONS D-37): a list of modifiers of three kinds.
+ * Authored trait (spec 022 trait record, DECISIONS D-37): a list of modifiers of three kinds and
+ * the ids of traits it never shares a character with (the procedural draw skips them, D-20).
  */
 export const traitSchema = z
   .object({
     id: contentIdSchema,
     name: z.string().min(1),
     modifiers: z.array(traitModifierSchema).min(1),
+    conflictsWith: z.array(contentIdSchema).default([]),
   })
   .strict();
 

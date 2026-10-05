@@ -3,8 +3,8 @@
     "id": "farming",
     "name": "Farming",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "output_bonus",
@@ -17,8 +17,8 @@
     "id": "woodcutting",
     "name": "Woodcutting",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "max_speed_bonus",
@@ -31,8 +31,8 @@
     "id": "carpentry",
     "name": "Carpentry",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "max_speed_bonus",
@@ -45,8 +45,8 @@
     "id": "construction",
     "name": "Construction",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "max_speed_bonus",
@@ -59,8 +59,8 @@
     "id": "hauling",
     "name": "Hauling",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "max_speed_bonus",
@@ -73,8 +73,8 @@
     "id": "baking",
     "name": "Baking",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "output_bonus",
@@ -87,8 +87,8 @@
     "id": "masonry",
     "name": "Masonry",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "quality_bonus",
@@ -101,8 +101,8 @@
     "id": "smithing",
     "name": "Smithing",
     "baseGrowthPerCompletion": 2,
-    "diminishingReturnsThreshold": 60,
-    "diminishingFactor": 0.4,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
     "outcomeEffects": [
       {
         "kind": "quality_bonus",

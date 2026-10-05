@@ -155,6 +155,7 @@ export enum PerformanceStat {
   Multiplier = "multiplier",
   OutputBonus = "output_bonus",
   SpeedMultiplier = "speed_multiplier",
+  MarginAdd = "margin_add",
 }
 
 /**
