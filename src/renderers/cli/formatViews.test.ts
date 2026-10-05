@@ -7,8 +7,10 @@ import {
   formatEntityDetail,
   formatEntityList,
   formatEvents,
+  formatIdentity,
   formatStatus,
   maxPrintedEvents,
+  styledNameOf,
 } from "./formatViews";
 
 const state: StateView = {
@@ -78,6 +80,22 @@ describe("formatEntityList", () => {
     ).toEqual(["entities 3-3 of 5", "  #3 peasant"]);
   });
 
+  it("prints the styled name of named entities", () => {
+    expect(
+      formatEntityList(
+        {
+          total: 2,
+          offset: 0,
+          entities: [
+            { id: 1, prototype: "government_faction" },
+            { id: 3, prototype: "baker" },
+          ],
+        },
+        new Map([[3, "Ansel the Baker"]]),
+      ),
+    ).toEqual(["entities 1-2 of 2", "  #1 government_faction", "  #3 baker Ansel the Baker"]);
+  });
+
   it("says when empty", () => {
     expect(formatEntityList({ total: 0, offset: 0, entities: [] })).toEqual([
       "no entities (total 0)",
@@ -129,5 +147,34 @@ describe("formatCharacter", () => {
 
   it("prints nothing for entities without the views", () => {
     expect(formatCharacter(null, null)).toEqual([]);
+  });
+});
+
+describe("styledNameOf", () => {
+  it("reads the styled name of an identity view", () => {
+    expect(styledNameOf({ styledName: "Ansel the Baker", givenName: "Ansel" })).toBe(
+      "Ansel the Baker",
+    );
+  });
+
+  it("is null for anything else", () => {
+    expect(styledNameOf(null)).toBeNull();
+    expect(styledNameOf({ givenName: "Ansel" })).toBeNull();
+  });
+});
+
+describe("formatIdentity", () => {
+  it("prints the styled name and the factions", () => {
+    expect(
+      formatIdentity(
+        { styledName: "Ansel the Baker" },
+        { entityId: 3, factions: [{ id: 1, name: "Settlement" }] },
+      ),
+    ).toEqual(["  name: Ansel the Baker", "  factions: #1 Settlement"]);
+  });
+
+  it("prints nothing for entities without the views or without factions", () => {
+    expect(formatIdentity(null, null)).toEqual([]);
+    expect(formatIdentity(null, { entityId: 1, factions: [] })).toEqual([]);
   });
 });

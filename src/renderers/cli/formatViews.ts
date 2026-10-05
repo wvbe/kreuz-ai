@@ -57,15 +57,22 @@ export function formatEvents(events: readonly EventRecord[], limit = maxPrintedE
  * Formats an entity list page.
  *
  * @param list - The `entities` view.
+ * @param names - Styled names by entity id (from `identity-of`); named entities print theirs.
  * @returns Output lines.
  */
-export function formatEntityList(list: EntityListView): string[] {
+export function formatEntityList(
+  list: EntityListView,
+  names: ReadonlyMap<number, string> = new Map(),
+): string[] {
   if (list.entities.length === 0) {
     return [`no entities (total ${list.total})`];
   }
   return [
     `entities ${list.offset + 1}-${list.offset + list.entities.length} of ${list.total}`,
-    ...list.entities.map((entity) => `  #${entity.id} ${entity.prototype}`),
+    ...list.entities.map((entity) => {
+      const name = names.get(entity.id);
+      return `  #${entity.id} ${entity.prototype}${name === undefined ? "" : ` ${name}`}`;
+    }),
   ];
 }
 
@@ -121,6 +128,46 @@ export function formatCharacter(skills: JsonValue, traits: JsonValue): string[] 
       (trait) => `${trait.name} (${trait.effects.join("; ")})`,
     );
     lines.push(`  traits: ${list.length === 0 ? "none" : list.join(", ")}`);
+  }
+  return lines;
+}
+
+const identitySummarySchema = z.object({ styledName: z.string() });
+
+const membershipSummarySchema = z.object({
+  factions: z.array(z.object({ id: z.number(), name: z.string() })),
+});
+
+/**
+ * Reads the styled name out of an `identity-of` query result.
+ *
+ * @param identity - Data of the `identity-of` query, or null.
+ * @returns The styled name, or null for anything that is not an identity view.
+ */
+export function styledNameOf(identity: JsonValue): string | null {
+  const parsed = identitySummarySchema.safeParse(identity);
+  return parsed.success ? parsed.data.styledName : null;
+}
+
+/**
+ * Formats the `identity-of` and `faction-of` query results for `inspect`: the styled name and the
+ * factions the entity belongs to. Results that are not those views print nothing.
+ *
+ * @param identity - Data of the `identity-of` query, or null.
+ * @param membership - Data of the `faction-of` query, or null.
+ * @returns Output lines, possibly none.
+ */
+export function formatIdentity(identity: JsonValue, membership: JsonValue): string[] {
+  const lines: string[] = [];
+  const name = styledNameOf(identity);
+  if (name !== null) {
+    lines.push(`  name: ${name}`);
+  }
+  const parsed = membershipSummarySchema.safeParse(membership);
+  if (parsed.success && parsed.data.factions.length > 0) {
+    lines.push(
+      `  factions: ${parsed.data.factions.map((faction) => `#${faction.id} ${faction.name}`).join(", ")}`,
+    );
   }
   return lines;
 }

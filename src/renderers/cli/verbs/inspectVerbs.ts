@@ -4,6 +4,8 @@ import {
   formatEntityDetail,
   formatEntityList,
   formatEvents,
+  formatIdentity,
+  styledNameOf,
 } from "../formatViews";
 import { renderAsciiMap } from "../renderAsciiMap";
 import { parseCount, verbDone, verbFailed } from "./Verb";
@@ -39,14 +41,19 @@ export const inspectVerbs: readonly Verb[] = [
     run: (args, { session }) => {
       const limit = parseCount(args[args.length - 1]);
       const prototype = args[0] !== undefined && parseCount(args[0]) === null ? args[0] : undefined;
-      return verbDone(
-        formatEntityList(
-          session.query.entities({
-            limit: limit !== null && limit >= 1 ? limit : defaultEntityPage,
-            ...(prototype === undefined ? {} : { prototype }),
-          }),
-        ),
-      );
+      const list = session.query.entities({
+        limit: limit !== null && limit >= 1 ? limit : defaultEntityPage,
+        ...(prototype === undefined ? {} : { prototype }),
+      });
+      const names = new Map<number, string>();
+      for (const entity of list.entities) {
+        const identity = session.query.run("identity-of", { entityId: entity.id });
+        const name = identity.ok ? styledNameOf(identity.data) : null;
+        if (name !== null) {
+          names.set(entity.id, name);
+        }
+      }
+      return verbDone(formatEntityList(list, names));
     },
   },
   {
@@ -61,8 +68,14 @@ export const inspectVerbs: readonly Verb[] = [
       const detail = session.query.entity(id);
       const skills = session.query.run("skills-of", { entityId: id });
       const traits = session.query.run("traits-of", { entityId: id });
+      const identity = session.query.run("identity-of", { entityId: id });
+      const membership = session.query.run("faction-of", { entityId: id });
       return verbDone([
         ...formatEntityDetail(detail, id),
+        ...formatIdentity(
+          identity.ok ? identity.data : null,
+          membership.ok ? membership.data : null,
+        ),
         ...formatCharacter(skills.ok ? skills.data : null, traits.ok ? traits.data : null),
       ]);
     },
