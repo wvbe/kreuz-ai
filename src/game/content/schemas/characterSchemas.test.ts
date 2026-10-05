@@ -1,0 +1,150 @@
+import { describe, expect, it } from "vitest";
+import {
+  animalPrototypeSchema,
+  factionSchema,
+  humanoidPrototypeSchema,
+  nameListSchema,
+  needSchema,
+  skillSchema,
+  traitSchema,
+} from "./characterSchemas";
+
+describe("needSchema", () => {
+  it("converts percent points to milli-percent", () => {
+    const need = needSchema.parse({
+      id: "hunger",
+      name: "Hunger",
+      decayPerTick: 0.1,
+      criticalThreshold: 20,
+    });
+    expect(need).toMatchObject({
+      decayPerTick: 100,
+      criticalThreshold: 20000,
+      satisfactionMethods: [],
+    });
+    expect(needSchema.safeParse({ ...need, criticalThreshold: 120 }).success).toBe(false);
+  });
+});
+
+describe("skillSchema", () => {
+  const skill = {
+    id: "baking",
+    name: "Baking",
+    baseGrowthPerCompletion: 2,
+    diminishingReturnsThreshold: 60,
+    diminishingFactor: 0.4,
+    outcomeEffects: [{ kind: "output_bonus", value: 1 }],
+    titleNoun: "Baker",
+  };
+
+  it("converts growth and factors and demands an effect and a title noun", () => {
+    expect(skillSchema.parse(skill)).toMatchObject({
+      baseGrowthPerCompletion: 2000,
+      diminishingFactor: 400,
+      outcomeEffects: [{ kind: "output_bonus", value: 1000 }],
+    });
+    expect(skillSchema.safeParse({ ...skill, outcomeEffects: [] }).success).toBe(false);
+    expect(skillSchema.safeParse({ ...skill, titleNoun: "" }).success).toBe(false);
+    expect(skillSchema.safeParse({ ...skill, diminishingReturnsThreshold: 101 }).success).toBe(
+      false,
+    );
+  });
+});
+
+describe("traitSchema", () => {
+  it("accepts the three modifier kinds and the ALL wildcards", () => {
+    const trait = traitSchema.parse({
+      id: "mixed",
+      name: "Mixed",
+      modifiers: [
+        { kind: "skill_aptitude", skill: "ALL", growthMultiplier: 1.2, startingValueBonus: 10 },
+        { kind: "performance", skill: "ALL_WORK", stat: "speed_multiplier", value: 1.1 },
+        { kind: "need_modifier", need: "mood", moodBonus: 5 },
+      ],
+    });
+    expect(trait.modifiers[0]).toMatchObject({ growthMultiplier: 1200, startingValueBonus: 10000 });
+    expect(trait.modifiers[2]).toMatchObject({ decayRateMultiplier: 1000, moodBonus: 5000 });
+  });
+
+  it("rejects unknown kinds, wildcards in aptitudes beyond ALL and empty lists", () => {
+    const base = { id: "bad", name: "Bad" };
+    expect(traitSchema.safeParse({ ...base, modifiers: [] }).success).toBe(false);
+    expect(traitSchema.safeParse({ ...base, modifiers: [{ kind: "magic" }] }).success).toBe(false);
+    expect(
+      traitSchema.safeParse({
+        ...base,
+        modifiers: [{ kind: "skill_aptitude", skill: "ALL_WORK", growthMultiplier: 1 }],
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("humanoidPrototypeSchema", () => {
+  const humanoid = { id: "farmer", name: "Farmer", behaviorTreeId: "basic_needs" };
+
+  it("applies defaults, scales skills and bounds trait slots", () => {
+    expect(
+      humanoidPrototypeSchema.parse({ ...humanoid, startingSkills: { farming: 30 } }),
+    ).toMatchObject({
+      startingSkills: { farming: 30000 },
+      traitSlots: 2,
+      nameListId: "common_13c",
+      inventorySlots: 8,
+      sellsItems: false,
+    });
+    expect(humanoidPrototypeSchema.safeParse({ ...humanoid, traitSlots: 0 }).success).toBe(false);
+    expect(
+      humanoidPrototypeSchema.safeParse({
+        ...humanoid,
+        traitSlots: 1,
+        defaultTraitIds: ["strong", "weak"],
+      }).success,
+    ).toBe(false);
+    expect(
+      humanoidPrototypeSchema.safeParse({ ...humanoid, startingSkills: { farming: 101 } }).success,
+    ).toBe(false);
+  });
+});
+
+describe("animalPrototypeSchema", () => {
+  it("accepts livestock and wild animals", () => {
+    const sheep = { id: "sheep", name: "Sheep", kind: "livestock", behaviorTreeId: "livestock" };
+    expect(animalPrototypeSchema.parse(sheep).threatLevel).toBe(0);
+    expect(animalPrototypeSchema.safeParse({ ...sheep, kind: "pet" }).success).toBe(false);
+  });
+});
+
+describe("factionSchema", () => {
+  const guild = {
+    id: "guild_bakers",
+    name: "Bakers",
+    factionType: "occupational",
+    leaderTitle: "Master",
+    disposition: "mercantile",
+    membership: { skillId: "baking", minLevel: 15 },
+  };
+
+  it("defaults the master threshold to 60 and requires it to exceed the membership minimum", () => {
+    expect(factionSchema.parse(guild).masterSkillThreshold).toBe(60);
+    expect(factionSchema.safeParse({ ...guild, masterSkillThreshold: 15 }).success).toBe(false);
+    expect(factionSchema.safeParse({ ...guild, masterSkillThreshold: 16 }).success).toBe(true);
+  });
+});
+
+describe("nameListSchema", () => {
+  const list = { id: "common", givenNames: [{ name: "Ada", weight: 1 }], bynames: ["Hill"] };
+
+  it("rejects duplicates ignoring case", () => {
+    expect(nameListSchema.safeParse(list).success).toBe(true);
+    expect(
+      nameListSchema.safeParse({
+        ...list,
+        givenNames: [
+          { name: "Ada", weight: 1 },
+          { name: "ADA", weight: 1 },
+        ],
+      }).success,
+    ).toBe(false);
+    expect(nameListSchema.safeParse({ ...list, bynames: ["Hill", "hill"] }).success).toBe(false);
+  });
+});
