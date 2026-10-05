@@ -1,18 +1,13 @@
 # Feature Specification: PRNG & Seed System
 
-**Feature Branch**: `011-prng-seed`
 **Created**: 2026-05-02
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "The PRNG/seed system. The game must be fully deterministic and reproducible given a seed."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Initialize PRNG with a Seed at Bootstrap (Priority: P1)
 
-When a game is bootstrapped (feature 007), a seed is provided (explicit integer) or auto-generated if not provided. The PRNG is initialized with the seed and is ready to produce deterministic random values. The same seed always produces the same sequence of random values, enabling reproducible game simulations for testing and replay.
+When a game is bootstrapped (feature 007), a seed is provided (explicit integer) or, if not provided, generated exactly once at bootstrap and recorded in the game state. The PRNG is initialized with the seed and is ready to produce deterministic random values. The same seed always produces the same sequence of random values, enabling reproducible game simulations for testing and replay.
 
 **Why this priority**: Foundation of determinism. Without seeded PRNG, the game is non-deterministic and save/load reproducibility fails. Blocking.
 
@@ -21,7 +16,7 @@ When a game is bootstrapped (feature 007), a seed is provided (explicit integer)
 **Acceptance Scenarios**:
 
 1. **Given** bootstrap with `{ seed: 12345 }`, **When** the PRNG is initialized, **Then** the seed is valid and stored (verified via `getSeed()`).
-2. **Given** no seed provided at bootstrap, **When** the engine initializes, **Then** a seed is auto-generated (e.g., from timestamp) and stored for reproducibility.
+2. **Given** no seed provided at bootstrap, **When** the engine initializes, **Then** the engine generates a seed exactly once and records it in the game state (`initOptions`, feature 007); all subsequent randomness derives from it, so the game is reproducible from its save.
 3. **Given** two games bootstrapped with the same seed, **When** both call `random()` 100 times, **Then** the two sequences are bit-for-bit identical.
 4. **Given** a game with seed 42 running 50 ticks, **When** a second game with seed 42 also runs 50 ticks, **Then** all random events (pathfinding, entity decisions, loot generation) are identical.
 5. **Given** an invalid seed (e.g., seed > 2^32-1), **When** bootstrap is called, **Then** validation rejects with clear error message.
@@ -84,7 +79,7 @@ Systems can derive sub-PRNGs from the main PRNG (e.g., pathfinding gets a derive
 
 ### User Story 5 - Re-seed During Gameplay for Testing and Debugging (Priority: P2)
 
-The PRNG can be re-seeded during gameplay via `setSeed(newSeed)`. This resets the PRNG to a new sequence, useful for testing different random outcomes without restarting the game. Derived PRNGs are also reset with corresponding seeds.
+The PRNG can be re-seeded during gameplay via `setSeed(newSeed)`. This resets the PRNG to a new sequence, useful for testing different random outcomes without restarting the game. Derived PRNGs are also reset with corresponding seeds. `setSeed` is limited to tests and debug tooling; normal gameplay never re-seeds.
 
 **Why this priority**: Useful for testing but not required for base game. P2 because it's optional but valuable for dev/test workflows.
 
@@ -120,19 +115,19 @@ The PRNG implementation is identical across all platforms (web browser, Node.js,
 
 ### Edge Cases
 
-- What happens if `randomInt(max, min)` is called with max < min? → Validation swaps parameters or rejects with error.
-- What happens if `randomWeighted()` is called with empty options array? → Validation rejects or returns null.
-- What happens if `randomWeighted()` weights don't sum to 1? → Weights are normalized; if they sum to 100, treat as percentages; if they sum to 5, normalize to 1.
+- What happens if `randomInt(max, min)` is called with max < min? → Rejected with a clear error (FR-014).
+- What happens if `randomWeighted()` is called with empty options array? → Rejected with a clear error (FR-014).
+- What happens if `randomWeighted()` weights don't sum to 1? → Fractional weights are rejected with a clear error (FR-014); weights are not normalized. Positive integer weights may have any sum (FR-016).
 - What happens if seed is re-set while a `shuffle()` is mid-operation? → Current operation completes; new seed applies to next operation.
 - What happens if PRNG state is corrupted in JSON (e.g., position is negative)? → Validation fails on load; error is raised before game resumes.
 - What happens if many derived PRNGs are created (100+)? → Each derives independently; memory usage scales; no artificial limit.
-- What happens if `derive()` is called with the same name twice? → Returns the same derived PRNG (or a fresh one; behavior documented).
+- What happens if `derive()` is called with the same name twice? → Each call returns a fresh derived PRNG at the deterministic initial state for (main seed, name), so both produce identical sequences (US4 scenario 2). Each consumer therefore derives its own uniquely named stream once and keeps it; the engine's derived streams are serialized by name with GameState (FR-011).
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
-- **FR-001**: PRNG MUST be seeded with an explicit integer seed at bootstrap time (feature 007) or auto-generated if not provided.
+- **FR-001**: PRNG MUST be seeded with an explicit integer seed at bootstrap time (feature 007) or, if none is provided, with a seed the engine generates exactly once at bootstrap and records in the game state (constitution seed carve-out); thereafter all randomness derives from it.
 - **FR-002**: Valid seed range MUST be 0 to 2^32-1 (unsigned 32-bit). Seeds outside this range MUST be rejected at initialization time.
 - **FR-003**: PRNG algorithm MUST be PCG (Permuted Congruential Generator) or equivalent deterministic, cross-platform algorithm.
 - **FR-004**: The PRNG MUST produce identical sequences given identical seeds and call sequences (strict determinism, bit-for-bit).
@@ -143,19 +138,20 @@ The PRNG implementation is identical across all platforms (web browser, Node.js,
 - **FR-009**: When a game is loaded from a save file, PRNG state MUST be restored; subsequent `random()` calls resume the pre-save sequence exactly.
 - **FR-010**: PRNG MUST support `derive(name)` to create independent sub-PRNGs with deterministic but separate sequences.
 - **FR-011**: Derived PRNGs MUST serialize as part of GameState; on load, derived PRNGs are reconstructed with identical state.
-- **FR-012**: PRNG MUST support `setSeed(newSeed)` to reset to a new sequence during gameplay (for testing/debugging).
+- **FR-012**: PRNG MUST support `setSeed(newSeed)` to reset to a new sequence during gameplay, for tests and debug tooling only (gameplay code MUST NOT call it). Re-seeding resets all derived PRNGs (re-derived from the new seed).
 - **FR-013**: PRNG implementation MUST be pure deterministic code (no platform-specific APIs like Math.random() or crypto); must work identically on all platforms.
 - **FR-014**: PRNG MUST validate all parameters (seed range, array bounds, weight sums); invalid calls MUST reject with clear error messages.
 - **FR-015**: Cross-platform determinism MUST be verified: same seed on Node.js and web browser produces bit-for-bit identical sequences.
+- **FR-016**: `randomWeighted` MUST also accept integer weights: when every weight is a positive integer, the weights may have any sum and are not required to sum to 1. Selection is then exactly proportional to weight ÷ sum: one integer is drawn uniformly in [0, sum) and the option whose cumulative weight range contains it is returned. Fractional weights still follow FR-014 (must sum to 1, not normalized). Integer weights are used by content weight tables such as spec 028 FR-004 (name lists) and spec 029 FR-015 (immigrant prototypes).
 
 ### Key Entities
 
 - **PRNG**: Main random number generator with seed, state, and methods for generating random values. Serializable.
-- **Seed**: Integer 0–2^32-1 provided by caller or auto-generated. Uniquely identifies a random sequence.
+- **Seed**: Integer 0–2^32-1 provided by caller or, if absent, generated once at bootstrap and recorded in game state. Uniquely identifies a random sequence.
 - **DerivedPRNG**: Sub-PRNG derived from main PRNG. Has its own independent sequence but derived deterministically.
 - **PRNGState**: Internal state of PRNG (position, counters, algorithm-specific data). Serializes to JSON.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
@@ -168,13 +164,14 @@ The PRNG implementation is identical across all platforms (web browser, Node.js,
 
 ## Assumptions
 
-- **Bootstrap provides seed or timestamp**: Bootstrap (feature 007) either receives an explicit seed or uses timestamp/deterministic auto-generation to seed the PRNG.
-- **No concurrent PRNG calls**: For POC, PRNG is assumed single-threaded. Concurrent calls from multiple threads are not thread-safe.
+- **Bootstrap provides the seed**: Bootstrap (feature 007) either receives an explicit seed or generates one exactly once and records it in the game state; this one-time generation is the only non-deterministic input (constitution seed carve-out).
+- **No concurrent PRNG calls**: PRNG is assumed single-threaded. Concurrent calls from multiple threads are not thread-safe.
 - **Pure JavaScript implementation**: PRNG is implemented in pure JavaScript/TypeScript with no native modules or platform-specific code paths.
 - **GameState handles serialization**: GameState (feature 006) serializes PRNG state; PRNG itself only provides state data (JSON-serializable).
 - **Derived PRNGs are reconstructed**: On load, derived PRNGs with the same names are reconstructed with identical state. New derives with unknown names start fresh.
-- **Pathfinding receives derived PRNG**: Pathfinding (feature 004) receives a derived PRNG for tie-breaking; it does not call main PRNG directly (injected dependency).
+- **Pathfinding receives derived PRNG**: Pathfinding (feature 012) receives a derived PRNG for tie-breaking; it does not call main PRNG directly (injected dependency).
 - **Room generation receives derived PRNG**: Room generator (feature 009) receives a derived PRNG; it does not access main PRNG directly.
+- **Citizen naming and immigration use derived streams**: Citizen naming uses the derived stream `identity.names` (spec 028 FR-004), and settler immigration uses `housing.immigration` (spec 029 FR-015).
 - **Event system uses main or derived PRNG**: Event bus (feature 010) and other systems receive PRNG as needed; no global PRNG singleton.
 - **No true randomness needed**: For all game purposes, pseudo-random sequences are sufficient; cryptographic randomness is not required.
 
@@ -193,4 +190,4 @@ The PRNG implementation is identical across all platforms (web browser, Node.js,
 **Answer**: Mutates in-place (like Fisher-Yates). Caller has the shuffled array after the call.
 
 **Q5 - Re-seeding and derived PRNGs**: If main PRNG is re-seeded, do existing derived PRNG instances continue their old state or are they reset?
-**Answer**: They continue their old state (independent). Calling `derive()` again with the same name after re-seeding returns a fresh derived PRNG based on the new seed.
+**Answer**: They are reset: re-seeding re-derives every derived PRNG from the new seed (same name → same new sequence). Re-seeding is test/debug tooling only (FR-012).
