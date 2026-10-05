@@ -4,8 +4,8 @@ import { EntityStore } from "../ecs/EntityStore";
 import { PrototypeRegistry } from "../ecs/PrototypeRegistry";
 import { IdCounters } from "../engine/IdCounters";
 import { BehaviorErrorKind } from "./BehaviorError";
-import { pickBestCandidate } from "./UtilityScoring";
-import type { BehaviorCandidate, UtilityContext, UtilityFactor } from "./UtilityScoring";
+import { pickBestCandidate } from "./utilityScoring";
+import type { BehaviorCandidate, UtilityContext, UtilityFactor } from "./utilityScoring";
 
 function context(): UtilityContext {
   const components = new ComponentRegistry();
