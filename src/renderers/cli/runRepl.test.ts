@@ -80,6 +80,24 @@ describe("executeReplLine", () => {
     expect(run(context, "jobs x")).toBe("error: usage: jobs [boardId]");
   });
 
+  it("shows the storage and the stock of a material (plan 3.2)", () => {
+    const { context } = createContext();
+    expect(run(context, "stock")).toContain("stock: 0 storages");
+    run(context, "new 42 steady small");
+    const overview = run(context, "stock").split("\n");
+    expect(overview[0]).toBe("stock: 1 storages, 16 slots (16 free)");
+    expect(overview).toContain("  nothing stored");
+    expect(overview).toContain("stockpiles:");
+    expect(overview.at(-1)).toMatch(
+      /^ {2}#9 chest at cell \d+ prio 50 accepts all, 16\/16 slots free: empty$/,
+    );
+    expect(run(context, "stock oak_log").split("\n")[0]).toBe("stock of oak_log:");
+    expect(run(context, "stock gem")).toMatch(/^error: .*gem/);
+    expect(run(context, "stock a b")).toBe("error: usage: stock [materialId]");
+    run(context, "step 288");
+    expect(run(context, "stock oak_log")).toMatch(/#9 chest at cell \d+: \d+/);
+  });
+
   it("inspect shows the skills and traits of a settler (spec 020)", () => {
     const { context } = createContext();
     run(context, "new 5 steady small");

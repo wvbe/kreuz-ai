@@ -25,6 +25,7 @@ Exit codes: 0 ok, 1 a scenario step failed, 2 bad arguments / unreadable or inva
 | `inspect <id>` | One entity and its components; characters also get a `skills:` and a `traits:` line. |
 | `events [n]` | The last n events (default 20). |
 | `jobs [boardId]` | Every job board (or one) with mode, pause state, open and claimed counts, its postings (`#id jobType status [by #worker] prio wage at cell`) and the last finished ones. |
+| `stock [materialId]` | What the storages hold: storage and slot counts, one line per material (total, reserved, available, room for more) and the stockpiles (`#id chest at cell prio accepts filter, free slots: contents`); with a material, its totals and which storage holds it. Carried goods and construction sites are not counted. |
 | `save <file>`, `load <file>` | Write / read a save file. |
 | `help [verb]`, `quit` | Help and exit. |
 
