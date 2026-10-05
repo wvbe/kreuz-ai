@@ -6,7 +6,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 
 ## Phase 0 — Foundations
 - [ ] 0.1 Delete old code; scaffold per spec 023 (tsconfigs, ESLint incl. determinism bans, vitest, tsx, check scripts)
-- [ ] 0.2 `docs/DECISIONS.md` — resolve cross-spec conflicts, command/event catalogues, tick order (**owner review gate**)
+- [ ] 0.2 `docs/DECISIONS.md` — resolve cross-spec conflicts, command/event catalogues, tick order, descopes (owner waived review; includes trader refined-credit ledger rule)
 - [ ] 0.3 PRNG & seed (011)
 - [ ] 0.4 Event bus (010)
 

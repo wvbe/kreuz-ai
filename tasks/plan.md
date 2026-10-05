@@ -56,7 +56,7 @@ Resolved by Task 0.2 (author proposes, owner approves — the only human gate be
 6. **014** cancel semantics (US8.3 vs FR-013a), material registry owner (005/014/022), recipe variants; **015** timing (immediate/next tick/within 1 tick), merge-confirm headless command, "Room" naming collision with 009 (rename 009's to `Site`/`MapRoom`).
 7. **019** negotiation protocol (counter reply, timeout, atomicity), barter valuation; **021** standing deltas, leader succession, NPC faction seat location, envoy combat (descope: envoys can fail by timeout only), refund on failed dispatch.
 8. **022** blockers: missing wall/door/job-board/town-crier/envoy prototypes, BT sub-tree references, gathering `outputs`/crop/season mechanics, `trading`/`preaching` skill effects vs 020, hunt/butcher/charity jobs, `mood` as non-need, zone furniture-requirement grammar, animal BTs.
-9. **027** *Hamlet has no iron source ⇒ Village unreachable* (smelter/forge are Village-tier). Pick: move Smelter/Forge unlock to Hamlet, or give Hamlet a trade-for-iron path. Also: 029 `dwelling` zone + level `unlockTier`s are missing from 027's table; Burgher House ≥ Market Town.
+9. **027** *Hamlet has no iron source ⇒ Village unreachable* (smelter/forge are Village-tier). **DECIDED (owner): Smelter/Forge stay at Village. Hamlet gets iron via trade:** it mines/gathers ore (add an ore source to Hamlet content), sells it to a trader, and may later buy refined iron. General, data-driven trader rule (019/021 amendment): each trader has content-defined `refines: {raw → refined, ratio}`; per-settlement ledger `refinedCredit[refined] += rawSold × ratio` (persisted in the trader/standing state, integer milli-units, **no expiry**; unbought refined stock stays stashed with the trader); the trader sells at most `refinedCredit` of that refined good and each purchase draws it down. 027 reachability validator (5.4) must prove Hamlet → ore source → sale → refined purchase → Village requirements. Also: 029 `dwelling` zone + level `unlockTier`s are missing from 027's table; Burgher House ≥ Market Town.
 10. **028 vs 029** Arrived-as-Major floods chronicle (SC-005); SC-006 size budget (300 KB/200 journals) infeasible → raise to ~1 MB or compact journals; store seen-skills set.
 11. **025** "report reasons" vs pure-derivation (FR-008): choose derivation (systems expose `explain()` providers) — simpler, no mutable state. **026** defaults for `maxOpenRunsPerOrder`, `maxStandingOrders`, `noticePostRadius`, `bellRadius`.
 12. **024** missing: trade-policy command semantics (descope to a no-op preference or define), time-control commands, who drives ticks (EngineHost), touch support (descope), asset pipeline (procedural primitives, no external models).
@@ -170,7 +170,7 @@ Deps 0.1 (parallel) · M (writing only, no code).
 One entry per conflict in "Spec conflicts" above with the chosen resolution and the spec edits (errata) needed; update the specs' text where a decision changes normative behaviour (small PR-able diffs), plus the canonical tick-pipeline order, command catalogue (names), event catalogue (names + payloads), and fixed-point conventions table.
 - [ ] Every numbered conflict has a decision or an explicit "defer to task X"
 - [ ] Command & event catalogues exist (inputs to 1.9 and each system task)
-- Verify: owner review. **Do not start Phase 1 before approval** (implementers may start 0.3/0.4 meanwhile — they are conflict-free after AD6).
+- Verify: self-review against the conflict list. **Not an owner gate** (owner waived review); log decisions and proceed. Phase 1 may start once the catalogues exist; 0.3/0.4 can start immediately (conflict-free after AD6).
 
 ### 0.3 PRNG & seed (011)
 Deps 0.1 · S–M. Files: `src/game/engine/Prng.ts`(+test).
@@ -300,7 +300,9 @@ Deps 1.4, 1.7 · L → split (a) outdoor Voronoi biomes/rivers/forests; (b) vill
 
 ## Phase 4
 
-### 4.1 Trade (019) — Deps 2.5, 3.1, 3.2 · L: negotiation protocol per DECISIONS, wages payer, treasury rent, Greedy margin hook, barter; whole-unit currency.
+### 4.1 Trade (019) — Deps 2.5, 3.1, 3.2 · L: negotiation protocol per DECISIONS, wages payer, treasury rent, Greedy margin hook, barter; whole-unit currency; **trader refined-credit ledger** (conflict item 9): content `refines` entries, persisted per settlement/trader, no expiry, purchases bounded by credit.
+- [ ] e2e: sell 10 ore → can buy exactly 10×ratio refined iron, not more; credit survives save/load and a 5000-tick wait; second sale adds to remaining credit
+- Hamlet content gains an ore source (mine/gather job) in 5.x.
 ### 4.2 Diplomacy (021 rest) — Deps 4.1 · L: standing deltas/thresholds, envoy lifecycle (timeout failure only), gifts with refund rule, leader succession, labour gate.
 ### 4.3 Standing orders & Steward (026) — Deps 3.3, 3.2 · L: orders CRUD commands, run budget caps, Notice Post/Bell Tower routing (017 hooks), Steward review at its pipeline slot.
 ### 4.4 Tiers/milestones/difficulty (027) — Deps 3.x · M: check cadence, unlock table incl. 029 dwellings, reachability validator (Hamlet→Village fixed per DECISIONS), difficulty multipliers (decay/hostility only).
@@ -338,10 +340,11 @@ Deps: `GameSession` API stable (after Checkpoint C at the earliest; recommended 
 | Tick cost at scale (many agents × BT × A\*) | Med | Path cache, budgets in 7.1, spatial indices in 1.2c |
 | Scenario/e2e brittleness from content tuning | Med | Assert on invariants and relative outcomes; golden hashes only for kernel scenarios |
 
-## Open questions for the owner
-1. ~~Greenfield?~~ **Confirmed by owner: delete the old implementation, keep nothing.**
-2. **AD3 — OK to replace spec 003's "async/await behaviors" with serializable step machines?** Needed for save/load correctness; implies a spec amendment.
-3. **Hamlet iron / Village reachability (027)** — move Smelter/Forge to Hamlet, or trade-for-iron? Default proposal: move to Hamlet.
-4. **Descopes:** envoy combat, touch support, trade-policy UI semantic, external 3D assets — default to "descoped, documented".
-5. **Scope of "playable":** plan declares the game playable (terminal) at Checkpoint C, complete-headless at D, and with GUI at Phase 6. Confirm that's the desired order or whether the GUI should come earlier at reduced scope.
-6. Constitution amendment for any fixed-point exception (currency, 019) — or keep everything ×1000?
+## Owner decisions (interview, 2026-10-05) — all former open questions are closed
+1. **Greenfield:** delete the old implementation, keep and consult nothing.
+2. **Playable =** start a Hamlet in the terminal, place a farm and buildings, watch settlers work and eat, grow toward Village. Terminal first (Checkpoint C playable, D complete headless); React GUI last (Phase 6).
+3. **Spec amendments allowed** when specs contradict each other or can't be built (incl. AD3: serializable step machines instead of spec 003's async/await). Each change is logged in `docs/DECISIONS.md`; **no owner review of DECISIONS.md is required** — task 0.2 is not a gate. Stop and ask only when a choice changes game rules in a way not covered above.
+4. **Village reachability:** trade-ledger rule in conflict item 9 (general, data-driven, no expiry). Smelter/Forge stay at Village.
+5. **Descoped (record in DECISIONS.md):** envoy combat (envoys fail only by timeout), touch support, trade-policy screen/command, external 3D models (GUI uses generated primitives).
+6. **Out of scope:** everything in `docs/ROADMAP.md`.
+7. Still mine to decide without asking: fixed-point handling of currency (default: keep ×1000 internally, display whole units) — logged in DECISIONS.md.
