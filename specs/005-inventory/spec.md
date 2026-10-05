@@ -1,13 +1,9 @@
 # Feature Specification: Inventory System
 
-**Feature Branch**: `005-inventory`
 **Created**: 2026-05-02
-**Status**: Unimplemented (fresh start)
 **Input**: User description: "A huge part of the game will be about goods, materials, money and ownership. There must be a notion of inventory that an entity (eg. person, vehicle, furniture) can have, and that can be interacted with to grab or store or trade material. Obviously inventories usually have a storage limit, in stacks, and materials of the same type can stack up to a certain amount before they require another stack/slot in inventory. The inventory helper class is cognizant of restrictions on grabbing/storing when it comes to availability and available space."
 
-> **Note (2026-05-04)**: A previous implementation of this feature was discarded. This spec is being reimplemented from scratch following the conventions in spec 023 (TypeScript code style). All code lives under `src/game/`, tests are co-located, no barrel files, no default exports. Entities are pure data objects; systems provide behavior. See spec 023 for the full code style reference.
-
-## User Scenarios & Testing _(mandatory)_
+## User Scenarios & Testing
 
 ### User Story 1 - Store and Retrieve Materials (Priority: P1)
 
@@ -24,7 +20,6 @@ An entity with an `Inventory` component can store materials (goods, resources, m
 3. **Given** a full inventory (all slots occupied at stack limit), **When** any additional material is stored, **Then** operation is rejected with a clear `InventoryFullError`; inventory state is unchanged.
 4. **Given** an inventory containing 5 units of `Stone`, **When** 3 units of `Stone` are retrieved, **Then** inventory contains 2 units of `Stone` and the retrieved items are returned to the caller.
 5. **Given** an inventory containing 2 units of `Stone`, **When** 5 units of `Stone` are retrieved, **Then** operation is rejected with `InsufficientItemsError`; inventory state is unchanged.
-6. **Given** any store/retrieve operation, **When** serialized to JSON mid-operation and reloaded, **Then** inventory state is identical and operation resumes correctly.
 
 ---
 
@@ -56,17 +51,17 @@ Before performing store or retrieve operations, systems and entities can query t
 
 **Acceptance Scenarios**:
 
-1. **Given** an inventory with 2 open slots and one slot of `Wood` at 8/50, **When** `canStore(Wood, 60)` is queried, **Then** result is `{ fits: false, maxFittable: 52 }` (42 remaining in existing stack + 50 in one new slot).
-2. **Given** an inventory containing 15 units of `Cheese`, **When** `canRetrieve(Cheese, 10)` is queried, **Then** result is `{ available: true, quantity: 15 }`.
-3. **Given** an inventory with no `Iron`, **When** `canRetrieve(Iron, 1)` is queried, **Then** result is `{ available: false, quantity: 0 }`.
-4. **Given** a full inventory, **When** `availableSlots()` is queried, **Then** result is `0`.
+1. **Given** an inventory with 2 open slots and one slot of `Wood` at 8/50, **When** `canStore(entity, "wood", 60)` is queried, **Then** result is `{ fits: false, maxFittable: 52 }` (42 remaining in existing stack + 50 in one new slot).
+2. **Given** an inventory containing 15 units of `Cheese`, **When** `canRetrieve(entity, "cheese", 10)` is queried, **Then** result is `{ available: true, quantity: 15 }`.
+3. **Given** an inventory with no `Iron`, **When** `canRetrieve(entity, "iron", 1)` is queried, **Then** result is `{ available: false, quantity: 0 }`.
+4. **Given** a full inventory, **When** `availableSlots(entity)` is queried, **Then** result is `0`.
 5. **Given** any inventory state, **When** query result is used to guard a store/retrieve call with exact fitting amounts, **Then** the store/retrieve succeeds without error.
 
 ---
 
 ### User Story 4 - Money as a Special Inventory Item (Priority: P1)
 
-Money is treated as a material in inventory with its own stack behavior, but it has special semantics: it is the primary medium of exchange in trades, and has a very high (or unlimited) stack limit compared to physical goods. Convenience system functions (`getBalance(entity)`, `debit(entity, amount)`, `credit(entity, amount)`) operate on the entity's inventory component data to interact with money without needing to know its material representation.
+Money is treated as a material in inventory with its own stack behavior, but it has special semantics: it is the primary medium of exchange in trades, and has a much higher stack limit (1000, per specs 019/022) than physical goods. Convenience system functions (`getBalance(entity)`, `debit(entity, amount)`, `credit(entity, amount)`) operate on the entity's inventory component data to interact with money without needing to know its material representation.
 
 **Why this priority**: Money underpins all economic interactions; must be clean and reliable.
 
@@ -92,17 +87,16 @@ Materials and money can be transferred directly between two entity inventories. 
 
 **Acceptance Scenarios**:
 
-1. **Given** entity A with 20 `Wood` and entity B with an empty inventory, **When** `transfer(A.inventory, B.inventory, Wood, 10)` is called, **Then** A has 10 `Wood`, B has 10 `Wood`, total unchanged.
-2. **Given** entity A with 5 `Wood` and B with a full inventory, **When** `transfer(A.inventory, B.inventory, Wood, 5)` is called, **Then** transfer rejects with `DestinationFullError`; both inventories unchanged.
-3. **Given** entity A with 3 `Wood` and B with an empty inventory, **When** `transfer(A.inventory, B.inventory, Wood, 10)` is called, **Then** transfer rejects with `InsufficientItemsError`; both inventories unchanged.
+1. **Given** entity A with 20 `Wood` and entity B with an empty inventory, **When** `transfer(entityA, entityB, "wood", 10)` is called, **Then** A has 10 `Wood`, B has 10 `Wood`, total unchanged.
+2. **Given** entity A with 5 `Wood` and B with a full inventory, **When** `transfer(entityA, entityB, "wood", 5)` is called, **Then** transfer rejects with `DestinationFullError`; both inventories unchanged.
+3. **Given** entity A with 3 `Wood` and B with an empty inventory, **When** `transfer(entityA, entityB, "wood", 10)` is called, **Then** transfer rejects with `InsufficientItemsError`; both inventories unchanged.
 4. **Given** a transfer of money between two entities, **When** transfer executes, **Then** total money across both entities is conserved; no money created or destroyed.
-5. **Given** a transfer in progress at save time, **When** save is loaded, **Then** transfer state is deterministic — either fully committed or fully rolled back; no partial state.
 
 ---
 
 ### User Story 6 - Partial Stores (Priority: P1)
 
-All item quantities are integers — there are no fractional items. However, a `store` operation may be asked to store more than fits, and the caller may explicitly opt into storing as much as fits (a partial store) rather than rejecting entirely. The `storeUpTo(material, quantity)` method stores the maximum integer quantity that fits, returns how many were actually stored, and leaves the remainder with the caller. This enables systems to fill inventories progressively without needing a pre-flight `canStore` check.
+All item quantities are integers — there are no fractional items. However, a `store` operation may be asked to store more than fits, and the caller may explicitly opt into storing as much as fits (a partial store) rather than rejecting entirely. The `storeUpTo(entity, material, quantity)` function stores the maximum integer quantity that fits, returns how many were actually stored, and leaves the remainder with the caller. This enables systems to fill inventories progressively without needing a pre-flight `canStore` check.
 
 **Why this priority**: Commonly needed by production, harvesting, and trading systems that deliver goods incrementally. Partial stores prevent logic complexity at call sites.
 
@@ -110,10 +104,9 @@ All item quantities are integers — there are no fractional items. However, a `
 
 **Acceptance Scenarios**:
 
-1. **Given** an inventory with space for 5 more `Wood`, **When** `storeUpTo(Wood, 20)` is called, **Then** 5 `Wood` are stored and the method returns `{ stored: 5, remainder: 15 }`.
-2. **Given** a full inventory, **When** `storeUpTo(Wood, 10)` is called, **Then** `{ stored: 0, remainder: 10 }` is returned and inventory is unchanged.
+1. **Given** an inventory with space for 5 more `Wood`, **When** `storeUpTo(entity, "wood", 20)` is called, **Then** 5 `Wood` are stored and the function returns `{ stored: 5, remainder: 15 }`.
+2. **Given** a full inventory, **When** `storeUpTo(entity, "wood", 10)` is called, **Then** `{ stored: 0, remainder: 10 }` is returned and inventory is unchanged.
 3. **Given** `storeUpTo` called with exactly fitting quantity, **When** it executes, **Then** `{ stored: N, remainder: 0 }` is returned (same as `store()`).
-4. **Given** any `storeUpTo` call, **When** serialized mid-execution and reloaded, **Then** stored quantity is deterministic (no partial slot state).
 
 ---
 
@@ -128,16 +121,16 @@ Each material type has an optional weight value. Inventories that have a weight 
 **Acceptance Scenarios**:
 
 1. **Given** a citizen with a weight limit of 50 units and materials `Stone` (weight 5/unit) and `Feather` (weight 0.1/unit represented as integer tenths), **When** 10 `Stone` are stored (total weight 50), **Then** inventory accepts them; no more `Stone` can be stored.
-2. **Given** a weight-limited inventory at capacity, **When** `store(Stone, 1)` is called, **Then** rejected with `WeightLimitExceededError` even if slots are available.
+2. **Given** a weight-limited inventory at capacity, **When** `store(entity, "stone", 1)` is called, **Then** rejected with `WeightLimitExceededError` even if slots are available.
 3. **Given** a stationary chest with no weight limit, **When** any quantity of any material is stored (within slot limits), **Then** weight is not checked or enforced.
-4. **Given** an inventory with weight limit and current weight, **When** `availableWeight()` is queried, **Then** remaining weight capacity is returned.
+4. **Given** an inventory with weight limit and current weight, **When** `availableWeight(entity)` is queried, **Then** remaining weight capacity is returned.
 5. **Given** inventory with weighted items, **When** serialized to JSON and deserialized, **Then** total weight and weight limit are preserved.
 
 ---
 
 ### User Story 8 - Perishable Items (Priority: P2)
 
-Some materials are perishable: they degrade or expire after a certain amount of game time. Each perishable material stack tracks its remaining game-time until expiry. When expiry is reached, the stack is automatically reduced or removed from inventory, and an event is emitted (so other systems can react, e.g., a citizen noticing their food has spoiled). Non-perishable materials are unaffected. Expiry is driven by game time, not real-world time.
+Some materials are perishable: they degrade or expire after a certain amount of game time. Each perishable material stack tracks its remaining game-time until expiry as a fixed-point integer count of remaining ticks (×1000, FR-020), decremented each tick by a fixed-point decay rate (normally 1 tick per tick; storage such as pantries (spec 018) may apply a multiplier). When the remaining time reaches zero, the stack is automatically reduced or removed from inventory, and an event is emitted (so other systems can react, e.g., a citizen noticing their food has spoiled). Non-perishable materials are unaffected. Expiry is driven by game time, not real-world time.
 
 **Why this priority**: Critical to food economy, trade urgency, and supply-chain gameplay. P2 because inventory works without it, but food/goods mechanics need it.
 
@@ -145,9 +138,9 @@ Some materials are perishable: they degrade or expire after a certain amount of 
 
 **Acceptance Scenarios**:
 
-1. **Given** an inventory with 10 `Cheese` with an expiry of 48 game hours, **When** game time advances 48 hours, **Then** the `Cheese` stack is removed and an `inventory.item.expired` event is emitted.
-2. **Given** `Cheese` stored at game time T, **When** `Cheese` has a 48-hour expiry, **Then** each stack records its expiry as `T + 48 hours` (not a global expiry — each stack expires based on when it was stored).
-3. **Given** two stacks of `Cheese` stored at different times, **When** time advances past the first stack's expiry only, **Then** first stack expires; second stack remains.
+1. **Given** an inventory with 10 `Cheese` with an expiry of 48 game hours (576 ticks) at the normal decay rate, **When** game time advances 48 hours, **Then** the `Cheese` stack is removed and an `inventory.item.expired` event is emitted.
+2. **Given** `Cheese` stored at game time T, **When** `Cheese` has a 48-hour expiry, **Then** the stack records its remaining time as 48 hours (576 ticks) at time T (not a global expiry — each stack expires based on its own remaining time).
+3. **Given** two separate stacks of `Cheese` stored at different times (the first stack was at its stack limit, so the second store started a new stack rather than merging), **When** time advances past the first stack's expiry only, **Then** first stack expires; second stack remains.
 4. **Given** a non-perishable material (`Wood`), **When** game time advances indefinitely, **Then** material does not expire.
 5. **Given** a perishable stack with remaining game time, **When** serialized to JSON and deserialized, **Then** remaining game time until expiry is preserved precisely.
 
@@ -163,9 +156,9 @@ Some entities (citizens, soldiers, merchants) have equipment slots: named slots 
 
 **Acceptance Scenarios**:
 
-1. **Given** a citizen with equipment slots `{ mainHand, offHand, chest }` and a `Sword` item in general inventory, **When** `equip(Sword, mainHand)` is called, **Then** `Sword` is removed from general inventory and placed in `mainHand` slot.
-2. **Given** `mainHand` slot already occupied by `Sword`, **When** `equip(Dagger, mainHand)` is called, **Then** `Sword` is unequipped back to general inventory and `Dagger` is equipped (swap behavior).
-3. **Given** a `chest` equipment slot restricted to armor-type items, **When** `equip(Bread, chest)` is called, **Then** operation is rejected with `EquipmentSlotIncompatibleError`.
+1. **Given** a citizen with equipment slots `{ mainHand, offHand, chest }` and a `Sword` item in general inventory, **When** `equip(entity, "sword", "mainHand")` is called, **Then** `Sword` is removed from general inventory and placed in `mainHand` slot.
+2. **Given** `mainHand` slot already occupied by `Sword`, **When** `equip(entity, "dagger", "mainHand")` is called, **Then** `Sword` is unequipped back to general inventory and `Dagger` is equipped (swap behavior).
+3. **Given** a `chest` equipment slot restricted to armor-type items, **When** `equip(entity, "bread", "chest")` is called, **Then** operation is rejected with `EquipmentSlotIncompatibleError`.
 4. **Given** an entity with equipped items, **When** serialized to JSON and deserialized, **Then** equipped items and their slot assignments are preserved.
 5. **Given** entity with equipped items, **When** entity is queried for all items (general inventory + equipment), **Then** combined totals are returned correctly.
 
@@ -190,55 +183,55 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 
 ### Edge Cases
 
-- What happens if stack limit for a material is changed after items are already stored at the old limit? → Existing stacks remain valid; new stores use the new limit.
+- What happens if stack limit for a material is changed after items are already stored at the old limit (e.g., a content update between saves; registries are immutable during a session)? → Existing stacks remain valid; new stores use the new limit.
 - What happens if an inventory slot limit is reduced below current occupied slots? → Existing contents remain; no new items can be stored until space is freed.
 - What happens if two concurrent transfers attempt to take the same items simultaneously? → Game loop is single-threaded per tick; concurrent transfers are sequenced by task execution order.
 - What happens if money balance would go negative after debit? → Reject with `InsufficientFundsError`; balance floored at 0, never negative.
 - What happens if a material type is unregistered (unknown to game)? → Reject store/retrieve with `UnknownMaterialError`.
 - What happens if a transfer is between inventories on different maps? → Transfer itself is location-agnostic; physical travel (if required) is handled by the entity's task queue, not the inventory.
 - What happens when an entity is deleted with items in its inventory? → Inventory contents may drop to terrain, be transferred to a loot pool, or be destroyed — depends on entity deletion semantics (caller responsibility).
-- What happens if a perishable stack partially expires (e.g., 10 cheese, only half the game time elapsed)? → No partial expiry within a stack at this stage; entire stack expires at once when game time reaches the stack's expiry timestamp.
-- What happens if two perishable stacks of the same material are merged? → The earlier expiry timestamp is used for the merged stack (conservative — prevents spoiled items hiding behind fresh ones).
+- What happens if a perishable stack partially expires (e.g., 10 cheese, only half the game time elapsed)? → No partial expiry within a stack at this stage; entire stack expires at once when the stack's remaining time reaches zero.
+- What happens if two perishable stacks of the same material are merged? → The merged stack's remaining time is the quantity-weighted average of both stacks' remaining time, rounded down (FR-020a).
 - What happens if an item is equipped but general inventory is full when the player tries to unequip? → Unequip rejects with `InventoryFullError`; item remains equipped.
 - What happens if a weight-limited entity picks up items through a transfer that would exceed weight? → Transfer rejects with `WeightLimitExceededError`; atomicity preserved.
 - What happens to equipped items when item weight changes (e.g., material rebalance)? → Equipped items recalculate total weight on next query; no retroactive rejection of already-equipped items.
 
-## Requirements _(mandatory)_
+## Requirements
 
 ### Functional Requirements
 
 - **FR-001**: System MUST provide an `Inventory` component attachable to any entity (person, vehicle, furniture, chest, etc.).
 - **FR-001a**: All inventory operations (`store`, `retrieve`, `transfer`, `equip`, `unequip`) execute synchronously within a single game tick and return results immediately; they are NOT awaitable.
 - **FR-002**: System MUST support configurable slot count per inventory instance (e.g., a chest has 20 slots; a citizen has 8 slots).
-- **FR-003**: System MUST support per-material configurable stack limits (e.g., `Coin` stacks to 10000; `Wood` stacks to 50; `Cheese` stacks to 20).
-- **FR-003a**: Materials MUST be identified by a stable integer ID (assigned at startup). Material names are metadata; all inventory slot storage and internal queries use material IDs, not names. Public API accepts material names as ergonomic aliases.
+- **FR-003**: System MUST support per-material configurable stack limits (e.g., currency stacks to 1000; `wood` stacks to 50; `cheese` stacks to 20).
+- **FR-003a**: Materials MUST be identified by a stable string content ID (lowercase snake_case, e.g., `iron_ingot`) defined in the material registry. Material names are display metadata; all inventory slot storage, internal queries, and the public API use material IDs, not names.
 - **FR-004**: System MUST fill existing partial stacks of the same material before consuming a new slot.
 - **FR-005**: System MUST reclaim (free) a slot when its stack quantity reaches zero.
-- **FR-006**: System MUST provide `store(material, quantity)` that places items into inventory, respecting stack limits and slot availability.
-- **FR-007**: System MUST provide `retrieve(material, quantity)` that removes items from inventory, respecting availability.
+- **FR-006**: System MUST provide `store(entity, material, quantity)` that places items into inventory, respecting stack limits and slot availability.
+- **FR-007**: System MUST provide `retrieve(entity, material, quantity)` that removes items from inventory, respecting availability.
 - **FR-008**: System MUST reject store operations that exceed capacity with `InventoryFullError`, leaving inventory unchanged.
 - **FR-009**: System MUST reject retrieve operations that exceed availability with `InsufficientItemsError`, leaving inventory unchanged.
-- **FR-010**: System MUST provide `canStore(material, quantity)` returning available capacity for a given material without modifying inventory.
-- **FR-011**: System MUST provide `canRetrieve(material, quantity)` returning availability of a given material without modifying inventory.
-- **FR-012**: System MUST provide `balance()`, `credit(amount)`, and `debit(amount)` as convenience methods for money, backed by money's material slot.
-- **FR-013**: System MUST reject `debit(amount)` when balance is insufficient, with `InsufficientFundsError`, leaving balance unchanged.
+- **FR-010**: System MUST provide `canStore(entity, material, quantity)` returning available capacity for a given material without modifying inventory.
+- **FR-011**: System MUST provide `canRetrieve(entity, material, quantity)` returning availability of a given material without modifying inventory.
+- **FR-012**: System MUST provide `getBalance(entity)`, `credit(entity, amount)`, and `debit(entity, amount)` as convenience functions for money, backed by money's material slot.
+- **FR-013**: System MUST reject `debit(entity, amount)` when balance is insufficient, with `InsufficientFundsError`, leaving balance unchanged.
 - **FR-014**: System MUST provide `transfer(source, destination, material, quantity)` that atomically moves items between inventories; rejects if source insufficient or destination full, with no partial state.
-- **FR-015**: System MUST provide `storeUpTo(material, quantity)` that stores the maximum integer quantity that fits and returns `{ stored, remainder }`; never errors on capacity.
+- **FR-015**: System MUST provide `storeUpTo(entity, material, quantity)` that stores the maximum integer quantity that fits and returns `{ stored, remainder }`; never errors on capacity.
 - **FR-016**: System MUST support per-material optional weight values; weight is represented as a non-negative integer (or fixed-point integer) per unit.
 - **FR-017**: System MUST support per-inventory optional weight limits; stores and transfers that would exceed a weight limit are rejected with `WeightLimitExceededError`.
-- **FR-018**: System MUST provide `availableWeight()` query returning remaining weight capacity for weight-limited inventories.
+- **FR-018**: System MUST provide `availableWeight(entity)` query returning remaining weight capacity for weight-limited inventories.
 - **FR-019**: System MUST support per-material optional perishability: a game-time duration after which a stored stack expires.
-- **FR-020**: System MUST track per-stack expiry timestamps (game time at storage + duration); each stack expires independently.
-- **FR-020a**: When a store operation adds items of a perishable material that already has a partial stack, the stacks MUST merge. The merged stack's new expiry timestamp is calculated as a weighted average: `newExpiry = (oldQuantity × oldExpiry + newQuantity × newExpiry) / (oldQuantity + newQuantity)`, rounded down to nearest integer game time tick.
-- **FR-021**: System MUST automatically remove or reduce expired stacks when game time advances past their expiry, and emit an `inventory.item.expired` event via the event bus at the tick boundary.
+- **FR-020**: System MUST track per-stack remaining time as a fixed-point integer count of remaining ticks (×1000; initialized to the material's perishability duration at storage), decremented each tick by the stack's fixed-point decay rate (1000 = one tick per tick, normal; containers such as pantries in spec 018 may apply a multiplier). Each stack expires independently. The difficulty `decayMultiplier` (spec 027 FR-015) applies after any container or zone multiplier, with rounding per spec 027 FR-014.
+- **FR-020a**: When a store operation adds items of a perishable material that already has a partial stack, the stacks MUST merge. The merged stack's new remaining time is calculated as a weighted average: `newRemaining = (oldQuantity × oldRemaining + newQuantity × newRemaining) / (oldQuantity + newQuantity)`, rounded down to the nearest integer.
+- **FR-021**: System MUST automatically remove or reduce expired stacks when their remaining time reaches zero, and emit an `inventory.item.expired` event via the event bus at the tick boundary.
 - **FR-021a**: System MUST emit inventory-change events via the event bus (`inventory.item.stored`, `inventory.item.retrieved`, `inventory.item.transferred`) at the tick boundary after the operation completes, allowing other systems to subscribe via `waitFor`.
 - **FR-022**: System MUST support named equipment slots per entity (e.g., `mainHand`, `chest`), each holding exactly one item (not a stack).
 - **FR-023**: System MUST support equipment slot type restrictions; equipping an incompatible item rejects with `EquipmentSlotIncompatibleError`.
 - **FR-024**: System MUST support equip/unequip operations that move items between general inventory and equipment slots atomically.
-- **FR-025**: System MUST support ownership (owner entity ID) and permission rules for access restrictions. Permission rules are defined as `{ type: "grant" | "deny", targetEntityId | faction | role, operation: "store" | "retrieve" | "transfer" | "equip" }`. Unauthorized access rejects with `AccessDeniedError`.
+- **FR-025**: System MUST support ownership (owner entity ID) and permission rules for access restrictions. Permission rules are defined as `{ type, targetEntityId | faction | role, operation }`, where `type` is a `PermissionType` enum (Grant, Deny) and `operation` is an `InventoryOperation` enum (Store, Retrieve, Transfer, Equip). Unauthorized access rejects with `AccessDeniedError`.
 - **FR-025a**: Permission checks occur at call time (not cached). Inventories default to open-access (no restrictions) unless explicitly configured. Permission evaluation is deterministic: first matching rule (in order) determines access; no caching allows dynamic permission updates.
-- **FR-026**: System MUST serialize full inventory state (slots, material IDs, quantities, stack limits, expiry timestamps, weight, equipment slots, ownership, access rules) to JSON without loss.
-- **FR-026a**: Material slots in JSON MUST store material ID (integer), not name, to ensure deterministic saves and future-proof material rebalancing.
+- **FR-026**: System MUST serialize full inventory state (slots, material IDs, quantities, stack limits, remaining perishable time and decay rates, weight, equipment slots, ownership, access rules) to JSON without loss.
+- **FR-026a**: Material slots in JSON MUST store the material's string content ID, not its display name, to ensure deterministic saves and future-proof material rebalancing.
 - **FR-027**: System MUST deserialize inventory state from JSON and produce identical inventory state.
 - **FR-028**: System MUST operate identically in headless environments (no renderer).
 - **FR-029**: System MUST make inventory state changes immediately visible to synchronous queries (`canStore`, `getTotal`, etc.) within the same tick that the operation completes. State consistency is maintained: all queries see the post-operation state immediately.
@@ -246,14 +239,12 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 ### Key Entities
 
 - **Inventory**: Component attachable to any entity. Has a slot count, a collection of `InventorySlot`s, an owner entity ID, and optional `PermissionRule` list for access restrictions.
-- **InventorySlot**: A single slot in an inventory. Contains a material type and a quantity (0 means empty/reclaimed). Quantity cannot exceed the material's stack limit.
-- **Material**: A typed, registered game resource with a stable integer ID assigned at startup. Has an ID, a human-readable name (metadata), a stack limit, an optional weight per unit (non-negative integer), and an optional perishability duration (in game ticks). Identified by ID internally; name is ergonomic alias for public API.
-- **InventorySlot**: A single general-storage slot. Contains a material ID (integer), an integer quantity, and — for perishable materials — an expiry timestamp in game ticks.
+- **Material**: A typed, registered game resource with a stable string content ID (lowercase snake_case). Has an ID, a human-readable name (display metadata), a stack limit, an optional weight per unit (non-negative integer), and an optional perishability duration (in game ticks). Identified by ID everywhere; name is display-only.
+- **InventorySlot**: A single general-storage slot. Contains a material ID (string), an integer quantity (0 means empty/reclaimed; cannot exceed the material's stack limit), and — for perishable materials — the remaining time (fixed-point integer ticks) and decay rate (fixed-point).
 - **EquipmentSlot**: A named slot for a single worn/wielded item. Has a name (e.g., `mainHand`), a type restriction (e.g., `weapon`), and holds at most one item.
-- **PermissionRule**: Defines access control for inventory operations. Structure: `{ type: "grant" | "deny", target: EntityId | FactionId | RoleType, operation: "store" | "retrieve" | "transfer" | "equip" }`. Rules are evaluated in order at call time; first match determines access. Deny rules take precedence over grant rules when explicitly ordered.
-- **InventoryTransaction**: Represents a store, retrieve, transfer, equip, or unequip operation. Used for atomicity guarantees and serialization of in-progress operations.
+- **PermissionRule**: Defines access control for inventory operations. Structure: `{ type: PermissionType, target: EntityId | FactionId | RoleType, operation: InventoryOperation }` (both enums; see FR-025). Rules are evaluated in order at call time; first match determines access. Deny rules take precedence over grant rules when explicitly ordered.
 
-## Success Criteria _(mandatory)_
+## Success Criteria
 
 ### Measurable Outcomes
 
@@ -264,7 +255,7 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 - **SC-004**: Money balance is conserved across all transfer operations; total money in game never increases or decreases through inventory operations alone.
 - **SC-005**: Inventory state serialized to JSON and deserialized produces bit-for-bit identical slot contents, quantities, and ownership.
 - **SC-006**: Transfer and equip/unequip operations are atomic; no partial state is observable or serializable.
-- **SC-007**: Inventory system functions operate on entity data via typed parameters: `getBalance(entity)`, `storeItem(entity, ...)`, `canRetrieve(entity, ...)`. No methods are attached to entity objects.
+- **SC-007**: Inventory system functions operate on entity data via typed parameters: `getBalance(entity)`, `store(entity, ...)`, `canRetrieve(entity, ...)`. No methods are attached to entity objects.
 - **SC-008**: All inventory operations behave identically in headless and browser environments.
 - **SC-009**: `storeUpTo` always returns `stored + remainder == quantity` (integer conservation).
 - **SC-010**: Perishable stack expiry events fire at the correct game time tick; no expiry fires early or late by more than one tick.
@@ -275,27 +266,26 @@ Inventories belong to entities and may have access restrictions: a locked chest 
 
 - **Within-Tick State Visibility**: Inventory operations complete synchronously and new state is immediately visible to synchronous queries within the same tick. Event-bus notifications fire at tick boundary for async subscribers. This prevents state inconsistency (queries don't see stale data) while allowing asynchronous reactions between ticks.
 - **Permission Rules & Call-Time Checking**: Inventories support optional permission rules (`{ type, target, operation }`) that are checked at call time (not cached). Evaluations are deterministic (first matching rule wins); no caching allows dynamic permission changes via event-driven faction/role updates. Default is open-access. This enables fine-grained faction politics, theft prevention, trade authorization, and locked containers.
-- **Material Identity by Integer ID**: Materials are identified by a stable integer ID assigned at startup. Material names are human-readable metadata; all inventory slot storage, serialization, and internal queries use material IDs. The public API accepts both material names (resolved to IDs at call time) and IDs directly for ergonomics. This ensures deterministic saves, efficient storage, and allows future material rebalancing without breaking existing saves.
+- **Material Identity by String ID**: Materials are identified by a stable string content ID (lowercase snake_case) from the material registry. Material names are human-readable metadata; all inventory slot storage, serialization, internal queries, and the public API use material IDs. This ensures deterministic saves and allows future material rebalancing without breaking existing saves.
 - **Synchronous Operations & Event-Bus Integration**: Inventory store/retrieve/transfer/equip/unequip operations complete synchronously within a tick. Event-bus events (`inventory.item.stored`, `inventory.item.retrieved`, `inventory.item.transferred`, `inventory.item.equipped`, `inventory.item.unequipped`, `inventory.item.expired`) fire at tick boundary; other systems subscribe via `event.waitFor()` to react asynchronously to inventory changes. This decouples inventory from downstream systems and simplifies atomicity guarantees.
-- **Money as Material**: Money is a registered material type (`Coin` or equivalent) with a very high or effectively unlimited stack limit. All money interactions go through the same inventory slot mechanism as other materials; `balance()`, `credit()`, `debit()` are convenience wrappers.
+- **Money as Material**: Money is a registered material type (the currency material, spec 019) with a stack limit of 1000 (specs 019/022). All money interactions go through the same inventory slot mechanism as other materials; `getBalance()`, `credit()`, `debit()` are convenience functions.
 - **Single Currency**: The game has one primary money type at this stage. Multiple currencies are out of scope.
 - **Integer Quantities Only**: All item quantities are integers. There are no fractional items. Partial stacks (e.g., 64 out of 100 max) are valid as long as the quantity is a whole number.
 - **Weight as Integer**: Item weight per unit is expressed as a non-negative integer (e.g., in tenths of a unit for precision). No floating-point weight values.
 - **Per-Stack Expiry & Merging**: Perishability is tracked per stack, not per individual item. When storing items of a material with an existing partial stack, the stacks merge and the new expiry is calculated as a weighted average of remaining game time (by stack quantity). This prevents spoilage hoarding and creates realistic "batch mixing" semantics: older small stacks mixed with fresh large stacks result in an intermediate expiry.
 - **Full-Stack Expiry Only**: At expiry, the entire stack is removed at once. Partial decay within a stack is out of scope.
 - **Equipment Slots Are Entity-Level**: Equipment slot definitions (which slots exist, type restrictions) are part of the entity prototype, not the inventory itself.
-- **`store()` Is All-or-Nothing**: `store(material, quantity)` rejects if the full amount doesn't fit. `storeUpTo(material, quantity)` is the explicit partial variant.
+- **`store()` Is All-or-Nothing**: `store(entity, material, quantity)` rejects if the full amount doesn't fit. `storeUpTo(entity, material, quantity)` is the explicit partial variant.
 - **Transfer Location-Agnostic**: Transfer operations between two inventories do not involve physical movement. Physical travel is handled by entity task queues.
 - **Deterministic Slot Order**: Slot allocation order is deterministic (seeded PRNG for tie-breaking if needed), ensuring identical saves produce identical slot layouts.
 - **Access Default Open**: Inventories are open-access by default unless a restriction is explicitly set.
-- **Material Registry at Startup**: All material types (including weight and perishability) are registered at game startup. Materials cannot be defined dynamically during gameplay.
+- **Material Registry at Startup**: All material types (including weight and perishability) are registered at game bootstrap; the registry is immutable afterwards. Materials cannot be defined dynamically during gameplay.
 
 ## Clarifications
 
 ### Session 2026-05-02
 
 - Q: How should inventory operations integrate with ECS async/await patterns? → A: Inventory operations execute synchronously (complete immediately within a tick), returning results synchronously. All state changes emit event-bus events that fire at tick boundary; downstream systems subscribe via `event.waitFor()` to react asynchronously. This ensures atomicity and allows other systems to compose inventory operations into larger async workflows.
-- Q: How should materials be identified and stored in inventory slots? → A: Materials identified by integer ID (assigned at startup). Names are metadata. Inventory slots store material ID (integer). Public API accepts both names and IDs for ergonomics. This enables deterministic saves and allows future material rebalancing without breaking saves.
-- Q: How should inventory access control be modeled? → A: Permission rules list with structure `{ type: "grant" | "deny", target (entity/faction/role), operation }`. Checked at call time (not cached). Default open-access. This enables faction politics, theft prevention, locked containers, and dynamic permission changes.
-- Q: How should perishable stacks be handled when storing items of the same material? → A: Merge on store, but calculate new expiry as weighted average of both stacks' remaining game time (weighted by quantity). Formula: `newExpiry = (oldQty × oldExpiry + newQty × newExpiry) / (oldQty + newQty)` rounded down. This creates realistic batch mixing semantics and prevents spoilage hoarding.
+- Q: How should inventory access control be modeled? → A: Permission rules list with structure `{ type: PermissionType, target (entity/faction/role), operation }`, where `PermissionType` is an enum (`Grant`, `Deny`). Checked at call time (not cached). Default open-access. This enables faction politics, theft prevention, locked containers, and dynamic permission changes.
+- Q: How should perishable stacks be handled when storing items of the same material? → A: Merge on store, but calculate new expiry as weighted average of both stacks' remaining game time (weighted by quantity). Formula: `newRemaining = (oldQty × oldRemaining + newQty × newRemaining) / (oldQty + newQty)` rounded down. This creates realistic batch mixing semantics and prevents spoilage hoarding.
 - Q: When can other systems observe the new inventory state after a store operation? → A: New state is immediately visible to synchronous queries within the same tick. Event-bus events fire at tick boundary. This prevents state inconsistency (queries see current state immediately) while allowing asynchronous reactions between ticks.
