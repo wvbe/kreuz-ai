@@ -28,9 +28,9 @@ describe("gathering verbs", () => {
     run(context, "zone designate farm_field 1 230 258 259 279 280 281");
     run(context, "step 20");
     const listing = run(context, "fields");
-    expect(listing).toContain("field #19: 3 cells, ");
+    expect(listing).toContain("field #26: 3 cells, ");
     expect(listing).toContain("1:230 wheat");
-    expect(run(context, "fields 19")).toContain("field #19");
+    expect(run(context, "fields 26")).toContain("field #26");
     expect(run(context, "fields 999")).toContain("no crop cells");
     const jobs = run(context, "jobs");
     expect(jobs).toMatch(/farm\.sow|mine\.ore|quarry\.stone/);

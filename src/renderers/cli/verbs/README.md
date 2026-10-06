@@ -17,6 +17,7 @@ The REPL commands, one file per verb group. A verb is `{name, usage, summary, ru
 - `standingVerbs.ts` - `standing [list | <orderId> | create <materialId> <target> [recipe= threshold= priority= zone= board=] | edit <orderId> [target= threshold= priority= board=] | pause | resume | delete <orderId>]` and `steward [appoint <entityId> | dismiss | review | board <boardId|none>]` (the queries `standing-orders`, `standing-order`, `steward`; the commands `CreateStandingOrder`, `UpdateStandingOrder`, `PauseStandingOrder`, `ResumeStandingOrder`, `DeleteStandingOrder`, `AppointSteward`, `DismissSteward`, `RequestStewardReview`, `SetStewardBoard`; formatted by `../formatStanding.ts`).
 - `housingVerbs.ts` - `homes`, `home <id>` (the queries `housing`, `dwellings`, `dwelling`, formatted by `../formatHousing.ts`; no commands, a dwelling is a zone).
 - `gatheringVerbs.ts` - `fields [zoneId]` (the `crops` query, formatted by `../formatCrops.ts`).
+- `faunaVerbs.ts` - `animals [wild|livestock]` (the `animals` query, formatted by `../formatAnimals.ts`; no commands, hunting is a posted `hunt.game` job).
 - `metaVerbs.ts` - `help, quit`.
 - `verbRegistry.ts` - `verbGroups` (the list of groups) and `createVerbRegistry` (flattens, rejects duplicate names).
 

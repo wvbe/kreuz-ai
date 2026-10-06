@@ -35,14 +35,14 @@ describe("production verbs", () => {
       cells: [300],
     });
     run(context, "step 1");
-    expect(run(context, "order create saw_oak_planks 2 19 70")).toContain(
+    expect(run(context, "order create saw_oak_planks 2 26 70")).toContain(
       "queued CreateProductionOrder",
     );
     run(context, "step 1");
     expect(run(context, "orders")).toMatch(
-      /^#1 saw_oak_planks 0\/2 at workstation #19: active, priority 70\n {4}blocked: MissingInput materialId=oak_log/,
+      /^#1 saw_oak_planks 0\/2 at workstation #26: active, priority 70\n {4}blocked: MissingInput materialId=oak_log/,
     );
-    expect(run(context, "orders 19")).toContain("#1 saw_oak_planks");
+    expect(run(context, "orders 26")).toContain("#1 saw_oak_planks");
     expect(run(context, "orders 77")).toBe("no production orders");
     expect(run(context, "order 1")).toMatch(
       /^#1 saw_oak_planks.*\n {2}no posting out\n {2}blocked: /,
@@ -52,7 +52,7 @@ describe("production verbs", () => {
     run(context, "step 1");
     expect(run(context, "orders")).toContain("paused, priority 20");
     expect(run(context, "order resume 1")).toContain("queued SetProductionOrderPaused");
-    expect(run(context, "order interrupt 19")).toContain("queued CancelCraft");
+    expect(run(context, "order interrupt 26")).toContain("queued CancelCraft");
     expect(run(context, "order cancel 1")).toContain("queued CancelProductionOrder");
     run(context, "step 1");
     expect(run(context, "orders")).toContain("cancelled");

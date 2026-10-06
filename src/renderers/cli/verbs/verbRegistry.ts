@@ -3,6 +3,7 @@ import { cellVerbs } from "./cellVerbs";
 import { constructionVerbs } from "./constructionVerbs";
 import { crierVerbs } from "./crierVerbs";
 import { diplomacyVerbs } from "./diplomacyVerbs";
+import { faunaVerbs } from "./faunaVerbs";
 import { gatheringVerbs } from "./gatheringVerbs";
 import { inspectVerbs } from "./inspectVerbs";
 import { jobVerbs } from "./jobVerbs";
@@ -33,6 +34,7 @@ export const verbGroups: readonly (readonly Verb[])[] = [
   productionVerbs,
   constructionVerbs,
   gatheringVerbs,
+  faunaVerbs,
   tradeVerbs,
   diplomacyVerbs,
   settlementVerbs,

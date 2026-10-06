@@ -39,11 +39,11 @@ describe("construction verbs", () => {
     expect(listing.match(/Construction wall/g)).toHaveLength(2);
     expect(listing).toContain("Construction door at 1:303");
     expect(run(context, "sites 1")).toContain("table");
-    expect(run(context, "build priority 19 90")).toContain("queued SetConstructionPriority");
-    expect(run(context, "build pause 19")).toContain("queued SetConstructionJobPaused");
-    expect(run(context, "build resume 19")).toContain("queued SetConstructionJobPaused");
-    expect(run(context, "build front 19")).toContain("queued MoveConstructionJobToFront");
-    expect(run(context, "build cancel 19")).toContain("queued CancelConstructionJob");
+    expect(run(context, "build priority 26 90")).toContain("queued SetConstructionPriority");
+    expect(run(context, "build pause 26")).toContain("queued SetConstructionJobPaused");
+    expect(run(context, "build resume 26")).toContain("queued SetConstructionJobPaused");
+    expect(run(context, "build front 26")).toContain("queued MoveConstructionJobToFront");
+    expect(run(context, "build cancel 26")).toContain("queued CancelConstructionJob");
     run(context, "step 1");
     expect(run(context, "sites")).toContain("finished #");
   });
