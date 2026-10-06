@@ -59,7 +59,23 @@ describe("ASCII map golden files", () => {
     session.newGame({ seed: 42, mapSize: MapSize.Small });
     const text = render(session, 1);
     expect(text).toBe(render(session, 1));
-    for (const glyph of ["~", ",", "T", "o", "*", "^", "="]) {
+    for (const glyph of [
+      "~",
+      ",",
+      "T",
+      "o",
+      "*",
+      "^",
+      "=",
+      "t",
+      "b",
+      "&",
+      "c",
+      "s",
+      ";",
+      "a",
+      "v",
+    ]) {
       expect(text).toContain(glyph);
     }
     await expect(text).toMatchFileSnapshot("./golden/world-seed42-small.txt");

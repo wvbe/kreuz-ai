@@ -5,6 +5,7 @@ import { GameEngine } from "../engine/GameEngine";
 import { MapSize } from "../map/mapSize";
 import { positionComponent } from "../map/positionComponent";
 import { getComponent } from "../ecs/Entity";
+import { baseTerrainOf } from "./placeFeatures";
 import { cellSpacing } from "./generateOutdoorTerrain";
 import { distanceSquared } from "./distanceSquared";
 import { readWorldLayout } from "./readWorldLayout";
@@ -64,7 +65,7 @@ describe("spawnFauna", () => {
       expect(position).toBeDefined();
       const cell = position?.cellIndex ?? -1;
       expect(map.isTraversable(cell)).toBe(true);
-      expect(record.habitatTerrainIds).toContain(map.terrainAt(cell));
+      expect(record.habitatTerrainIds).toContain(baseTerrainOf(map.terrainAt(cell)));
       expect(distanceSquared(map.centroid(cell), origin)).toBeGreaterThanOrEqual(
         faunaSafeSpacings * faunaSafeSpacings * spacing * spacing,
       );

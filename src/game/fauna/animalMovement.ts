@@ -10,6 +10,7 @@ import { positionComponent } from "../map/positionComponent";
 import { activeZonesOfType } from "../zones/zoneQueries";
 import { getZoneService } from "../zones/zoneServiceRegistry";
 import { distanceSquared } from "../worldgen/distanceSquared";
+import { baseTerrainOf } from "../worldgen/placeFeatures";
 import {
   animalStandChance,
   animalStandMaxTicks,
@@ -231,7 +232,8 @@ export function wanderAnimal(
           (reachable) =>
             reachable.cell !== own &&
             (!inPen || pen.has(reachable.cell)) &&
-            (allowed.length === 0 || allowed.includes(map.terrainAt(reachable.cell))),
+            (allowed.length === 0 ||
+              allowed.includes(baseTerrainOf(map.terrainAt(reachable.cell)))),
         );
   if (options.length === 0) {
     enqueueStand(engine, entity, ticks, 10);
@@ -260,7 +262,7 @@ export function grazeAnimal(
   if (position === undefined || map === undefined || content.dietTerrainIds.length === 0) {
     return false;
   }
-  if (content.dietTerrainIds.includes(map.terrainAt(position.cellIndex))) {
+  if (content.dietTerrainIds.includes(baseTerrainOf(map.terrainAt(position.cellIndex)))) {
     enqueueStand(engine, entity, grazeStandTicks, 10);
     return true;
   }
@@ -269,7 +271,7 @@ export function grazeAnimal(
   const food = cellsAround(engine, entity, animalWanderRadiusCost)
     .filter(
       (reachable) =>
-        content.dietTerrainIds.includes(map.terrainAt(reachable.cell)) &&
+        content.dietTerrainIds.includes(baseTerrainOf(map.terrainAt(reachable.cell))) &&
         (!inPen || pen.has(reachable.cell)),
     )
     .slice(0, 3);

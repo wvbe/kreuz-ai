@@ -4,6 +4,7 @@ import type { Entity } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { storeUpTo } from "../inventory/inventoryOperations";
 import { positionComponent } from "../map/positionComponent";
+import { baseTerrainOf } from "../worldgen/placeFeatures";
 import { animalComponent } from "./animalComponent";
 import { animalContentOf } from "./animalSenses";
 import { animalEatPerTick, animalHungerPerTick, animalProducedEvent } from "./faunaTypes";
@@ -30,7 +31,7 @@ export function tickAnimal(engine: GameEngine, entity: Entity, tick: number): vo
   const eating =
     position !== undefined &&
     map !== undefined &&
-    content.dietTerrainIds.includes(map.terrainAt(position.cellIndex));
+    content.dietTerrainIds.includes(baseTerrainOf(map.terrainAt(position.cellIndex)));
   const change = animalHungerPerTick - (eating ? animalEatPerTick : 0);
   animal.hungerMilli = Math.min(maxMeterMilli, Math.max(0, animal.hungerMilli + change));
   if (content.productIntervalTicks === 0 || content.products.length === 0) {

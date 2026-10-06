@@ -6,6 +6,7 @@ import { carvePath } from "./carvePath";
 import { generateOutdoorTerrain } from "./generateOutdoorTerrain";
 import { chooseVillageCenter, layoutVillage } from "./layoutVillage";
 import type { VillageLayout } from "./layoutVillage";
+import { featuresStreamName, placeFeatures } from "./placeFeatures";
 import { placeIronOre } from "./placeIronOre";
 import { spawnSettlers } from "./spawnSettlers";
 import { verifyWorld } from "./verifyWorld";
@@ -144,6 +145,15 @@ export function generateWorld(
       `no valid world after ${attempts} attempts: ${problems.join("; ")}`,
     );
   }
+  placeFeatures(terrain, {
+    geometry,
+    stream: engine.prng.stream(featuresStreamName),
+    villageCenter: village.center,
+    oreCells,
+    clearing: village.clearing,
+    hasTerrain: (terrainId) => engine.content.terrain.has(terrainId),
+  });
+  map.assignTerrain(terrain);
   const spawned = spawnSettlers(engine, map.id, village);
   return {
     mapId: map.id,

@@ -13,6 +13,8 @@ import {
   outdoorGeneratorName,
   worldGenStreamName,
 } from "./generateWorld";
+import { hashText } from "../save/stateHash";
+import { baseTerrainOf, featuresStreamName } from "./placeFeatures";
 import { traitStreamName } from "../skills/skillTypes";
 import { terrainHash } from "./terrainHash";
 import { WorldGenError, WorldGenErrorKind } from "./WorldGenError";
@@ -43,10 +45,26 @@ describe("generateWorld through newGame", () => {
     expect(terrainHash(start(42, MapSize.Medium).maps.require(1))).not.toBe(first);
   });
 
+  // D-250: the feature pass changed these three hashes (and only them); the base hashes below are
+  // the old goldens and pin that the pass only converts cells of existing biomes.
   it("matches the golden terrain hashes of three seeds", () => {
-    expect(terrainHash(start(42, MapSize.Small).maps.require(1))).toBe("ffa3557e4ac960f6");
-    expect(terrainHash(start(1, MapSize.Medium).maps.require(1))).toBe("75b840302f761935");
-    expect(terrainHash(start(2024, MapSize.Large).maps.require(1))).toBe("2bb799d61e2e1f2b");
+    expect(terrainHash(start(42, MapSize.Small).maps.require(1))).toBe("7c96cd4f7eed5766");
+    expect(terrainHash(start(1, MapSize.Medium).maps.require(1))).toBe("9436949c3b6b2c42");
+    expect(terrainHash(start(2024, MapSize.Large).maps.require(1))).toBe("18a24d10597c3803");
+  });
+
+  it("keeps the base biome hashes of before the feature pass (D-250)", () => {
+    const baseHash = (seed: number, size: MapSize): string => {
+      const map = start(seed, size).maps.require(1);
+      const ids: string[] = [];
+      for (let cell = 0; cell < map.cellCount; cell += 1) {
+        ids.push(baseTerrainOf(map.terrainAt(cell)));
+      }
+      return hashText(`${map.cellCount}:${ids.join(",")}`);
+    };
+    expect(baseHash(42, MapSize.Small)).toBe("ffa3557e4ac960f6");
+    expect(baseHash(1, MapSize.Medium)).toBe("75b840302f761935");
+    expect(baseHash(2024, MapSize.Large)).toBe("2bb799d61e2e1f2b");
   });
 
   it("scales the map with the size and records the generator", () => {
@@ -81,7 +99,7 @@ describe("generateWorld through newGame", () => {
     }
   });
 
-  it("only draws from the world.gen, world.fauna, content.traits and identity.names streams", () => {
+  it("only draws from the world.gen, world.gen.features, world.fauna, content.traits and identity.names streams", () => {
     const engine = start(42, MapSize.Small);
     expect(Object.keys(engine.prng.serialize().streams)).toEqual([
       traitStreamName,
@@ -89,6 +107,7 @@ describe("generateWorld through newGame", () => {
       "trade.visit",
       "world.fauna",
       worldGenStreamName,
+      featuresStreamName,
     ]);
   });
 });

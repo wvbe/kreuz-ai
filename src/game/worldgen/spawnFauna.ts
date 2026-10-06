@@ -5,6 +5,7 @@ import { FaunaStream } from "../fauna/faunaTypes";
 import type { CellPoint } from "../map/mapTypes";
 import { distanceSquared } from "./distanceSquared";
 import { cellSpacing } from "./generateOutdoorTerrain";
+import { baseTerrainOf } from "./placeFeatures";
 
 /**
  * Habitat cells per animal by threat level (index 0..4): a wild species gets one animal per this
@@ -37,7 +38,9 @@ export const faunaSafeSpacings = 6;
  * {@link faunaSafeSpacings} cell spacings from the village center are candidates; the species
  * gets `floor(candidates / habitatCellsPerAnimal[threat])` animals (at most
  * `maxAnimalsPerSpecies[threat]`, at least one up to {@link guaranteedThreatLevel}), each on a
- * cell chosen uniformly from the candidates left (no two on one cell). Livestock is not spawned:
+ * cell chosen uniformly from the candidates left (no two on one cell). A cell counts as the biome
+ * it was cut from by the late feature pass (`baseTerrainOf`, D-250), so the feature terrains
+ * change neither the candidates nor the draws. Livestock is not spawned:
  * it arrives by trade (spec 022 edge cases).
  *
  * @param engine - The engine in `NewGame` init.
@@ -62,7 +65,7 @@ export function spawnFauna(engine: GameEngine, mapId: number, villageCell: numbe
       if (
         !taken.has(cell) &&
         map.isTraversable(cell) &&
-        animal.habitatTerrainIds.includes(map.terrainAt(cell)) &&
+        animal.habitatTerrainIds.includes(baseTerrainOf(map.terrainAt(cell))) &&
         distanceSquared(map.centroid(cell), origin) >= safe
       ) {
         candidates.push(cell);

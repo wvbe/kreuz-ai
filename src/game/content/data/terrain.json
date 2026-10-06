@@ -280,7 +280,7 @@
   {
     "id": "clay_deposit",
     "name": "Clay deposit",
-    "moveCost": 15,
+    "moveCost": 10,
     "passable": true,
     "blockReason": null,
     "buildable": false,
