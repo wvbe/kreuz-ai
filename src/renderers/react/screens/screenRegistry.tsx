@@ -4,7 +4,6 @@ import { Screen } from "../navigation/Screen";
 import { ContentScreen } from "./ContentScreen";
 import { MapScreen } from "./MapScreen";
 import { NewGameScreen } from "./NewGameScreen";
-import { PlaceholderScreen } from "./PlaceholderScreen";
 import { SettingsScreen } from "./SettingsScreen";
 import { ChronicleScreen } from "../views/ChronicleScreen";
 import { FlowScreen } from "../views/FlowScreen";
