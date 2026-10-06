@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { JsonObject } from "./invariants";
-import { checkBounded, checkReferences, checkReservations, collectNonIntegers } from "./invariants";
+import {
+  checkAnimals,
+  checkBounded,
+  checkReferences,
+  checkReservations,
+  collectNonIntegers,
+} from "./invariants";
 import { runSoak, seededUnit } from "./soakRun";
 
 // The light soak of plan task 7.1 that runs in CI: the hamlet-to-village opening for about 2,400
@@ -119,6 +125,17 @@ describe("soak: the invariant checks find what they are for", () => {
       "event queue holds 3 events (limit 2)",
       "entity#4 holds 0 bread",
     ]);
+  });
+
+  it("flags an animal without a position, a citizen animal and too many animals", () => {
+    const root: JsonObject = {
+      entities: [
+        { id: 1, components: { Animal: {}, Position: {} } },
+        { id: 2, components: { Animal: {}, Citizen: {} } },
+      ],
+    };
+    expect(checkAnimals(root, 5)).toEqual(["animal#2 has no Position", "animal#2 is a Citizen"]);
+    expect(checkAnimals(root, 1)).toContain("2 animals (limit 1)");
   });
 
   it("the seeded generator repeats and spreads", () => {

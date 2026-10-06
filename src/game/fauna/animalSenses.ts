@@ -114,11 +114,11 @@ export function senseNearest(
   if (position === undefined || radiusCost <= 0) {
     return null;
   }
-  const cells = getAiService(engine)
-    .pathfinding.reachable(position.mapId, position.cellIndex, radiusCost)
-    .sort((left, right) =>
-      left.cost === right.cost ? left.cell - right.cell : left.cost - right.cost,
-    );
+  const cells = [
+    ...getAiService(engine).pathfinding.reachable(position.mapId, position.cellIndex, radiusCost),
+  ].sort((left, right) =>
+    left.cost === right.cost ? left.cell - right.cell : left.cost - right.cost,
+  );
   for (const reachable of cells) {
     for (const id of engine.maps.occupants.occupantsOf(position.mapId, reachable.cell)) {
       const entity = engine.store.get(id);

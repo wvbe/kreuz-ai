@@ -222,6 +222,36 @@ export function checkBounded(root: JsonObject, queueLimit: number): string[] {
 }
 
 /**
+ * Every animal has a position and no `Citizen` component (animals are never settlers), and
+ * there are at most `limit` of them (wild fauna stays bounded).
+ *
+ * @param root - The parsed save text.
+ * @param limit - The largest allowed number of animals.
+ * @returns Violations.
+ */
+export function checkAnimals(root: JsonObject, limit: number): string[] {
+  const violations: string[] = [];
+  let animals = 0;
+  for (const entity of root["entities"] as JsonObject[]) {
+    const components = entity["components"] as JsonObject;
+    if (components["Animal"] === undefined) {
+      continue;
+    }
+    animals += 1;
+    if (components["Position"] === undefined) {
+      violations.push(`animal#${String(entity["id"])} has no Position`);
+    }
+    if (components["Citizen"] !== undefined) {
+      violations.push(`animal#${String(entity["id"])} is a Citizen`);
+    }
+  }
+  if (animals > limit) {
+    violations.push(`${animals} animals (limit ${limit})`);
+  }
+  return violations;
+}
+
+/**
  * Runs every state invariant against the current state of a session.
  *
  * @param session - The running game.
@@ -243,6 +273,7 @@ export function checkInvariants(session: GameSession, queueLimit = 2000): string
     ...checkReferences(root),
     ...checkReservations(root),
     ...checkBounded(root, queueLimit),
+    ...checkAnimals(root, 200),
     ...checkNoUnexplained(session),
   ];
 }

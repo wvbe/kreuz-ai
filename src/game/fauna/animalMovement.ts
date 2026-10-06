@@ -39,11 +39,15 @@ export function cellsAround(
   const position = getComponent(entity, positionComponent);
   return position === undefined
     ? []
-    : getAiService(engine)
-        .pathfinding.reachable(position.mapId, position.cellIndex, radiusCost)
-        .sort((left, right) =>
-          left.cost === right.cost ? left.cell - right.cell : left.cost - right.cost,
-        );
+    : [
+        ...getAiService(engine).pathfinding.reachable(
+          position.mapId,
+          position.cellIndex,
+          radiusCost,
+        ),
+      ].sort((left, right) =>
+        left.cost === right.cost ? left.cell - right.cell : left.cost - right.cost,
+      );
 }
 
 /**
