@@ -1,3 +1,4 @@
+import { getCrierService } from "../../crier/crierServiceRegistry";
 import { getComponent } from "../../ecs/Entity";
 import { getBoard, listBoards } from "../../jobs/jobBoards";
 import { jobBoardComponent } from "../../jobs/jobBoardComponent";
@@ -10,7 +11,8 @@ import type { Reason, StatusProvider, SubjectStatus } from "../statusTypes";
 /**
  * The status provider of job boards (spec 025 subject `JobBoard`): Blocked with `Paused` when the
  * player paused it and with `ZoneInactive {zoneId}` (cause: the zone) when the system paused it
- * because its zone is not active; Active otherwise.
+ * because its zone is not active, and with `AwaitingTownCrier` while a player change for it still
+ * waits for a Town Crier to take it; Active otherwise.
  */
 export const boardProvider: StatusProvider = {
   kind: StatusSubjectKind.JobBoard,
@@ -40,6 +42,13 @@ export const boardProvider: StatusProvider = {
               { kind: StatusSubjectKind.Zone, id: zoneId },
             ),
       );
+    }
+    if (
+      getCrierService(engine)
+        .updates()
+        .some((update) => update.boardId === ref.id && update.crierId === null)
+    ) {
+      reasons.push(makeReason(BlockedReasonKind.AwaitingTownCrier, { jobBoardId: ref.id }));
     }
     return {
       state: reasons.length === 0 ? StatusState.Active : StatusState.Blocked,

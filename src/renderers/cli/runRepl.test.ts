@@ -70,11 +70,11 @@ describe("executeReplLine", () => {
     expect(run(context, "jobs")).toBe("no job boards");
     run(context, "new 42 steady small");
     expect(run(context, "jobs")).toMatch(
-      /^board #2 system-managed at map 1 cell \d+ running: 0 open, 0 claimed\n {2}no postings$/,
+      /^board #2 user-managed at map 1 cell \d+ running: 0 open, 0 claimed\n {2}no postings$/,
     );
     run(context, "step 12");
     const lines = run(context, "jobs 2").split("\n");
-    expect(lines[0]).toMatch(/^board #2 system-managed at map 1 cell \d+ running: \d+ open/);
+    expect(lines[0]).toMatch(/^board #2 user-managed at map 1 cell \d+ running: \d+ open/);
     expect(lines.some((line) => /^ {2}#1 fell\.trees (open|claimed)/.test(line))).toBe(true);
     expect(run(context, "jobs 9")).toBe("board 9 does not exist");
     expect(run(context, "jobs x")).toBe("error: usage: jobs [boardId]");

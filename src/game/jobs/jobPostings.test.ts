@@ -10,8 +10,10 @@ import {
   claimPosting,
   completePosting,
   failPosting,
+  modifyPosting,
   postJob,
   releasePosting,
+  validatePostable,
 } from "./jobPostings";
 import { getJobService } from "./jobServiceRegistry";
 import { EligibilityKind, PostingStatus, claimBackoffTicks, maxPostingHistory } from "./jobTypes";
@@ -303,5 +305,50 @@ describe("failPosting and cancelPosting", () => {
     expect(kindOf(() => cancelPosting(world.engine, first.id, "again", 9))).toBe(
       JobErrorKind.UnknownPosting,
     );
+  });
+});
+
+describe("modifyPosting", () => {
+  it("changes priority (clamped) and wage of an active posting and keeps the rest", () => {
+    const world = createJobWorld();
+    const posting = world.postFell(15);
+    const changed = modifyPosting(world.engine, posting.id, { priority: 250, wage: 7 });
+    expect(changed).toMatchObject({ priority: 100, wage: 7, status: PostingStatus.Open });
+    expect(modifyPosting(world.engine, posting.id, {})).toMatchObject({ priority: 100, wage: 7 });
+    expect(requireBoard(world.engine, world.boardId).data.postings[0]?.wage).toBe(7);
+  });
+
+  it("rejects a finished or unknown posting", () => {
+    const world = createJobWorld();
+    const posting = world.postFell(15);
+    cancelPosting(world.engine, posting.id, "player", 3);
+    expect(kindOf(() => modifyPosting(world.engine, posting.id, { wage: 1 }))).toBe(
+      JobErrorKind.UnknownPosting,
+    );
+  });
+});
+
+describe("validatePostable", () => {
+  const target = (world: JobTestWorld, cellIndex: number) => ({
+    mapId: world.mapId,
+    cellIndex,
+    entityId: null,
+    materialId: null,
+  });
+
+  it("accepts a known board job on the map and changes nothing", () => {
+    const world = createJobWorld();
+    expect(() => validatePostable(world.engine, "fell.trees", target(world, 5))).not.toThrow();
+    expect(requireBoard(world.engine, world.boardId).data.postings).toEqual([]);
+  });
+
+  it("names the problem: unknown job type, cell off the map", () => {
+    const world = createJobWorld();
+    expect(kindOf(() => ({ done: validatePostable(world.engine, "nope", target(world, 5)) }))).toBe(
+      JobErrorKind.UnknownJobType,
+    );
+    expect(
+      kindOf(() => ({ done: validatePostable(world.engine, "fell.trees", target(world, 5000)) })),
+    ).toBe(JobErrorKind.InvalidTarget);
   });
 });

@@ -80,13 +80,6 @@ describe("registerJobs", () => {
     ).toThrow(/unknown/);
   });
 
-  it("PostJob is only accepted on a user-managed board", () => {
-    const world = createJobWorld();
-    expect(() => command(world.engine, "PostJob", target(world, 15))).toThrow(/system-managed/);
-    requireBoard(world.engine, world.boardId).data.mode = JobBoardMode.UserManaged;
-    expect(command(world.engine, "PostJob", target(world, 15))).toEqual({ postingId: 1 });
-  });
-
   it("answers job-boards, jobs-on and job", () => {
     const world = createJobWorld();
     const posting = world.postFell(15);

@@ -5,7 +5,11 @@ import { citizenComponent } from "../factions/citizenComponent";
 import { setFactionLeader, pickLeaderCandidate } from "../factions/factionLeader";
 import { joinFaction } from "../factions/factionMembership";
 import { governmentFactionId } from "../factions/factionRegistry";
+import { appointCrier } from "../crier/crierFleet";
+import { getComponent } from "../ecs/Entity";
 import { assignIdentity } from "../identity/assignIdentity";
+import { jobBoardComponent } from "../jobs/jobBoardComponent";
+import { JobBoardMode } from "../jobs/jobTypes";
 import { initializeCharacter } from "../skills/traitAssignment";
 import type { VillageLayout } from "./layoutVillage";
 
@@ -33,6 +37,12 @@ export const startingSettlerPrototypes: readonly string[] = [
 ];
 
 /**
+ * Prototype of the starting settler who becomes the Town Crier (DECISIONS D-12, D-53): the first
+ * settler of this prototype.
+ */
+export const startingCrierPrototype = "peasant";
+
+/**
  * What {@link spawnSettlers} created.
  */
 export type SpawnedSettlement = {
@@ -49,13 +59,19 @@ export type SpawnedSettlement = {
    * Settler entity ids in spawn order.
    */
   settlerIds: EntityId[];
+  /**
+   * Entity id of the starting Town Crier (one of the settlers), or null when there is none.
+   */
+  crierId: EntityId | null;
 };
 
 /**
  * Spawns the settlement kit on the village clearing: the job board on the center cell, the
  * starting settlers on distinct clearing cells (nearest to the center first, never a starter
- * plot) and then the stockpile chest (task 3.2) on the next clearing cell. Cells are registered with the map occupant index and written to `Position`; settlers get
- * their traits and starting skill bonuses from `initializeCharacter`, join the government faction
+ * plot) and then the stockpile chest (task 3.2) on the next clearing cell. Cells are registered
+ * with the map occupant index and written to `Position`; the village board is user-managed (the
+ * town square: the player edits it through a Town Crier) and the first peasant is appointed
+ * Town Crier (D-12, D-53); settlers get their traits and starting skill bonuses from `initializeCharacter`, join the government faction
  * and are named by `assignIdentity`; afterwards the settler with the greatest total skill (ties:
  * lowest id) becomes the government's leader.
  *
@@ -99,5 +115,15 @@ export function spawnSettlers(
   if (government !== null) {
     setFactionLeader(engine, government, pickLeaderCandidate(engine, government));
   }
-  return { jobBoardId, stockpileId, settlerIds };
+  const board = jobBoardId === null ? undefined : engine.store.get(jobBoardId);
+  const boardData = board === undefined ? undefined : getComponent(board, jobBoardComponent);
+  if (boardData !== undefined) {
+    boardData.mode = JobBoardMode.UserManaged;
+  }
+  const crierId =
+    settlerIds.find((id) => engine.store.get(id)?.prototype === startingCrierPrototype) ?? null;
+  if (crierId !== null && hasComponent(engine.store.require(crierId), citizenComponent)) {
+    appointCrier(engine, crierId);
+  }
+  return { jobBoardId, stockpileId, settlerIds, crierId };
 }

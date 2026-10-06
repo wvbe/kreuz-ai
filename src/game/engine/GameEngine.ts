@@ -47,6 +47,7 @@ import { IdCounters } from "./IdCounters";
 import { registerFactions } from "../factions/registerFactions";
 import { jobsSystemId } from "../jobs/jobTypes";
 import { registerJobs } from "../jobs/registerJobs";
+import { registerCrier } from "../crier/registerCrier";
 import { registerStorage } from "../storage/registerStorage";
 import { registerProduction } from "../production/registerProduction";
 import { registerConstruction } from "../construction/registerConstruction";
@@ -661,6 +662,7 @@ export class GameEngine {
     registerSkills(this);
     registerAi(this);
     registerJobs(this);
+    registerCrier(this);
     registerStorage(this);
     registerZones(this);
     registerProduction(this);

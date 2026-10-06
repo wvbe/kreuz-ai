@@ -13,11 +13,10 @@ import { postFellJobs, registerFellTrees } from "./fellTrees";
 import { jobBoardComponent } from "./jobBoardComponent";
 import { findPosting, listBoards, requireBoard } from "./jobBoards";
 import { registerJobHandlers } from "./jobBehavior";
-import { JobError, JobErrorKind } from "./JobError";
 import { postJob, releasePosting } from "./jobPostings";
 import { JobService } from "./JobService";
 import { bindJobService, getJobService } from "./jobServiceRegistry";
-import { JobBoardMode, PauseSource, jobsSystemId } from "./jobTypes";
+import { PauseSource, jobsSystemId } from "./jobTypes";
 import { createVisitTask } from "./jobVisitTask";
 import { buildBoardSummaries, buildBoardView, buildPostingView } from "./jobViews";
 
@@ -72,9 +71,9 @@ function postFromCommand(engine: GameEngine, payload: PostPayload): { postingId:
  *   `claim_job` (named by `basic_needs`);
  * - the slot-7 system `jobboard` (drops expired back-offs, runs the `fell.trees` auto-poster);
  * - a before-delete hook that releases the claims of a deleted worker;
- * - the commands `SetJobBoardPaused {boardId, paused}` (player pause), `PostJob` (user-managed
- *   boards only, immediate until the Town Crier of 3.1c) and `PostCustomJob` (any board,
- *   immediate) and the queries `job-boards`, `jobs-on {boardId}` and `job {postingId}`.
+ * - the commands `SetJobBoardPaused {boardId, paused}` (player pause) and `PostCustomJob` (any
+ *   board, immediate; the player's `PostJob` goes through a Town Crier, see `../crier`) and the
+ *   queries `job-boards`, `jobs-on {boardId}` and `job {postingId}`.
  *
  * @param engine - The engine to extend; call before the first `newGame` / `loadGame`.
  * @returns The engine's job service.
@@ -131,18 +130,6 @@ export function registerJobs(engine: GameEngine): JobService {
             ? pauseBoard(target, payload.boardId, PauseSource.Player)
             : resumeBoard(target, payload.boardId, PauseSource.Player);
           return { changed };
-        },
-      }),
-      PostJob: defineCommand({
-        schema: postPayloadSchema,
-        handler: (payload, target) => {
-          if (requireBoard(target, payload.boardId).data.mode !== JobBoardMode.UserManaged) {
-            throw new JobError(
-              JobErrorKind.BoardNotUserManaged,
-              `board ${payload.boardId} is system-managed`,
-            );
-          }
-          return postFromCommand(target, payload);
         },
       }),
       PostCustomJob: defineCommand({

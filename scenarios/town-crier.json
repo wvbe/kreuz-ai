@@ -1,0 +1,35 @@
+{
+  "name": "town-crier",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    { "assert": { "query": "town-criers", "path": "length", "op": "eq", "value": 1 } },
+    { "assert": { "query": "town-criers", "path": "0.crierId", "op": "eq", "value": 7 } },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "fell.trees",
+        "mapId": 1,
+        "cellIndex": 296,
+        "priority": 77,
+        "wage": 9
+      }
+    },
+    { "step": 2 },
+    { "assert": { "query": "pending-updates", "path": "length", "op": "eq", "value": 1 } },
+    { "assert": { "query": "pending-updates", "path": "0.state", "op": "eq", "value": "carried" } },
+    { "assert": { "query": "pending-updates", "path": "0.crierId", "op": "eq", "value": 7 } },
+    { "assert": { "query": "pending-updates", "path": "0.etaTicks", "op": "exists" } },
+    { "assert": { "query": "town-criers", "path": "0.status", "op": "eq", "value": "traveling" } },
+    { "saveLoad": true },
+    { "step": 400 },
+    { "assert": { "query": "pending-updates", "path": "length", "op": "eq", "value": 0 } },
+    { "assert": { "query": "town-criers", "path": "0.status", "op": "eq", "value": "available" } },
+    { "assertHash": { "label": "delivered" } },
+    { "replay": true }
+  ]
+}

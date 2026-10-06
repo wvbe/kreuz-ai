@@ -36,6 +36,14 @@ export enum JobErrorKind {
    * The target cell is not on the named map.
    */
   InvalidTarget = "invalid-target",
+  /**
+   * The pending board update does not exist (command error `UnknownUpdate`).
+   */
+  UnknownUpdate = "unknown-update",
+  /**
+   * The entity cannot be a Town Crier (command error `IneligibleCrier`).
+   */
+  IneligibleCrier = "ineligible-crier",
 }
 
 /**

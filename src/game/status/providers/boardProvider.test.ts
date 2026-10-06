@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { queueBoardUpdate } from "../../crier/boardUpdates";
+import { BoardChangeKind, UpdateOrigin } from "../../crier/crierTypes";
 import { pauseBoard } from "../../jobs/boardPause";
-import { PauseSource } from "../../jobs/jobTypes";
+import { requireBoard } from "../../jobs/jobBoards";
+import { JobBoardMode, PauseSource } from "../../jobs/jobTypes";
 import { createStatusContext } from "../statusContext";
 import { evaluateSubject, explain } from "../explain";
 import { BlockedReasonKind, StatusState, StatusSubjectKind } from "../statusTypes";
@@ -54,5 +57,38 @@ describe("boardProvider", () => {
       kind: StatusSubjectKind.Zone,
       id: zoneId ?? 0,
     });
+  });
+
+  it("reports a change that waits for a Town Crier as AwaitingTownCrier", () => {
+    const world = createStatusWorld();
+    requireBoard(world.engine, world.boardId).data.mode = JobBoardMode.UserManaged;
+    queueBoardUpdate(
+      world.engine,
+      world.boardId,
+      {
+        kind: BoardChangeKind.Add,
+        jobTypeId: "fell.trees",
+        mapId: world.mapId,
+        cellIndex: 15,
+        entityId: null,
+        materialId: null,
+        priority: null,
+        urgent: false,
+        wage: null,
+      },
+      UpdateOrigin.Player,
+    );
+    const status = evaluateSubject(world.engine, {
+      kind: StatusSubjectKind.JobBoard,
+      id: world.boardId,
+    });
+    expect(status?.state).toBe(StatusState.Blocked);
+    expect(status?.reasons).toEqual([
+      {
+        kind: BlockedReasonKind.AwaitingTownCrier,
+        params: { jobBoardId: world.boardId },
+        causeRef: null,
+      },
+    ]);
   });
 });

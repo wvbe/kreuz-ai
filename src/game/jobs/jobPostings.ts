@@ -104,11 +104,48 @@ function requireClaimedBy(
 }
 
 /**
+ * Checks that a job could be posted: the job type exists, is posted on boards and is not locked
+ * by the settlement tier, and the target cell is on its map. Throws `JobError` otherwise
+ * (`UnknownJobType`, `ContentLocked`, `InvalidTarget`); used by {@link postJob} and when a
+ * command queues a Town Crier update, so the player hears of a bad posting at once.
+ *
+ * @param engine - The engine.
+ * @param jobTypeId - Job type id.
+ * @param target - Where the work happens.
+ */
+export function validatePostable(engine: GameEngine, jobTypeId: string, target: JobTarget): void {
+  const jobType = engine.content.jobs.find(jobTypeId);
+  if (jobType === undefined || !jobType.onBoard) {
+    throw new JobError(
+      JobErrorKind.UnknownJobType,
+      `job type "${jobTypeId}" is unknown or never posted on a board`,
+    );
+  }
+  if (
+    jobType.unlockTier !== null &&
+    jobType.unlockTier !== undefined &&
+    tierOrder.indexOf(getJobService(engine).currentTier()) < tierOrder.indexOf(jobType.unlockTier)
+  ) {
+    throw new JobError(
+      JobErrorKind.ContentLocked,
+      `job type "${jobTypeId}" needs tier ${jobType.unlockTier}`,
+    );
+  }
+  const map = engine.maps.get(target.mapId);
+  if (map === undefined || !map.inBounds(target.cellIndex)) {
+    throw new JobError(
+      JobErrorKind.InvalidTarget,
+      `cell ${target.cellIndex} is not on map ${target.mapId}`,
+    );
+  }
+}
+
+/**
  * Posts a job on a board (spec 017 FR-003, DECISIONS D-08): validates the board, the job type
  * (it must exist, be postable on boards and not be locked by the settlement tier) and the target
  * cell, takes a posting id from the persisted counter and queues `jobboard.job.posted`. Systems
- * and the player post through this one function; a paused board still accepts postings (it just
- * offers none).
+ * and Town Criers (delivering a player's `PostJob`) post through this one function; a paused
+ * board still accepts postings (it just offers none).
  *
  * @param engine - The engine.
  * @param boardId - Board entity id.
@@ -123,30 +160,8 @@ export function postJob(
   tick: number,
 ): JobPosting {
   const { data } = requireBoard(engine, boardId);
-  const jobType = engine.content.jobs.find(request.jobTypeId);
-  if (jobType === undefined || !jobType.onBoard) {
-    throw new JobError(
-      JobErrorKind.UnknownJobType,
-      `job type "${request.jobTypeId}" is unknown or never posted on a board`,
-    );
-  }
-  if (
-    jobType.unlockTier !== null &&
-    jobType.unlockTier !== undefined &&
-    tierOrder.indexOf(getJobService(engine).currentTier()) < tierOrder.indexOf(jobType.unlockTier)
-  ) {
-    throw new JobError(
-      JobErrorKind.ContentLocked,
-      `job type "${request.jobTypeId}" needs tier ${jobType.unlockTier}`,
-    );
-  }
-  const map = engine.maps.get(request.target.mapId);
-  if (map === undefined || !map.inBounds(request.target.cellIndex)) {
-    throw new JobError(
-      JobErrorKind.InvalidTarget,
-      `cell ${request.target.cellIndex} is not on map ${request.target.mapId}`,
-    );
-  }
+  validatePostable(engine, request.jobTypeId, request.target);
+  const jobType = engine.content.jobs.require(request.jobTypeId);
   const posting: JobPosting = {
     id: engine.counters.allocate(CounterName.PostingId),
     boardId,
@@ -338,6 +353,30 @@ export function cancelPosting(
   tick: number,
 ): JobPosting {
   return endPosting(engine, postingId, reason, tick, PostingStatus.Cancelled, jobCancelledEvent);
+}
+
+/**
+ * Changes the priority and/or the wage of an active posting (the player edits a user-managed
+ * board, delivered by a Town Crier). A claimed posting keeps its claimant.
+ *
+ * @param engine - The engine.
+ * @param postingId - Posting id; throws `JobError` `UnknownPosting` when it is finished.
+ * @param changes - New priority (clamped to `0..100`) and/or wage; absent fields stay.
+ * @returns A copy of the posting after the change.
+ */
+export function modifyPosting(
+  engine: GameEngine,
+  postingId: number,
+  changes: { priority?: number; wage?: number },
+): JobPosting {
+  const { posting } = requireActive(engine, postingId);
+  if (changes.priority !== undefined) {
+    posting.priority = Math.max(0, Math.min(maxPostingPriority, changes.priority));
+  }
+  if (changes.wage !== undefined) {
+    posting.wage = Math.max(0, changes.wage);
+  }
+  return cloneJson(posting);
 }
 
 function endPosting(
