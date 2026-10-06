@@ -3,7 +3,8 @@ import { getComponent } from "../ecs/Entity";
 import type { Entity, EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { factionComponent } from "../factions/factionComponent";
-import { listFactions } from "../factions/factionRegistry";
+import { governmentFactionId, listFactions } from "../factions/factionRegistry";
+import { getStandingService } from "../standing/standingServiceRegistry";
 import { identityComponent } from "./identityComponent";
 import { TitleRank } from "./identityTypes";
 import type { IdentityData, Office, Title } from "./identityTypes";
@@ -70,7 +71,8 @@ export function formatStyledName(formats: NameFormatsContent, parts: StyledNameP
 
 /**
  * The offices a citizen holds: every faction it leads that has a leader title, ascending by
- * faction id (spec 028 FR-009; the steward office joins with the steward system).
+ * faction id, then the Steward's office of the player government when it is the Steward (spec 028
+ * FR-009; the title text is `stewardTitle` of the name formats).
  *
  * @param engine - The engine that owns the entities.
  * @param entityId - The citizen.
@@ -87,6 +89,21 @@ export function officesOf(engine: GameEngine, entityId: EntityId): Office[] {
         leaderTitle: faction.leaderTitle,
       });
     }
+  }
+  const government = governmentFactionId(engine);
+  const governmentFaction = government === null ? undefined : engine.store.get(government);
+  const governmentData =
+    governmentFaction === undefined ? undefined : getComponent(governmentFaction, factionComponent);
+  if (
+    government !== null &&
+    governmentData !== undefined &&
+    getStandingService(engine).state.stewardEntityId === entityId
+  ) {
+    offices.push({
+      factionId: government,
+      factionName: governmentData.name,
+      leaderTitle: engine.content.nameFormats.stewardTitle,
+    });
   }
   return offices;
 }

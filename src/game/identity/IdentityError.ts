@@ -6,6 +6,14 @@ export enum IdentityErrorKind {
    * A loaded identity names a name list or skill that the content pack does not define.
    */
   DanglingReference = "dangling-reference",
+  /**
+   * `RenameCitizen` with a given name or byname that fails spec 028 FR-020.
+   */
+  InvalidName = "InvalidName",
+  /**
+   * `RenameCitizen` for an entity that is no citizen of the settlement.
+   */
+  UnknownEntity = "UnknownEntity",
 }
 
 /**

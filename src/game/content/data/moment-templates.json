@@ -45,11 +45,11 @@
   },
   {
     "kind": "home_improved",
-    "template": "{name}'s home was improved."
+    "template": "{name}'s home is now a {dwellingLevel}."
   },
   {
     "kind": "renamed",
-    "template": "{name} took a new name."
+    "template": "{previousName} took the name {name}."
   },
   {
     "kind": "died",
@@ -57,7 +57,7 @@
   },
   {
     "kind": "settlement_milestone",
-    "template": "The {settlementNoun} reached a milestone."
+    "template": "The {settlementNoun} reached a milestone: {milestone}."
   },
   {
     "kind": "tier_reached",

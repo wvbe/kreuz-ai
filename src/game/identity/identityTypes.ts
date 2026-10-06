@@ -1,3 +1,4 @@
+import type { MomentRecord } from "../chronicle/chronicleTypes";
 import type { EntityId } from "../ecs/Entity";
 
 /**
@@ -42,8 +43,10 @@ export type Office = {
 };
 
 /**
- * Data of the `Identity` component (spec 028 FR-003, DECISIONS D-17). The journal of FR-017 is
- * added by the chronicle task (4.6); `seenSkills` is the sorted set `FirstWork` needs.
+ * Data of the `Identity` component (spec 028 FR-003, FR-017, DECISIONS D-17). `journal` holds the
+ * moments of the citizen, oldest first, at most `journalCapacity`; `seenSkills` (sorted) and
+ * `tradeSeen` live outside the journal so that `FirstWork` and `FirstTrade` stay once-only after
+ * old entries were dropped.
  */
 export type IdentityData = {
   givenName: string;
@@ -56,6 +59,11 @@ export type IdentityData = {
   nameListId: string;
   titleSnapshot: Title | null;
   seenSkills: string[];
+  /**
+   * Whether the first trade was recorded.
+   */
+  tradeSeen: boolean;
+  journal: MomentRecord[];
 };
 
 /**

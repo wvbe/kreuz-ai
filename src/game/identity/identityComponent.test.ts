@@ -12,6 +12,8 @@ describe("identityComponent", () => {
       nameListId: "common_13c",
       titleSnapshot: null,
       seenSkills: [],
+      tradeSeen: false,
+      journal: [],
     });
   });
 
@@ -28,6 +30,18 @@ describe("identityComponent", () => {
         guildId: "guild_bakers",
       },
       seenSkills: ["baking", "farming"],
+      tradeSeen: true,
+      journal: [
+        {
+          momentId: 4,
+          tick: 12,
+          kind: "first_work",
+          prominence: "minor",
+          entityId: 8,
+          nameSnapshot: "Ansel atte Brook",
+          params: { skillId: "baking" },
+        },
+      ],
     };
     expect(identityDataSchema.parse(JSON.parse(JSON.stringify(data)))).toEqual(data);
   });
@@ -44,5 +58,19 @@ describe("identityComponent", () => {
       }).success,
     ).toBe(false);
     expect(identityDataSchema.safeParse({ ...base, extra: 1 }).success).toBe(false);
+    const moment = {
+      momentId: 1,
+      tick: 0,
+      kind: "died",
+      prominence: "minor",
+      entityId: 8,
+      nameSnapshot: null,
+      params: {},
+    };
+    expect(identityDataSchema.safeParse({ ...base, journal: [moment] }).success).toBe(false);
+    expect(
+      identityDataSchema.safeParse({ ...base, journal: [{ ...moment, prominence: "major" }] })
+        .success,
+    ).toBe(true);
   });
 });

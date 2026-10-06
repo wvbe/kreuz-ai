@@ -1,3 +1,4 @@
+import type { MomentRecord } from "../chronicle/chronicleTypes";
 import type { EntityId } from "../ecs/Entity";
 import type { MilestoneKind, SettlementTier, TierRequirementKind } from "../content/contentTypes";
 
@@ -82,20 +83,6 @@ export type SettlementProgressData = {
 };
 
 /**
- * A moment of the settlement chronicle (task 4.6 fills it; the shape follows the event
- * `chronicle.moment.recorded`).
- */
-export type ChronicleMoment = {
-  momentId: number;
-  tick: number;
-  kind: string;
-  prominence: string;
-  entityId: EntityId | null;
-  nameSnapshot: string | null;
-  params: { [name: string]: string | number | boolean | null };
-};
-
-/**
  * One entry of the chronicle's finest-holder table (spec 028 FR-018).
  */
 export type FinestEntry = {
@@ -107,11 +94,12 @@ export type FinestEntry = {
 };
 
 /**
- * Data of the `SettlementChronicle` component on the government faction (spec 028 FR-018). Task
- * 4.4 only creates and saves it; task 4.6 records into it.
+ * Data of the `SettlementChronicle` component on the government faction (spec 028 FR-018): the
+ * Major moments in recording order (at most `chronicleCapacity`, the oldest dropped first), the
+ * finest-holder table and the next moment id (a mirror of the root counter `nextMomentId`).
  */
 export type SettlementChronicleData = {
-  moments: ChronicleMoment[];
+  moments: MomentRecord[];
   finest: FinestEntry[];
   nextMomentId: number;
 };

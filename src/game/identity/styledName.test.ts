@@ -6,6 +6,7 @@ import { setFactionLeader } from "../factions/factionLeader";
 import { ensureContentFaction } from "../factions/factionRegistry";
 import { TitleRank } from "./identityTypes";
 import type { Title } from "./identityTypes";
+import { appointSteward } from "../standing/steward";
 import { formatStyledName, officesOf, styledName, stylePartsOf } from "./styledName";
 
 const formats = loadContent().nameFormats;
@@ -93,6 +94,22 @@ describe("officesOf, stylePartsOf and styledName", () => {
     ).toHaveLength(2);
     expect(styledName(engine, entity)).toBe(
       "Odo Thorne, Reeve of the Settlement, Master Baker of the Bakers' guild",
+    );
+  });
+
+  it("adds the Steward's office of the government after the led factions", () => {
+    const { engine, peasant } = setup();
+    const entity = engine.store.require(peasant);
+    const identity = entity.components["Identity"] as { givenName: string; byname: string | null };
+    identity.givenName = "Odo";
+    identity.byname = "Thorne";
+    appointSteward(engine, peasant);
+    expect(officesOf(engine, peasant)).toEqual([
+      { factionId: 1, factionName: "Settlement", leaderTitle: "Steward" },
+    ]);
+    setFactionLeader(engine, 1, peasant);
+    expect(styledName(engine, entity)).toBe(
+      "Odo Thorne, Reeve of the Settlement, Steward of the Settlement",
     );
   });
 

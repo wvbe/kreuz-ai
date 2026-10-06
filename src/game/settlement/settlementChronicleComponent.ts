@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { momentRecordSchema } from "../chronicle/momentRecordSchema";
 import { defineComponent } from "../ecs/ComponentRegistry";
 import type { SettlementChronicleData } from "./settlementTypes";
 
@@ -10,19 +11,7 @@ const tickSchema = z.number().int().min(0);
  */
 export const settlementChronicleSchema = z
   .object({
-    moments: z.array(
-      z
-        .object({
-          momentId: idSchema,
-          tick: tickSchema,
-          kind: z.string().min(1),
-          prominence: z.string().min(1),
-          entityId: idSchema.nullable(),
-          nameSnapshot: z.string().nullable(),
-          params: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])),
-        })
-        .strict(),
-    ),
+    moments: z.array(momentRecordSchema),
     finest: z.array(
       z
         .object({
@@ -40,8 +29,8 @@ export const settlementChronicleSchema = z
 
 /**
  * The `SettlementChronicle` component (spec 028 FR-018) on the player government faction: the
- * Major moments in recording order, the finest-holder table and the next moment id. Task 4.4
- * creates and saves the empty record; the chronicle task (4.6) records into it.
+ * Major moments in recording order, the finest-holder table and the next moment id. The
+ * chronicle system (task 4.6) records into it.
  */
 export const settlementChronicleComponent = defineComponent<
   "SettlementChronicle",

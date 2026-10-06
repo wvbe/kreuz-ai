@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { momentRecordSchema } from "../chronicle/momentRecordSchema";
 import { defineComponent } from "../ecs/ComponentRegistry";
 import { TitleRank } from "./identityTypes";
 import type { IdentityData } from "./identityTypes";
@@ -24,6 +25,8 @@ export const identityDataSchema = z
       .strict()
       .nullable(),
     seenSkills: z.array(z.string().regex(contentId)),
+    tradeSeen: z.boolean(),
+    journal: z.array(momentRecordSchema),
   })
   .strict()
   .refine(
@@ -36,7 +39,7 @@ export const identityDataSchema = z
 
 /**
  * The `Identity` component (spec 028 FR-003): names as strings, the name ordinal, the name list
- * used, the title snapshot and the skills seen at work. Default: unnamed, common list.
+ * used, the title snapshot, the skills seen at work, the first-trade flag and the journal. Default: unnamed, common list.
  */
 export const identityComponent = defineComponent<"Identity", IdentityData>(
   "Identity",
@@ -48,5 +51,7 @@ export const identityComponent = defineComponent<"Identity", IdentityData>(
     nameListId: "common_13c",
     titleSnapshot: null,
     seenSkills: [],
+    tradeSeen: false,
+    journal: [],
   }),
 );
