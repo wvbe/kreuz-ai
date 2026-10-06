@@ -61,7 +61,7 @@ describe("createStandingOrder", () => {
       priority: 50,
       paused: false,
       restocking: false,
-      outputPerRun: 2,
+      outputPerRun: 3,
     });
     world.run(1);
     expect(events).toEqual([{ orderId: 1 }]);

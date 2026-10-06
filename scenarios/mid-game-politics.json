@@ -391,6 +391,14 @@
       }
     },
     {
+      "command": {
+        "kind": "TradeSell",
+        "traderId": 92,
+        "materialId": "iron_ore",
+        "quantity": 4
+      }
+    },
+    {
       "step": 460
     },
     {
@@ -407,14 +415,6 @@
         "path": "traders.0.phase",
         "op": "eq",
         "value": "Present"
-      }
-    },
-    {
-      "command": {
-        "kind": "TradeSell",
-        "traderId": 92,
-        "materialId": "iron_ore",
-        "quantity": 4
       }
     },
     {

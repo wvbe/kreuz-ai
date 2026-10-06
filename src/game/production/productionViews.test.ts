@@ -83,7 +83,7 @@ describe("buildRecipeViews", () => {
         id: "bake_bread",
         name: "Bake bread",
         inputs: [{ materialId: "flour", quantity: 1 }],
-        outputs: [{ materialId: "bread", quantity: 2 }],
+        outputs: [{ materialId: "bread", quantity: 3 }],
         durationTicks: 20,
         skillId: "baking",
         minSkillLevel: 0,

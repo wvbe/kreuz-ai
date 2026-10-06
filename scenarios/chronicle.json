@@ -236,7 +236,7 @@
         "query": "chronicle",
         "path": "total",
         "op": "eq",
-        "value": 1,
+        "value": 2,
         "args": {
           "kind": "settlement_milestone"
         }
@@ -245,7 +245,7 @@
     {
       "assert": {
         "query": "chronicle",
-        "path": "moments.0.params.milestone",
+        "path": "moments.1.params.milestone",
         "op": "eq",
         "value": "throne-room-established",
         "args": {
@@ -256,7 +256,7 @@
     {
       "assert": {
         "query": "chronicle",
-        "path": "moments.0.text",
+        "path": "moments.1.text",
         "op": "eq",
         "value": "The hamlet reached a milestone: throne room established.",
         "args": {

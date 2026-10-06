@@ -35,7 +35,7 @@ describe("standing verbs", () => {
     expect(listed).toContain("#1 bread:");
     expect(listed).toContain("stock 12/20 (restock at 15)");
     expect(listed).toContain("priority 60");
-    expect(run(context, "standing 1").text).toContain("recipe bake_bread (2 per run)");
+    expect(run(context, "standing 1").text).toContain("recipe bake_bread (3 per run)");
   });
 
   it("edits, pauses, resumes and deletes an order", () => {

@@ -6,6 +6,7 @@ The utility half of the hybrid AI (spec 013 FR-003/011/012/014/017/022, DECISION
 - `rolePriority.ts` - `roleOf` (Merchant if the prototype `sellsItems`, Guard if the dominant skill is `combat`, else Worker; nothing is stored) and `needPriorityOrder` (the prototype's `needPriority`, else the role's leading needs, then the rest in registry order).
 - `decisionFactors.ts` - the default scoring: `needBaseScore` (`(needCount - rank) * 1000`), factors `urgency` (0..999), `emergency` (+10000 at a need of zero) and `wealth_luxury` (+-300 on comfort, faith, social).
 - `chooseAction.ts` - `scoreCandidates` and `chooseAction`: `score = base + sum(factors)`, integers only, highest wins, ties go to the lowest candidate id. No randomness. `DecisionFactor` is the plugin interface (`AiService.registerDecisionFactor`).
+- `chooseCriticalNeed.ts` - `chooseCriticalNeed(engine, entity, tick)`: the shared choice of the critical need to serve (candidates are the critical needs that have a plan, scored by `chooseAction`); used by the `satisfy_critical_need` action and by the wake check of a sleeping `ai.satisfy` task (D-180).
 - `planNeed.ts` / `needPlanTypes.ts` - `planNeed` finds a concrete way to satisfy a need: own inventory first, then the registered need sources (`AiService.registerNeedSource`), then the nearest reachable bed, then the ground (reduced by `groundSleepRate`). A `NeedPlan` is plain JSON and is stored in the `ai.satisfy` task.
 
 ## Plugging in a need source

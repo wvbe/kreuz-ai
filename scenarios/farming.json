@@ -139,7 +139,7 @@
       "assert": {
         "query": "entity",
         "args": {
-          "id": 4
+          "id": 3
         },
         "path": "components.Skills.values.farming",
         "op": "gt",

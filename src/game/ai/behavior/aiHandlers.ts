@@ -3,15 +3,9 @@ import type { BehaviorContext } from "../../behavior/behaviorTypes";
 import { getComponent } from "../../ecs/Entity";
 import type { GameEngine } from "../../engine/GameEngine";
 import { taskQueueComponent } from "../../task/taskQueueComponent";
-import { getAiService } from "../aiServiceRegistry";
 import { AiStream, AiTaskPriority, AiTaskType } from "../aiTypes";
-import { chooseAction } from "../decision/chooseAction";
-import type { ActionCandidate } from "../decision/chooseAction";
-import { buildDecisionContext } from "../decision/decisionContext";
-import { needBaseScore } from "../decision/decisionFactors";
-import { planNeed } from "../decision/planNeed";
+import { chooseCriticalNeed } from "../decision/chooseCriticalNeed";
 import { NeedPlanKind } from "../decision/needPlanTypes";
-import type { NeedPlan } from "../decision/needPlanTypes";
 import { moveTaskData } from "../movement/moveTask";
 import { criticalNeedsOf, getNeedValue } from "../needs/needAccess";
 import { idleTaskData } from "../tasks/idleTask";
@@ -33,8 +27,6 @@ export const satisfyCriticalNeedId = "satisfy_critical_need";
  * Id of the action that makes an idle entity stand around or walk somewhere nearby.
  */
 export const idleWanderId = "idle_wander";
-
-type PlannedCandidate = ActionCandidate & { plan: NeedPlan };
 
 /**
  * The condition `any_need_below_critical`: success while at least one need of the entity is
@@ -63,20 +55,7 @@ export function anyNeedBelowCritical(engine: GameEngine, context: BehaviorContex
  * @returns Success when a task was enqueued, failure otherwise.
  */
 export function satisfyCriticalNeed(engine: GameEngine, context: BehaviorContext): NodeStatus {
-  const decision = buildDecisionContext(engine.content, context.entity, context.tick);
-  const candidates: PlannedCandidate[] = [];
-  for (const need of criticalNeedsOf(engine.content.needs, context.entity)) {
-    const plan = planNeed(engine, context.entity, need);
-    if (plan !== null) {
-      candidates.push({
-        id: need.id,
-        needId: need.id,
-        base: needBaseScore(decision, need.id),
-        plan,
-      });
-    }
-  }
-  const chosen = chooseAction(candidates, getAiService(engine).decisionFactors(), decision);
+  const chosen = chooseCriticalNeed(engine, context.entity, context.tick);
   if (chosen === null) {
     return NodeStatus.Failure;
   }

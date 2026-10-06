@@ -209,8 +209,19 @@
       "assert": {
         "query": "settlement",
         "path": "population",
-        "op": "lt",
+        "op": "eq",
         "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "windowConsumed",
+        "op": "gt",
+        "value": 0
       }
     },
     {
@@ -220,7 +231,7 @@
           "kind": "died"
         },
         "path": "total",
-        "op": "gt",
+        "op": "eq",
         "value": 0
       }
     },

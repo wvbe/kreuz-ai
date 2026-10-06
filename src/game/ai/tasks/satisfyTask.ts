@@ -7,12 +7,13 @@ import { positionComponent } from "../../map/positionComponent";
 import { childWait, continueStep, doneStep, failStep, waitStep } from "../../task/stepResults";
 import { TaskStatus } from "../../task/taskTypes";
 import type { StepResult, TaskContext, TaskHandler } from "../../task/taskTypes";
-import { AiTaskType } from "../aiTypes";
+import { AiTaskPriority, AiTaskType } from "../aiTypes";
 import { moveTaskData } from "../movement/moveTask";
 import { addMoodInfluenceTo } from "../mood/runMood";
 import { consumeNeedItem } from "../needs/consumeNeedItem";
-import { adjustNeed, getNeedValue } from "../needs/needAccess";
+import { adjustNeed, criticalNeedsOf, getNeedValue } from "../needs/needAccess";
 import { satisfactionAmountMilli } from "../needs/needMath";
+import { chooseCriticalNeed } from "../decision/chooseCriticalNeed";
 import { NeedPlanKind } from "../decision/needPlanTypes";
 import type { NeedPlan } from "../decision/needPlanTypes";
 
@@ -50,6 +51,12 @@ const planSchema = z
 
 const satisfyDataSchema = z.object({ plan: planSchema }).strict();
 
+/**
+ * A sleeper looks for another critical need every this many ticks (finding food walks the map, so
+ * not on every tick of a sleep that lasts up to 200).
+ */
+export const wakeCheckIntervalTicks = 6;
+
 enum SatisfyPhase {
   Approach = "approach",
   Act = "act",
@@ -86,6 +93,27 @@ function consume(engine: GameEngine, context: TaskContext, plan: NeedPlan): Step
   return doneStep();
 }
 
+// Whether a sleeper must wake because another critical need that can be satisfied now wins the
+// utility decision (DECISIONS D-180): a settler whose hunger is critical and who can reach food
+// does not sleep on until it starves. A collapsed settler (the slept need was exactly zero, so the
+// task runs at priority `Collapse`) is never woken, and the decision itself decides, so a guard
+// whose rest outranks hunger sleeps on.
+function wakesForOtherNeed(
+  engine: GameEngine,
+  context: TaskContext,
+  plan: NeedPlan,
+): boolean {
+  if (
+    context.task.priority >= AiTaskPriority.Collapse ||
+    context.tick % wakeCheckIntervalTicks !== 0 ||
+    !criticalNeedsOf(engine.content.needs, context.entity).some((need) => need.id !== plan.needId)
+  ) {
+    return false;
+  }
+  const chosen = chooseCriticalNeed(engine, context.entity, context.tick);
+  return chosen !== null && chosen.needId !== plan.needId;
+}
+
 function sleep(engine: GameEngine, context: TaskContext, plan: NeedPlan): StepResult {
   context.task.phase = SatisfyPhase.Sleep;
   adjustNeed(
@@ -95,7 +123,7 @@ function sleep(engine: GameEngine, context: TaskContext, plan: NeedPlan): StepRe
   );
   const level = getNeedValue(context.entity, plan.needId) ?? 0;
   if (level < engine.content.constants.sleepWakeThreshold) {
-    return continueStep();
+    return wakesForOtherNeed(engine, context, plan) ? doneStep() : continueStep();
   }
   if (plan.sourceId === null) {
     addMoodInfluenceTo(

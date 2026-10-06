@@ -25,7 +25,7 @@ describe("resolveRecipe", () => {
     expect(resolveRecipe(world.engine, "bread", undefined)).toEqual({
       materialId: "bread",
       recipeId: "bake_bread",
-      outputPerRun: 2,
+      outputPerRun: 3,
     });
   });
 

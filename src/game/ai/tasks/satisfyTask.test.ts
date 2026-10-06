@@ -6,9 +6,9 @@ import { AiTaskPriority, AiTaskType } from "../aiTypes";
 import { NeedPlanKind } from "../decision/needPlanTypes";
 import type { NeedPlan } from "../decision/needPlanTypes";
 import { getNeedValue } from "../needs/needAccess";
-import { createAiWorld } from "../testAiWorld";
+import { createAiWorld, removeItems } from "../testAiWorld";
 import type { AiTestWorld } from "../testAiWorld";
-import { createSatisfyTask, satisfyTaskData } from "./satisfyTask";
+import { createSatisfyTask, satisfyTaskData, wakeCheckIntervalTicks } from "./satisfyTask";
 
 const noAi = { AiState: { treeId: null } };
 
@@ -165,6 +165,72 @@ describe("createSatisfyTask", () => {
       influences: { source: string; deltaMilli: number }[];
     };
     expect(mood.influences.map((item) => item.source)).toContain("slept_on_ground");
+  });
+
+  describe("waking a sleeper for another critical need (DECISIONS D-180)", () => {
+    const groundSleep = (world: AiTestWorld, id: number): void =>
+      enqueue(world, id, {
+        kind: NeedPlanKind.Sleep,
+        needId: "rest",
+        sourceId: null,
+        materialId: null,
+        mapId: world.mapId,
+        cellIndex: 4,
+        amountMilli: 600,
+      });
+
+    it("wakes when hunger is critical and food is at hand: the sleep ends early", () => {
+      const world = createAiWorld();
+      const settler = world.spawn("peasant", 4, noAi);
+      setNeed(world, settler.id, "rest", 10_000);
+      setNeed(world, settler.id, "hunger", 10_000);
+      groundSleep(world, settler.id);
+      world.run(wakeCheckIntervalTicks + 1);
+      expect(lastOutcome(world, settler.id).outcome).toBe("Completed");
+      expect(value(world, settler.id, "rest")).toBeLessThan(90_000);
+    });
+
+    it("keeps sleeping when hunger is critical but nothing can be eaten", () => {
+      const world = createAiWorld();
+      const settler = world.spawn("peasant", 4, noAi);
+      removeItems(world, settler.id, "bread");
+      setNeed(world, settler.id, "rest", 10_000);
+      setNeed(world, settler.id, "hunger", 10_000);
+      groundSleep(world, settler.id);
+      world.run(20);
+      expect(lastOutcome(world, settler.id).outcome).toBe("none");
+    });
+
+    it("does not wake a settler who has collapsed (rest exactly zero)", () => {
+      const world = createAiWorld();
+      const settler = world.spawn("peasant", 4, noAi);
+      setNeed(world, settler.id, "rest", 0);
+      setNeed(world, settler.id, "hunger", 10_000);
+      world.engine.tasks.enqueue(settler.id, {
+        type: AiTaskType.Satisfy,
+        data: satisfyTaskData({
+          kind: NeedPlanKind.Sleep,
+          needId: "rest",
+          sourceId: null,
+          materialId: null,
+          mapId: world.mapId,
+          cellIndex: 4,
+          amountMilli: 600,
+        }),
+        priority: AiTaskPriority.Collapse,
+      });
+      world.run(wakeCheckIntervalTicks + 1);
+      expect(lastOutcome(world, settler.id).outcome).toBe("none");
+    });
+
+    it("keeps sleeping when hunger is not critical", () => {
+      const world = createAiWorld();
+      const settler = world.spawn("peasant", 4, noAi);
+      setNeed(world, settler.id, "rest", 10_000);
+      groundSleep(world, settler.id);
+      world.run(20);
+      expect(lastOutcome(world, settler.id).outcome).toBe("none");
+    });
   });
 
   it("sleeps faster in a bed and without the mood penalty", () => {

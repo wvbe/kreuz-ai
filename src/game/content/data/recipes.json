@@ -49,7 +49,7 @@
     "outputs": [
       {
         "materialId": "bread",
-        "quantity": 2
+        "quantity": 3
       }
     ],
     "durationTicks": 20,

@@ -320,7 +320,7 @@
         "query": "settlement-progress",
         "path": "milestones.length",
         "op": "eq",
-        "value": 1
+        "value": 2
       }
     },
     {
@@ -395,7 +395,7 @@
         "query": "settlement-progress",
         "path": "milestones.length",
         "op": "eq",
-        "value": 1
+        "value": 2
       }
     },
     {
