@@ -1,6 +1,7 @@
 import type { MapEntityView } from "../../../game/api/Views";
 import type { CameraState, Viewport } from "./cameraMath";
 import type { CropCell } from "./instanceLayout";
+import type { TickMotion } from "./entityMotion";
 import type { MapScene } from "./mapScene";
 
 /**
@@ -70,4 +71,8 @@ export type MapCanvasProps = {
   selectedCell: number | null;
   selectedEntityId: number | null;
   ghost: PlacementGhost | null;
+  /**
+   * The tick clock for sliding entities between cells; absent means no interpolation.
+   */
+  motion?: TickMotion;
 };

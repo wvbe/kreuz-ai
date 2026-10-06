@@ -44,6 +44,7 @@ export function MapCanvas(props: MapCanvasProps) {
         viewport={props.viewport}
         entities={props.entities}
         crops={props.crops}
+        motion={props.motion}
       />
     </Canvas>
   );

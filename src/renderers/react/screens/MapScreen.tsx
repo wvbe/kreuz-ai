@@ -15,6 +15,8 @@ import { wildAnimalMarker } from "../map/entityVisuals";
 import { Breadcrumb } from "../map/Breadcrumb";
 import type { CropCell } from "../map/instanceLayout";
 import type { PlacementGhost } from "../map/MapCanvasProps";
+import { tickDelayMs } from "../map/entityMotion";
+import type { TickMotion } from "../map/entityMotion";
 import { buildMapScene } from "../map/mapScene";
 import { MapViewport } from "../map/MapViewport";
 import type { MapBadge, MapStrokeTool } from "../map/MapViewport";
@@ -79,6 +81,15 @@ export function MapScreen() {
   const animalRows = dataOf(useQuery<AnimalsView>("animals", {}))?.animals ?? [];
   const bellRings = useEvents("bell-tower.rang");
   const tick = useGameState((state) => state.time.tick);
+  const time = useGameState((state) => state.time);
+  const motion = useMemo(
+    (): TickMotion => ({
+      tick: time.tick,
+      tickMs: tickDelayMs(time.tickIntervalMs, time.speed),
+      paused: time.paused,
+    }),
+    [time.tick, time.tickIntervalMs, time.speed, time.paused],
+  );
 
   const [preview, setPreview] = useState<readonly number[]>([]);
   const stroke = useMemo((): MapStrokeTool | null => {
@@ -206,6 +217,7 @@ export function MapScreen() {
           showZones={prefs.showZones}
           badges={badges}
           ghost={ghost}
+          motion={motion}
           stroke={stroke}
           hoverLabel={hoverLabel}
           onPrimaryClick={(cell, entityId) => {

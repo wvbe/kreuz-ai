@@ -20,6 +20,7 @@ import { createCellPicker } from "./cellPicker";
 import { buildCellEntityIndex, pickEntity } from "./entityPicking";
 import { classifyEntity, visualHeight } from "./entityVisuals";
 import type { CropCell } from "./instanceLayout";
+import type { TickMotion } from "./entityMotion";
 import type { PlacementGhost, ZoneOverlay } from "./MapCanvasProps";
 import type { MapScene } from "./mapScene";
 
@@ -73,6 +74,10 @@ export type MapViewportProps = {
    * The active drag tool, or null/undefined for select and pan.
    */
   stroke?: MapStrokeTool | null;
+  /**
+   * The tick clock for sliding entities between cells; absent means no interpolation.
+   */
+  motion?: TickMotion;
 };
 
 const dragThreshold = 4;
@@ -309,6 +314,7 @@ export function MapViewport(props: MapViewportProps) {
         selectedCell={selection.cell}
         selectedEntityId={selection.entityId}
         ghost={props.ghost}
+        motion={props.motion}
       />
       <div className="kv-badges" aria-hidden={badges.length === 0}>
         {badges.map((badge) => (

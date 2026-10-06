@@ -3,13 +3,15 @@ import type { ContentEntryView } from "../../../game/api/contentQueries";
 import type { EntityDetailView } from "../../../game/api/Views";
 import type { IdentityView } from "../../../game/identity/identityViews";
 import type { StewardView } from "../../../game/standing/standingViews";
+import type { WorkstationView } from "../../../game/production/productionViews";
 import type { ZoneView } from "../../../game/zones/zoneTypes";
 import type { NeedsView } from "../../../game/ai/aiViews";
 import type { MembershipView } from "../../../game/factions/factionViews";
 import type { SkillsView, TraitsView } from "../../../game/skills/skillViews";
 import { useEngineHost } from "../engine/useEngineHost";
 import { useQuery } from "../engine/useGameState";
-import { EntityLink } from "../ui/EntityLink";
+import { openContentEntry } from "../screens/contentRequests";
+import { EntityLink, Link } from "../ui/EntityLink";
 import { KeyValueList } from "../ui/KeyValueList";
 import { NeedBar } from "../ui/NeedBar";
 import { describeActiveNode } from "./describeActiveNode";
@@ -41,6 +43,13 @@ export function CitizenOverview(props: { entityId: number }) {
     kind: ContentKind.Behavior,
     id: aiState?.treeId ?? "",
   });
+  const stations = useQuery<readonly WorkstationView[]>("workstations");
+  // The workstation this citizen crafts at now: one click from the citizen to the workstation
+  // and one more to the recipe (spec 024 SC-002), or one click straight to the recipe.
+  const workstation = stations.ok
+    ? stations.data.find((row) => row.crafting?.crafterId === props.entityId)
+    : undefined;
+  const craftingRecipe = workstation?.crafting?.recipeId;
   const steward = useQuery<StewardView>("steward", {});
   const needs = useQuery<NeedsView | null>("needs-of", { entityId: props.entityId });
   const skills = useQuery<SkillsView | null>("skills-of", { entityId: props.entityId });
@@ -90,6 +99,29 @@ export function CitizenOverview(props: { entityId: number }) {
                     />
                   ),
               },
+              workstation === undefined
+                ? null
+                : {
+                    label: "Works at",
+                    value: (
+                      <EntityLink
+                        entityId={workstation.entityId}
+                        label={`${humanizeId(workstation.furnitureId ?? "workstation")} #${workstation.entityId}`}
+                      />
+                    ),
+                  },
+              craftingRecipe === undefined
+                ? null
+                : {
+                    label: "Crafting",
+                    value: (
+                      <Link
+                        label={humanizeId(craftingRecipe)}
+                        title="Open the recipe"
+                        onClick={() => openContentEntry(host, ContentKind.Recipe, craftingRecipe)}
+                      />
+                    ),
+                  },
               title === null
                 ? null
                 : { label: "Title", value: `${humanizeId(title.rank)} ${title.noun}` },
