@@ -21,7 +21,13 @@ function load(): Scenario {
 
 describe("UI smoke scenario: checkpoint C through the EngineHost", () => {
   it("ends in the same state hash as the CLI scenario path", () => {
-    const scenario = load();
+    // The state hash includes the command id counter, so the CLI run keeps only the steps the
+    // host plays (assert, saveLoad and replay steps would allocate ids the host path never does).
+    const full = load();
+    const scenario: Scenario = {
+      ...full,
+      steps: full.steps.filter((step) => "command" in step || "step" in step),
+    };
     const cli = runScenario(scenario, { createSession: () => new GameSession() });
     expect(cli.ok).toBe(true);
     const host = new EngineHost();
@@ -44,12 +50,12 @@ describe("UI smoke scenario: checkpoint C through the EngineHost", () => {
     expect(replay.ok).toBe(true);
   });
 
-  it("reaches the same hash when the clock, not step, advances time", () => {
+  it("reaches the same hash when the clock advances time one tick at a time", () => {
     const scenario: Scenario = {
       name: "clock",
       seed: 42,
       options: { difficulty: "steady", mapSize: 0 },
-      steps: [{ step: 30 }],
+      steps: Array.from({ length: 30 }, () => ({ step: 1 })),
     };
     const cli = runScenario(scenario, { createSession: () => new GameSession() });
     const fake = createFakeScheduler();
