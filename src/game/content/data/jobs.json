@@ -8,7 +8,8 @@
       "ref": "farm_field"
     },
     "recurrence": "one-time",
-    "priority": 60
+    "priority": 60,
+    "toolMaterialId": "hoe"
   },
   {
     "id": "farm.tend",
@@ -18,7 +19,7 @@
       "kind": "zone",
       "ref": "farm_field"
     },
-    "recurrence": "one-time"
+    "recurrence": "recurring"
   },
   {
     "id": "farm.harvest",
@@ -35,7 +36,8 @@
         "quantity": 4
       }
     ],
-    "priority": 60
+    "priority": 60,
+    "toolMaterialId": "sickle"
   },
   {
     "id": "fell.trees",
@@ -53,7 +55,8 @@
       }
     ],
     "wage": 2,
-    "priority": 30
+    "priority": 30,
+    "toolMaterialId": "axe"
   },
   {
     "id": "mine.ore",
@@ -71,7 +74,8 @@
       }
     ],
     "wage": 2,
-    "priority": 20
+    "priority": 20,
+    "toolMaterialId": "pickaxe"
   },
   {
     "id": "quarry.stone",
@@ -89,7 +93,8 @@
       }
     ],
     "wage": 2,
-    "priority": 40
+    "priority": 40,
+    "toolMaterialId": "pickaxe"
   },
   {
     "id": "haul.deliver",
@@ -149,5 +154,369 @@
     "recurrence": "one-time",
     "wage": 1,
     "priority": 55
+  },
+  {
+    "id": "fish.catch",
+    "name": "Catch fish",
+    "skillId": "fishing",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "fishing_dock"
+    },
+    "recurrence": "recurring",
+    "toolMaterialId": "fishing_rod",
+    "outputs": [
+      {
+        "materialId": "raw_fish",
+        "quantity": 3
+      }
+    ],
+    "wage": 2,
+    "priority": 45
+  },
+  {
+    "id": "gather.herbs",
+    "name": "Gather herbs",
+    "skillId": "herbalism",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "herb_garden"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "herbs",
+        "quantity": 3
+      }
+    ],
+    "wage": 2,
+    "priority": 30
+  },
+  {
+    "id": "gather.fruit",
+    "name": "Gather fruit",
+    "skillId": "farming",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "orchard"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "fruit",
+        "quantity": 4
+      }
+    ],
+    "wage": 2,
+    "priority": 30,
+    "unlockTier": "village"
+  },
+  {
+    "id": "gather.grapes",
+    "name": "Gather grapes",
+    "skillId": "farming",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "vineyard"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "grapes",
+        "quantity": 4
+      }
+    ],
+    "wage": 2,
+    "priority": 30,
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "fell.pine",
+    "name": "Fell pine trees",
+    "skillId": "woodcutting",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "forest_pine"
+    },
+    "recurrence": "recurring",
+    "toolMaterialId": "axe",
+    "outputs": [
+      {
+        "materialId": "pine_log",
+        "quantity": 3
+      }
+    ],
+    "wage": 2,
+    "priority": 25
+  },
+  {
+    "id": "fell.birch",
+    "name": "Fell birch trees",
+    "skillId": "woodcutting",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "forest_birch"
+    },
+    "recurrence": "recurring",
+    "toolMaterialId": "axe",
+    "outputs": [
+      {
+        "materialId": "birch_log",
+        "quantity": 3
+      }
+    ],
+    "wage": 2,
+    "priority": 25
+  },
+  {
+    "id": "dig.clay",
+    "name": "Dig clay",
+    "skillId": "mining",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "clay_deposit"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "clay",
+        "quantity": 3
+      }
+    ],
+    "charges": 4,
+    "wage": 2,
+    "priority": 25
+  },
+  {
+    "id": "gather.sand",
+    "name": "Gather sand",
+    "skillId": "hauling",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "sand"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "sand",
+        "quantity": 3
+      }
+    ],
+    "wage": 2,
+    "priority": 25
+  },
+  {
+    "id": "mine.vein",
+    "name": "Mine metal ore",
+    "skillId": "mining",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "ore_vein"
+    },
+    "recurrence": "recurring",
+    "toolMaterialId": "pickaxe",
+    "outputs": [
+      {
+        "materialId": "copper_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "tin_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "coal",
+        "quantity": 2
+      }
+    ],
+    "charges": 8,
+    "wage": 2,
+    "priority": 20
+  },
+  {
+    "id": "quarry.granite",
+    "name": "Quarry granite",
+    "skillId": "masonry",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "rocky"
+    },
+    "recurrence": "recurring",
+    "toolMaterialId": "pickaxe",
+    "outputs": [
+      {
+        "materialId": "granite",
+        "quantity": 2
+      }
+    ],
+    "charges": 8,
+    "wage": 2,
+    "priority": 35
+  },
+  {
+    "id": "tend.animals",
+    "name": "Tend livestock",
+    "skillId": "animal_husbandry",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "pasture"
+    },
+    "recurrence": "recurring"
+  },
+  {
+    "id": "tend.bees",
+    "name": "Tend apiary",
+    "skillId": "animal_husbandry",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "apiary_yard"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "honey",
+        "quantity": 2
+      },
+      {
+        "materialId": "beeswax",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "hunt.game",
+    "name": "Hunt game",
+    "skillId": "combat",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 2
+      },
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "butcher.animal",
+    "name": "Butcher an animal",
+    "skillId": "animal_husbandry",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time",
+    "outputs": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 4
+      },
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      },
+      {
+        "materialId": "tallow",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "charity.distribute",
+    "name": "Distribute alms",
+    "skillId": "preaching",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "recurring",
+    "priority": 70
+  },
+  {
+    "id": "build.deconstruct",
+    "name": "Deconstruct",
+    "skillId": "construction",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time",
+    "toolMaterialId": "iron_hammer",
+    "onBoard": false
+  },
+  {
+    "id": "guard.patrol",
+    "name": "Patrol area",
+    "skillId": "combat",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "guard_post"
+    },
+    "recurrence": "recurring"
+  },
+  {
+    "id": "guard.watch",
+    "name": "Stand watch",
+    "skillId": "combat",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "guard_post"
+    },
+    "recurrence": "recurring"
+  },
+  {
+    "id": "preach.sermon",
+    "name": "Deliver sermon",
+    "skillId": "preaching",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "chapel"
+    },
+    "recurrence": "recurring"
+  },
+  {
+    "id": "preach.pray",
+    "name": "Personal prayer",
+    "skillId": "preaching",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "chapel"
+    },
+    "recurrence": "recurring"
+  },
+  {
+    "id": "diplomacy.dispatch",
+    "name": "Diplomatic mission",
+    "skillId": "trading",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "throne_room"
+    },
+    "recurrence": "one-time",
+    "onBoard": false
+  },
+  {
+    "id": "haul.bury",
+    "name": "Bury deceased",
+    "skillId": "hauling",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "cemetery"
+    },
+    "recurrence": "one-time"
+  },
+  {
+    "id": "govern.steward_audience",
+    "name": "Steward's audience",
+    "skillId": null,
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "throne_room"
+    },
+    "recurrence": "recurring-daily",
+    "onBoard": false
   }
 ]

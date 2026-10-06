@@ -44,7 +44,7 @@ Religious faction `associatedZoneIds` stay empty until the zones exist:
 - chapel, church - zones - parish_church
 - cloister, church, brewery, herb_garden - zones - monastic_order
 - chapel, market - zones - mendicant_friars (`market` may be a zone id)
-- charity.distribute - jobs - mendicant_friars charity (spec open question, no job type yet)
+- charity.distribute - jobs - the job type now exists (D-133, any citizen hands out bread); the friars' own faction board and the mood trigger of the spec are still open
 
 Spec differences kept on purpose (existing ids are never rebalanced): `guild_masons` is `mercantile` in the pack (spec: isolationist); the three religious factions have no skill criterion (membership by prototype or choice); `wulfric_abbey` is an NPC religious faction on top of the three spec factions, so a pack test counts the player-side religious factions as `factionType: religious` without an `npc` block.
 

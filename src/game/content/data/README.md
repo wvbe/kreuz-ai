@@ -15,9 +15,9 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `skills.json` | 21 skills (task 5.3; effect kinds `faith_bonus`, `trade_margin` since D-90) | done |
 | `traits.json` | 32 traits; 24 are `extended` (drawn only for prototypes with `drawExtendedTraits`, D-91) | done |
 | `furniture.json` | 66 records: the 64 of spec 022 plus `wall` and `door`, each with the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); tags equal the id plus the spec categories, tiers per D-73 (task 5.1) | final |
-| `zones.json` | 39 zone types (tasks 5.2 and 5.4a: the 8 v0 ones plus the 31 new ones of spec 022); `activityUnlocks` are the spec's `activity.unlock` effects; a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
+| `zones.json` | 43 zone types (tasks 5.2 and 5.4a: the 8 v0 ones plus the 31 new ones of spec 022, plus the crop zones `flax_field`, `barley_field`, `rye_field`, `vegetable_garden` of D-130; the crop zones carry per-crop data: `cropOutputs`, `cropGrowthTicks`, `cropTerrainId`, `harvestJobId`, `perennial`); `activityUnlocks` are the spec's `activity.unlock` effects; a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 59 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
-| `jobs.json` | 11 jobs (a `priority` field per job type since D-54) | 20+ |
+| `jobs.json` | 36 jobs: the 23 of spec 022 plus `build.supply`, the terrain, fruit, grape, charity and animal jobs (a `priority` field per job type since D-54, `charges` since D-130) | final except zone contexts, see `docs/content-crossrefs-5.4.md` |
 | `factions.json` | 9 guilds, 3 religious (`parish_church`, `monastic_order`, `mendicant_friars`, no zones yet) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | zones for the religious factions |
 | `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |
 | `name-lists.json` | `common_13c`: 62 given names, 41 bynames (meets the 60/40 minimum) | keep, extend |

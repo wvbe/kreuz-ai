@@ -146,8 +146,12 @@ const furnitureAlternativeSchema = z
  * alternatives (OR); the entries are combined with AND. An alternative with `perTiles` is a
  * density: it needs `count` pieces for every started `perTiles` tiles of the zone (at least
  * `count`). `requiresJobBoard` makes a job board inside the zone a requirement (spec 017 FR-018).
- * `cropOutputs` are the harvest yields of a farm field (DECISIONS D-15). `activityUnlocks` are the
- * spec 022 `activity.unlock` effects (data only, DECISIONS D-80).
+ * `cropOutputs` are the harvest yields of a crop zone (DECISIONS D-15); the other `crop*` fields
+ * are the per-crop growth data (D-130): `cropTerrainId` the terrain a plot needs (default
+ * `fertile_soil`), `cropGrowthTicks` the growth time (default the constant `cropGrowthTicks`),
+ * `harvestJobId` the job that harvests ripe cells (default `farm.harvest`) and `perennial` zones
+ * (orchard, vineyard, herb garden) replant themselves, so they have no sowing job.
+ * `activityUnlocks` are the spec 022 `activity.unlock` effects (data only, DECISIONS D-80).
  */
 export const zoneTypeSchema = z
   .object({
@@ -160,6 +164,10 @@ export const zoneTypeSchema = z
     effects: z.array(effectSchema).default([]),
     skillAffinityId: contentIdSchema.optional(),
     cropOutputs: z.array(materialAmountSchema).default([]),
+    cropTerrainId: contentIdSchema.optional(),
+    cropGrowthTicks: positiveSchema.optional(),
+    harvestJobId: dottedIdSchema.optional(),
+    perennial: z.boolean().default(false),
     activityUnlocks: z.array(contentIdSchema).default([]),
     unlockTier: unlockTierSchema,
   })
@@ -215,6 +223,8 @@ const zoneContextSchema = z
  * Authored job type (spec 022 job record). Gathering jobs list `outputs` (FR-024); `priority`
  * (default 50, DECISIONS D-54) is the posting priority when the poster names none, so essential
  * work (food) outranks background gathering; `onBoard: false` marks jobs that are never posted on a job board.
+ * `charges` is how often a cell of a terrain job's deposit can be worked before it turns into the
+ * terrain's `clearsTo` (default 1, DECISIONS D-130; ignored for terrain without `clearsTo`).
  */
 export const jobTypeSchema = z
   .object({
@@ -225,6 +235,7 @@ export const jobTypeSchema = z
     zoneContext: zoneContextSchema,
     recurrence: z.enum(JobRecurrence),
     outputs: z.array(materialAmountSchema).default([]),
+    charges: positiveSchema.default(1),
     wage: countSchema.default(0),
     priority: z.number().int().min(0).max(100).default(50),
     onBoard: z.boolean().default(true),

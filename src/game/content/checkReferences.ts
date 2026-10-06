@@ -76,6 +76,7 @@ export function checkReferences(content: ParsedContent): ContentIssue[] {
   const zones = idSet(content.zones);
   const factions = idSet(content.factions);
   const traits = idSet(content.traits);
+  const jobIds = idSet(content.jobs);
   const trees = idSet(content.behaviorTrees);
   const nameLists = idSet(content.nameLists);
   const humanoids = idSet(content.humanoids);
@@ -191,6 +192,12 @@ export function checkReferences(content: ParsedContent): ContentIssue[] {
       need(skills, ContentFile.Zones, entry.id, "skillAffinityId", entry.skillAffinityId, "skill");
     }
     amounts(ContentFile.Zones, entry.id, "cropOutputs", entry.cropOutputs);
+    if (entry.cropTerrainId !== undefined) {
+      need(terrain, ContentFile.Zones, entry.id, "cropTerrainId", entry.cropTerrainId, "terrain");
+    }
+    if (entry.harvestJobId !== undefined) {
+      need(jobIds, ContentFile.Zones, entry.id, "harvestJobId", entry.harvestJobId, "job type");
+    }
   }
   for (const entry of content.recipes) {
     amounts(ContentFile.Recipes, entry.id, "inputs", entry.inputs);

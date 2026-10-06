@@ -197,14 +197,34 @@
     "requiresRoom": false,
     "minTiles": 9,
     "activityUnlocks": ["orcharding"],
-    "unlockTier": "village"
+    "unlockTier": "village",
+    "cropOutputs": [
+      {
+        "materialId": "fruit",
+        "quantity": 4
+      }
+    ],
+    "cropTerrainId": "orchard_soil",
+    "cropGrowthTicks": 576,
+    "harvestJobId": "gather.fruit",
+    "perennial": true
   },
   {
     "id": "herb_garden",
     "name": "Herb Garden",
     "requiresRoom": false,
     "minTiles": 6,
-    "activityUnlocks": ["herbalism"]
+    "activityUnlocks": ["herbalism"],
+    "cropOutputs": [
+      {
+        "materialId": "herbs",
+        "quantity": 3
+      }
+    ],
+    "cropGrowthTicks": 288,
+    "harvestJobId": "gather.herbs",
+    "perennial": true,
+    "skillAffinityId": "herbalism"
   },
   {
     "id": "vineyard",
@@ -212,7 +232,17 @@
     "requiresRoom": false,
     "minTiles": 9,
     "activityUnlocks": ["viticulture"],
-    "unlockTier": "market_town"
+    "unlockTier": "market_town",
+    "cropOutputs": [
+      {
+        "materialId": "grapes",
+        "quantity": 4
+      }
+    ],
+    "cropTerrainId": "vineyard_soil",
+    "cropGrowthTicks": 576,
+    "harvestJobId": "gather.grapes",
+    "perennial": true
   },
   {
     "id": "quarry",
@@ -728,5 +758,65 @@
     ],
     "activityUnlocks": ["beekeeping"],
     "unlockTier": "village"
+  },
+  {
+    "id": "flax_field",
+    "name": "Flax field",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "cropOutputs": [
+      {
+        "materialId": "flax",
+        "quantity": 3
+      }
+    ],
+    "cropGrowthTicks": 432,
+    "skillAffinityId": "farming",
+    "activityUnlocks": ["flax_growing"]
+  },
+  {
+    "id": "barley_field",
+    "name": "Barley field",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "cropOutputs": [
+      {
+        "materialId": "barley",
+        "quantity": 4
+      }
+    ],
+    "cropGrowthTicks": 576,
+    "skillAffinityId": "farming",
+    "activityUnlocks": ["barley_growing"]
+  },
+  {
+    "id": "rye_field",
+    "name": "Rye field",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "cropOutputs": [
+      {
+        "materialId": "rye",
+        "quantity": 4
+      }
+    ],
+    "cropGrowthTicks": 576,
+    "skillAffinityId": "farming",
+    "activityUnlocks": ["rye_growing"]
+  },
+  {
+    "id": "vegetable_garden",
+    "name": "Vegetable garden",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "cropOutputs": [
+      {
+        "materialId": "vegetables",
+        "quantity": 3
+      }
+    ],
+    "cropGrowthTicks": 288,
+    "skillAffinityId": "farming",
+    "activityUnlocks": ["vegetable_growing"]
   }
 ]
