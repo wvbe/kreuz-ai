@@ -85,8 +85,29 @@ function checkEveryMomentOnce(run: Run): void {
   }
 }
 
+// Since D-182 the settlement of this scenario no longer starves on its own, so the death that the
+// chronicle must keep is brought about here: the last settler is at hunger zero with no health left.
+function starveLastSettler(run: Run): void {
+  const settlers = run.session.engine.store
+    .entities()
+    .filter((entity) => entity.components["Needs"] !== undefined);
+  const victim = settlers[settlers.length - 1];
+  if (victim === undefined) {
+    throw new Error("no settler to starve");
+  }
+  const needs = victim.components["Needs"] as { values: { needId: string; valueMilli: number }[] };
+  for (const value of needs.values) {
+    if (value.needId === "hunger") {
+      value.valueMilli = 0;
+    }
+  }
+  (victim.components["Health"] as { valueMilli: number }).valueMilli = 0;
+  run.session.step(1);
+}
+
 describe("chronicle scenario (task 4.6, spec 028)", () => {
   const run = play("chronicle");
+  starveLastSettler(run);
 
   it("passes its own assertions", () => {
     expect(run.result).toMatch(/^PASS chronicle/);

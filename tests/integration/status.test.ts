@@ -137,7 +137,8 @@ describe("flow ledger conservation", () => {
       expect(delta, row.materialId).toBe(row.windowProduced - row.windowConsumed);
     }
     const bread = buildFlowRow(world.engine, "bread");
-    expect(bread?.windowProduced).toBe(8);
+    // four bakes of one flour make three loaves each since D-182
+    expect(bread?.windowProduced).toBe(12);
     expect(buildFlowRow(world.engine, "wheat")?.windowConsumed).toBe(8);
     expect(buildFlowRow(world.engine, "flour")).toMatchObject({ windowProduced: 4 });
   });
