@@ -10,3 +10,5 @@ Format: `- gap: <materialId>` then the recipes that consume it.
 - gap: honey (brew_mead, make_preserves)
 - gap: salt (dry_meat, salt_fish)
 - gap: beeswax (mold_beeswax_candles)
+
+Checked again with D-250 (terrain features now generated): none of the four gaps above closes by terrain. `oak_bark` is a `harvestable` of `forest_oak` that no job reads, and honey, salt and beeswax have no terrain or zone source at all.

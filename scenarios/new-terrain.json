@@ -1,0 +1,364 @@
+{
+  "name": "new-terrain",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "forest_pine"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "forest_birch"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "clay_deposit"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "sand"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "ore_vein"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "rocky"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "orchard_soil"
+      }
+    },
+    {
+      "assert": {
+        "query": "map",
+        "args": {
+          "mapId": 1
+        },
+        "path": "terrain",
+        "op": "includes",
+        "value": "vineyard_soil"
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 93
+        },
+        "path": "terrain",
+        "op": "eq",
+        "value": "forest_pine"
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 93
+        },
+        "path": "traversable",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 527
+        },
+        "path": "terrain",
+        "op": "eq",
+        "value": "clay_deposit"
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 527
+        },
+        "path": "traversable",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 111
+        },
+        "path": "terrain",
+        "op": "eq",
+        "value": "ore_vein"
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 111
+        },
+        "path": "traversable",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 426
+        },
+        "path": "terrain",
+        "op": "eq",
+        "value": "sand"
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 426
+        },
+        "path": "traversable",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 350
+        },
+        "path": "terrain",
+        "op": "eq",
+        "value": "rocky"
+      }
+    },
+    {
+      "assert": {
+        "query": "cell",
+        "args": {
+          "mapId": 1,
+          "cell": 350
+        },
+        "path": "traversable",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "fell.pine",
+        "mapId": 1,
+        "cellIndex": 93,
+        "priority": 77,
+        "wage": 9
+      }
+    },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "dig.clay",
+        "mapId": 1,
+        "cellIndex": 527,
+        "priority": 77,
+        "wage": 9
+      }
+    },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "mine.vein",
+        "mapId": 1,
+        "cellIndex": 111,
+        "priority": 77,
+        "wage": 9
+      }
+    },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "gather.sand",
+        "mapId": 1,
+        "cellIndex": 426,
+        "priority": 77,
+        "wage": 9
+      }
+    },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "quarry.granite",
+        "mapId": 1,
+        "cellIndex": 350,
+        "priority": 77,
+        "wage": 9
+      }
+    },
+    {
+      "step": 1100
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "pine_log"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "clay"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "copper_ore"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "sand"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "granite"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 100
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}

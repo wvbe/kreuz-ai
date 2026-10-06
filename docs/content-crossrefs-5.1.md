@@ -8,7 +8,7 @@ Every workstation tag now has a recipe (the `forge` and `apiary` pieces serve zo
 
 ## Terrain ids for other categories (zones, jobs, animals)
 
-New terrain ids that habitat lists, jobs (`zoneContext` terrain) and zones may use: forest_pine, forest_birch, rocky, ore_vein, water_deep, marsh, road_stone, sand, vineyard_soil, orchard_soil, clay_deposit, floor_stone. World generation does not place any of them yet (it only uses the v0 ids).
+New terrain ids that habitat lists, jobs (`zoneContext` terrain) and zones may use: forest_pine, forest_birch, rocky, ore_vein, water_deep, marsh, road_stone, sand, vineyard_soil, orchard_soil, clay_deposit, floor_stone. World generation places all of them except road_stone and floor_stone (built by the player) through the late feature pass of D-250 (`src/game/worldgen/placeFeatures.ts`); `nonGeneratedTerrain` there lists the ids that no generator paints, with the reason.
 
 ## Tier notes (furniture)
 
