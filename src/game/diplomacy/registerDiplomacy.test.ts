@@ -30,6 +30,7 @@ function failure(world: DiplomacyTestWorld, kind: string, payload: object): stri
   throw new Error("expected the command to be refused");
 }
 
+// @covers 021:FR-010 021:FR-011 021:FR-014 021:SC-001
 describe("registerDiplomacy", () => {
   it("registers the commands, the queries and the Envoy component", () => {
     const world = createDiplomacyWorld();

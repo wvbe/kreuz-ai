@@ -19,6 +19,7 @@ function setup(): { engine: GameEngine; guild: number; baker: number } {
   return { engine, guild, baker };
 }
 
+// @covers 021:FR-015
 describe("buildFactionView", () => {
   it("shows the faction data and its derived members", () => {
     const { engine, guild, baker } = setup();

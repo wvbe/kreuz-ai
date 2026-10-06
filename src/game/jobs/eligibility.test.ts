@@ -20,6 +20,7 @@ function setup() {
 }
 
 // @covers 016:FR-001b
+// @covers 021:FR-008 021:SC-002
 describe("defaultEligibility", () => {
   it("is a citizen who is not hostile to the poster", () => {
     expect(defaultEligibility()).toEqual([

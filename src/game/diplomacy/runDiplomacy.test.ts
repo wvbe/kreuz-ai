@@ -4,6 +4,7 @@ import { ticksPerDay } from "../time/GameTime";
 import { isDecayTick, runDiplomacy } from "./runDiplomacy";
 import { createDiplomacyWorld } from "./testDiplomacyWorld";
 
+// @covers 021:FR-003 021:FR-007
 describe("isDecayTick", () => {
   it("is the first tick of every second day, never tick 0", () => {
     const world = createDiplomacyWorld();

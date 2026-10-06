@@ -23,6 +23,7 @@ function message(
   };
 }
 
+// @covers 021:FR-009
 describe("acceptsAgreement", () => {
   it("needs the target's standing to be at least 20 (E-20) and no hostility", () => {
     const world = createDiplomacyWorld();

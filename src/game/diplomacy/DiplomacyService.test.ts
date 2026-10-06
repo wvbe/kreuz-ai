@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DiplomacyService } from "./DiplomacyService";
 import { DiplomaticActType } from "./diplomacyTypes";
 
+// @covers 021:FR-014 021:SC-006
 describe("DiplomacyService", () => {
   it("adds proposals with counter ids, finds them and lists them ascending", () => {
     const service = new DiplomacyService();

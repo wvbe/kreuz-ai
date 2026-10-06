@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { citizenComponent, citizenDataSchema } from "./citizenComponent";
 
+// @covers 021:FR-002
 describe("citizenComponent", () => {
   it("defaults to no factions and no home", () => {
     expect(citizenComponent.name).toBe("Citizen");

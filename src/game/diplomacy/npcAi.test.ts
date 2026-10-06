@@ -36,6 +36,7 @@ function acts(world: DiplomacyTestWorld, senderId: number): string[] {
     );
 }
 
+// @covers 021:FR-008 021:FR-012 021:SC-007
 describe("npcRecordOf", () => {
   it("reads the npc block of the content faction", () => {
     const world = createDiplomacyWorld();

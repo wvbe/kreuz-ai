@@ -56,6 +56,7 @@ function setup(): { world: TradeTestWorld; trader: Entity; settler: Entity } {
 const nails = (quantity: number): Item[] => [{ materialId: "nails", quantity }];
 
 // @covers 019:FR-007 019:FR-008
+// @covers 021:FR-008 021:SC-002
 describe("evaluateOffer", () => {
   it("accepts when the coins reach what the trader asks (10 nails: 2000 milli x 1.1 = 3 coins)", () => {
     const { world, trader, settler } = setup();

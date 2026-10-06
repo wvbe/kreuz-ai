@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DispatchFailureReason, EnvoyStatus } from "./diplomacyTypes";
 import { envoyComponent, envoyDataSchema } from "./envoyComponent";
 
+// @covers 021:FR-004 021:FR-005
 describe("envoyComponent", () => {
   it("defaults to a traveling overture without cargo", () => {
     expect(envoyComponent.name).toBe("Envoy");

@@ -38,6 +38,8 @@ function leaderOf(world: DiplomacyTestWorld, factionId: number): number | null {
   return getComponent(world.engine.store.require(factionId), factionComponent)?.leaderId ?? null;
 }
 
+// @covers 021:FR-005 021:FR-006 021:FR-010 021:FR-011 021:FR-014 021:SC-001 021:SC-003
+// @covers 021:SC-004 021:SC-006
 describe("US1 faction data", () => {
   it("keeps standing, agreements, leaders and members through save and load", () => {
     const world = createDiplomacyWorld();

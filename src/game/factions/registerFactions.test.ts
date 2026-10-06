@@ -23,6 +23,7 @@ function query(engine: GameEngine, name: string, args: object): JsonValue | unde
 
 const stripTimestamp = (text: string): string => text.replace(/"savedAt":"[^"]*"/, "");
 
+// @covers 021:FR-003 021:FR-014 021:SC-006
 describe("registerFactions", () => {
   it("is part of every engine and idempotent", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });

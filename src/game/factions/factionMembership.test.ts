@@ -16,6 +16,7 @@ function setup(): { engine: GameEngine; government: number; guild: number; citiz
   return { engine, government: 1, guild, citizens };
 }
 
+// @covers 021:FR-002 021:FR-015 021:SC-005
 describe("joinFaction", () => {
   it("adds a citizen to several factions, ascending, and emits the change once each", () => {
     const { engine, government, guild, citizens } = setup();

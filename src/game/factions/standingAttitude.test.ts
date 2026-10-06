@@ -12,6 +12,7 @@ function setup(): { engine: GameEngine; government: number; guild: number } {
   return { engine, government: 1, guild: spawnContentFaction(engine, "guild_bakers").id };
 }
 
+// @covers 021:FR-008 021:SC-002
 describe("getAttitude", () => {
   it("is neutral by default and follows each side's own standing", () => {
     const { engine, government, guild } = setup();

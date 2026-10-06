@@ -56,6 +56,7 @@ function send(world: DiplomacyTestWorld, targetId: number, coins = 100) {
   return { envoy, data };
 }
 
+// @covers 021:FR-004 021:FR-006 021:FR-011 021:SC-001 021:SC-003 021:SC-004
 describe("runEnvoys", () => {
   it("waits for arriveTick, then delivers the gift to the leader, applies standing and heads home", () => {
     const world = createDiplomacyWorld();

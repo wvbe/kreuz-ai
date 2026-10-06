@@ -13,6 +13,7 @@ function setup(): { engine: GameEngine; government: number; guild: number } {
   return { engine, government: 1, guild: spawnContentFaction(engine, "guild_bakers").id };
 }
 
+// @covers 021:FR-007
 describe("clampStanding", () => {
   it("clamps to -100..100", () => {
     expect(clampStanding(250)).toBe(100);

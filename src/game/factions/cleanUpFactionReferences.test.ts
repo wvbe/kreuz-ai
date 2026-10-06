@@ -25,6 +25,7 @@ function setup(): { engine: GameEngine; guild: number; baker: number; peasant: n
   return { engine, guild, baker, peasant };
 }
 
+// @covers 021:FR-003 021:SC-004
 describe("cleanUpFactionReferences", () => {
   it("empties leaderId of a deleted leader and emits the change", () => {
     const { engine, guild, baker } = setup();

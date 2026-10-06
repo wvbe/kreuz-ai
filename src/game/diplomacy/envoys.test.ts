@@ -46,6 +46,7 @@ function refusal(run: () => void): DiplomacyErrorKind | null {
   return null;
 }
 
+// @covers 021:FR-005 021:FR-010 021:FR-011 021:SC-004
 describe("giftValueCoins", () => {
   it("counts coins at face value and goods at their value, rounded down", () => {
     const world = createDiplomacyWorld();

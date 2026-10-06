@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { factionComponent, factionDataSchema } from "./factionComponent";
 
+// @covers 021:FR-001 021:FR-014
 describe("factionComponent", () => {
   it("defaults to an unnamed political faction without leader or standing", () => {
     expect(factionComponent.name).toBe("Faction");

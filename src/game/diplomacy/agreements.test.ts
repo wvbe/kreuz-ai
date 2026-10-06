@@ -3,6 +3,7 @@ import { getStanding, setStanding } from "../factions/factionStanding";
 import { hasAgreement, listAgreements, setAgreement } from "./agreements";
 import { createDiplomacyWorld } from "./testDiplomacyWorld";
 
+// @covers 021:FR-009
 describe("setAgreement", () => {
   it("sets the flag on both lists, keeps the values and queues formed once", () => {
     const world = createDiplomacyWorld();

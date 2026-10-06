@@ -17,6 +17,7 @@ function setup(): GameEngine {
   return engine;
 }
 
+// @covers 021:FR-001
 describe("governmentFactionId", () => {
   it("is the bootstrap faction entity with its Faction component", () => {
     const engine = setup();

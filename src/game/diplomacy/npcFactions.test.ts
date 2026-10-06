@@ -7,6 +7,7 @@ import { styledName } from "../identity/styledName";
 import { spawnNpcFactions, spawnNpcMember } from "./npcFactions";
 import { createDiplomacyWorld } from "./testDiplomacyWorld";
 
+// @covers 021:FR-012 021:SC-007
 describe("spawnNpcFactions", () => {
   it("seeds every content faction with an npc block: seat, members, leader and standing", () => {
     const world = createDiplomacyWorld();

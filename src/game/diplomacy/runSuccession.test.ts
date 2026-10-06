@@ -14,6 +14,7 @@ function leaderOf(
   return getComponent(world.engine.store.require(factionId), factionComponent)?.leaderId ?? null;
 }
 
+// @covers 021:FR-003 021:SC-004
 describe("runSuccession", () => {
   it("does nothing while every faction has a leader", () => {
     const world = createDiplomacyWorld();

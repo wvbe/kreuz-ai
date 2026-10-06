@@ -19,6 +19,7 @@ function setup(): { engine: GameEngine; farmer: number; baker: number; peasant: 
   };
 }
 
+// @covers 021:FR-003
 describe("setFactionLeader", () => {
   it("sets and clears the one leader and emits the change", () => {
     const { engine, baker } = setup();

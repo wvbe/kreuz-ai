@@ -8,6 +8,7 @@ import { DiplomaticActType, ProposalResponse } from "./diplomacyTypes";
 import { expireProposals, receiveProposal, respondToProposal } from "./proposals";
 import { createDiplomacyWorld } from "./testDiplomacyWorld";
 
+// @covers 021:FR-013
 describe("receiveProposal", () => {
   it("stores the proposal with its expiry and queues diplomacy.proposal.received", () => {
     const world = createDiplomacyWorld();

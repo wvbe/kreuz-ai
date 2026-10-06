@@ -16,6 +16,7 @@ import {
 } from "./standingRules";
 import { createDiplomacyWorld } from "./testDiplomacyWorld";
 
+// @covers 021:FR-006 021:FR-007 021:FR-009
 describe("giftDelta (standing arithmetic, D-14)", () => {
   const world = createDiplomacyWorld();
   const constants = world.engine.content.constants;

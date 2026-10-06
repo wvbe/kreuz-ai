@@ -78,6 +78,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
   - [x] Soak (D-110): `tests/soak/`, `npm run soak` (10,000 ticks, seeds 42 and 7, integers, references, reservations, Unexplained, event ledger, bounded queues, save/load at seeded ticks) and a 2,400-tick variant in CI; no violation found
   - [x] Performance (D-112): `docs/PERFORMANCE.md`, `npm run perf`, `tests/integration/performanceBudgets.test.ts`; quadratic hot spots fixed (`ReachCache` for `reachable`, `EntityStore.structureRevision` for `listBoards`): 200 citizens 11 ms to 4 ms per tick, 400 citizens 35 ms to 10 ms
   - [x] Traceability groundwork (D-113): `npm run fr-coverage` writes `docs/FR-COVERAGE.md` (not gated; 7.2 decides the rule)
+  - [x] Audit 013-021 (D-210 to D-212): per-spec tables in `docs/audit/013.md` to `021.md`, `@covers` tags on existing tests, new code for relationship writer and decay, zone activity and modifier queries (`mood.bonus` wired), recurring postings; gaps listed per file (safety/social need sources, construction tools, concurrency > 1, home board, AI-initiated trade)
 - [ ] 7.2 Spec→test traceability audit, docs, CLI manual
   - Audit 001-012 (D-190): `docs/audit/NNN.md` per spec, every id named by a test except two noted gaps; see the Gaps lists
 - [ ] **Final:** all specs implemented, `npm run ci` green, playable in terminal and browser
