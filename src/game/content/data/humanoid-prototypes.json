@@ -76,5 +76,356 @@
     "behaviorTreeId": "basic_needs",
     "defaultFactionIds": ["guild_bakers"],
     "defaultTraitIds": ["born_baker"]
+  },
+  {
+    "id": "blacksmith",
+    "name": "Blacksmith",
+    "startingSkills": {
+      "smithing": 30,
+      "mining": 10
+    },
+    "equipment": [
+      {
+        "materialId": "iron_hammer",
+        "quantity": 1
+      },
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_smiths"]
+  },
+  {
+    "id": "mason",
+    "name": "Mason",
+    "startingSkills": {
+      "masonry": 30,
+      "construction": 15
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_masons"]
+  },
+  {
+    "id": "brewer",
+    "name": "Brewer",
+    "startingSkills": {
+      "brewing": 30,
+      "cooking": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_brewers"]
+  },
+  {
+    "id": "weaver",
+    "name": "Weaver",
+    "startingSkills": {
+      "weaving": 30,
+      "tailoring": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_weavers"]
+  },
+  {
+    "id": "tanner",
+    "name": "Tanner",
+    "startingSkills": {
+      "leatherworking": 30,
+      "hauling": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_tanners"]
+  },
+  {
+    "id": "potter",
+    "name": "Potter",
+    "startingSkills": {
+      "masonry": 15,
+      "cooking": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_potters"]
+  },
+  {
+    "id": "cook",
+    "name": "Cook",
+    "startingSkills": {
+      "cooking": 30,
+      "baking": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "fisherman",
+    "name": "Fisherman",
+    "startingSkills": {
+      "fishing": 25,
+      "cooking": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "herbalist",
+    "name": "Herbalist",
+    "startingSkills": {
+      "herbalism": 30,
+      "cooking": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "miner",
+    "name": "Miner",
+    "startingSkills": {
+      "mining": 30,
+      "hauling": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "lumberjack",
+    "name": "Lumberjack",
+    "startingSkills": {
+      "woodcutting": 25,
+      "carpentry": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "shepherd",
+    "name": "Shepherd",
+    "startingSkills": {
+      "animal_husbandry": 25,
+      "farming": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "guard",
+    "name": "Guard",
+    "startingSkills": {
+      "combat": 25,
+      "hauling": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "needPriority": ["safety", "rest", "hunger", "social", "comfort", "faith"]
+  },
+  {
+    "id": "soldier",
+    "name": "Soldier",
+    "startingSkills": {
+      "combat": 35,
+      "hauling": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "needPriority": ["safety", "rest", "hunger", "social", "comfort", "faith"]
+  },
+  {
+    "id": "merchant",
+    "name": "Merchant",
+    "startingSkills": {
+      "trading": 30
+    },
+    "equipment": [
+      {
+        "materialId": "silver_penny",
+        "quantity": 100
+      },
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["guild_merchants"],
+    "sellsItems": true,
+    "needPriority": ["social", "hunger", "rest", "comfort", "safety", "faith"]
+  },
+  {
+    "id": "priest",
+    "name": "Priest",
+    "startingSkills": {
+      "preaching": 30,
+      "herbalism": 10
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["parish_church"],
+    "needPriority": ["faith", "social", "hunger", "rest", "comfort", "safety"]
+  },
+  {
+    "id": "monk",
+    "name": "Monk",
+    "startingSkills": {
+      "preaching": 20,
+      "brewing": 15,
+      "herbalism": 15
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "defaultFactionIds": ["monastic_order"],
+    "needPriority": ["faith", "social", "hunger", "rest", "comfort", "safety"]
+  },
+  {
+    "id": "scholar",
+    "name": "Scholar",
+    "startingSkills": {
+      "preaching": 10,
+      "trading": 5
+    },
+    "equipment": [
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 2,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs"
+  },
+  {
+    "id": "noble",
+    "name": "Noble",
+    "startingSkills": {
+      "trading": 15,
+      "combat": 10
+    },
+    "equipment": [
+      {
+        "materialId": "silver_penny",
+        "quantity": 200
+      },
+      {
+        "materialId": "bread",
+        "quantity": 2
+      }
+    ],
+    "traitSlots": 3,
+    "drawExtendedTraits": true,
+    "behaviorTreeId": "basic_needs",
+    "needPriority": ["comfort", "social", "hunger", "rest", "safety", "faith"]
   }
 ]

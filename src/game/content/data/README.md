@@ -12,16 +12,16 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `terrain.json` | 11 terrain types | 15+ |
 | `materials.json` | 14 materials incl. `silver_penny` | 70+ |
 | `needs.json` | the 6 needs; only hunger (bread) and rest (wooden_bed) have satisfaction methods | all methods |
-| `skills.json` | 8 skills | 20+ |
-| `traits.json` | 7 traits | 24+ |
+| `skills.json` | 21 skills (task 5.3; effect kinds `faith_bonus`, `trade_margin` since D-90) | done |
+| `traits.json` | 32 traits; 24 are `extended` (drawn only for prototypes with `drawExtendedTraits`, D-91) | done |
 | `furniture.json` | 11 records: 9 pieces plus `wall` and `door` (the `notice_post` of the Village tier and the `church_bell` of the Market Town came with task 4.3); each has the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); bed, workbench, chest, table, sawmill, wall and door unlock at `hamlet`, the oven at `village` | 50+ |
 | `zones.json` | 8 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room, bell_tower); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
 | `jobs.json` | 11 jobs (a `priority` field per job type since D-54) | 20+ |
-| `factions.json` | 3 guilds (`guild_bakers`, `guild_masons`, `guild_carpenters`) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | 9 guilds + 3 religious |
+| `factions.json` | 9 guilds, 3 religious (`parish_church`, `monastic_order`, `mendicant_friars`, no zones yet) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | zones for the religious factions |
 | `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |
 | `name-lists.json` | `common_13c`: 62 given names, 41 bynames (meets the 60/40 minimum) | keep, extend |
-| `humanoid-prototypes.json` | peasant, farmer, carpenter, baker | 20+ |
+| `humanoid-prototypes.json` | 23 prototypes; the 19 new ones draw extended traits and use `basic_needs` until the tree catalogue exists | equipment and trees per `docs/content-crossrefs-5.3.md` |
 | `animal-prototypes.json` | empty | 6 livestock + 5 wild |
 | `engine-prototypes.json` | `government_faction` (no components yet), `wall`, `door`, `zone`, `furniture_piece` (test and construction stand-in: `Position` + `Furniture`), `job_board`, `chest` (furniture storage and stockpile), `loose_pile`, `build_site` (task 3.5: `Position`, a non-queryable 16-slot staging `Inventory`, `BuildSite`) | add `diplomatic_envoy` with its components |
 | `dwelling-levels.json` | 4 levels, placeholder numbers | tuned (spec 029) |

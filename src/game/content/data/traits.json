@@ -90,5 +90,365 @@
         "value": 0.05
       }
     ]
+  },
+  {
+    "id": "natural_smith",
+    "name": "Natural smith",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "smithing",
+        "growthMultiplier": 1.5,
+        "startingValueBonus": 10
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "green_thumb",
+    "name": "Green thumb",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "farming",
+        "growthMultiplier": 1.5,
+        "startingValueBonus": 10
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "steady_hand",
+    "name": "Steady hand",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "carpentry",
+        "growthMultiplier": 1.3,
+        "startingValueBonus": 5
+      },
+      {
+        "kind": "skill_aptitude",
+        "skill": "masonry",
+        "growthMultiplier": 1.3,
+        "startingValueBonus": 5
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "silver_tongue",
+    "name": "Silver tongue",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "trading",
+        "growthMultiplier": 1.5,
+        "startingValueBonus": 10
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "iron_constitution",
+    "name": "Iron constitution",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "mining",
+        "growthMultiplier": 1.3,
+        "startingValueBonus": 5
+      },
+      {
+        "kind": "skill_aptitude",
+        "skill": "combat",
+        "growthMultiplier": 1.2
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "keen_eye",
+    "name": "Keen eye",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "fishing",
+        "growthMultiplier": 1.4,
+        "startingValueBonus": 5
+      },
+      {
+        "kind": "skill_aptitude",
+        "skill": "herbalism",
+        "growthMultiplier": 1.3
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "nimble_fingers",
+    "name": "Nimble fingers",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "weaving",
+        "growthMultiplier": 1.4,
+        "startingValueBonus": 5
+      },
+      {
+        "kind": "skill_aptitude",
+        "skill": "tailoring",
+        "growthMultiplier": 1.4,
+        "startingValueBonus": 5
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "devout_soul",
+    "name": "Devout soul",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "preaching",
+        "growthMultiplier": 1.5,
+        "startingValueBonus": 10
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "animal_friend",
+    "name": "Animal friend",
+    "modifiers": [
+      {
+        "kind": "skill_aptitude",
+        "skill": "animal_husbandry",
+        "growthMultiplier": 1.5,
+        "startingValueBonus": 10
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "quick",
+    "name": "Quick",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "ALL_WORK",
+        "stat": "multiplier",
+        "value": 1.15
+      }
+    ],
+    "conflictsWith": ["slow"],
+    "extended": true
+  },
+  {
+    "id": "slow",
+    "name": "Slow",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "ALL_WORK",
+        "stat": "multiplier",
+        "value": 0.85
+      }
+    ],
+    "conflictsWith": ["quick"],
+    "extended": true
+  },
+  {
+    "id": "meticulous",
+    "name": "Meticulous",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "ALL_CRAFTING",
+        "stat": "output_bonus",
+        "value": 0.5
+      },
+      {
+        "kind": "performance",
+        "skill": "ALL_CRAFTING",
+        "stat": "speed_multiplier",
+        "value": 0.9
+      }
+    ],
+    "conflictsWith": ["clumsy"],
+    "extended": true
+  },
+  {
+    "id": "clumsy",
+    "name": "Clumsy",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "ALL_CRAFTING",
+        "stat": "output_bonus",
+        "value": -0.3
+      },
+      {
+        "kind": "performance",
+        "skill": "ALL_CRAFTING",
+        "stat": "speed_multiplier",
+        "value": 1.1
+      }
+    ],
+    "conflictsWith": ["meticulous"],
+    "extended": true
+  },
+  {
+    "id": "hardy",
+    "name": "Hardy",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "combat",
+        "stat": "multiplier",
+        "value": 1.2
+      },
+      {
+        "kind": "performance",
+        "skill": "construction",
+        "stat": "multiplier",
+        "value": 1.15
+      }
+    ],
+    "extended": true
+  },
+  {
+    "id": "lethargic",
+    "name": "Lethargic",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "rest",
+        "decayRateMultiplier": 1.4
+      }
+    ],
+    "conflictsWith": ["tireless"],
+    "extended": true
+  },
+  {
+    "id": "ravenous",
+    "name": "Ravenous",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "hunger",
+        "decayRateMultiplier": 1.4
+      }
+    ],
+    "conflictsWith": ["hearty"],
+    "extended": true
+  },
+  {
+    "id": "gregarious",
+    "name": "Gregarious",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "social",
+        "decayRateMultiplier": 1.3,
+        "satisfactionBonusMultiplier": 1.3
+      }
+    ],
+    "conflictsWith": ["solitary"],
+    "extended": true
+  },
+  {
+    "id": "solitary",
+    "name": "Solitary",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "social",
+        "decayRateMultiplier": 0.6,
+        "satisfactionBonusMultiplier": 0.7
+      }
+    ],
+    "conflictsWith": ["gregarious"],
+    "extended": true
+  },
+  {
+    "id": "devout",
+    "name": "Devout",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "faith",
+        "decayRateMultiplier": 1.3,
+        "satisfactionBonusMultiplier": 1.5
+      }
+    ],
+    "conflictsWith": ["skeptical"],
+    "extended": true
+  },
+  {
+    "id": "skeptical",
+    "name": "Skeptical",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "faith",
+        "decayRateMultiplier": 0.5,
+        "satisfactionBonusMultiplier": 0.5
+      }
+    ],
+    "conflictsWith": ["devout"],
+    "extended": true
+  },
+  {
+    "id": "brave",
+    "name": "Brave",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "safety",
+        "decayRateMultiplier": 0.6
+      }
+    ],
+    "conflictsWith": ["cowardly"],
+    "extended": true
+  },
+  {
+    "id": "cowardly",
+    "name": "Cowardly",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "safety",
+        "decayRateMultiplier": 1.5
+      }
+    ],
+    "conflictsWith": ["brave"],
+    "extended": true
+  },
+  {
+    "id": "generous",
+    "name": "Generous",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "mood",
+        "moodBonus": 3
+      }
+    ],
+    "conflictsWith": ["miserly"],
+    "extended": true
+  },
+  {
+    "id": "miserly",
+    "name": "Miserly",
+    "modifiers": [
+      {
+        "kind": "need_modifier",
+        "need": "mood",
+        "moodBonus": 3
+      }
+    ],
+    "conflictsWith": ["generous"],
+    "extended": true
   }
 ]

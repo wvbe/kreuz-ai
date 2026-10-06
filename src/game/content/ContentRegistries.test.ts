@@ -75,29 +75,32 @@ describe("ContentRegistries", () => {
     const first = content.createPrototypeRegistry(components());
     const second = content.createPrototypeRegistry(components());
     expect(first).not.toBe(second);
-    expect(first.ids()).toEqual([
-      "baker",
-      "build_site",
-      "carpenter",
-      "chest",
-      "diplomatic_envoy",
-      "door",
-      "faction",
-      "farmer",
-      "furniture_piece",
-      "government_faction",
-      "grinding_mill",
-      "job_board",
-      "loose_pile",
-      "npc_leader",
-      "oven",
-      "peasant",
-      "sawmill",
-      "trader_caravan",
-      "wall",
-      "workbench",
-      "zone",
-    ]);
+    expect(first.ids()).toEqual(
+      expect.arrayContaining([
+        "baker",
+        "build_site",
+        "carpenter",
+        "chest",
+        "diplomatic_envoy",
+        "door",
+        "faction",
+        "farmer",
+        "furniture_piece",
+        "government_faction",
+        "grinding_mill",
+        "job_board",
+        "loose_pile",
+        "npc_leader",
+        "oven",
+        "peasant",
+        "sawmill",
+        "trader_caravan",
+        "wall",
+        "workbench",
+        "zone",
+      ]),
+    );
+    expect(first.ids()).toEqual(second.ids());
     expect(first.has(governmentFactionPrototypeId)).toBe(true);
   });
 

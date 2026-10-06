@@ -36,6 +36,102 @@
     "masterSkillThreshold": 60
   },
   {
+    "id": "guild_smiths",
+    "name": "Blacksmiths' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Smith",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "smithing",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "guild_weavers",
+    "name": "Weavers' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Weaver",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "weaving",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "guild_tanners",
+    "name": "Tanners' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Tanner",
+    "disposition": "isolationist",
+    "membership": {
+      "skillId": "leatherworking",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "guild_brewers",
+    "name": "Brewers' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Brewer",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "brewing",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "guild_merchants",
+    "name": "Merchants' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Guildmaster",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "trading",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "guild_potters",
+    "name": "Potters' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Potter",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "masonry",
+      "minLevel": 10
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "parish_church",
+    "name": "The Parish",
+    "factionType": "religious",
+    "leaderTitle": "Parish Priest",
+    "disposition": "mercantile",
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "monastic_order",
+    "name": "Monastic Order",
+    "factionType": "religious",
+    "leaderTitle": "Abbot",
+    "disposition": "isolationist",
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "mendicant_friars",
+    "name": "Mendicant Friars",
+    "factionType": "religious",
+    "leaderTitle": "Prior",
+    "disposition": "mercantile",
+    "masterSkillThreshold": 60
+  },
+  {
     "id": "merchant_caravans",
     "name": "Travelling merchants",
     "factionType": "mercantile",

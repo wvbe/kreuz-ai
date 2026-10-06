@@ -82,13 +82,14 @@ describe("content pack v0 with the kernel", () => {
     const store = new EntityStore({ components, prototypes, counters: new IdCounters() });
 
     const spawned = content.humanoids.all().map((humanoid) => store.spawn(humanoid.id));
-    expect(spawned.map((entity) => entity.prototype)).toEqual([
+    expect(spawned.map((entity) => entity.prototype).slice(0, 4)).toEqual([
       "peasant",
       "farmer",
       "carpenter",
       "baker",
     ]);
-    const baker = spawned[3];
+    expect(spawned).toHaveLength(content.humanoids.size);
+    const baker = spawned.find((entity) => entity.prototype === "baker");
     if (!baker) throw new Error("baker missing");
     expect(getTotal(baker, "silver_penny")).toBe(20);
     expect(requireComponent(baker, aiStateComponent).treeId).toBe("basic_needs");
@@ -98,7 +99,7 @@ describe("content pack v0 with the kernel", () => {
       "SettlementChronicle",
       "SettlementProgress",
     ]);
-    expect(store.size).toBe(5);
+    expect(store.size).toBe(content.humanoids.size + 1);
   });
 
   it("builds the behavior trees of the pack against registered handlers", () => {

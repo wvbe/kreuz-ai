@@ -135,8 +135,178 @@
       {
         "kind": "output_bonus",
         "value": 0.5
+      },
+      {
+        "kind": "trade_margin",
+        "value": 0.05
       }
     ],
     "titleNoun": "Trader"
+  },
+  {
+    "id": "weaving",
+    "name": "Weaving",
+    "baseGrowthPerCompletion": 2.5,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Weaver"
+  },
+  {
+    "id": "tailoring",
+    "name": "Tailoring",
+    "baseGrowthPerCompletion": 2.5,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Tailor"
+  },
+  {
+    "id": "leatherworking",
+    "name": "Leatherworking",
+    "baseGrowthPerCompletion": 2.5,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Tanner"
+  },
+  {
+    "id": "brewing",
+    "name": "Brewing",
+    "baseGrowthPerCompletion": 2.5,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Brewer"
+  },
+  {
+    "id": "cooking",
+    "name": "Cooking",
+    "baseGrowthPerCompletion": 3,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.6
+      }
+    ],
+    "titleNoun": "Cook"
+  },
+  {
+    "id": "fishing",
+    "name": "Fishing",
+    "baseGrowthPerCompletion": 3,
+    "diminishingReturnsThreshold": 40,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      },
+      {
+        "kind": "output_bonus",
+        "value": 1
+      }
+    ],
+    "titleNoun": "Fisher"
+  },
+  {
+    "id": "herbalism",
+    "name": "Herbalism",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      },
+      {
+        "kind": "output_bonus",
+        "value": 1
+      }
+    ],
+    "titleNoun": "Herbalist"
+  },
+  {
+    "id": "animal_husbandry",
+    "name": "Animal husbandry",
+    "baseGrowthPerCompletion": 2.5,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.5,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Herdsman"
+  },
+  {
+    "id": "combat",
+    "name": "Combat",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Man-at-Arms"
+  },
+  {
+    "id": "preaching",
+    "name": "Preaching",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "faith_bonus",
+        "value": 5
+      }
+    ],
+    "titleNoun": "Preacher"
+  },
+  {
+    "id": "glassblowing",
+    "name": "Glassblowing",
+    "baseGrowthPerCompletion": 1.5,
+    "diminishingReturnsThreshold": 60,
+    "diminishingFactor": 0.4,
+    "outcomeEffects": [
+      {
+        "kind": "max_speed_bonus",
+        "value": 0.4
+      },
+      {
+        "kind": "output_bonus",
+        "value": 1
+      }
+    ],
+    "titleNoun": "Glazier"
   }
 ]

@@ -121,11 +121,20 @@ describe("validateTierReachability", () => {
   });
 
   it("fails when Chartered Town needs more guilds than the pack has", () => {
-    const content = patched(ContentFile.Factions, "guild_masons", (record) => ({
-      ...record,
-      factionType: "religious",
-    }));
-    const issues = validateTierReachability(content);
+    const files = { ...bundledContentFiles };
+    const factions = files[ContentFile.Factions];
+    if (!Array.isArray(factions)) {
+      throw new Error("factions is not a list");
+    }
+    let kept = 0;
+    files[ContentFile.Factions] = factions.map((record) => {
+      if (!isObject(record) || record["factionType"] !== "occupational") {
+        return record;
+      }
+      kept += 1;
+      return kept <= 2 ? record : { ...record, factionType: "religious" };
+    });
+    const issues = validateTierReachability(loadContentPack(files));
     expect(issues).toHaveLength(1);
     expect(issues[0]).toMatchObject({
       tier: SettlementTier.CharteredTown,

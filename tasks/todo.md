@@ -55,6 +55,8 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [ ] 5.1 Terrain / materials / furniture
 - [ ] 5.2 Recipes / jobs / zones
 - [ ] 5.3 Humanoids / animals / skills / traits / needs / behaviors / factions / names
+  - [x] part 1: skills (21), traits (32), needs, humanoids (23), factions (15), name list (D-90..D-92; open ids in `docs/content-crossrefs-5.3.md`)
+  - [ ] part 2: animals, behavior trees, jobs
 - [ ] 5.4 Content conformance test (counts, references, Hamlet→Village reachability)
 
 ## Phase 6 — React renderer (024)
