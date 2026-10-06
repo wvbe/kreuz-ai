@@ -195,9 +195,9 @@ describe("animal movement", () => {
     expect(penTilesOf(world.engine, sheep, content)).toBeNull();
     world.furniture(22, "trough");
     world.run(2);
-    expect([...(penTilesOf(world.engine, sheep, content) ?? [])].sort((a, b) => a - b)).toEqual(
-      [...cells].sort((a, b) => a - b),
-    );
+    expect(
+      [...(penTilesOf(world.engine, sheep, content) ?? [])].sort((left, right) => left - right),
+    ).toEqual([...cells].sort((left, right) => left - right));
     expect(penTilesOf(world.engine, deer, wild)).toBeNull();
     expect(isOutsidePen(world.engine, sheep, content)).toBe(true);
     expect(isOutsidePen(world.engine, deer, wild)).toBe(false);
