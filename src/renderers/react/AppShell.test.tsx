@@ -37,13 +37,13 @@ describe("AppShell", () => {
     expect(screen.getByTestId("map-canvas")).toBeTruthy();
   });
 
-  it("lets any code navigate through the host and shows the placeholder task", () => {
+  it("lets any code navigate through the host and shows the screen", () => {
     const app = renderApp();
     app.start();
     act(() => {
       app.host.navigation.navigate(Screen.Flow);
     });
-    expect(screen.getByText(/plan task 6\.5/)).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Production flow" })).toBeTruthy();
   });
 
   it("shows toasts and dismisses them", () => {
