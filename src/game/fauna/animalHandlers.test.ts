@@ -7,6 +7,7 @@ import type { BehaviorContext, BehaviorParams } from "../behavior/behaviorTypes"
 import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
 import { noAiOverride } from "../jobs/testJobWorld";
+import { createZoneWorld } from "../zones/testZoneWorld";
 import { taskQueueComponent } from "../task/taskQueueComponent";
 import { animalComponent } from "./animalComponent";
 import {
@@ -19,6 +20,8 @@ import {
   humanoidNear,
   huntUrge,
   noGuardNear,
+  outsidePen,
+  returnToPenAction,
   preyNear,
   registerAnimalHandlers,
   stalkPrey,
@@ -217,6 +220,21 @@ describe("animal handlers", () => {
     world.spawn("peasant", 5, noAiOverride);
     expect(attackIntruder(world.engine, contextOf(world, bear))).toBe(NodeStatus.Success);
     expect(queueLength(bear)).toBe(1);
+  });
+
+  it("outside_pen and return_to_pen look after livestock with a pasture", () => {
+    const world = createZoneWorld();
+    const sheep = world.spawn("sheep", 99, noAiOverride);
+    expect(outsidePen(world.engine, contextOf(world, sheep))).toBe(NodeStatus.Failure);
+    expect(returnToPenAction(world.engine, contextOf(world, sheep))).toBe(NodeStatus.Failure);
+    world.designate("pasture", world.rect(2, 2, 4, 3));
+    world.furniture(22, "trough");
+    world.run(2);
+    expect(outsidePen(world.engine, contextOf(world, sheep))).toBe(NodeStatus.Success);
+    expect(returnToPenAction(world.engine, contextOf(world, sheep))).toBe(NodeStatus.Success);
+    expect(queueLength(sheep)).toBe(1);
+    expect(returnToPenAction(world.engine, contextOf(world, sheep))).toBe(NodeStatus.Success);
+    expect(queueLength(sheep)).toBe(1);
   });
 
   it("registers every handler the animal trees name", () => {

@@ -5,6 +5,7 @@ import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
 import type { JsonValue } from "../engine/EventBus";
 import { noAiOverride } from "../jobs/testJobWorld";
+import { createZoneWorld } from "../zones/testZoneWorld";
 import { taskQueueComponent } from "../task/taskQueueComponent";
 import { animalContentOf } from "./animalSenses";
 import {
@@ -14,11 +15,18 @@ import {
   fleeAnimal,
   grazeAnimal,
   hasTaskAtLeast,
+  isOutsidePen,
+  penTilesOf,
+  returnToPen,
   pickFleeCell,
   roamTerrainOf,
   wanderAnimal,
 } from "./animalMovement";
 import { FaunaTaskPriority, fleeDistanceCost } from "./faunaTypes";
+
+function cellOf(entity: Entity): number {
+  return (entity.components["Position"] as { cellIndex: number }).cellIndex;
+}
 
 function tasksOf(entity: Entity): { type: string; priority: number; data: JsonValue }[] {
   return (getComponent(entity, taskQueueComponent)?.tasks ?? []).map((task) => ({
@@ -168,5 +176,75 @@ describe("animal movement", () => {
     const tasks = tasksOf(deer);
     expect(tasks.map((task) => task.type)).toEqual([AiTaskType.Move, AiTaskType.Idle]);
     expect(tasks.every((task) => task.priority === FaunaTaskPriority.Flee)).toBe(true);
+  });
+
+  it("knows the pen of livestock: the active zones of its zone type on its map", () => {
+    const world = createZoneWorld();
+    const sheep = world.spawn("sheep", 55, noAiOverride);
+    const deer = world.spawn("deer", 56, noAiOverride);
+    const content = animalContentOf(world.engine, sheep);
+    const wild = animalContentOf(world.engine, deer);
+    if (content === undefined || wild === undefined) {
+      throw new Error("content missing");
+    }
+    expect(penTilesOf(world.engine, sheep, content)).toBeNull();
+    const cells = world.rect(2, 2, 4, 3);
+    const [zoneId] = world.designate("pasture", cells);
+    world.run(2);
+    expect(zoneId === undefined ? undefined : world.zoneData(zoneId).active).toBe(false);
+    expect(penTilesOf(world.engine, sheep, content)).toBeNull();
+    world.furniture(22, "trough");
+    world.run(2);
+    expect([...(penTilesOf(world.engine, sheep, content) ?? [])].sort((a, b) => a - b)).toEqual(
+      [...cells].sort((a, b) => a - b),
+    );
+    expect(penTilesOf(world.engine, deer, wild)).toBeNull();
+    expect(isOutsidePen(world.engine, sheep, content)).toBe(true);
+    expect(isOutsidePen(world.engine, deer, wild)).toBe(false);
+  });
+
+  it("walks back to the nearest cell of the pen and stays in it once there", () => {
+    const world = createZoneWorld();
+    const cells = world.rect(2, 2, 4, 3);
+    world.designate("pasture", cells);
+    world.furniture(22, "trough");
+    const sheep = world.spawn("sheep", 99, noAiOverride);
+    world.run(2);
+    const content = animalContentOf(world.engine, sheep);
+    if (content === undefined) {
+      throw new Error("content missing");
+    }
+    expect(returnToPen(world.engine, sheep, content)).toBe(true);
+    world.run(150);
+    expect(isOutsidePen(world.engine, sheep, content)).toBe(false);
+    expect(returnToPen(world.engine, sheep, content)).toBe(false);
+    for (let round = 0; round < 25; round += 1) {
+      wanderAnimal(world.engine, sheep, content);
+      world.run(40);
+      expect(cells).toContain(cellOf(sheep));
+    }
+  });
+
+  it("cannot return to a pen it cannot reach, and does not graze outside the pen", () => {
+    const world = createZoneWorld();
+    const cells = world.rect(2, 2, 4, 3);
+    world.designate("pasture", cells);
+    world.furniture(22, "trough");
+    const map = world.engine.maps.require(world.mapId);
+    const sheep = world.spawn("sheep", 0, noAiOverride);
+    world.run(2);
+    for (const cell of [1, 10, 11]) {
+      map.setTerrain(cell, "water_shallow");
+    }
+    const content = animalContentOf(world.engine, sheep);
+    if (content === undefined) {
+      throw new Error("content missing");
+    }
+    expect(returnToPen(world.engine, sheep, content)).toBe(false);
+    const inside = world.spawn("sheep", 33, noAiOverride);
+    for (const cell of cells) {
+      map.setTerrain(cell, "forest_oak");
+    }
+    expect(grazeAnimal(world.engine, inside, content)).toBe(false);
   });
 });

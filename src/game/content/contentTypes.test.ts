@@ -62,6 +62,10 @@ describe("content conformance against spec 022 (task 5.4a, D-120)", () => {
     for (const zone of content.zones.all()) {
       zone.cropOutputs.forEach((output) => producible.add(output.materialId));
     }
+    for (const animal of content.animals.all()) {
+      animal.products.forEach((output) => producible.add(output.materialId));
+      animal.drops.forEach((output) => producible.add(output.materialId));
+    }
     for (const prototype of content.enginePrototypes.all()) {
       const trader = prototype.components["Trader"];
       if (typeof trader === "object" && trader !== null && "sells" in trader) {

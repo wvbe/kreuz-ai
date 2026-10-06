@@ -20,6 +20,8 @@ import {
   fleeAnimal,
   grazeAnimal,
   hasTaskAtLeast,
+  isOutsidePen,
+  returnToPen,
   wanderAnimal,
 } from "./animalMovement";
 import {
@@ -67,6 +69,12 @@ export const noGuardNearId = "no_guard_near";
 export const animalAggressiveId = "animal_aggressive";
 
 /**
+ * Condition: the animal has a pen (an active zone of its type, the pasture of livestock) and
+ * stands outside it.
+ */
+export const outsidePenId = "outside_pen";
+
+/**
  * Condition: the per-decision roll that a predator that sees prey goes for it
  * (`predatorHuntChance`, stream `fauna.hunt`).
  */
@@ -81,6 +89,11 @@ export const fleeFromThreatId = "flee_from_threat";
  * Action: walk to food and eat there.
  */
 export const grazeId = "graze";
+
+/**
+ * Action: walk back to the nearest cell of the animal's pen.
+ */
+export const returnToPenId = "return_to_pen";
 
 /**
  * Action: stand around or stroll over the animal's terrain.
@@ -210,6 +223,18 @@ export function animalAggressive(engine: GameEngine, context: BehaviorContext): 
 }
 
 /**
+ * Whether the animal stands outside its pen.
+ *
+ * @param engine - The engine.
+ * @param context - Behavior context.
+ * @returns Success when it has a pen and is not in it.
+ */
+export function outsidePen(engine: GameEngine, context: BehaviorContext): NodeStatus {
+  const content = animalContentOf(engine, context.entity);
+  return status(content !== undefined && isOutsidePen(engine, context.entity, content));
+}
+
+/**
  * The hunt roll: success with `predatorHuntChance` per mille, drawn from `fauna.hunt`.
  *
  * @param engine - The engine.
@@ -241,6 +266,21 @@ export function fleeFromThreat(engine: GameEngine, context: BehaviorContext): No
 export function graze(engine: GameEngine, context: BehaviorContext): NodeStatus {
   const content = animalContentOf(engine, context.entity);
   return status(content !== undefined && grazeAnimal(engine, context.entity, content));
+}
+
+/**
+ * Walks back to the pen (nothing to do while the animal is busy).
+ *
+ * @param engine - The engine.
+ * @param context - Behavior context.
+ * @returns Success when a walk was enqueued or one is running, failure without a reachable pen.
+ */
+export function returnToPenAction(engine: GameEngine, context: BehaviorContext): NodeStatus {
+  const content = animalContentOf(engine, context.entity);
+  if (content === undefined) {
+    return NodeStatus.Failure;
+  }
+  return status(hasTaskAtLeast(context.entity, 0) || returnToPen(engine, context.entity, content));
 }
 
 /**
@@ -363,9 +403,11 @@ export function registerAnimalHandlers(engine: GameEngine): void {
   handlers.registerCondition(preyNearId, (context) => preyNear(engine, context));
   handlers.registerCondition(noGuardNearId, (context) => noGuardNear(engine, context));
   handlers.registerCondition(animalAggressiveId, (context) => animalAggressive(engine, context));
+  handlers.registerCondition(outsidePenId, (context) => outsidePen(engine, context));
   handlers.registerCondition(huntUrgeId, () => huntUrge(engine));
   handlers.registerAction(fleeFromThreatId, (context) => fleeFromThreat(engine, context));
   handlers.registerAction(grazeId, (context) => graze(engine, context));
+  handlers.registerAction(returnToPenId, (context) => returnToPenAction(engine, context));
   handlers.registerAction(wanderAnimalId, (context) => wanderAnimalAction(engine, context));
   handlers.registerAction(stalkPreyId, (context) => stalkPrey(engine, context));
   handlers.registerAction(attackPreyId, (context) => attackPrey(engine, context));

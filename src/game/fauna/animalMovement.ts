@@ -7,6 +7,8 @@ import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { positionComponent } from "../map/positionComponent";
+import { activeZonesOfType } from "../zones/zoneQueries";
+import { getZoneService } from "../zones/zoneServiceRegistry";
 import { distanceSquared } from "../worldgen/distanceSquared";
 import {
   animalStandChance,
@@ -114,9 +116,89 @@ export function enqueueStand(
 }
 
 /**
+ * The cells of the active zones of the animal's own zone type (the pasture of a livestock animal)
+ * on its map.
+ *
+ * @param engine - The engine.
+ * @param entity - The animal.
+ * @param content - Its record.
+ * @returns The zone cells, or null when the record names no zone or no such zone is active.
+ */
+export function penTilesOf(
+  engine: GameEngine,
+  entity: Entity,
+  content: AnimalPrototypeContent,
+): ReadonlySet<number> | null {
+  const position = getComponent(entity, positionComponent);
+  if (position === undefined || content.zoneId === undefined) {
+    return null;
+  }
+  const tiles = new Set<number>();
+  for (const zoneId of activeZonesOfType(engine, content.zoneId)) {
+    const zone = getZoneService(engine).getZone(zoneId);
+    if (zone !== null && zone.data.mapId === position.mapId) {
+      for (const tile of zone.data.tiles) {
+        tiles.add(tile);
+      }
+    }
+  }
+  return tiles.size === 0 ? null : tiles;
+}
+
+/**
+ * Whether the animal has a pen (an active zone of its type) and stands outside it.
+ *
+ * @param engine - The engine.
+ * @param entity - The animal.
+ * @param content - Its record.
+ * @returns True when it should go back.
+ */
+export function isOutsidePen(
+  engine: GameEngine,
+  entity: Entity,
+  content: AnimalPrototypeContent,
+): boolean {
+  const pen = penTilesOf(engine, entity, content);
+  const position = getComponent(entity, positionComponent);
+  return pen !== null && position !== undefined && !pen.has(position.cellIndex);
+}
+
+/**
+ * Sends an animal that stands outside its pen to the nearest cell of the pen (by path cost, ties
+ * lowest cell) at idle priority.
+ *
+ * @param engine - The engine.
+ * @param entity - The animal.
+ * @param content - Its record.
+ * @returns False when it has no pen, is inside it already, or cannot reach it.
+ */
+export function returnToPen(
+  engine: GameEngine,
+  entity: Entity,
+  content: AnimalPrototypeContent,
+): boolean {
+  const pen = penTilesOf(engine, entity, content);
+  const position = getComponent(entity, positionComponent);
+  if (pen === null || position === undefined || pen.has(position.cellIndex)) {
+    return false;
+  }
+  const nearest = getAiService(engine)
+    .pathfinding.reachable(position.mapId, position.cellIndex)
+    .filter((reachable) => pen.has(reachable.cell))
+    .sort((left, right) =>
+      left.cost === right.cost ? left.cell - right.cell : left.cost - right.cost,
+    )[0];
+  if (nearest === undefined) {
+    return false;
+  }
+  enqueueMove(engine, entity, nearest.cell, 10);
+  return true;
+}
+
+/**
  * Makes an idle animal stand around or walk to a nearby cell of its terrain (the fauna version of
  * `idle_wander`, drawing only from `fauna.move`). It does nothing while the animal already has a
- * task.
+ * task. An animal inside its pen stays inside it.
  *
  * @param engine - The engine.
  * @param entity - The animal.
@@ -136,12 +218,15 @@ export function wanderAnimal(
   const allowed = roamTerrainOf(content);
   const map = engine.maps.get(getComponent(entity, positionComponent)?.mapId ?? 0);
   const own = getComponent(entity, positionComponent)?.cellIndex;
+  const pen = penTilesOf(engine, entity, content);
+  const inPen = pen !== null && own !== undefined && pen.has(own);
   const options =
     stand || map === undefined
       ? []
       : cellsAround(engine, entity, animalWanderRadiusCost).filter(
           (reachable) =>
             reachable.cell !== own &&
+            (!inPen || pen.has(reachable.cell)) &&
             (allowed.length === 0 || allowed.includes(map.terrainAt(reachable.cell))),
         );
   if (options.length === 0) {
@@ -153,7 +238,8 @@ export function wanderAnimal(
 
 /**
  * Sends a hungry animal to food: it stands and eats where it is when the terrain under it is in
- * its diet, otherwise it walks to one of the three nearest diet cells (`fauna.move` picks).
+ * its diet, otherwise it walks to one of the three nearest diet cells (`fauna.move` picks); in its
+ * pen it only eats inside the pen.
  *
  * @param engine - The engine.
  * @param entity - The animal.
@@ -174,8 +260,14 @@ export function grazeAnimal(
     enqueueStand(engine, entity, grazeStandTicks, 10);
     return true;
   }
+  const pen = penTilesOf(engine, entity, content);
+  const inPen = pen !== null && pen.has(position.cellIndex);
   const food = cellsAround(engine, entity, animalWanderRadiusCost)
-    .filter((reachable) => content.dietTerrainIds.includes(map.terrainAt(reachable.cell)))
+    .filter(
+      (reachable) =>
+        content.dietTerrainIds.includes(map.terrainAt(reachable.cell)) &&
+        (!inPen || pen.has(reachable.cell)),
+    )
     .slice(0, 3);
   if (food.length === 0) {
     return false;

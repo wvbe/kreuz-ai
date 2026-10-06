@@ -14,6 +14,7 @@ import { createJobWorld, noAiOverride } from "../../src/game/jobs/testJobWorld";
 import { MapSize } from "../../src/game/map/mapSize";
 import { taskQueueComponent } from "../../src/game/task/taskQueueComponent";
 import { positionComponent } from "../../src/game/map/positionComponent";
+import { createZoneWorld } from "../../src/game/zones/testZoneWorld";
 
 // Task 5.3 part 2b: animals live by their behavior trees next to the settlers (spec 022 US11 and
 // US14 scenarios) without changing what the settlers do.
@@ -126,6 +127,33 @@ describe("animals next to settlers", () => {
       return cells;
     };
     expect(walk(true)).toEqual(walk(false));
+  });
+});
+
+describe("livestock in a pasture", () => {
+  it("walks into the pasture, grazes there and stays in it", () => {
+    const world = createZoneWorld();
+    const cells = world.rect(2, 2, 4, 3);
+    world.designate("pasture", cells);
+    world.furniture(22, "trough");
+    const sheep = world.spawn("sheep", 99);
+    world.run(200);
+    expect(cells).toContain(cellOf(sheep));
+    for (let round = 0; round < 20; round += 1) {
+      world.run(25);
+      expect(cells).toContain(cellOf(sheep));
+    }
+  });
+
+  it("wanders freely without a pasture", () => {
+    const world = createAiWorld();
+    const sheep = world.spawn("sheep", 55);
+    const seen = new Set<number>();
+    for (let round = 0; round < 40; round += 1) {
+      world.run(15);
+      seen.add(cellOf(sheep));
+    }
+    expect(seen.size).toBeGreaterThan(3);
   });
 });
 

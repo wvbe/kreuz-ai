@@ -297,6 +297,19 @@
           ]
         },
         {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "outside_pen"
+            },
+            {
+              "type": "action",
+              "id": "return_to_pen"
+            }
+          ]
+        },
+        {
           "type": "action",
           "id": "wander_animal"
         }

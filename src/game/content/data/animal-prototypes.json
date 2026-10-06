@@ -20,7 +20,8 @@
     "dietTerrainIds": ["grassland", "fertile_soil"],
     "productIntervalTicks": 1152,
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "cow",
@@ -43,7 +44,8 @@
     "dietTerrainIds": ["grassland", "fertile_soil"],
     "productIntervalTicks": 288,
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "goat",
@@ -70,7 +72,8 @@
     "dietTerrainIds": ["grassland", "fertile_soil", "rocky"],
     "productIntervalTicks": 288,
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "pig",
@@ -90,7 +93,8 @@
     "behaviorTreeId": "livestock_behavior",
     "dietTerrainIds": ["grassland", "fertile_soil", "forest_oak"],
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "chicken",
@@ -113,7 +117,8 @@
     "dietTerrainIds": ["grassland", "fertile_soil"],
     "productIntervalTicks": 288,
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "horse",
@@ -123,7 +128,8 @@
     "behaviorTreeId": "livestock_behavior",
     "dietTerrainIds": ["grassland", "fertile_soil"],
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "donkey",
@@ -133,7 +139,8 @@
     "behaviorTreeId": "livestock_behavior",
     "dietTerrainIds": ["grassland", "fertile_soil"],
     "fleeRadiusCost": 60,
-    "detectionRadiusCost": 60
+    "detectionRadiusCost": 60,
+    "zoneId": "pasture"
   },
   {
     "id": "deer",

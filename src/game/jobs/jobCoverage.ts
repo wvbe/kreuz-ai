@@ -9,7 +9,7 @@ export enum DeferralReason {
    */
   NoTendingStep = "no-tending-step",
   /**
-   * Needs the animal system (livestock, wild game, bees): wired by the animals task (5.3 part 2b).
+   * Needs the bees (an apiary prototype); livestock and game are served by the fauna system.
    */
   NeedsAnimals = "needs-animals",
   /**
@@ -30,16 +30,13 @@ export enum DeferralReason {
 /**
  * Job types of the content pack that are on the board list but deliberately have no executor
  * yet, with the reason (DECISIONS D-130). They are never offered to a worker (a posting needs a
- * registered task handler, D-46) and no system posts them. Agent-owned follow-ups: the animal
- * jobs (`tend.animals`, `tend.bees`, `hunt.game`, `butcher.animal`) are wired by the animals task
- * and must be removed from this list when their executors exist.
+ * registered task handler, D-46) and no system posts them. `tend.animals`, `hunt.game` and
+ * `butcher.animal` have executors since task 5.3 part 2b (`../fauna`, D-142); `tend.bees` waits
+ * for an apiary prototype.
  */
 export const deferredJobReasons: Readonly<Record<string, DeferralReason>> = {
   "farm.tend": DeferralReason.NoTendingStep,
-  "tend.animals": DeferralReason.NeedsAnimals,
   "tend.bees": DeferralReason.NeedsAnimals,
-  "hunt.game": DeferralReason.NeedsAnimals,
-  "butcher.animal": DeferralReason.NeedsAnimals,
   "guard.patrol": DeferralReason.NeedsThreats,
   "guard.watch": DeferralReason.NeedsThreats,
   "preach.sermon": DeferralReason.NeedsChurch,

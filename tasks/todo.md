@@ -54,10 +54,10 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 ## Phase 5 — Content to full spec (022), parallelizable
 - [x] 5.1 Terrain / materials / furniture - 23 terrain types (the 21 of spec 022 plus the v0 `iron_ore_deposit` and `cave_floor`), 88 materials, 66 furniture records (the 64 of the spec plus `wall` and `door`), 42 item categories, engine prototypes for the new workstations and storage, ASCII glyphs, `tests/integration/worldContentPack.test.ts`, `docs/content-crossrefs-5.1.md`, D-70..D-75
 - [x] 5.2 Recipes / jobs / zones (recipes and zones: 4 of 59 recipes and 19 of 39 zone types resolve at the base pack, the rest is a queue in `docs/content-crossrefs-5.2.md` and `docs/content-pending-5.2.json` for 5.4, D-80; jobs were not in this slice)
-- [ ] 5.3 Humanoids / animals / skills / traits / needs / behaviors / factions / names
+- [x] 5.3 Humanoids / animals / skills / traits / needs / behaviors / factions / names
   - [x] part 1: skills (21), traits (32), needs, humanoids (23), factions (15), name list (D-90..D-92; open ids in `docs/content-crossrefs-5.3.md`)
   - [x] part 2a: jobs (23 spec job types + extras) and raw-material sources: crops per zone type, terrain gathering, fishing, charity, deferral list (D-130..D-134, `scenarios/gathering-sources.json`)
-  - [ ] part 2b: animals, behavior trees (and the animal job executors listed in `jobs/jobCoverage.ts`)
+  - [x] part 2b: animals (13 prototypes, `src/game/fauna`: senses, flee / graze / hunt / pasture handlers, hunger and periodic products), the 7 spec behavior trees plus prey and fox trees (`run_tree`, role handlers in `src/game/roles`), executors of `tend.animals` / `butcher.animal` / `hunt.game`, wild animals at world generation, query and verb `animals`, `scenarios/fauna.json` (D-140..D-145)
 - [ ] 5.4 Content conformance test (counts, references, Hamlet→Village reachability)
   - [x] 5.4a Pending queue landed (59 recipes, 39 zone types), strict conformance test in `src/game/content/contentTypes.test.ts`, source gaps in `docs/content-crossrefs-5.4.md` (D-120..D-123)
 

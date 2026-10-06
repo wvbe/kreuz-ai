@@ -48,14 +48,20 @@ Religious faction `associatedZoneIds` stay empty until the zones exist:
 
 Spec differences kept on purpose (existing ids are never rebalanced): `guild_masons` is `mercantile` in the pack (spec: isolationist); the three religious factions have no skill criterion (membership by prototype or choice); `wulfric_abbey` is an NPC religious faction on top of the three spec factions, so a pack test counts the player-side religious factions as `factionType: religious` without an `npc` block.
 
-## Behavior trees (category: behavior trees, later task)
+## Behavior trees (landed in task 5.3 part 2b, D-141)
 
-All 19 new humanoid prototypes use `basic_needs` until the tree catalogue exists:
+The 7 trees of spec 022 US14 exist (`daily_routine`, `worker_cycle`, `guard_patrol`, `merchant_routine`, `priest_routine`, `livestock_behavior`, `predator_behavior`) plus `prey_behavior` and `fox_behavior`; the 19 new humanoids use `daily_routine`, `guard_patrol`, `merchant_routine` or `priest_routine`. Leaves of the spec trees that have no system behind them are not authored (each branch is simply absent, the tree falls through to the daily routine):
 
-- daily_routine, worker_cycle - all workers
-- guard_patrol - guard, soldier
-- merchant_routine - merchant
-- priest_routine - priest, monk (and the charity trigger of the friars)
+- daily_routine: `seek_conversation`, `seek_comfort` (social and comfort need methods), `attend_worship` (faith, chapel or church zone and a congregation)
+- guard_patrol: patrol route and watch duty (`guard.patrol`, `guard.watch`, no threats system), `alert_nearby_guards`
+- merchant_routine: the daytime test, `await_trade_offers`, restock trips (`query_available_goods`, `purchase_restock`)
+- priest_routine: the sermon at a lectern (`preach.sermon`), counselling of citizens with low mood, monastic work, the charity trigger of the friars
+- livestock_behavior: `eat_from_trough` (livestock eat on their diet terrain instead)
+- predator_behavior: packs ("hunts in packs") and "cornered" boars (a boar attacks only when a humanoid is within two cells)
+
+## Animals (landed in task 5.3 part 2b, D-140)
+
+All 13 prototypes exist. Not modelled: livestock breeding (out of scope in the spec), mounts and draft work of horse and donkey ("future" in the spec), `tend.bees` (no apiary prototype), shearing and milking as separate job types (`tend.animals` takes every held product), troughs.
 
 ## Skill to job and recipe links
 

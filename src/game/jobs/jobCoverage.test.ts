@@ -50,10 +50,13 @@ describe("findUnhandledJobTypes", () => {
     }
   });
 
-  it("names the animal jobs for the animals task and gives every deferral a reason", () => {
-    for (const id of ["tend.animals", "tend.bees", "hunt.game", "butcher.animal"]) {
-      expect(deferredJobReasons[id]).toBe(DeferralReason.NeedsAnimals);
+  it("serves the animal jobs, defers the bees and gives every deferral a reason", () => {
+    const world = createJobWorld();
+    for (const id of ["tend.animals", "hunt.game", "butcher.animal"]) {
+      expect(world.engine.taskHandlers.has(id), id).toBe(true);
+      expect(deferredJobReasons[id], id).toBeUndefined();
     }
+    expect(deferredJobReasons["tend.bees"]).toBe(DeferralReason.NeedsAnimals);
     expect(Object.keys(deferredJobReasons)).toEqual([...deferredJobTypeIds]);
   });
 

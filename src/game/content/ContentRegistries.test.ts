@@ -78,6 +78,7 @@ function registerPackHandlers(handlers: BehaviorHandlerRegistry): void {
     "no_guard_near",
     "animal_aggressive",
     "hunt_urge",
+    "outside_pen",
   ]) {
     handlers.registerCondition(id, () => NodeStatus.Failure);
   }
@@ -95,6 +96,7 @@ function registerPackHandlers(handlers: BehaviorHandlerRegistry): void {
     "attack_prey",
     "steal_prey",
     "attack_intruder",
+    "return_to_pen",
   ]) {
     handlers.registerAction(id, () => NodeStatus.Success);
   }
