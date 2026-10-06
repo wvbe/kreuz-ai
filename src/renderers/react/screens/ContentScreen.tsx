@@ -9,6 +9,7 @@ import type { JsonValue } from "../../../game/engine/EventBus";
 import { useQuery } from "../engine/useGameState";
 import { useStaticQuery } from "../engine/useStaticQuery";
 import { Link } from "../ui/EntityLink";
+import { takeContentRequest } from "./contentRequests";
 import { KeepInStockButton } from "../ui/KeepInStockButton";
 import { KeyValueList } from "../ui/KeyValueList";
 import "../panels/panels.css";
@@ -162,7 +163,7 @@ export function ContentScreen() {
   const registries = useStaticQuery<ContentRegistriesView>("content-registries");
   const unlocks = useQuery<readonly UnlockRow[]>("unlocks");
   const [search, setSearch] = useState("");
-  const [chosen, setChosen] = useState<Chosen | null>(null);
+  const [chosen, setChosen] = useState<Chosen | null>(takeContentRequest);
   const locks = new Map<string, UnlockRow>();
   if (unlocks.ok) {
     for (const row of unlocks.data) {

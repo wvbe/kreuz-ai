@@ -1,5 +1,9 @@
+import { ContentKind } from "../../../game/api/contentQueries";
 import type { RecipeView, WorkstationView } from "../../../game/production/productionViews";
+import { useEngineHost } from "../engine/useEngineHost";
 import { useQuery } from "../engine/useGameState";
+import { openContentEntry } from "../screens/contentRequests";
+import { Link } from "../ui/EntityLink";
 import { KeyValueList } from "../ui/KeyValueList";
 import { EntityNameLink } from "./EntityNameLink";
 import { PrimaryStatus } from "./PrimaryStatus";
@@ -14,6 +18,7 @@ import "./panels.css";
  * @returns The panel body.
  */
 export function WorkstationInspection(props: { entityId: number }) {
+  const host = useEngineHost();
   const stations = useQuery<readonly WorkstationView[]>("workstations");
   const recipes = useQuery<readonly RecipeView[]>("recipes-for", { workstationId: props.entityId });
   const station = stations.ok
@@ -37,8 +42,12 @@ export function WorkstationInspection(props: { entityId: number }) {
                 label: "Crafting",
                 value: (
                   <span>
-                    {humanizeId(crafting.recipeId)} {crafting.progressTicks}/
-                    {crafting.durationTicks} by <EntityNameLink entityId={crafting.crafterId} />
+                    <Link
+                      label={humanizeId(crafting.recipeId)}
+                      onClick={() => openContentEntry(host, ContentKind.Recipe, crafting.recipeId)}
+                    />{" "}
+                    {crafting.progressTicks}/{crafting.durationTicks} by{" "}
+                    <EntityNameLink entityId={crafting.crafterId} />
                   </span>
                 ),
               },
@@ -59,7 +68,10 @@ export function WorkstationInspection(props: { entityId: number }) {
         <ul>
           {recipes.data.map((recipe) => (
             <li key={recipe.id} className={recipe.locked ? "kv-locked" : undefined}>
-              {recipe.name}
+              <Link
+                label={recipe.name}
+                onClick={() => openContentEntry(host, ContentKind.Recipe, recipe.id)}
+              />
               {recipe.locked
                 ? ` (unlocks at ${humanizeId(recipe.unlockTier ?? "a later tier")})`
                 : ""}

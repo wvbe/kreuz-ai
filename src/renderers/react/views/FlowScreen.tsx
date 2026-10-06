@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { ContentKind } from "../../../game/api/contentQueries";
 import type { FlowParty, FlowRow } from "../../../game/status/statusTypes";
 import { useEngineHost } from "../engine/useEngineHost";
 import { useQuery } from "../engine/useGameState";
 import { humanizeId } from "./blockedReasonText";
 import { focusSubject } from "./focusSubject";
 import { formatPerDay, sortByDeficit, sumBySource, trendArrow, trendDirection } from "./flowFormat";
+import { openContentEntry } from "../screens/contentRequests";
+import { Link } from "../ui/EntityLink";
 import { openStandingOrderForm } from "./standingOrderRequests";
 import { SubjectLabel } from "./SubjectLabel";
 import "./views.css";
@@ -45,13 +48,20 @@ function Parties(props: { title: string; parties: readonly FlowParty[] }) {
 
 function FlowRowView(props: { row: FlowRow }) {
   const { row } = props;
+  const host = useEngineHost();
   const [open, setOpen] = useState(false);
   const arrow = trendArrow(trendDirection(row.trend));
   const label = humanizeId(row.materialId);
   return (
     <>
       <tr data-material={row.materialId} className={row.netPerDayMilli < 0 ? "kv-deficit" : ""}>
-        <th scope="row">{label}</th>
+        <th scope="row">
+          <Link
+            label={label}
+            title={`Open ${label} in the content browser`}
+            onClick={() => openContentEntry(host, ContentKind.Material, row.materialId)}
+          />
+        </th>
         <td>{formatPerDay(row.producedPerDayMilli)}</td>
         <td>{formatPerDay(row.consumedPerDayMilli)}</td>
         <td>{formatPerDay(row.netPerDayMilli)}</td>

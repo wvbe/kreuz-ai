@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
+import { ContentKind } from "../../../game/api/contentQueries";
 import { Screen } from "../navigation/Screen";
+import { openContentEntry } from "./contentRequests";
 import { renderApp } from "../testing/renderApp";
 
 afterEach(cleanup);
@@ -97,5 +99,15 @@ describe("ContentScreen", () => {
     expect(within(root).getByRole("heading", { name: /^Humanoids/ })).toBeTruthy();
     expect(within(root).getByRole("heading", { name: /^Skills/ })).toBeTruthy();
     expect(within(root).getByRole("heading", { name: /^Factions/ })).toBeTruthy();
+  });
+
+  // @covers 024:FR-019 024:SC-002
+  it("opens on the entry another screen links to", () => {
+    const app = renderApp();
+    app.start();
+    act(() => {
+      openContentEntry(app.host, ContentKind.Recipe, "bake_bread");
+    });
+    expect(screen.getByRole("article", { name: "Bake bread" })).toBeTruthy();
   });
 });
