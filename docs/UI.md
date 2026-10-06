@@ -51,6 +51,14 @@ const selection = useStore(host.selection); // { activeMapId, entityId, cell, ho
 2. A screen of the shell: replace its `PlaceholderScreen` entry in `screens/screenRegistry.tsx`. A panel beside the map: append `{ id, title, component }` to `screens/sidePanels.ts`.
 3. Test with `renderApp()` from `testing/renderApp.tsx` (the whole app over a real `GameSession`, a stub canvas and a hand-driven scheduler): `app.start()` starts the standard game (seed 42, Small), `app.host` drives it, `app.fake.fireMany(n)` runs n clock ticks.
 
+## Inspection and content browser (plan 6.3)
+
+The first side panel is the inspection panel (`panels/InspectionPanel.tsx`). Click something on the map: an entity shows its name, kind and position, then a status line (the primary reason of `explain`, or what it does while active) with a "why?" button. The popover lists every reason and the chain of causes; each cause is a link that selects it and centres the map. Characters have tabs for Overview (action, need bars, mood and health, skills, traits, factions and offices), Inventory (stacks, weights, slots) and Journal (the newest lines and a link to the chronicle). Zones show a requirement checklist with its gaps and the goods stored inside; dwellings show level, residents, streaks and what is needed to keep or reach a level. Workstations, build sites and storage have their own views. A tile shows terrain, move cost, buildable, zone and occupants; a tile with several entities has a "Next on this tile" button.
+
+The Content screen searches live across every content registry (`content-registries`, `content-entry`): a recipe links to its inputs, outputs and workstation, a material to the recipes that use it, furniture to the recipes it enables. Locked content shows `Unlocks at <Tier>` from the `unlocks` query.
+
+Building blocks for other panels (`src/renderers/react/ui`): `NeedBar` (labelled meter), `StackList` (stacks with quantity, weight, capacity), `KeyValueList`, `Checklist`, `Tabs`, `Link` and `EntityLink` (select and focus). `panels/PrimaryStatus` and `panels/WhyPopover` take an entity id (or a posting or order id with its kind) and can be dropped into any list; `panels/reasonText.ts` turns reasons into sentences.
+
 ## Testing
 
 - Pure map math (camera, picking, buffers, layout, colours) is plain vitest.

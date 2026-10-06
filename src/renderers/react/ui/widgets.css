@@ -1,0 +1,80 @@
+.kv-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--kv-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.kv-needbar {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 3.2rem;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.kv-needbar-track {
+  height: 8px;
+  background: var(--kv-bg);
+  border: 1px solid var(--kv-line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.kv-needbar-fill {
+  height: 100%;
+  background: #5aa469;
+}
+
+.kv-needbar[data-critical="true"] .kv-needbar-fill {
+  background: #d0584b;
+}
+
+.kv-kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 10px;
+  margin: 0;
+}
+
+.kv-kv dt {
+  color: var(--kv-dim);
+}
+
+.kv-kv dd {
+  margin: 0;
+}
+
+.kv-stacks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kv-stacks li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.kv-dim {
+  color: var(--kv-dim);
+}
+
+.kv-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kv-checklist li[data-met="true"]::before {
+  content: "\2713  ";
+  color: #5aa469;
+}
+
+.kv-checklist li[data-met="false"]::before {
+  content: "\2717  ";
+  color: #d0584b;
+}

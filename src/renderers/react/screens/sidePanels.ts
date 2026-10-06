@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { SelectionSummary } from "./SelectionSummary";
+import { InspectionPanel } from "../panels/InspectionPanel";
 
 /**
  * A panel docked beside the map. It reads the selection with `useStore(host.selection)` and its
@@ -19,5 +19,5 @@ export type SidePanel = {
  * command list, the build menu); nothing else has to change.
  */
 export const sidePanels: readonly SidePanel[] = [
-  { id: "selection-summary", title: "Selection", component: SelectionSummary },
+  { id: "inspection", title: "Inspection", component: InspectionPanel },
 ];

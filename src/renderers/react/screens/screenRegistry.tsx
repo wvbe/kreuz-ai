@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import { Screen } from "../navigation/Screen";
+import { ContentScreen } from "./ContentScreen";
 import { MapScreen } from "./MapScreen";
 import { NewGameScreen } from "./NewGameScreen";
 import { PlaceholderScreen } from "./PlaceholderScreen";
@@ -24,7 +25,7 @@ export const screenRegistry: readonly ScreenDefinition[] = [
   {
     screen: Screen.Content,
     label: "Content",
-    render: () => <PlaceholderScreen title="Content browser" task="6.5" />,
+    render: () => <ContentScreen />,
   },
   {
     screen: Screen.Chronicle,

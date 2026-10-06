@@ -1,0 +1,88 @@
+.kv-inspection h4 {
+  margin: 10px 0 4px;
+  font-size: 0.9rem;
+  color: var(--kv-dim);
+}
+
+.kv-inspection-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.kv-status {
+  margin: 6px 0;
+}
+
+.kv-status[data-state="Blocked"] strong {
+  color: #d0584b;
+}
+
+.kv-why {
+  position: relative;
+  display: inline-block;
+}
+
+.kv-why-popover {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 100%;
+  width: 20rem;
+  max-width: 80vw;
+  padding: 8px 10px;
+  background: var(--kv-panel);
+  border: 1px solid var(--kv-accent);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 50%);
+}
+
+.kv-why-reasons,
+.kv-why-chain {
+  margin: 0 0 6px;
+  padding-left: 1.2rem;
+}
+
+.kv-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 4px;
+}
+
+.kv-journal {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kv-journal li {
+  margin-bottom: 3px;
+}
+
+.kv-content {
+  display: grid;
+  grid-template-columns: 18rem 1fr;
+  gap: 16px;
+  height: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.kv-content-list {
+  overflow: auto;
+  min-height: 0;
+}
+
+.kv-content-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kv-content-detail {
+  overflow: auto;
+  min-height: 0;
+}
+
+.kv-locked {
+  color: var(--kv-dim);
+}

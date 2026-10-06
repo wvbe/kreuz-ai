@@ -64,7 +64,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 ## Phase 6 — React renderer (024)
 - [x] 6.1 Shell: EngineHost (owns clock), store/hooks, Vite app, new/save/load
 - [x] 6.2 Map canvas, camera, picking, entity primitives, overlays
-- [ ] 6.3 Inspection panels, why-popover, citizen/journal
+- [x] 6.3 Inspection panels, why-popover, citizen/journal (+ content browser of 6.5; D-150..D-155)
 - [ ] 6.4 Command UIs (build, zones, walls, boards, standing orders, steward, directives, pending list)
 - [ ] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
 - [ ] 6.6 jsdom UI smoke tests running the shared scenario JSON
