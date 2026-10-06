@@ -1,5 +1,6 @@
 import { collectEntityMarkers } from "../collectEntityMarkers";
 import { collectZoneMarks } from "../collectZoneMarks";
+import { formatJournalTail } from "../formatChronicle";
 import {
   formatCharacter,
   formatEntityDetail,
@@ -16,6 +17,7 @@ import type { Verb } from "./Verb";
 
 const defaultEventCount = 20;
 const defaultEntityPage = 50;
+const journalLinesShown = 3;
 
 /**
  * Read-only verbs: map, entities, inspect, events.
@@ -84,6 +86,7 @@ export const inspectVerbs: readonly Verb[] = [
       const identity = session.query.run("identity-of", { entityId: id });
       const membership = session.query.run("faction-of", { entityId: id });
       const needs = session.query.run("needs-of", { entityId: id });
+      const journal = session.query.run("journal", { entityId: id });
       return verbDone([
         ...formatEntityDetail(detail, id),
         ...formatIdentity(
@@ -92,6 +95,7 @@ export const inspectVerbs: readonly Verb[] = [
         ),
         ...formatCharacter(skills.ok ? skills.data : null, traits.ok ? traits.data : null),
         ...formatNeeds(needs.ok ? needs.data : null),
+        ...formatJournalTail(journal.ok ? journal.data : null, journalLinesShown),
       ]);
     },
   },

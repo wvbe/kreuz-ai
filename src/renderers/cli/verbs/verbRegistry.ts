@@ -1,3 +1,4 @@
+import { chronicleVerbs } from "./chronicleVerbs";
 import { cellVerbs } from "./cellVerbs";
 import { constructionVerbs } from "./constructionVerbs";
 import { crierVerbs } from "./crierVerbs";
@@ -37,6 +38,7 @@ export const verbGroups: readonly (readonly Verb[])[] = [
   settlementVerbs,
   housingVerbs,
   standingVerbs,
+  chronicleVerbs,
   statusVerbs,
   metaVerbs,
 ];

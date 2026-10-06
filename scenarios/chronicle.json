@@ -1,0 +1,364 @@
+{
+  "name": "chronicle",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    {
+      "command": {
+        "kind": "AppointSteward",
+        "entityId": 4
+      }
+    },
+    {
+      "command": {
+        "kind": "RenameCitizen",
+        "entityId": 3,
+        "givenName": "Mathilde",
+        "byname": "Fairhair"
+      }
+    },
+    {
+      "step": 100
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 4
+      }
+    },
+    {
+      "step": 700
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "grind_flour",
+        "quantity": 60
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 120
+      }
+    },
+    {
+      "step": 640
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [215, 216, 234, 235, 240, 263, 267, 286, 289, 312]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 314
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "table",
+        "mapId": 1,
+        "cell": 265
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "throne_room",
+        "mapId": 1,
+        "cells": [236, 237, 238, 239, 264, 265, 266, 287, 288]
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 24
+      }
+    },
+    {
+      "step": 864
+    },
+    {
+      "assertHash": {
+        "label": "day-8"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 1152
+    },
+    {
+      "step": 576
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 4032
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "total",
+        "op": "gte",
+        "value": 5
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "total",
+        "op": "eq",
+        "value": 2,
+        "args": {
+          "kind": "took_office"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "moments.0.params.office",
+        "op": "eq",
+        "value": "Steward",
+        "args": {
+          "kind": "took_office"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "moments.1.params.office",
+        "op": "eq",
+        "value": "Reeve",
+        "args": {
+          "kind": "took_office"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "total",
+        "op": "eq",
+        "value": 1,
+        "args": {
+          "kind": "settlement_milestone"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "moments.0.params.milestone",
+        "op": "eq",
+        "value": "throne-room-established",
+        "args": {
+          "kind": "settlement_milestone"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "moments.0.text",
+        "op": "eq",
+        "value": "The hamlet reached a milestone: throne room established.",
+        "args": {
+          "kind": "settlement_milestone"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "total",
+        "op": "eq",
+        "value": 0,
+        "args": {
+          "kind": "tier_reached"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "path": "total",
+        "op": "gte",
+        "value": 1,
+        "args": {
+          "kind": "became_finest"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "journal",
+        "path": "entries.0.kind",
+        "op": "eq",
+        "value": "arrived",
+        "args": {
+          "entityId": 3
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "journal",
+        "path": "entries.1.kind",
+        "op": "eq",
+        "value": "renamed",
+        "args": {
+          "entityId": 3
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "journal",
+        "path": "entries.1.params.previousName",
+        "op": "eq",
+        "value": "Margery the Farmer",
+        "args": {
+          "entityId": 3
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "identity-of",
+        "path": "fullName",
+        "op": "eq",
+        "value": "Mathilde Fairhair",
+        "args": {
+          "entityId": 3
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "identity-of",
+        "path": "offices.0.leaderTitle",
+        "op": "eq",
+        "value": "Steward",
+        "args": {
+          "entityId": 4
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "identity-of",
+        "path": "offices.0.leaderTitle",
+        "op": "eq",
+        "value": "Reeve",
+        "args": {
+          "entityId": 5
+        }
+      }
+    },
+    {
+      "assertHash": {
+        "label": "day-14"
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}

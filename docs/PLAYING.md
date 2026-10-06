@@ -133,6 +133,10 @@ Households also keep goods (bread for a Cottage) in a chest inside the dwelling 
 
 Two rules of thumb that the script follows: food orders come before everything else (a hungry settler does nothing useful), and a job that feeds another must not have the lower priority (stone and planks are cut at 36-38, the rooms that need them at 43-46; quarrying is 40 and felling 30 by default). Walls cost one stone block and a quarry trip brings four limestone (D-58); the layout of the rooms is the cheapest one the map allows (see `docs/DECISIONS.md` D-58).
 
+## The chronicle and journals
+
+Your people keep a story. Each citizen has a **journal** of up to 16 lines (`journal 3`, and the last three lines show in `inspect 3`): arrival, the first work of each craft, titles, guilds, offices, a better home, a new name. The settlement keeps the **chronicle**: the 200 most recent big moments (`chronicle`, newest first, `chronicle 5 citizen 4`, `chronicle kind became_finest`): a master craftsman, the finest hauler of the hamlet, an office taken, a death, a milestone, the day the hamlet became a village. Names in the chronicle stay as they were at the time, so the dead remain readable. `scenarios/chronicle.json` plays the first two weeks with a Steward and a renamed citizen.
+
 ## Standing orders and the Steward
 
 Instead of `order create bake_bread 400 ...` you can say what you want in the pantry and let the Steward keep it there. A **standing order** is "keep N of this material in stock": the Steward, a citizen you appoint, counts the stock once a day at 06:00 (in the throne room's name, so one must stand: ten walls, a door and a table) and, once the stock has fallen to the restock threshold (75 % of the target by default), asks for as many single crafts as the gap needs (at most five per order and day). The Town Crier carries each ask to the village board like any posting, a baker takes it, and the order stays *Restocking* until the stock reaches the target.
