@@ -11,7 +11,7 @@ npm run build    # type-check and build the app into dist/
 npm test         # unit and jsdom tests (WebGL is stubbed)
 ```
 
-Start a game on the New game screen (difficulty with a one-line description, seed, map size, starting tier). The game starts paused; use the time bar to resume, change speed (1/4x to 4x) or step. Drag the map to pan, wheel to zoom, Q and E (or the buttons) to rotate, click to select. Settings has the autosave interval, toast limit, badge and zone toggles and save to file, load from file, load autosave.
+Start a game on the New game screen (difficulty with a one-line description, seed, map size, starting tier). The game starts running at 1x; use the time bar (or Space and the keys 1 to 5) to pause, change speed (1/4x to 4x) or step. Drag the map to pan, wheel to zoom, Q and E (or the buttons) to rotate, click to select. Settings has the autosave interval, toast limit, badge and zone toggles and save to file, load from file, load autosave.
 
 The menu entries (`screens/screenRegistry.tsx`) are Map, Content, Chronicle, Flow, Idle and blocked, Government, Settlement, New game and Settings. Not built, by owner decision: touch gestures, a trade-policy screen and external 3D models (see `docs/ROADMAP.md`). The frame rate and a cold start in a real browser are not measured (jsdom has no WebGL; `docs/audit/024.md`).
 
@@ -58,7 +58,7 @@ const selection = useStore(host.selection); // { activeMapId, entityId, cell, ho
 ## Adding a panel or screen
 
 1. Write the component (PascalCase `.tsx`, named export, TSDoc, a co-located test, a line in the folder README).
-2. A screen of the shell: replace its `PlaceholderScreen` entry in `screens/screenRegistry.tsx`. A panel beside the map: append `{ id, title, component }` to `screens/sidePanels.ts`.
+2. A screen of the shell: add an entry to `screens/screenRegistry.tsx` (and a value to `navigation/Screen.ts`). A panel beside the map: append `{ id, title, component }` to `screens/sidePanels.ts`.
 3. Test with `renderApp()` from `testing/renderApp.tsx` (the whole app over a real `GameSession`, a stub canvas and a hand-driven scheduler): `app.start()` starts the standard game (seed 42, Small), `app.host` drives it, `app.fake.fireMany(n)` runs n clock ticks.
 
 ## Inspection and content browser (plan 6.3)
@@ -82,6 +82,25 @@ The **Government** screen (menu entry "Government") has tabs: Job boards (pause 
 Rules for these panels: every command goes through `host.commands.send` (the host raises the error toast; the form also shows the structured error beside the field, `useSender`); commands are queued and applied on the next tick, so a result appears after the next step; locked content cannot be chosen.
 
 Map tools: `ToolStore` modes `Place`, `Paint` (`PaintAction.Designate|AddTiles|RemoveTiles`) and `Walls`; a tool that strokes passes a `stroke` prop (`MapStrokeTool`) to `MapViewport`, which collects cells (`command/strokeMath.ts`) and calls `onCommit`; `MapScreen` sends them with `commitStroke`.
+
+## Keyboard, accessibility and focus (D-264)
+
+- Shortcuts (also listed in Settings): Space pauses or resumes, 1 to 5 set the speed (1/4x, 1/2x, 1x, 2x, 4x). With the map focused: Q and E rotate, Escape cancels the tool and clears the selection. The global keys do nothing while a form control or button has the focus, with Ctrl, Alt or Meta held, or without a game. They send the same commands as the time bar (`ui/useGlobalShortcuts.ts`; test `ui/useGlobalShortcuts.test.tsx`).
+- Every interactive control has an accessible name: `AppShell.test.tsx` walks every screen (and every tab) and fails on a button, input, checkbox, tab or link without one.
+- No focus trap is used anywhere (dialogs are not modal); Tab moves through the page in DOM order. Desktop only: no touch gestures.
+
+## Movement, performance and loading (D-260, D-262, D-263)
+
+- **Interpolation** (`map/entityMotion.ts`, `map/EntityLayer.tsx`): the game moves an entity one cell per tick; the canvas draws it sliding from the previous to the current cell centre over the real tick interval (`floor(tickIntervalMs * 1000 / speed)`, the clock's own rule) using the three.js clock, and asks for frames only while a slide runs. It is cosmetic: paused (also a single step while paused), a map change, a new entity or a jump over more than 2.5 world units snap. On a Voronoi map a one-cell step can exceed 2.5 units only for very large cells; those snap too.
+- **Performance proxies** (`screens/MapScreen.test.tsx`): the Small map is drawn with one instanced mesh per visual kind (plus one for crops), at most one instance per entity; the first render of the map screen runs at most 40 queries and one tick at most 32 (measured 24 and 21). **A real frame rate (spec 024 SC-001) and a cold browser start (SC-006) are unverified**: they need a GPU and a browser, and no such run has been made. The proposed check stays a Playwright run with a frame counter.
+- **Code splitting**: the three.js canvas is loaded with `React.lazy` and a dynamic `import()` (`map/LazyMapCanvas.tsx`) behind a `Suspense` boundary in `MapViewport`; the first chunk no longer holds three.js (index 1.0 MB, map chunk 0.9 MB, was one 1.9 MB chunk). Vite still warns about chunks over 500 kB: the remaining index chunk is the game engine and its content, and the map chunk is three.js and react-three; shrinking them further needs build configuration (`vite.config.ts`), outside the renderer.
+- **Small map size**: the New game screen's Small map has 600 cells; the 64x64 (4096 cell) layout is covered by `EntityLayer.test.tsx` ("handles 4096 entities").
+
+## Known limitations
+
+- Touch gestures, trade priorities (no trade-policy screen) and a measured frame rate are descoped or unverified (see above).
+- A citizen's overview names the workstation it is crafting at ("Works at", "Crafting"); a citizen walking to a workstation, or hauling, shows only its action text until the craft starts.
+- Interpolation does not tell a normal step from a short teleport on a Voronoi map (both are slid when they are under 2.5 world units).
 
 ## Testing
 

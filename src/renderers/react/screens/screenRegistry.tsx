@@ -20,9 +20,8 @@ export type ScreenDefinition = {
 };
 
 /**
- * The screens of the shell in menu order. To build a screen of a later task, replace its
- * `PlaceholderScreen` entry with the real component; the shell, the menu and the routing need no
- * change.
+ * The screens of the shell in menu order. A new screen is one more entry here and one more value
+ * of `Screen`; the shell, the menu and the routing need no change.
  */
 export const screenRegistry: readonly ScreenDefinition[] = [
   { screen: Screen.Map, label: "Map", render: () => <MapScreen /> },

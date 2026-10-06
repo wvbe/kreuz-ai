@@ -23,7 +23,7 @@ export type RenderedApp = RenderResult & {
    */
   downloads: { fileName: string; text: string }[];
   /**
-   * Starts the standard test game (seed 42, Steady, Small, Hamlet) inside `act`, paused.
+   * Starts the standard test game (seed 42, Steady, Small, Hamlet) inside `act` (the clock runs at 1x; the hand-driven scheduler fires no tick on its own).
    */
   start: () => void;
 };

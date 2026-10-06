@@ -1187,3 +1187,24 @@ Wildcard subscribers in use: `status.*`, `settlement.**`, `inventory.item.*`, `h
 - **Harsh**: `scenarios/harsh-survival.json` asserts survival: population 6 at day 10 (tick 2,880), bread eaten (`flow-of` bread `windowConsumed` above zero), no `died` moment in the chronicle; the early assertions that the kit's loaves rot by tick 560 (stock 0) and that crops, flour and bread exist stay. Before D-180 and D-182: everybody dead by tick 1,615.
 - **Invariant** (`tests/integration/noStarvationWithFood.test.ts`): over the first five days (1,440 ticks) of the same opening, on Harsh and on Steady, nobody dies of starvation, and no settler stays at hunger zero for 120 ticks while `planNeed` finds food it can reach and nobody reserved (settlers whose rest is also zero are exempt). It fails when a sleeper is not woken (D-180) in the situations of the unit tests.
 - Still true and left open: hunger touches zero twice on Harsh during the first ten days (tick 800, the gap between the rotted kit and the first loaves, and about 1,400); the settlement survives it but a less careful opening would not.
+
+## UI gaps from the audit (D-260 ... D-269)
+
+### D-260 Entity movement is interpolated in the canvas only (spec 024 SC-002, spec 004 SC-002)
+- `EntityLayer` keeps the cell of every entity from the previous tick and draws it sliding to the current cell over `floor(tickIntervalMs * 1000 / speed)` real milliseconds (`map/entityMotion.ts`, pure and unit tested). The timing comes from `MapScreen` (`TickMotion` from the `state` view: tick, interval at the current speed, paused), so the engine host still never reads the wall clock; the three.js clock measures the elapsed time and the canvas requests frames only while a slide runs (`frameloop="demand"` stays).
+- Cosmetic only: nothing in game state, picking or badges changes. Paused, a map change, a new entity and a jump over 2.5 world units snap. Without the optional `motion` prop (old tests) nothing slides.
+
+### D-261 A citizen links to the workstation it crafts at and to its recipe (spec 024 SC-002)
+- The citizen overview finds the workstation whose active craft names the citizen (`workstations` query) and shows "Works at" (selects it, centres the map) and "Crafting" (opens the recipe in the content browser). Citizen to recipe is one click, citizen to workstation to recipe two; `CitizenOverview.test.tsx` walks the clicks with a bakery that really crafts.
+
+### D-262 Performance without a browser (spec 024 SC-001, SC-006)
+- `MapScreen.test.tsx` bounds the draw calls of the Small map (one instanced mesh per visual kind plus crops, at most one instance per entity) and the queries of the first render (40) and of one tick (32). Measured 24 and 21. A frame rate and a cold start are not verified; `docs/UI.md` says so.
+
+### D-263 The three.js canvas is a lazy chunk
+- `LazyMapCanvas` (`React.lazy` over `import("./MapCanvas")`) under a `Suspense` boundary in `MapViewport`; tests keep the injected stub canvas and `LazyMapCanvas.test.tsx` checks the fallback and the loaded chunk. The first chunk dropped from 1.9 MB to 1.0 MB and three.js (0.9 MB) loads with the map. The Vite 500 kB warning remains for both chunks; removing it means chunk configuration in `vite.config.ts` (out of scope here) rather than more splitting of the renderer.
+
+### D-264 Keyboard shortcuts and the accessible-name audit
+- Global keys: Space (pause or resume) and 1 to 5 (speed), ignored while a control has the focus; Q, E, Escape stay on the focused map. Listed in Settings and `docs/UI.md`. `AppShell.test.tsx` fails on any unnamed control on any screen or tab. No focus trap.
+
+### D-265 Dead code removed
+- `PlaceholderScreen` (unused since every screen exists) is deleted; `docs/UI.md` said the game starts paused but a new game runs at 1x, now corrected.
