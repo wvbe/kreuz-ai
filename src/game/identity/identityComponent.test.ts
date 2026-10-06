@@ -17,6 +17,7 @@ describe("identityComponent", () => {
     });
   });
 
+  // @covers 028:FR-003
   it("round trips JSON with a title snapshot", () => {
     const data = {
       givenName: "Ansel",

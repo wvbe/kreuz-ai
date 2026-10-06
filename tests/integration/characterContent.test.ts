@@ -285,6 +285,7 @@ describe("factions (spec 022 FR-012, FR-013)", () => {
 });
 
 describe("name lists (spec 022 FR-021, spec 028)", () => {
+  // @covers 028:FR-001
   it("meets the size minimum with no duplicates and no title noun as byname", () => {
     const list = content.nameLists.require("common_13c");
     expect(list.givenNames.length).toBeGreaterThanOrEqual(60);
@@ -297,6 +298,7 @@ describe("name lists (spec 022 FR-021, spec 028)", () => {
     expect(bynames.filter((byname) => nouns.has(byname))).toEqual([]);
   });
 
+  // @covers 028:FR-002
   it("has every prototype name list in the registry", () => {
     for (const humanoid of content.humanoids.all()) {
       expect(content.nameLists.has(humanoid.nameListId)).toBe(true);

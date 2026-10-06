@@ -35,6 +35,7 @@ function parts(overrides: Partial<Parameters<typeof formatStyledName>[1]> = {}) 
 }
 
 describe("formatStyledName", () => {
+  // @covers 028:FR-011
   it("formats plain, Practitioner and Master names", () => {
     expect(formatStyledName(formats, parts())).toBe("Ansel atte Brook");
     expect(formatStyledName(formats, parts({ byname: null }))).toBe("Ansel");
@@ -75,6 +76,7 @@ describe("officesOf, stylePartsOf and styledName", () => {
     return { engine, guild, peasant };
   }
 
+  // @covers 028:FR-009
   it("lists the led factions ascending and builds the styled name", () => {
     const { engine, guild, peasant } = setup();
     const entity = engine.store.require(peasant);
@@ -97,6 +99,7 @@ describe("officesOf, stylePartsOf and styledName", () => {
     );
   });
 
+  // @covers 028:FR-009
   it("adds the Steward's office of the government after the led factions", () => {
     const { engine, peasant } = setup();
     const entity = engine.store.require(peasant);

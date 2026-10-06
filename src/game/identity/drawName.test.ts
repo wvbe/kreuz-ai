@@ -34,6 +34,7 @@ describe("drawName", () => {
     }
   });
 
+  // @covers 028:FR-004
   it("gives a byname with the stated probability", () => {
     const none = drawName({
       list: common,
@@ -53,6 +54,7 @@ describe("drawName", () => {
     expect(always.byname).not.toBeNull();
   });
 
+  // @covers 028:FR-004
   it("redraws on a collision and keeps the last draw with the lowest free ordinal", () => {
     const single: NameListContent = {
       id: "single",

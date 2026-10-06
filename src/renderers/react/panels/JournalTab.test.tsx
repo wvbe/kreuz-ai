@@ -7,7 +7,7 @@ import { JournalTab, journalLinesShown } from "./JournalTab";
 afterEach(cleanup);
 
 describe("JournalTab", () => {
-  // @covers 024:FR-039
+  // @covers 024:FR-039 028:FR-022
   it("shows the newest lines and opens the chronicle", () => {
     const host = startedHost();
     renderPanel(<JournalTab entityId={firstEntityOf(host, "peasant")} />, host);

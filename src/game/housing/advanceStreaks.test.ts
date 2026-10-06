@@ -58,6 +58,7 @@ describe("advanceStreaks", () => {
     });
   });
 
+  // @covers 029:SC-002
   it("rises exactly upgradeGraceDays x 3 evaluations from Hovel to Burgher House (SC-001)", () => {
     let evaluations = 0;
     let levels = 0;

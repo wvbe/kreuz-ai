@@ -3,6 +3,7 @@ import { NotableMomentKind } from "../content/contentTypes";
 import { MomentProminence, prominenceOfKind } from "./chronicleTypes";
 
 describe("prominenceOfKind", () => {
+  // @covers 028:FR-012
   it("makes exactly the D-17 kinds Major, and Arrived Minor", () => {
     const major = Object.values(NotableMomentKind).filter(
       (kind) => prominenceOfKind[kind] === MomentProminence.Major,

@@ -18,6 +18,7 @@ function record(momentId: number, kind: NotableMomentKind): MomentRecord {
 }
 
 describe("appendToJournal", () => {
+  // @covers 028:FR-017
   it("drops the oldest entry other than Arrived when the journal is full", () => {
     const journal = [
       record(1, NotableMomentKind.Arrived),
@@ -60,6 +61,7 @@ describe("recordMoment", () => {
     expect(world.recorded).toHaveLength(before + 1);
   });
 
+  // @covers 028:FR-014
   it("records a Major moment in the journal and the chronicle and keeps the ids monotonic", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();
@@ -82,6 +84,7 @@ describe("recordMoment", () => {
     ]);
   });
 
+  // @covers 028:FR-014
   it("records nothing about an entity that is no named settlement citizen", () => {
     const world = createChronicleWorld();
     const outsider = world.engine.store.spawn("peasant");
@@ -102,6 +105,7 @@ describe("recordMoment", () => {
     expect(world.recorded).toEqual([]);
   });
 
+  // @covers 028:FR-018
   it("keeps the 200 newest Major moments of the chronicle, oldest evicted first", () => {
     const world = createChronicleWorld();
     for (let index = 0; index < 205; index += 1) {

@@ -54,6 +54,7 @@ describe("dwellingProvider", () => {
     ).toBeNull();
   });
 
+  // @covers 029:SC-008
   it("is Idle with DwellingRequirementsUnmet and LockedByTier for the next level (FR-019a)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(2, 2, { beds: 2 });

@@ -5,6 +5,7 @@ import { reachableCells } from "../pathfinding/reachableCells";
 import { multiSourceCosts } from "./multiSourceCosts";
 
 describe("multiSourceCosts", () => {
+  // @covers 029:FR-008
   it("equals the minimum over the single-source costs", () => {
     const world = createAiWorld({ width: 8, height: 6 });
     const map = world.engine.maps.require(world.mapId);

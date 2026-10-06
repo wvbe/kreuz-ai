@@ -70,6 +70,7 @@ describe("buildChronicleView", () => {
     expect(view.moments.map((moment) => moment.kind)).toEqual(["tier_reached", "mastery_achieved"]);
   });
 
+  // @covers 028:FR-019
   it("filters by citizen, also after the citizen died, and by kind", () => {
     const { world, first, second } = populated();
     world.engine.store.requestDelete(first.id);

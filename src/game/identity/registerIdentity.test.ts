@@ -58,6 +58,7 @@ describe("registerIdentity", () => {
     ]);
   });
 
+  // @covers 028:SC-001
   it("gives the same names for the same seed and other names for another seed", () => {
     const names = (seed: number) =>
       citizens(startEngine(seed)).map((entity) => {
@@ -75,6 +76,7 @@ describe("registerIdentity", () => {
     expect(engine.getQuery("identity-of")?.run({ entityId: 1 } as never, engine)).toBeNull();
   });
 
+  // @covers 028:FR-010
   it("recomputes the title on skill.increased and emits identity.title.changed", () => {
     const engine = startEngine(42);
     const peasant = 7;
@@ -114,6 +116,7 @@ describe("registerIdentity", () => {
     ]);
   });
 
+  // @covers 028:FR-021
   it("round trips identities through save and load and continues the name stream", () => {
     const first = startEngine(42);
     first.bus.processQueue();

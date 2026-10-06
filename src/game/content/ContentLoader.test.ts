@@ -584,7 +584,7 @@ describe("dangling references", () => {
     );
   });
 
-  // @covers 022:FR-018
+  // @covers 022:FR-018 029:FR-003
   it("rejects incomplete enum tables (tiers, difficulties, dwelling levels, moments)", () => {
     const pack = clonePack();
     pack[ContentFile.SettlementTiers] = records(pack, ContentFile.SettlementTiers).slice(0, 3);

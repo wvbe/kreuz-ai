@@ -29,6 +29,7 @@ function giveCoins(world: HousingTestWorld, entityId: number, coins: number): vo
 }
 
 describe("runHousingEvaluation", () => {
+  // @covers 029:FR-006
   it("runs once per day at the housing tick of day (FR-006)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -39,6 +40,7 @@ describe("runHousingEvaluation", () => {
     expect(world.dwellingData(zone).lastEvaluatedDay).toBe(1);
   });
 
+  // @covers 029:FR-020
   it("houses the homeless in ascending entity id order, one event each (US1.2)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -79,6 +81,7 @@ describe("runHousingEvaluation", () => {
     expect(world.residents(zone)).not.toContain(newcomer.id);
   });
 
+  // @covers 029:FR-020
   it("upgrades after upgradeGraceDays qualifying evaluations and says so (US2.1, SC-001)", () => {
     const world = createHousingWorld({ ...options, content: contentWithLevels(cottageLike) });
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -103,6 +106,7 @@ describe("runHousingEvaluation", () => {
     expect(milestone).toMatchObject({ reached: true, subjectIds: [zone] });
   });
 
+  // @covers 029:FR-011
   it("resets the streak when a requirement is lost before the grace is over (US2.2)", () => {
     const world = createHousingWorld({ ...options, content: contentWithLevels(cottageLike) });
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -138,6 +142,7 @@ describe("runHousingEvaluation", () => {
     expect(lock).toMatchObject({ met: false, requiredTier: "village" });
   });
 
+  // @covers 029:FR-011 029:SC-002 029:FR-020
   it("warns on the first failing day, downgrades on day 7 and evicts the latest residents (US4)", () => {
     const world = createHousingWorld({
       ...options,
@@ -209,6 +214,7 @@ describe("runHousingEvaluation", () => {
     expect(world.dwellingData(zone)).toMatchObject({ level: "hovel", downgradeStreak: 0 });
   });
 
+  // @covers 029:FR-013
   it("collects rent from residents in id order into the treasury (US5.1)", () => {
     const world = createHousingWorld({ ...options, content: contentWithLevels(cottageLike) });
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -256,6 +262,7 @@ describe("runHousingEvaluation", () => {
     expect(unpaid).toEqual([{ dwellingId: zone, shortfall: 2, reason: "TreasuryUnavailable" }]);
   });
 
+  // @covers 029:SC-004
   it("conserves coins over many days of rent (SC-004)", () => {
     const world = createHousingWorld({ ...options, content: contentWithLevels(cottageLike) });
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -316,6 +323,7 @@ describe("runHousingEvaluation", () => {
     expect(world.residents(zone)).toHaveLength(6);
   });
 
+  // @covers 029:SC-003
   it("is deterministic: two worlds with one seed bring the same settlers (US5.5, SC-003)", () => {
     const run = (): string => {
       const world = createHousingWorld({ ...options, seed: 99 });

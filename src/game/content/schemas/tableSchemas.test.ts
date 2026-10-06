@@ -13,7 +13,7 @@ import {
 describe("contentConstantsSchema", () => {
   const constants = bundledContentFiles[ContentFile.ContentConstants];
 
-  // @covers 022:FR-023 022:FR-016 026:FR-027
+  // @covers 022:FR-023 022:FR-016 026:FR-027 029:FR-022
   it("converts ratios and percentages and rejects out-of-range values", () => {
     const parsed = contentConstantsSchema.parse(constants);
     expect(parsed.bynameChance).toBe(850);
@@ -70,6 +70,7 @@ describe("difficultyModeSchema", () => {
 });
 
 describe("dwellingLevelSchema", () => {
+  // @covers 029:FR-003 029:FR-022
   it("converts supplied goods rates to milli", () => {
     const level = dwellingLevelSchema.parse({
       level: "cottage",

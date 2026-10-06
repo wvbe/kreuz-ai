@@ -4,6 +4,7 @@ import { GameEngine } from "../engine/GameEngine";
 import { chronicleOf } from "./chronicleOf";
 
 describe("chronicleOf", () => {
+  // @covers 028:FR-018
   it("is null before a game and the government's record after newGame", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });
     expect(chronicleOf(engine)).toBeNull();

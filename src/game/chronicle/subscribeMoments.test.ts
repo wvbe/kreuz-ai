@@ -26,6 +26,7 @@ function skillRose(
 }
 
 describe("subscribeMoments", () => {
+  // @covers 028:FR-013
   it("records Arrived once when a citizen joins the player government", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();
@@ -63,6 +64,7 @@ describe("subscribeMoments", () => {
     expect(world.ofKind("title_earned")).toHaveLength(1);
   });
 
+  // @covers 028:FR-013
   it("records JoinedGuild and LeftGuild for occupational factions only", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();
@@ -81,6 +83,7 @@ describe("subscribeMoments", () => {
     expect(world.ofKind("left_guild")).toHaveLength(1);
   });
 
+  // @covers 028:FR-013
   it("records TookOffice (Major) and LostOffice (Minor) for a leader change", () => {
     const world = createChronicleWorld();
     const first = world.addCitizen();
@@ -127,6 +130,7 @@ describe("subscribeMoments", () => {
     expect(world.ofKind("died").map((record) => record.entityId)).toEqual([dying.id]);
   });
 
+  // @covers 028:FR-013
   it("records FirstWork once per skill, even after the journal dropped the entry", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();
@@ -185,6 +189,7 @@ describe("subscribeMoments", () => {
     expect(world.identityOf(buyer.id).tradeSeen).toBe(true);
   });
 
+  // @covers 028:FR-013
   it("records HomeImproved for every resident of an upgraded dwelling", () => {
     const world = createChronicleWorld();
     const residents = [world.addCitizen(), world.addCitizen()];

@@ -7,6 +7,7 @@ import { assignIdentity } from "./assignIdentity";
 import { buildIdentityView } from "./identityViews";
 
 describe("buildIdentityView", () => {
+  // @covers 028:FR-011
   it("shows names, title, offices and the styled name", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });
     engine.newGame({ seed: 7 });

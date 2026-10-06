@@ -51,6 +51,7 @@ describe("skillSchema", () => {
     ]);
   });
 
+  // @covers 028:FR-006
   it("converts growth and factors and demands an effect and a title noun", () => {
     expect(skillSchema.parse(skill)).toMatchObject({
       baseGrowthPerCompletion: 2000,
@@ -179,6 +180,7 @@ describe("factionSchema", () => {
     membership: { skillId: "baking", minLevel: 15 },
   };
 
+  // @covers 028:FR-006
   it("defaults the master threshold to 60 and requires it to exceed the membership minimum", () => {
     expect(factionSchema.parse(guild).masterSkillThreshold).toBe(60);
     expect(factionSchema.safeParse({ ...guild, masterSkillThreshold: 15 }).success).toBe(false);
@@ -189,6 +191,7 @@ describe("factionSchema", () => {
 describe("nameListSchema", () => {
   const list = { id: "common", givenNames: [{ name: "Ada", weight: 1 }], bynames: ["Hill"] };
 
+  // @covers 028:FR-001
   it("rejects duplicates ignoring case", () => {
     expect(nameListSchema.safeParse(list).success).toBe(true);
     expect(

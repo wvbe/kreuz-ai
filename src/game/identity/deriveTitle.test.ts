@@ -15,6 +15,7 @@ function citizen(levels: { [skillId: string]: number }): Entity {
 }
 
 describe("deriveTitle", () => {
+  // @covers 028:FR-007
   it("gives no title below the threshold and a Practitioner from level 20", () => {
     expect(deriveTitle(content, citizen({ baking: 10 }), null)).toBeNull();
     expect(deriveTitle(content, citizen({ baking: 19 }), null)).toBeNull();
@@ -26,6 +27,7 @@ describe("deriveTitle", () => {
     });
   });
 
+  // @covers 028:FR-007
   it("gives a Master at the guild's master threshold, only for skills a guild uses", () => {
     expect(deriveTitle(content, citizen({ baking: 59 }), null)?.rank).toBe(TitleRank.Practitioner);
     expect(deriveTitle(content, citizen({ baking: 60 }), null)).toEqual({
@@ -48,6 +50,7 @@ describe("deriveTitle", () => {
     expect(title?.rank).toBe(TitleRank.Master);
   });
 
+  // @covers 028:FR-008
   it("breaks ties without a current title by level, then skill id ascending", () => {
     expect(deriveTitle(content, citizen({ farming: 40, carpentry: 40 }), null)?.skillId).toBe(
       "carpentry",
@@ -60,6 +63,7 @@ describe("deriveTitle", () => {
     );
   });
 
+  // @covers 028:FR-008
   it("keeps the current title skill until another one leads by the switch margin", () => {
     const current = deriveTitle(content, citizen({ farming: 40 }), null);
     expect(current?.skillId).toBe("farming");

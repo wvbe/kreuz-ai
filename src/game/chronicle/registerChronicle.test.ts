@@ -19,6 +19,7 @@ function data(result: { ok: boolean; data?: JsonValue }): JsonValue {
 }
 
 describe("registerChronicle", () => {
+  // @covers 028:FR-019
   it("answers the queries chronicle, journal and moments-since", () => {
     const session = started();
     session.step(600);
@@ -40,6 +41,7 @@ describe("registerChronicle", () => {
     expect(session.query.run("chronicle", { limit: 0 }).ok).toBe(false);
   });
 
+  // @covers 028:FR-020
   it("renames a citizen by command and rejects a bad name at the next tick", () => {
     const session = started();
     const result = session.dispatch({
@@ -68,6 +70,7 @@ describe("registerChronicle", () => {
     expect(rejected).toHaveLength(1);
   });
 
+  // @covers 028:FR-021
   it("saves and loads journals, chronicle and finest table identically, then plays on the same", () => {
     const first = started();
     first.step(900);
@@ -87,6 +90,7 @@ describe("registerChronicle", () => {
     );
   });
 
+  // @covers 028:SC-001
   it("is deterministic: the same seed gives the same moments", () => {
     const left = started();
     const right = started();

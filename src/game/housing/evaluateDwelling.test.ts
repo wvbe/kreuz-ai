@@ -18,6 +18,7 @@ const simpleCottage = {
 };
 
 describe("evaluateDwelling", () => {
+  // @covers 029:FR-011
   it("counts the upgrade streak up to the grace days and then raises the level", () => {
     const world = createHousingWorld({ ...options, content: contentWithLevels(simpleCottage) });
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -34,6 +35,7 @@ describe("evaluateDwelling", () => {
     expect(upgraded).toEqual([{ dwellingId: zone, fromLevel: "hovel", toLevel: "cottage" }]);
   });
 
+  // @covers 029:SC-002
   it("rises one level at a time even when two levels qualify (US2.5)", () => {
     const world = createHousingWorld({
       ...options,

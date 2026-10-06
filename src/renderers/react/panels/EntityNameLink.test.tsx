@@ -11,7 +11,7 @@ function Name(props: { entityId: number }) {
 }
 
 describe("EntityNameLink", () => {
-  // @covers 024:FR-038
+  // @covers 024:FR-038 028:FR-022
   it("names a citizen by its styled name, an object by its prototype, a gone entity by id", () => {
     const host = startedHost();
     const peasant = firstEntityOf(host, "peasant");

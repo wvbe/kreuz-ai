@@ -37,6 +37,7 @@ function collidingContent() {
 }
 
 describe("assignIdentity", () => {
+  // @covers 028:FR-003 028:FR-004 028:FR-005
   it("draws a name from the list on identity.names and queues identity.named", () => {
     const engine = start();
     const events: JsonValue[] = [];
@@ -68,6 +69,7 @@ describe("assignIdentity", () => {
     expect(spawnNamed(engine, "peasant").titleSnapshot).toBeNull();
   });
 
+  // @covers 028:FR-004
   it("keeps the living government citizens unique, falling back to ordinals", () => {
     const engine = start(collidingContent());
     const names = [1, 2, 3].map(() => spawnNamed(engine, "peasant"));
@@ -78,6 +80,7 @@ describe("assignIdentity", () => {
     ]);
   });
 
+  // @covers 028:FR-002
   it("draws nothing for prototypes with a fixed name and applies only the ordinal rule", () => {
     const humanoids = (bundledContentFiles[ContentFile.HumanoidPrototypes] as { id: string }[]).map(
       (entry) =>

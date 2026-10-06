@@ -13,6 +13,7 @@ import {
 } from "./dwellingLevels";
 
 describe("dwelling levels", () => {
+  // @covers 029:FR-002
   it("orders the four levels like the enum", () => {
     expect(orderedLevels).toEqual(Object.values(DwellingLevel));
     expect(levelRank(DwellingLevel.Hovel)).toBe(0);
@@ -32,6 +33,7 @@ describe("dwelling levels", () => {
     expect(isAtOrAbove(DwellingLevel.Hovel, DwellingLevel.Cottage)).toBe(false);
   });
 
+  // @covers 029:FR-002
   it("names the levels", () => {
     expect(orderedLevels.map(levelName)).toEqual([
       "Hovel",
@@ -41,6 +43,7 @@ describe("dwelling levels", () => {
     ]);
   });
 
+  // @covers 029:FR-003
   it("reads the content record of a level", () => {
     const engine = new GameEngine(loadVillageBakeryContent());
     expect(levelDefinition(engine, DwellingLevel.Hovel).capacity).toBe(2);

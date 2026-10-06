@@ -92,7 +92,7 @@ describe("NotificationCenter", () => {
     expect(calls).toEqual(["progress", "entity:12", "progress"]);
   });
 
-  // @covers 024:FR-040
+  // @covers 024:FR-040 028:FR-023
   it("notifies Major moments only, with the rendered text, and links to the citizen", () => {
     const { toasts, send, click, calls } = harness();
     send("chronicle.moment.recorded", moment(1, "arrived", "minor", 3));
@@ -105,7 +105,7 @@ describe("NotificationCenter", () => {
     expect(calls).toEqual(["journal:3"]);
   });
 
-  // @covers 024:FR-040
+  // @covers 024:FR-040 028:FR-023
   it("folds tidings beyond the burst limit within a game hour into 'N more tidings'", () => {
     const { toasts, send, click, calls } = harness({ toastBurstLimit: 2 });
     for (let index = 0; index < 5; index += 1) {

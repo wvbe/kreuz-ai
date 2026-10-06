@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { dwellingComponent, dwellingDataSchema } from "./dwellingComponent";
 
 describe("dwellingComponent", () => {
+  // @covers 029:FR-004
   it("defaults to a Hovel with empty counters", () => {
     expect(dwellingComponent.defaults()).toEqual({
       level: "hovel",
@@ -13,6 +14,7 @@ describe("dwellingComponent", () => {
     });
   });
 
+  // @covers 029:FR-004 029:FR-021
   it("accepts a progressed record and survives a JSON round trip", () => {
     const data = {
       level: "cottage",

@@ -58,6 +58,7 @@ describe("buildDwellingSummaries", () => {
 });
 
 describe("buildDwellingView", () => {
+  // @covers 029:SC-008
   it("shows the requirements of the current and the next level with the streaks (US6)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(1, 2, { beds: 2 });

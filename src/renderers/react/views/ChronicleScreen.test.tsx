@@ -19,7 +19,7 @@ function startedHost(): EngineHost {
 }
 
 describe("ChronicleScreen", () => {
-  // @covers 024:FR-041
+  // @covers 024:FR-041 028:FR-024
   it("shows the count line and offers every kind as a filter", () => {
     render(
       <EngineProvider host={startedHost()}>

@@ -38,6 +38,7 @@ describe("foodsInWindow", () => {
 });
 
 describe("levelRequirements", () => {
+  // @covers 029:FR-007
   it("checks tiles and furniture of a level (MinTiles, Furniture)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(2, 2, { beds: 1 });
@@ -55,6 +56,7 @@ describe("levelRequirements", () => {
     expect(hovel.met).toBe(true);
   });
 
+  // @covers 029:FR-007
   it("counts the distinct foods of the household inside the window (US3.5)", () => {
     const world = createHousingWorld({ ...options, content: contentWithLevels({}) });
     const zone = world.dwelling(2, 2, { beds: 2 });
@@ -72,6 +74,7 @@ describe("levelRequirements", () => {
     ).toMatchObject({ met: false, current: 1 });
   });
 
+  // @covers 029:FR-008
   it("reports the nearest service distance and the limit (US2.3)", () => {
     const limit = 40;
     const content = contentWithLevels({
@@ -111,6 +114,7 @@ describe("levelRequirements", () => {
     });
   });
 
+  // @covers 029:FR-008
   it("is unmet beyond the limit and keeps the nearest cost (US2.3)", () => {
     const world = createHousingWorld({
       ...options,
@@ -167,6 +171,7 @@ describe("levelRequirements", () => {
     expect(met).toMatchObject({ met: true, supplyStatus: SupplyStatus.Met, inStock: 3, needed: 1 });
   });
 
+  // @covers 029:FR-007
   it("checks the tier lock of a level (TierUnlocked)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(2, 2);

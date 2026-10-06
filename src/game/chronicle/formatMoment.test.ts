@@ -19,6 +19,7 @@ function moment(kind: string, params: MomentParams, tick = 12 * 288): MomentReco
 }
 
 describe("formatMoment", () => {
+  // @covers 028:FR-016
   it("renders the name snapshot and the noun of the skill", () => {
     expect(
       formatMoment(
@@ -64,6 +65,7 @@ describe("formatMoment", () => {
     );
   });
 
+  // @covers 028:FR-016
   it("is empty for a kind without a template", () => {
     expect(formatMoment(content, moment("nonsense", {}), "hamlet")).toBe("");
   });

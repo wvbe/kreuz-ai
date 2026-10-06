@@ -29,6 +29,7 @@ describe("trackFinest", () => {
     expect(world.ofKind("became_finest")).toEqual([]);
   });
 
+  // @covers 028:FR-015
   it("announces the first holder with a Major BecameFinest", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();
@@ -57,6 +58,7 @@ describe("trackFinest", () => {
     expect(world.ofKind("became_finest")).toHaveLength(1);
   });
 
+  // @covers 028:FR-015
   it("changes the holder silently within the cooldown and announces after it", () => {
     const world = createChronicleWorld();
     const first = world.addCitizen();

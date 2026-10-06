@@ -76,6 +76,7 @@ describe("registerHousing", () => {
     expect(service.bedRank(world.engine, stranger, plain)).toBe(1);
   });
 
+  // @covers 029:SC-007
   it("round-trips the housing state through a save (FR-021, SC-007)", () => {
     const world = createHousingWorld(options);
     world.throneRoom(12, 2);

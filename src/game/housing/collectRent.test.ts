@@ -35,6 +35,7 @@ describe("collectRent", () => {
     expect(world.coins(settler.id)).toBe(5);
   });
 
+  // @covers 029:FR-013
   it("moves the coins from the residents to the treasury and returns the total", () => {
     const world = createHousingWorld({
       ...options,

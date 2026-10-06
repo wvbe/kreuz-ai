@@ -14,6 +14,7 @@ function kindOf(action: () => void): IdentityErrorKind | null {
 }
 
 describe("renameCitizen", () => {
+  // @covers 028:FR-005
   it("replaces the names, queues identity.named and records Renamed with the previous name", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();
@@ -55,6 +56,7 @@ describe("renameCitizen", () => {
     expect(renameCitizen(world.engine, second.id, "odo", "thorne")).toBe(false);
   });
 
+  // @covers 028:FR-020
   it("rejects bad names with InvalidName and strangers with UnknownEntity", () => {
     const world = createChronicleWorld();
     const citizen = world.addCitizen();

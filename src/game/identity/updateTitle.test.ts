@@ -30,6 +30,7 @@ describe("updateTitle", () => {
     expect(events).toEqual([]);
   });
 
+  // @covers 028:FR-010
   it("replaces the snapshot and emits old and new title once", () => {
     const { engine, id, skills, identity, events } = setup();
     skills.values["baking"] = 20_000;

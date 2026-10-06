@@ -12,6 +12,7 @@ const record = {
 };
 
 describe("momentRecordSchema", () => {
+  // @covers 028:FR-014
   it("round trips a record through JSON", () => {
     expect(momentRecordSchema.parse(JSON.parse(JSON.stringify(record)))).toEqual(record);
   });
