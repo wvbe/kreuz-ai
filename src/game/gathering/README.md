@@ -1,0 +1,19 @@
+# src/game/gathering
+
+Farming and gathering (spec 014 field production and spec 022 gathering jobs, DECISIONS D-15 and D-52, plan task 3.7a). Settlers grow wheat on fertile soil inside an active `farm_field` zone and dig iron ore and limestone out of deposits; all of it is posted to the job boards by auto-posters and hauled by the storage poster. The engine registers it for itself (`registerGathering` in the `GameEngine` constructor, after construction).
+
+- `gatheringTypes.ts` - ids (`sowJobId`, `harvestJobId`, `mineOreJobId`, `quarryStoneJobId`, terrain and material ids), base work times, poster bounds (`gatheringPosterIntervalTicks` 12, `gatheringMaxActivePostings` 4, `depositMaxActivePostings` 2, `gatheringRadiusCost` 400), the enum `CropStage` (`Fallow, Sown, Ripe`), `CropPlot`, `DepositRecord`, `CropView` and the events `gathering.crop.ripened` / `gathering.deposit.depleted`.
+- `GatheringService.ts` / `gatheringServiceRegistry.ts` - the per-engine state: crop plots (only sown and ripe cells) and the charges left of partly worked deposits, saved in the section `systems.gathering`. `getGatheringService(engine)` finds it.
+- `cropPlots.ts` - the crop rules: `cropOfZoneType`, `cropGrowthMilli`, `isWorkingField`, `fertileCellsOf`, `fieldCellAt`, `cropStageAt`, `sowCell`, `harvestCell`, `growCrops` (the per-tick pass). `seasonModifier.ts` - `seasonModifier()`, the season hook (always 1000, v1 has no seasons).
+- `deposits.ts` - `depositCharges`, `chargesLeft`, `takeCharge` (mining is finite; the last charge turns the cell into the `clearsTo` terrain).
+- `cellPoster.ts` - `postCellJobs`, the shared bounded auto-poster. `materialStock.ts` - `materialStock`, the total of a material in all inventories (the threshold input of the mining posters). `storeGatheredOutputs.ts` - `storeGatheredOutputs` (outputs plus the skill output bonus into the worker's inventory).
+- `cropJobs.ts` - `postSowJobs`, `postHarvestJobs`, `registerCropJobs` (`farm.sow`, `farm.harvest`). `miningJobs.ts` - `postMineJobs`, `postQuarryJobs`, `registerMiningJobs` (`mine.ore`, `quarry.stone`).
+- `buildCropsView.ts` - `buildCropsView` (query `crops`). `registerGathering.ts` - `registerGathering(engine)`: executors, section, slot-12 system `gathering`, query `crops {zoneId?}` (no commands). `testGatheringWorld.ts` - test helper: a zone test world with `field`, `terrain` and `farmer`.
+
+## Rules
+
+- **Fields.** A crop grows only on `fertile_soil` tiles of a `farm_field` zone that is active and past its activation tick (effects count from the tick after, D-11). A field painted over other terrain has fewer crop cells; none at all is `LocationBlocked` in the status view. Needs no furniture or room.
+- **Lifecycle.** Fallow -> `farm.sow` (no seed item, D-52) -> Sown, `growthMilli` grows by 1000 x `seasonModifier()` / 1000 per tick in a working field -> Ripe after `cropGrowthTicks` (864) -> `farm.harvest` gives the zone's `cropOutputs` (wheat x4) plus the farming output bonus -> Fallow. A plot of a cell that left the field is dropped.
+- **Deposits.** `iron_ore_deposit` has `oreDepositCharges` (6) charges, `stone_deposit` `stoneDepositCharges` (8); one completed `mine.ore` / `quarry.stone` uses one and yields iron ore x2 / limestone x2 (+ bonus); the last charge makes the cell `cave_floor`.
+- **Posting.** Every 12 ticks (slot 12) per running board in id order: nearest candidate cells (path cost <= 400, ties lowest cell), never twice for one cell, at most 4 active postings per job type (2 for mining and quarrying). Mining posts only while iron ore (all inventories) is below `oreLowStock` (8), quarrying while limestone is below `stoneLowStock` (12).
+- **Status.** The Zone provider shows an active field with an open sow/harvest posting as Blocked `AwaitingWorker` (cause: the posting) via `status/providers/fieldReasons.ts`.

@@ -50,6 +50,7 @@ import { registerJobs } from "../jobs/registerJobs";
 import { registerStorage } from "../storage/registerStorage";
 import { registerProduction } from "../production/registerProduction";
 import { registerConstruction } from "../construction/registerConstruction";
+import { registerGathering } from "../gathering/registerGathering";
 import { registerStatus } from "../status/registerStatus";
 import { registerZones } from "../zones/registerZones";
 import { zonesSystemId } from "../zones/zoneTypes";
@@ -664,6 +665,7 @@ export class GameEngine {
     registerZones(this);
     registerProduction(this);
     registerConstruction(this);
+    registerGathering(this);
     registerStatus(this);
     this.registerSystem({
       id: "world.starting-map",

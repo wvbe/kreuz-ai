@@ -50,7 +50,8 @@
         "materialId": "limestone",
         "quantity": 2
       }
-    ]
+    ],
+    "clearsTo": "cave_floor"
   },
   {
     "id": "mountain",
@@ -80,7 +81,8 @@
         "materialId": "iron_ore",
         "quantity": 2
       }
-    ]
+    ],
+    "clearsTo": "cave_floor"
   },
   {
     "id": "cave_floor",

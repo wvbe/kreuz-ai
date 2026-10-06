@@ -10,6 +10,16 @@
     "recurrence": "one-time"
   },
   {
+    "id": "farm.tend",
+    "name": "Tend field",
+    "skillId": "farming",
+    "zoneContext": {
+      "kind": "zone",
+      "ref": "farm_field"
+    },
+    "recurrence": "one-time"
+  },
+  {
     "id": "farm.harvest",
     "name": "Harvest field",
     "skillId": "farming",
@@ -38,6 +48,40 @@
       {
         "materialId": "oak_log",
         "quantity": 3
+      }
+    ],
+    "wage": 2
+  },
+  {
+    "id": "mine.ore",
+    "name": "Mine ore",
+    "skillId": "mining",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "iron_ore_deposit"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "iron_ore",
+        "quantity": 2
+      }
+    ],
+    "wage": 2
+  },
+  {
+    "id": "quarry.stone",
+    "name": "Quarry stone",
+    "skillId": "masonry",
+    "zoneContext": {
+      "kind": "terrain",
+      "ref": "stone_deposit"
+    },
+    "recurrence": "recurring",
+    "outputs": [
+      {
+        "materialId": "limestone",
+        "quantity": 2
       }
     ],
     "wage": 2

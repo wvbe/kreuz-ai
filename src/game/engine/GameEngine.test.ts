@@ -380,6 +380,7 @@ describe("GameEngine registerSystem", () => {
     expect(engine.queryNames()).toEqual([
       "build-menu",
       "construction-queue",
+      "crops",
       "demo.total",
       "explain",
       "faction-of",

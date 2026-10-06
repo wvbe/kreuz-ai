@@ -76,7 +76,7 @@ describe("rankPostings", () => {
     ).toEqual([good.id, backedOff.id]);
     requireBoard(world.engine, world.boardId).data.postings[3] = {
       ...good,
-      jobTypeId: "farm.sow",
+      jobTypeId: "farm.tend",
     };
     expect(
       rankPostings(world.engine, worker, world.boardId, 100, costs).map((entry) => entry.postingId),

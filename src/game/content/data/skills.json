@@ -110,5 +110,19 @@
       }
     ],
     "titleNoun": "Smith"
+  },
+  {
+    "id": "mining",
+    "name": "Mining",
+    "baseGrowthPerCompletion": 2,
+    "diminishingReturnsThreshold": 50,
+    "diminishingFactor": 0.25,
+    "outcomeEffects": [
+      {
+        "kind": "output_bonus",
+        "value": 0.5
+      }
+    ],
+    "titleNoun": "Miner"
   }
 ]

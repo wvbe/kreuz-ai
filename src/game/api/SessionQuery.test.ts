@@ -18,6 +18,7 @@ describe("SessionQuery", () => {
       "build-menu",
       "cell",
       "construction-queue",
+      "crops",
       "entities",
       "entity",
       "event-log",

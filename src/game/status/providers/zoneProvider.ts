@@ -2,12 +2,14 @@ import { getComponent } from "../../ecs/Entity";
 import { zoneComponent } from "../../zones/zoneComponent";
 import { getZoneService } from "../../zones/zoneServiceRegistry";
 import { makeReason } from "../reasons";
+import { fieldReasons } from "./fieldReasons";
 import { BlockedReasonKind, StatusState, StatusSubjectKind } from "../statusTypes";
 import type { StatusProvider, SubjectStatus } from "../statusTypes";
 
 /**
- * The status provider of zones (spec 025 subject `Zone`): Active while the zone is active,
- * otherwise Blocked with `ZoneRequirementsUnmet {gaps}` (the gaps of spec 015 FR-017, mapped
+ * The status provider of zones (spec 025 subject `Zone`): Active while the zone is active (an
+ * active `farm_field` that waits for a farmer or has no fertile soil is Blocked with the reasons of
+ * `fieldReasons`), otherwise Blocked with `ZoneRequirementsUnmet {gaps}` (the gaps of spec 015 FR-017, mapped
  * kind by kind: `not-enclosed`, `too-small`, `missing-furniture`, `missing-job-board`).
  */
 export const zoneProvider: StatusProvider = {
@@ -24,7 +26,10 @@ export const zoneProvider: StatusProvider = {
       return null;
     }
     if (data.active) {
-      return { state: StatusState.Active, activity: null, reasons: [] };
+      const reasons = fieldReasons(engine, ref.id);
+      return reasons.length === 0
+        ? { state: StatusState.Active, activity: null, reasons: [] }
+        : { state: StatusState.Blocked, activity: null, reasons };
     }
     return {
       state: StatusState.Blocked,

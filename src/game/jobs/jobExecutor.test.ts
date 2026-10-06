@@ -12,8 +12,8 @@ import { PostingStatus, jobTaskPriority, postingGoneReason, targetInvalidReason 
 import { createJobWorld, noAiOverride } from "./testJobWorld";
 import type { JobTestWorld } from "./testJobWorld";
 
-// `farm.sow` is a content job type without a built-in executor, so tests can register their own.
-const testJobType = "farm.sow";
+// `farm.tend` is a content job type without a built-in executor, so tests can register their own.
+const testJobType = "farm.tend";
 
 function setup(executor: JobExecutor) {
   const world = createJobWorld();

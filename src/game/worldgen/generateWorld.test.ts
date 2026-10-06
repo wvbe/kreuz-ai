@@ -157,8 +157,15 @@ describe("generateWorld content requirements", () => {
     const terrain = (bundledContentFiles[ContentFile.Terrain] as { id: string }[]).filter(
       (entry) => entry.id !== WorldTerrain.IronOreDeposit,
     );
+    const jobs = (bundledContentFiles[ContentFile.Jobs] as { id: string }[]).filter(
+      (entry) => entry.id !== "mine.ore",
+    );
     const engine = new GameEngine(
-      loadContentPack({ ...bundledContentFiles, [ContentFile.Terrain]: terrain }),
+      loadContentPack({
+        ...bundledContentFiles,
+        [ContentFile.Terrain]: terrain,
+        [ContentFile.Jobs]: jobs,
+      }),
       { entropy: () => 1 },
     );
     try {

@@ -34,5 +34,9 @@
   "wanderRadiusCost": 60,
   "idleStandChance": 0.3,
   "idleStandMinTicks": 6,
-  "idleStandMaxTicks": 24
+  "idleStandMaxTicks": 24,
+  "oreDepositCharges": 6,
+  "stoneDepositCharges": 8,
+  "oreLowStock": 8,
+  "stoneLowStock": 12
 }

@@ -66,7 +66,12 @@ describe("first jobs (seed 42, Small)", () => {
     // The logs are in the settlers' inventories or in the chest (task 3.2 hauls them there).
     expect(logsHeld(engine) + logsStored(engine) - before).toBe(3 * felled.length);
     expect(logsStored(engine)).toBeGreaterThan(0);
-    expect(coinsHeld(engine) - coinsBefore).toBe(2 * felled.length);
+    // Mining and quarrying jobs pay wages too.
+    let wages = 0;
+    for (const entry of completed) {
+      wages += (entry as { wage: number }).wage;
+    }
+    expect(coinsHeld(engine) - coinsBefore).toBe(wages);
     const first = felled[0] as { workerId: number; wage: number; jobTypeId: string };
     expect(first.jobTypeId).toBe("fell.trees");
     expect(first.wage).toBe(2);
