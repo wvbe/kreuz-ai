@@ -3,6 +3,7 @@
 Small shared components.
 
 - `TimeControls.tsx` - day and hour, pause or resume, step, the five speeds.
+- `useGlobalShortcuts.ts` - the app-wide keys (Space pauses or resumes, 1 to 5 set the speed) and the `keyboardShortcuts` list shown in Settings; ignored while a form control or button has the focus.
 - `ToastHost.tsx` - the toast stack (a toast with an action is a button); mounts the `NotificationBridge`.
 - `SaveLoadMenu.tsx`, `downloadTextFile.ts` - save as a JSON file download, load from a file, load the autosave.
 - `ErrorBoundary.tsx` - message and retry instead of a blank page.

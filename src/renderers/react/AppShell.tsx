@@ -4,6 +4,7 @@ import { useGameState } from "./engine/useGameState";
 import { useStore } from "./engine/useStore";
 import { Screen } from "./navigation/Screen";
 import { screenRegistry } from "./screens/screenRegistry";
+import { useGlobalShortcuts } from "./ui/useGlobalShortcuts";
 import { TimeControls } from "./ui/TimeControls";
 import {
   rememberStandingOrderMaterial,
@@ -25,6 +26,7 @@ function hasGame(state: StateView): boolean {
  */
 export function AppShell() {
   const host = useEngineHost();
+  useGlobalShortcuts();
   useEffect(() => {
     // "Keep in stock..." anywhere opens the Standing orders tab of the Government screen with the
     // form prefilled (spec 024 FR-030).

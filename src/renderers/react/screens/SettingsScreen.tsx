@@ -2,6 +2,7 @@ import { useEngineHost } from "../engine/useEngineHost";
 import { useGameVersion } from "../engine/useGameState";
 import { ToastSettings } from "../notifications/ToastSettings";
 import { SaveLoadMenu } from "../ui/SaveLoadMenu";
+import { keyboardShortcuts } from "../ui/useGlobalShortcuts";
 
 /**
  * Settings: the renderer preferences (never saved with the game) and save or load.
@@ -60,6 +61,15 @@ export function SettingsScreen() {
         </label>
       </div>
       <ToastSettings />
+      <h3>Keyboard shortcuts</h3>
+      <dl className="kv-shortcuts">
+        {keyboardShortcuts.map((shortcut) => (
+          <div key={shortcut.keys}>
+            <dt>{shortcut.keys}</dt>
+            <dd>{shortcut.action}</dd>
+          </div>
+        ))}
+      </dl>
       <h3>Save and load</h3>
       <SaveLoadMenu />
     </section>

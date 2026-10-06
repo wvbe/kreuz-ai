@@ -79,3 +79,51 @@ describe("AppShell", () => {
     expect(orders.ok && JSON.stringify(orders.data)).toContain('"materialId":"bread"');
   });
 });
+
+describe("AppShell accessibility", () => {
+  const roles = [
+    "button",
+    "textbox",
+    "searchbox",
+    "checkbox",
+    "combobox",
+    "spinbutton",
+    "radio",
+    "slider",
+    "tab",
+    "link",
+  ] as const;
+
+  function unnamed(): string[] {
+    return roles.flatMap((role) => {
+      const all = screen.queryAllByRole(role).length;
+      const named = screen.queryAllByRole(role, { name: /\S/ }).length;
+      return all === named ? [] : [`${role}: ${all - named} without an accessible name`];
+    });
+  }
+
+  // @covers 024:FR-001
+  it("gives every interactive control of every screen an accessible name", () => {
+    const app = renderApp();
+    expect(unnamed()).toEqual([]);
+    app.start();
+    const citizen = app.host.session.query.entities({ prototype: "peasant", limit: 1 }).entities[0];
+    act(() => {
+      app.host.selection.selectEntity(citizen?.id ?? 0, null);
+    });
+    let controls = 0;
+    for (const target of Object.values(Screen)) {
+      act(() => {
+        app.host.navigation.navigate(target);
+      });
+      controls += roles.reduce((sum, role) => sum + screen.queryAllByRole(role).length, 0);
+      expect(unnamed(), `screen ${target}`).toEqual([]);
+      for (const tab of screen.queryAllByRole("tab")) {
+        fireEvent.click(tab);
+        expect(unnamed(), `screen ${target}, tab ${tab.textContent ?? ""}`).toEqual([]);
+      }
+    }
+    // the audit looked at real controls, not at an empty page
+    expect(controls).toBeGreaterThan(50);
+  });
+});

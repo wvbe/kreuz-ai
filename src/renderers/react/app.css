@@ -241,3 +241,18 @@ button:disabled {
 .kv-error {
   padding: 24px;
 }
+
+.kv-shortcuts dt {
+  display: inline-block;
+  min-width: 6em;
+  font-weight: 600;
+}
+
+.kv-shortcuts dd {
+  display: inline;
+  margin: 0;
+}
+
+.kv-shortcuts > div {
+  margin: 0.2em 0;
+}
