@@ -112,5 +112,619 @@
     "stackLimit": 1,
     "weight": 3,
     "value": 8
+  },
+  {
+    "id": "pine_log",
+    "name": "Pine log",
+    "categories": ["raw", "wood", "building", "fuel"],
+    "stackLimit": 20,
+    "weight": 4,
+    "value": 1
+  },
+  {
+    "id": "birch_log",
+    "name": "Birch log",
+    "categories": ["raw", "wood", "fuel"],
+    "stackLimit": 20,
+    "weight": 4.5,
+    "value": 1
+  },
+  {
+    "id": "granite",
+    "name": "Granite",
+    "categories": ["raw", "stone"],
+    "stackLimit": 10,
+    "weight": 9,
+    "value": 2
+  },
+  {
+    "id": "clay",
+    "name": "Clay",
+    "categories": ["raw", "ceramic"],
+    "stackLimit": 30,
+    "weight": 3,
+    "value": 0.5
+  },
+  {
+    "id": "copper_ore",
+    "name": "Copper ore",
+    "categories": ["raw", "ore", "metal"],
+    "stackLimit": 15,
+    "weight": 6,
+    "value": 2
+  },
+  {
+    "id": "tin_ore",
+    "name": "Tin ore",
+    "categories": ["raw", "ore", "metal"],
+    "stackLimit": 15,
+    "weight": 6,
+    "value": 2.5
+  },
+  {
+    "id": "flax",
+    "name": "Flax",
+    "categories": ["raw", "fiber", "plant"],
+    "stackLimit": 30,
+    "weight": 0.5,
+    "value": 0.4
+  },
+  {
+    "id": "raw_wool",
+    "name": "Raw wool",
+    "categories": ["raw", "fiber", "animal"],
+    "stackLimit": 30,
+    "weight": 0.4,
+    "value": 0.8
+  },
+  {
+    "id": "barley",
+    "name": "Barley",
+    "categories": ["raw", "grain", "plant"],
+    "stackLimit": 40,
+    "weight": 1,
+    "value": 0.5
+  },
+  {
+    "id": "rye",
+    "name": "Rye",
+    "categories": ["raw", "grain", "plant"],
+    "stackLimit": 40,
+    "weight": 1,
+    "value": 0.5
+  },
+  {
+    "id": "raw_hide",
+    "name": "Raw hide",
+    "categories": ["raw", "animal"],
+    "stackLimit": 10,
+    "weight": 4,
+    "value": 1.5,
+    "perishability": 1152
+  },
+  {
+    "id": "tallow",
+    "name": "Tallow",
+    "categories": ["raw", "animal", "fuel"],
+    "stackLimit": 20,
+    "weight": 1,
+    "value": 1
+  },
+  {
+    "id": "herbs",
+    "name": "Herbs",
+    "categories": ["raw", "plant", "medicinal"],
+    "stackLimit": 20,
+    "weight": 0.2,
+    "value": 1,
+    "perishability": 1728
+  },
+  {
+    "id": "salt",
+    "name": "Salt",
+    "categories": ["raw", "mineral", "preservative"],
+    "stackLimit": 40,
+    "weight": 1,
+    "value": 2
+  },
+  {
+    "id": "sand",
+    "name": "Sand",
+    "categories": ["raw", "mineral"],
+    "stackLimit": 20,
+    "weight": 3,
+    "value": 0.2
+  },
+  {
+    "id": "honey",
+    "name": "Honey",
+    "categories": ["raw", "food", "sweet"],
+    "stackLimit": 20,
+    "weight": 1,
+    "value": 3
+  },
+  {
+    "id": "raw_fish",
+    "name": "Raw fish",
+    "categories": ["raw", "food", "animal"],
+    "stackLimit": 10,
+    "weight": 1,
+    "value": 1,
+    "perishability": 288
+  },
+  {
+    "id": "raw_meat",
+    "name": "Raw meat",
+    "categories": ["raw", "food", "animal"],
+    "stackLimit": 10,
+    "weight": 2,
+    "value": 2,
+    "perishability": 576
+  },
+  {
+    "id": "milk",
+    "name": "Milk",
+    "categories": ["raw", "food", "animal"],
+    "stackLimit": 10,
+    "weight": 1,
+    "value": 0.5,
+    "perishability": 288
+  },
+  {
+    "id": "grapes",
+    "name": "Grapes",
+    "categories": ["raw", "food", "plant"],
+    "stackLimit": 20,
+    "weight": 0.5,
+    "value": 0.8,
+    "perishability": 1152
+  },
+  {
+    "id": "vegetables",
+    "name": "Vegetables",
+    "categories": ["raw", "food", "plant"],
+    "stackLimit": 20,
+    "weight": 0.7,
+    "value": 0.5,
+    "perishability": 2304
+  },
+  {
+    "id": "fruit",
+    "name": "Fruit",
+    "categories": ["raw", "food", "plant"],
+    "stackLimit": 20,
+    "weight": 0.5,
+    "value": 0.6,
+    "perishability": 1728
+  },
+  {
+    "id": "oak_bark",
+    "name": "Oak bark",
+    "categories": ["raw", "plant", "tanning"],
+    "stackLimit": 30,
+    "weight": 1,
+    "value": 0.3
+  },
+  {
+    "id": "beeswax",
+    "name": "Beeswax",
+    "categories": ["raw", "animal"],
+    "stackLimit": 20,
+    "weight": 0.5,
+    "value": 2
+  },
+  {
+    "id": "pine_plank",
+    "name": "Pine plank",
+    "categories": ["processed", "wood", "building"],
+    "stackLimit": 30,
+    "weight": 1.5,
+    "value": 1.5
+  },
+  {
+    "id": "birch_plank",
+    "name": "Birch plank",
+    "categories": ["processed", "wood"],
+    "stackLimit": 30,
+    "weight": 1.8,
+    "value": 2
+  },
+  {
+    "id": "brick",
+    "name": "Brick",
+    "categories": ["processed", "ceramic", "building"],
+    "stackLimit": 30,
+    "weight": 3,
+    "value": 1.5
+  },
+  {
+    "id": "copper_ingot",
+    "name": "Copper ingot",
+    "categories": ["processed", "metal"],
+    "stackLimit": 20,
+    "weight": 5,
+    "value": 5
+  },
+  {
+    "id": "bronze_ingot",
+    "name": "Bronze ingot",
+    "categories": ["processed", "metal", "alloy"],
+    "stackLimit": 20,
+    "weight": 5,
+    "value": 9
+  },
+  {
+    "id": "charcoal",
+    "name": "Charcoal",
+    "categories": ["processed", "fuel"],
+    "stackLimit": 30,
+    "weight": 1,
+    "value": 1.5
+  },
+  {
+    "id": "malt",
+    "name": "Malt",
+    "categories": ["processed", "grain", "brewing"],
+    "stackLimit": 30,
+    "weight": 1,
+    "value": 1
+  },
+  {
+    "id": "linen_thread",
+    "name": "Linen thread",
+    "categories": ["processed", "fiber"],
+    "stackLimit": 40,
+    "weight": 0.1,
+    "value": 0.5
+  },
+  {
+    "id": "wool_thread",
+    "name": "Wool thread",
+    "categories": ["processed", "fiber"],
+    "stackLimit": 40,
+    "weight": 0.1,
+    "value": 0.6
+  },
+  {
+    "id": "linen_cloth",
+    "name": "Linen cloth",
+    "categories": ["processed", "textile"],
+    "stackLimit": 20,
+    "weight": 0.8,
+    "value": 3
+  },
+  {
+    "id": "wool_cloth",
+    "name": "Wool cloth",
+    "categories": ["processed", "textile"],
+    "stackLimit": 20,
+    "weight": 1,
+    "value": 4
+  },
+  {
+    "id": "leather",
+    "name": "Leather",
+    "categories": ["processed", "animal"],
+    "stackLimit": 15,
+    "weight": 2,
+    "value": 5
+  },
+  {
+    "id": "rope",
+    "name": "Rope",
+    "categories": ["processed", "fiber"],
+    "stackLimit": 20,
+    "weight": 1,
+    "value": 1.5
+  },
+  {
+    "id": "parchment",
+    "name": "Parchment",
+    "categories": ["processed", "animal", "writing", "parchment"],
+    "stackLimit": 15,
+    "weight": 0.1,
+    "value": 3
+  },
+  {
+    "id": "candle",
+    "name": "Candle",
+    "categories": ["processed", "light"],
+    "stackLimit": 30,
+    "weight": 0.2,
+    "value": 0.8
+  },
+  {
+    "id": "glass_pane",
+    "name": "Glass pane",
+    "categories": ["processed", "rare", "building"],
+    "stackLimit": 10,
+    "weight": 2,
+    "value": 12
+  },
+  {
+    "id": "plaster",
+    "name": "Plaster",
+    "categories": ["processed", "building"],
+    "stackLimit": 20,
+    "weight": 4,
+    "value": 1
+  },
+  {
+    "id": "iron_chisel",
+    "name": "Iron chisel",
+    "categories": ["tool", "metal"],
+    "stackLimit": 5,
+    "weight": 1.5,
+    "value": 6
+  },
+  {
+    "id": "saw",
+    "name": "Saw",
+    "categories": ["tool", "metal", "wood"],
+    "stackLimit": 5,
+    "weight": 2,
+    "value": 8
+  },
+  {
+    "id": "axe",
+    "name": "Axe",
+    "categories": ["tool", "metal", "wood"],
+    "stackLimit": 5,
+    "weight": 3,
+    "value": 8
+  },
+  {
+    "id": "pickaxe",
+    "name": "Pickaxe",
+    "categories": ["tool", "metal", "wood"],
+    "stackLimit": 5,
+    "weight": 3.5,
+    "value": 8
+  },
+  {
+    "id": "sickle",
+    "name": "Sickle",
+    "categories": ["tool", "metal"],
+    "stackLimit": 5,
+    "weight": 1,
+    "value": 6
+  },
+  {
+    "id": "hoe",
+    "name": "Hoe",
+    "categories": ["tool", "metal", "wood"],
+    "stackLimit": 5,
+    "weight": 2.5,
+    "value": 6
+  },
+  {
+    "id": "fishing_rod",
+    "name": "Fishing rod",
+    "categories": ["tool", "wood"],
+    "stackLimit": 5,
+    "weight": 1,
+    "value": 3
+  },
+  {
+    "id": "needle",
+    "name": "Needle",
+    "categories": ["tool", "metal"],
+    "stackLimit": 10,
+    "weight": 0.05,
+    "value": 1
+  },
+  {
+    "id": "iron_sword",
+    "name": "Iron sword",
+    "categories": ["weapon", "metal"],
+    "stackLimit": 3,
+    "weight": 3,
+    "value": 25
+  },
+  {
+    "id": "iron_shield",
+    "name": "Iron shield",
+    "categories": ["weapon", "metal", "wood"],
+    "stackLimit": 3,
+    "weight": 5,
+    "value": 18
+  },
+  {
+    "id": "spear",
+    "name": "Spear",
+    "categories": ["weapon", "metal", "wood"],
+    "stackLimit": 5,
+    "weight": 2.5,
+    "value": 10
+  },
+  {
+    "id": "bow",
+    "name": "Bow",
+    "categories": ["weapon", "wood"],
+    "stackLimit": 3,
+    "weight": 1,
+    "value": 12
+  },
+  {
+    "id": "arrow",
+    "name": "Arrow",
+    "categories": ["weapon", "wood", "metal"],
+    "stackLimit": 20,
+    "weight": 0.1,
+    "value": 0.5
+  },
+  {
+    "id": "leather_armor",
+    "name": "Leather armor",
+    "categories": ["armor", "leather"],
+    "stackLimit": 3,
+    "weight": 6,
+    "value": 20
+  },
+  {
+    "id": "iron_chainmail",
+    "name": "Iron chainmail",
+    "categories": ["armor", "metal"],
+    "stackLimit": 2,
+    "weight": 12,
+    "value": 60
+  },
+  {
+    "id": "iron_helm",
+    "name": "Iron helm",
+    "categories": ["armor", "metal"],
+    "stackLimit": 3,
+    "weight": 3,
+    "value": 18
+  },
+  {
+    "id": "peasant_clothing",
+    "name": "Peasant clothing",
+    "categories": ["clothing", "textile"],
+    "stackLimit": 5,
+    "weight": 1.5,
+    "value": 6
+  },
+  {
+    "id": "fine_clothing",
+    "name": "Fine clothing",
+    "categories": ["clothing", "textile", "luxury"],
+    "stackLimit": 3,
+    "weight": 2,
+    "value": 30
+  },
+  {
+    "id": "monks_habit",
+    "name": "Monk's habit",
+    "categories": ["clothing", "textile", "religious"],
+    "stackLimit": 5,
+    "weight": 2,
+    "value": 8
+  },
+  {
+    "id": "rye_bread",
+    "name": "Rye bread",
+    "categories": ["food", "cooked", "staple"],
+    "stackLimit": 20,
+    "weight": 0.6,
+    "value": 1.5,
+    "perishability": 864
+  },
+  {
+    "id": "ale",
+    "name": "Ale",
+    "categories": ["drink", "brewed"],
+    "stackLimit": 15,
+    "weight": 1,
+    "value": 1,
+    "perishability": 1728
+  },
+  {
+    "id": "wine",
+    "name": "Wine",
+    "categories": ["drink", "brewed", "luxury"],
+    "stackLimit": 15,
+    "weight": 1,
+    "value": 4,
+    "perishability": 17280
+  },
+  {
+    "id": "mead",
+    "name": "Mead",
+    "categories": ["drink", "brewed"],
+    "stackLimit": 15,
+    "weight": 1,
+    "value": 3,
+    "perishability": 2880
+  },
+  {
+    "id": "cheese",
+    "name": "Cheese",
+    "categories": ["food", "dairy", "preserved"],
+    "stackLimit": 20,
+    "weight": 0.8,
+    "value": 3,
+    "perishability": 8640
+  },
+  {
+    "id": "dried_meat",
+    "name": "Dried meat",
+    "categories": ["food", "preserved"],
+    "stackLimit": 20,
+    "weight": 0.5,
+    "value": 3,
+    "perishability": 11520
+  },
+  {
+    "id": "salted_fish",
+    "name": "Salted fish",
+    "categories": ["food", "preserved"],
+    "stackLimit": 20,
+    "weight": 0.6,
+    "value": 2,
+    "perishability": 11520
+  },
+  {
+    "id": "pottage",
+    "name": "Pottage",
+    "categories": ["food", "cooked"],
+    "stackLimit": 10,
+    "weight": 1,
+    "value": 0.8,
+    "perishability": 576
+  },
+  {
+    "id": "stew",
+    "name": "Stew",
+    "categories": ["food", "cooked"],
+    "stackLimit": 10,
+    "weight": 1,
+    "value": 1.5,
+    "perishability": 576
+  },
+  {
+    "id": "roast_meat",
+    "name": "Roast meat",
+    "categories": ["food", "cooked"],
+    "stackLimit": 10,
+    "weight": 0.8,
+    "value": 3,
+    "perishability": 576
+  },
+  {
+    "id": "fruit_preserves",
+    "name": "Fruit preserves",
+    "categories": ["food", "preserved", "sweet"],
+    "stackLimit": 15,
+    "weight": 0.7,
+    "value": 3,
+    "perishability": 8640
+  },
+  {
+    "id": "butter",
+    "name": "Butter",
+    "categories": ["food", "dairy"],
+    "stackLimit": 15,
+    "weight": 0.5,
+    "value": 2,
+    "perishability": 2304
+  },
+  {
+    "id": "porridge",
+    "name": "Porridge",
+    "categories": ["food", "cooked", "staple"],
+    "stackLimit": 10,
+    "weight": 1,
+    "value": 0.6,
+    "perishability": 576
+  },
+  {
+    "id": "eggs",
+    "name": "Eggs",
+    "categories": ["food", "raw", "animal"],
+    "stackLimit": 15,
+    "weight": 0.1,
+    "value": 0.4,
+    "perishability": 1728
   }
 ]

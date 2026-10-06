@@ -54,5 +54,117 @@
   {
     "id": "valuable",
     "name": "Valuable"
+  },
+  {
+    "id": "ceramic",
+    "name": "Ceramic"
+  },
+  {
+    "id": "ore",
+    "name": "Ore"
+  },
+  {
+    "id": "fiber",
+    "name": "Fiber"
+  },
+  {
+    "id": "plant",
+    "name": "Plant"
+  },
+  {
+    "id": "animal",
+    "name": "Animal"
+  },
+  {
+    "id": "medicinal",
+    "name": "Medicinal"
+  },
+  {
+    "id": "mineral",
+    "name": "Mineral"
+  },
+  {
+    "id": "preservative",
+    "name": "Preservative"
+  },
+  {
+    "id": "sweet",
+    "name": "Sweet"
+  },
+  {
+    "id": "tanning",
+    "name": "Tanning"
+  },
+  {
+    "id": "alloy",
+    "name": "Alloy"
+  },
+  {
+    "id": "brewing",
+    "name": "Brewing"
+  },
+  {
+    "id": "textile",
+    "name": "Textile"
+  },
+  {
+    "id": "writing",
+    "name": "Writing"
+  },
+  {
+    "id": "parchment",
+    "name": "Parchment"
+  },
+  {
+    "id": "light",
+    "name": "Light"
+  },
+  {
+    "id": "rare",
+    "name": "Rare"
+  },
+  {
+    "id": "weapon",
+    "name": "Weapon"
+  },
+  {
+    "id": "armor",
+    "name": "Armor"
+  },
+  {
+    "id": "leather",
+    "name": "Leather"
+  },
+  {
+    "id": "clothing",
+    "name": "Clothing"
+  },
+  {
+    "id": "luxury",
+    "name": "Luxury"
+  },
+  {
+    "id": "religious",
+    "name": "Religious"
+  },
+  {
+    "id": "cooked",
+    "name": "Cooked"
+  },
+  {
+    "id": "staple",
+    "name": "Staple"
+  },
+  {
+    "id": "brewed",
+    "name": "Brewed"
+  },
+  {
+    "id": "dairy",
+    "name": "Dairy"
+  },
+  {
+    "id": "preserved",
+    "name": "Preserved"
   }
 ]
