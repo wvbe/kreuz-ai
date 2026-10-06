@@ -13,6 +13,8 @@ npm test         # unit and jsdom tests (WebGL is stubbed)
 
 Start a game on the New game screen (difficulty with a one-line description, seed, map size, starting tier). The game starts paused; use the time bar to resume, change speed (1/4x to 4x) or step. Drag the map to pan, wheel to zoom, Q and E (or the buttons) to rotate, click to select. Settings has the autosave interval, toast limit, badge and zone toggles and save to file, load from file, load autosave.
 
+The menu entries (`screens/screenRegistry.tsx`) are Map, Content, Chronicle, Flow, Idle and blocked, Government, Settlement, New game and Settings. Not built, by owner decision: touch gestures, a trade-policy screen and external 3D models (see `docs/ROADMAP.md`). The frame rate and a cold start in a real browser are not measured (jsdom has no WebGL; `docs/audit/024.md`).
+
 ## Architecture
 
 ```

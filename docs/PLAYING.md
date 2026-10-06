@@ -1,6 +1,6 @@
 # Playing a Hamlet in the terminal
 
-A short guide to the opening moves. Everything here is a player command: zones, construction and production orders. Nobody gets a job by magic; settlers claim postings at the village board, so you decide what exists and the settlers do the work. The opening below is the script of `scenarios/checkpoint-c.json` (seed 42, small map) and keeps six settlers fed for at least 14 days. The full verb list is in [CLI.md](CLI.md).
+A short guide to the opening moves. Everything here is a player command: zones, construction and production orders. Nobody gets a job by magic; settlers claim postings at the village board, so you decide what exists and the settlers do the work. The opening below is the script of `scenarios/checkpoint-c.json` (seed 42, small map) and keeps six settlers fed: the scenario runs ten days and `tests/integration/checkpointC.test.ts` checks 14. The full verb list is in [CLI.md](CLI.md).
 
 ```sh
 npm run cli        # interactive shell; commands are applied on the next tick
@@ -9,6 +9,8 @@ npm run cli        # interactive shell; commands are applied on the next tick
 ## What you start with
 
 Six settlers (two farmers, a carpenter, a baker, two peasants; one peasant is the Town Crier), the village board (#2) in the middle, and a storehouse chest (#9) holding 24 planks, 30 nails, 16 stone blocks and 12 bread. Bread is the only food. Hunger runs from full to empty in about four days and a settler who stays hungry loses health, so the first harvest has to be baked into bread by about day 4. Without any command everybody starves (tested).
+
+**Difficulty.** `new 42 steady small` is the default used above. On `harsh` (needs drain 1.3 times as fast, perishables decay 1.5 times as fast) the same opening also keeps all six alive for ten days (`scenarios/harsh-survival.json`, D-183), but hunger touches zero twice, around tick 800 (the founders' loaves rot at tick 576) and tick 1,400,, so there is no slack.
 
 ## The chain
 
@@ -70,15 +72,15 @@ A travelling trader arrives about day 3, stays two days, and comes back every si
 
 ```
 traders                              # is a trader here? what does it sell and buy?
-trade quote sell 50 iron_ore 8       # what it pays for 8 ore
-trade sell 50 iron_ore 8             # settlers fetch the ore from the chests (mining is automatic) and sell it
+trade quote sell 57 iron_ore 8       # what it pays for 8 ore
+trade sell 57 iron_ore 8             # settlers fetch the ore from the chests (mining is automatic) and sell it
 trade orders                         # progress: order #1 sell iron_ore 8/8 ... Done
 ledger                               # trader_caravan: 4 iron_ingot may still be bought, credit 4 (iron_ore x 0.5)
-trade buy 50 iron_ingot 4            # five would be refused (trade.order.refused: RefinedCreditExhausted)
+trade buy 57 iron_ingot 4            # five would be refused (trade.order.refused: RefinedCreditExhausted)
 treasury                             # coins: wages are paid from here, sales fill it, purchases empty it
 ```
 
-The ids are those of your game (`traders` shows the trader's). A settler carries the goods or the coins, so trips take time and each costs the 1 coin wage. Bought goods are hauled into the chests. If the trader leaves before an order is done, the order waits for the next visit; unspent credit and the stock the trader keeps for you wait too. `scenarios/trade-ore-for-iron.json` plays this with the commands above (seed 42: ids 50 and 59).
+The ids are those of your game (`traders` shows the trader's). A settler carries the goods or the coins, so trips take time and each costs the 1 coin wage. Bought goods are hauled into the chests. If the trader leaves before an order is done, the order waits for the next visit; unspent credit and the stock the trader keeps for you wait too. `scenarios/trade-ore-for-iron.json` plays this with the commands above (seed 42: trader ids 57 on the first visit and 66 on the next; it also checks that five ingots are refused first).
 
 ## Neighbours (diplomacy)
 
