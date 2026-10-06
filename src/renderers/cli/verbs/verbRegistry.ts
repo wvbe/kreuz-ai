@@ -9,6 +9,7 @@ import { metaVerbs } from "./metaVerbs";
 import { productionVerbs } from "./productionVerbs";
 import { statusVerbs } from "./statusVerbs";
 import { storageVerbs } from "./storageVerbs";
+import { tradeVerbs } from "./tradeVerbs";
 import { zoneVerbs } from "./zoneVerbs";
 import type { Verb } from "./Verb";
 
@@ -27,6 +28,7 @@ export const verbGroups: readonly (readonly Verb[])[] = [
   productionVerbs,
   constructionVerbs,
   gatheringVerbs,
+  tradeVerbs,
   statusVerbs,
   metaVerbs,
 ];
