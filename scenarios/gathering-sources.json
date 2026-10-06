@@ -1,0 +1,178 @@
+{
+  "name": "gathering-sources",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "flax"
+        },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "raw_fish"
+        },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 338
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "flax_field",
+        "mapId": 1,
+        "cells": [230, 258, 259, 279, 280, 281]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "fishing_dock",
+        "mapId": 1,
+        "cells": [397, 421, 440, 467]
+      }
+    },
+    {
+      "step": 3
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "length",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "1.zoneTypeId",
+        "op": "eq",
+        "value": "flax_field"
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "2.zoneTypeId",
+        "op": "eq",
+        "value": "fishing_dock"
+      }
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "length",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "step": 300
+    },
+    {
+      "assertHash": {
+        "label": "day-1"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 900
+    },
+    {
+      "assertHash": {
+        "label": "day-4"
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "raw_fish"
+        },
+        "path": "windowProduced",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "flax"
+        },
+        "path": "windowProduced",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "step": 700
+    },
+    {
+      "assertHash": {
+        "label": "day-6"
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "flax"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}

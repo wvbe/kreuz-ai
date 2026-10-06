@@ -56,7 +56,8 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 5.2 Recipes / jobs / zones (recipes and zones: 4 of 59 recipes and 19 of 39 zone types resolve at the base pack, the rest is a queue in `docs/content-crossrefs-5.2.md` and `docs/content-pending-5.2.json` for 5.4, D-80; jobs were not in this slice)
 - [ ] 5.3 Humanoids / animals / skills / traits / needs / behaviors / factions / names
   - [x] part 1: skills (21), traits (32), needs, humanoids (23), factions (15), name list (D-90..D-92; open ids in `docs/content-crossrefs-5.3.md`)
-  - [ ] part 2: animals, behavior trees, jobs
+  - [x] part 2a: jobs (23 spec job types + extras) and raw-material sources: crops per zone type, terrain gathering, fishing, charity, deferral list (D-130..D-134, `scenarios/gathering-sources.json`)
+  - [ ] part 2b: animals, behavior trees (and the animal job executors listed in `jobs/jobCoverage.ts`)
 - [ ] 5.4 Content conformance test (counts, references, Hamlet→Village reachability)
   - [x] 5.4a Pending queue landed (59 recipes, 39 zone types), strict conformance test in `src/game/content/contentTypes.test.ts`, source gaps in `docs/content-crossrefs-5.4.md` (D-120..D-123)
 
