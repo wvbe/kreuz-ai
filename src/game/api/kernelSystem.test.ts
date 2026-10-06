@@ -43,7 +43,7 @@ describe("createKernelSystem", () => {
     for (const registration of Object.values(definition.commandHandlers ?? {})) {
       expect(registration.mode).toBe(CommandMode.Immediate);
     }
-    expect(Object.keys(definition.queries ?? {})).toHaveLength(10);
+    expect(Object.keys(definition.queries ?? {})).toHaveLength(12);
     definition.run?.({ tick: 4, tickOfDay: 4 });
     expect(calls).toEqual(["apply:4"]);
   });

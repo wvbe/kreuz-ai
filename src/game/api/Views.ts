@@ -146,6 +146,41 @@ export type MapView = {
 };
 
 /**
+ * The polygon of every cell of one map (query `map-geometry`): derived, never saved, a pure
+ * function of the map params (AD9). Counter-clockwise corners in map units, clipped to the
+ * extent; square maps give four corners per tile.
+ */
+export type MapGeometryView = {
+  readonly mapId: number;
+  /**
+   * Corners of every cell, by cell index.
+   */
+  readonly polygons: readonly (readonly PointView[])[];
+};
+
+/**
+ * One entity standing on a map (query `map-entities`).
+ */
+export type MapEntityView = {
+  readonly id: number;
+  readonly prototype: string;
+  readonly cell: number;
+  /**
+   * Names of the components the entity has (a renderer classifies by them; values are read with
+   * the `entity` query).
+   */
+  readonly components: readonly string[];
+};
+
+/**
+ * Every entity with a position on one map, ascending by id (query `map-entities`).
+ */
+export type MapEntitiesView = {
+  readonly mapId: number;
+  readonly entities: readonly MapEntityView[];
+};
+
+/**
  * One cell of one map.
  */
 export type CellView = {
@@ -226,6 +261,8 @@ export type Views = {
   readonly entity: EntityDetailView | null;
   readonly maps: MapListView;
   readonly map: MapView;
+  readonly "map-geometry": MapGeometryView;
+  readonly "map-entities": MapEntitiesView;
   readonly cell: CellView;
   readonly settlement: SettlementSummaryView;
   readonly "event-log": EventLogView;

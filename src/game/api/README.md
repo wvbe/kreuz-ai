@@ -10,7 +10,8 @@ The ONE facade renderers, the CLI and tests use (spec 024, DECISIONS D-23/D-39, 
 - `CommandQueue.ts` - the FIFO of queued commands plus the command id counter; saved as `systems.commandQueue`.
 - `kernelSystem.ts` - the system the session registers: slot-1 queue application, the kernel commands and queries, all through the same path later phases use.
 - `scenario/` - the scenario runner and its steps, including the scenario-only `debugSpawn` (see its README).
-- `Views.ts`, `viewBuilders.ts`, `SessionQuery.ts` - the view model (plain readonly JSON built from copies) and the typed query methods; `query.run(name, args)` serves any registered query.
+- `createSessionRunner.ts` - wraps a session in the engine `AutoRunner` (real time for a host such as the React `EngineHost`; each tick is a logged `Step`).
+- `Views.ts`, `viewBuilders.ts`, `SessionQuery.ts` - the view model (includes `map-geometry` cell polygons and `map-entities` positioned entities for renderers) (plain readonly JSON built from copies) and the typed query methods; `query.run(name, args)` serves any registered query.
 - `EventLog.ts` - bounded recent-event buffer (session convenience, not game state).
 
 ## Adding a command and a query (no file in this folder changes)

@@ -25,6 +25,8 @@ import {
   buildEntityDetailView,
   buildEntityListView,
   buildEventLogView,
+  buildMapEntitiesView,
+  buildMapGeometryView,
   buildMapListView,
   buildMapView,
   buildPendingCommandsView,
@@ -199,6 +201,14 @@ export function createKernelSystem(host: KernelHost): EngineSystemDefinition {
       map: defineQuery({
         schema: z.object({ mapId: z.number().int().min(1) }).strict(),
         run: (args) => buildMapView(engine, args.mapId),
+      }),
+      "map-geometry": defineQuery({
+        schema: z.object({ mapId: z.number().int().min(1) }).strict(),
+        run: (args) => buildMapGeometryView(engine, args.mapId),
+      }),
+      "map-entities": defineQuery({
+        schema: z.object({ mapId: z.number().int().min(1) }).strict(),
+        run: (args) => buildMapEntitiesView(engine, args.mapId),
       }),
       cell: defineQuery({
         schema: z

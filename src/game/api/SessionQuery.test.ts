@@ -46,6 +46,8 @@ describe("SessionQuery", () => {
       "jobs-on",
       "journal",
       "map",
+      "map-entities",
+      "map-geometry",
       "maps",
       "members-of",
       "milestones",
@@ -112,6 +114,10 @@ describe("SessionQuery", () => {
   it("returns null for things that do not exist and errors from run", () => {
     const session = startedSession();
     expect(session.query.map(9)).toBeNull();
+    expect(session.query.mapGeometry(9)).toBeNull();
+    expect(session.query.mapEntities(9)).toBeNull();
+    expect(session.query.mapGeometry(1)?.polygons.length).toBe(session.query.map(1)?.cellCount);
+    expect(session.query.run("map-entities", { mapId: 1 }).ok).toBe(true);
     expect(session.query.cell(9, 0)).toBeNull();
     expect(session.query.entity(99)).toBeNull();
     expect(session.query.run("nope")).toMatchObject({

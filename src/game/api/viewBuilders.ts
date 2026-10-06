@@ -13,6 +13,9 @@ import type {
   EntityListFilter,
   EntityListView,
   EventLogView,
+  MapEntitiesView,
+  MapEntityView,
+  MapGeometryView,
   MapLinkView,
   MapListView,
   MapView,
@@ -181,6 +184,62 @@ export function buildMapView(engine: GameEngine, mapId: number): MapView {
       targetCell: link.targetCell,
     })),
   };
+}
+
+/**
+ * The cell polygons of one map.
+ *
+ * @param engine - The engine to read.
+ * @param mapId - Map id.
+ * @returns A fresh view.
+ * @throws {ApiError} NotFound when the map does not exist.
+ */
+export function buildMapGeometryView(engine: GameEngine, mapId: number): MapGeometryView {
+  const map = engine.maps.get(mapId);
+  if (map === undefined) {
+    throw new ApiError(ApiErrorKind.NotFound, `map ${mapId} does not exist`);
+  }
+  return {
+    mapId,
+    polygons: map.geometry.polygons.map((polygon) =>
+      polygon.map((corner) => ({ x: corner.x, y: corner.y })),
+    ),
+  };
+}
+
+/**
+ * The entities standing on one map (those with a Position on it).
+ *
+ * @param engine - The engine to read.
+ * @param mapId - Map id.
+ * @returns A fresh view, ascending by entity id.
+ * @throws {ApiError} NotFound when the map does not exist.
+ */
+export function buildMapEntitiesView(engine: GameEngine, mapId: number): MapEntitiesView {
+  if (engine.maps.get(mapId) === undefined) {
+    throw new ApiError(ApiErrorKind.NotFound, `map ${mapId} does not exist`);
+  }
+  const entities: MapEntityView[] = [];
+  for (const entity of engine.store.entities()) {
+    const position = entity.components["Position"];
+    if (
+      engine.store.isPendingDelete(entity.id) ||
+      typeof position !== "object" ||
+      position === null ||
+      Array.isArray(position) ||
+      position["mapId"] !== mapId ||
+      typeof position["cellIndex"] !== "number"
+    ) {
+      continue;
+    }
+    entities.push({
+      id: entity.id,
+      prototype: entity.prototype,
+      cell: position["cellIndex"],
+      components: Object.keys(entity.components).sort(),
+    });
+  }
+  return { mapId, entities };
 }
 
 /**

@@ -13,6 +13,8 @@ import type {
   EntityListFilter,
   EntityListView,
   EventLogView,
+  MapEntitiesView,
+  MapGeometryView,
   MapListView,
   MapView,
   PendingCommandsView,
@@ -25,6 +27,8 @@ import {
   buildEntityDetailView,
   buildEntityListView,
   buildEventLogView,
+  buildMapEntitiesView,
+  buildMapGeometryView,
   buildMapListView,
   buildMapView,
   buildPendingCommandsView,
@@ -148,6 +152,26 @@ export class SessionQuery {
    */
   map(mapId: number): MapView | null {
     return this.orNull(() => buildMapView(this.engine, mapId));
+  }
+
+  /**
+   * The cell polygons of one map (query `map-geometry`).
+   *
+   * @param mapId - Map id.
+   * @returns The view, or null when the map does not exist.
+   */
+  mapGeometry(mapId: number): MapGeometryView | null {
+    return this.orNull(() => buildMapGeometryView(this.engine, mapId));
+  }
+
+  /**
+   * The entities standing on one map (query `map-entities`).
+   *
+   * @param mapId - Map id.
+   * @returns The view, or null when the map does not exist.
+   */
+  mapEntities(mapId: number): MapEntitiesView | null {
+    return this.orNull(() => buildMapEntitiesView(this.engine, mapId));
   }
 
   /**

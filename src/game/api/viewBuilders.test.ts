@@ -11,6 +11,8 @@ import {
   buildEntityDetailView,
   buildEntityListView,
   buildEventLogView,
+  buildMapEntitiesView,
+  buildMapGeometryView,
   buildMapListView,
   buildMapView,
   buildPendingCommandsView,
@@ -128,5 +130,22 @@ describe("view builders", () => {
     expect(buildPendingCommandsView(queue).commands).toEqual([
       { commandId: 1, kind: "demo.cmd", payload: { field: 1 }, tick: 4 },
     ]);
+  });
+
+  it("buildMapGeometryView lists a polygon of corners per cell", () => {
+    const view = buildMapGeometryView(engine, 1);
+    expect(view.polygons).toHaveLength(buildMapView(engine, 1).cellCount);
+    expect(view.polygons.every((polygon) => polygon.length >= 3)).toBe(true);
+    expect(() => buildMapGeometryView(engine, 9)).toThrow(ApiError);
+  });
+
+  it("buildMapEntitiesView lists the entities with a Position on the map", () => {
+    const view = buildMapEntitiesView(engine, 1);
+    expect(view.mapId).toBe(1);
+    for (const entity of view.entities) {
+      expect(entity.components).toContain("Position");
+      expect(entity.cell).toBeGreaterThanOrEqual(0);
+    }
+    expect(() => buildMapEntitiesView(engine, 9)).toThrow(ApiError);
   });
 });
