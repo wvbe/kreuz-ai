@@ -9,7 +9,10 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [time](time/README.md) - the simulation clock and calendar helpers.
 - [ecs](ecs/README.md) - entities, components, prototypes, queries, relationships.
 - [task](task/README.md) - serializable task step machines: queue, priorities, interrupts, waits.
+- [api](api/README.md) - the `GameSession` facade, command queue, command log and replay, query and command builders, the scenario runner. The only module renderers import values from.
 - [map](map/README.md) - square and Voronoi maps, terrain registry, sub-maps and links, occupant index.
+- [pathfinding](pathfinding/README.md) - deterministic A\* over the map adjacency graph, with a reachability cache.
+- [worldgen](worldgen/README.md) - deterministic map generators and the starting settlement (village, job board, six settlers, starting chest, wild animals).
 - [inventory](inventory/README.md) - materials, stacked slots, weight, perishables, equipment, permissions, atomic transfers, money.
 - [save](save/README.md) - GameState root, canonical save/load, validation, migrations, state hash.
 - [behavior](behavior/README.md) - JSON behavior trees: DSL schema, loader checks, interpreter with serialized running node.
@@ -21,6 +24,7 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [fauna](fauna/README.md) - animals (022 US11): the `Animal` component, 13 prototypes, senses, flee / graze / hunt handlers for the animal trees, hunger and periodic products, the `tend.animals` / `butcher.animal` / `hunt.game` executors, the `animals` query.
 - [roles](roles/README.md) - handlers of the role trees of 022 US14 (`go_to_zone`, `zone_available`, `hostile_animal_near`, `engage_threat`).
 - [jobs](jobs/README.md) - job boards, postings, claim order, job type executors, `fell.trees`, wages.
+- [crier](crier/README.md) - the Town Crier fleet: pending board updates the player's job edits wait in until a crier carries them to the board.
 - [storage](storage/README.md) - reservations, `Furniture` / `Stockpile`, tiered routing, hauling (`haul.deliver`), stock queries, storage decay.
 - [zones](zones/README.md) - zones and rooms: `Zone`, the furniture requirement grammar, status and `zone.*` events, merge and split, skill affinity, board pausing, zone hooks of storage.
 - [production](production/README.md) - production and crafting: workstations with `ProductionOrders`, order commands, the `craft.produce` job (fetch, lock, craft, consume), output hauling, cancel semantics and blocked-reason reporting for 025.
