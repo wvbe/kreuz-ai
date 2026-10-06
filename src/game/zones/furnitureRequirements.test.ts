@@ -24,6 +24,7 @@ function alt(
   return { match, count, perTiles };
 }
 
+// @covers 015:FR-017 015:FR-007
 describe("parseFurnitureRequirements", () => {
   const valid: [string, ReturnType<typeof parseFurnitureRequirements>][] = [
     ["any bed", [{ alternatives: [alt({ tag: "bed" })] }]],

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { contentWithZones, createZoneWorld } from "./testZoneWorld";
 
+// @covers 015:FR-001 015:FR-005 015:SC-005
 describe("createZoneWorld", () => {
   it("designates zones, tracks zone events and builds rooms", () => {
     const world = createZoneWorld();
@@ -31,5 +32,19 @@ describe("createZoneWorld", () => {
     ]);
     expect(content.zones.has("test_extra")).toBe(true);
     expect(content.zones.has("bakery")).toBe(true);
+  });
+
+  it("rejects a zone type that names furniture the content does not have (FR-002)", () => {
+    expect(() =>
+      contentWithZones([
+        {
+          id: "test_bad",
+          name: "Bad",
+          requiresRoom: false,
+          minTiles: 1,
+          furnitureRequirements: [[{ kind: "id", ref: "no_such_furniture", count: 1 }]],
+        },
+      ]),
+    ).toThrow(/no_such_furniture/);
   });
 });

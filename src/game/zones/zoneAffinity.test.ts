@@ -3,6 +3,7 @@ import { noAiOverride } from "../jobs/testJobWorld";
 import { createZoneWorld } from "./testZoneWorld";
 import { zoneAffinity, zoneWorkers } from "./zoneAffinity";
 
+// @covers 015:FR-011
 describe("zoneWorkers", () => {
   it("lists the citizens standing on the zone's tiles, ascending, not other entities", () => {
     const world = createZoneWorld();

@@ -1150,3 +1150,6 @@ Wildcard subscribers in use: `status.*`, `settlement.**`, `inventory.item.*`, `h
 
 ### D-210 Relationship writer and decay (spec 013 FR-007)
 - `ai/relationships/relationshipEvents.ts`: `recordRelationshipEvent` (affinity delta clamped to +-100000 milli, history capped at 8, oldest `lastTick` evicted at 16 entries, asymmetric) and `effectiveAffinityMilli` (stored affinity faded by `halfLife / (halfLife + elapsed)`, half-life 200 ticks). Pure helpers, no caller yet: wiring gifts, conflicts and a decision factor changes scenario outcomes and is left as an audit gap (docs/audit/013.md).
+
+### D-211 Zone activity and modifier queries (spec 015 FR-009, FR-010)
+- `isActivityPermittedAt(engine, mapId, cell, activityId)`: true when the cell lies in an active zone (from the tick after activation) whose type lists the activity in `activityUnlocks` (D-81). `zoneModifierMilliFor(engine, entityId, modifierId)`: the summed milli value of that zone-type effect for the zone the entity stands in (0 outside; zones never stack because a cell has one zone). Consumers today: `updateMood` adds `mood.bonus` to the mood target, so `great_hall` and `cloister` raise the mood of whoever stands inside. `social.bonus`, `faith.bonus` and `safety.bonus` have no consumer yet (their needs have no satisfaction methods, docs/audit/013.md gap 1).

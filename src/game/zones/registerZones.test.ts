@@ -14,6 +14,7 @@ function query(engine: GameEngine, name: string, args: JsonValue): JsonValue {
   return registration.run(args, engine);
 }
 
+// @covers 015:FR-003 015:FR-014 015:FR-016 015:FR-013 015:SC-001
 describe("registerZones", () => {
   it("is idempotent and returns the engine's service", () => {
     const world = createZoneWorld();

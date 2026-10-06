@@ -8,7 +8,7 @@ Zones and rooms (spec 015, DECISIONS D-11 and D-48, plan task 3.4). A zone is an
 - `zoneGeometry.ts` - `connectedComponents`, `outerRing` (grid-agnostic, through `map.neighbors`).
 - `zoneEvaluation.ts` - `evaluateZone` (room, status, gaps, furniture, boards), `isEnclosed`, `isEnclosingCell`, `enclosingRingCells`, `isBorderCell`.
 - `ZoneService.ts` / `zoneServiceRegistry.ts` - the per-engine service: cell index, designate / add / remove / delete / merge, the slot-9 `evaluateAll`, merge offers (section `systems.zones`), board pausing, the storage hooks. `getZoneService(engine)` finds it.
-- `zoneQueries.ts` - `zoneAt`, `zoneOfEntity`, `activeZonesOfType`, `isInActiveZoneOfType`. `zoneAffinity.ts` - `zoneWorkers`, `zoneAffinity`. `zoneViews.ts` - the views behind the queries.
+- `zoneQueries.ts` - `zoneAt`, `zoneOfEntity`, `activeZonesOfType`, `isInActiveZoneOfType`, `isActivityPermittedAt` (FR-009), `zoneModifierMilliFor` (FR-010; `ai/mood/runMood` reads `mood.bonus`, D-211). `zoneAffinity.ts` - `zoneWorkers`, `zoneAffinity`. `zoneViews.ts` - the views behind the queries.
 - `registerZones.ts` - `registerZones(engine)`: component, section, slot-9 system, commands and queries. `testZoneWorld.ts` - test helper: a storage test world with `designate`, `walls`, `door`, `furniture`, `rect`, `events`, `setTier` and `contentWithZones`.
 
 ## Rules

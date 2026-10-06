@@ -3,6 +3,7 @@ import { createZoneWorld } from "./testZoneWorld";
 import { buildMergeOffers, buildZoneView, buildZoneViews } from "./zoneViews";
 import { ZoneStatus } from "./zoneTypes";
 
+// @covers 015:FR-016 015:FR-017
 describe("buildZoneView", () => {
   it("copies the zone state with affinity and workers; null for unknown ids", () => {
     const world = createZoneWorld();

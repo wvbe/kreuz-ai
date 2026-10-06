@@ -28,6 +28,7 @@ const grid: CellGraph = {
   },
 };
 
+// @covers 015:FR-003 015:FR-015
 describe("connectedComponents", () => {
   it("returns one sorted component for contiguous cells", () => {
     expect(connectedComponents(grid, [5, 1, 4, 0])).toEqual([[0, 1, 4, 5]]);

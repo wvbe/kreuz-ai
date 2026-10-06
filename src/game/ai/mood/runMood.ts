@@ -4,10 +4,16 @@ import { truncDiv } from "../../engine/fixedPoint";
 import type { GameEngine } from "../../engine/GameEngine";
 import { moodNeedId } from "../../content/contentTypes";
 import { needModifiers } from "../../skills/traitModifiers";
+import { zoneModifierMilliFor } from "../../zones/zoneQueries";
 import { neutralMoodMilli } from "../aiTypes";
 import { needsComponent } from "../needs/needsComponent";
 import { moodComponent } from "./moodComponent";
 import { activeInfluences, addMoodInfluence, moodTargetMilli, stepMood } from "./moodModel";
+
+/**
+ * The zone effect that lifts the mood target of whoever stands in an active zone (spec 015 FR-010).
+ */
+const moodBonusModifierId = "mood.bonus";
 
 /**
  * Adds a mood influence to an entity (no-op without a `Mood` component).
@@ -56,7 +62,9 @@ export function updateMood(engine: GameEngine, entity: Entity, tick: number): vo
           values.length,
         );
   const influence = mood.influences.reduce((sum, item) => sum + item.deltaMilli, 0);
-  const bonus = needModifiers(engine.content, entity, moodNeedId).moodBonusMilli;
+  const bonus =
+    needModifiers(engine.content, entity, moodNeedId).moodBonusMilli +
+    zoneModifierMilliFor(engine, entity.id, moodBonusModifierId);
   mood.valueMilli = stepMood(
     mood.valueMilli,
     moodTargetMilli(mean, influence, bonus),

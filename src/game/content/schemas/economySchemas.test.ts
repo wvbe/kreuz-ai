@@ -10,6 +10,7 @@ import {
 } from "./economySchemas";
 
 // @covers 014:FR-001 014:FR-002
+// @covers 015:FR-001
 describe("materialContentSchema", () => {
   const bread = { id: "bread", name: "Bread", categories: ["food"], stackLimit: 20, weight: 0.5 };
 

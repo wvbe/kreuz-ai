@@ -75,3 +75,69 @@ export function isInActiveZoneOfType(
     engine.time.tickCount > zone.data.activeSinceTick
   );
 }
+
+/**
+ * The active zone that covers a cell, once its effects count (the tick after it became active).
+ */
+function effectiveZoneTypeAt(engine: GameEngine, mapId: number, cellIndex: number): string | null {
+  const service = getZoneService(engine);
+  const zoneId = service.zoneIdAt(mapId, cellIndex);
+  const zone = zoneId === null ? null : service.getZone(zoneId);
+  if (
+    zone === null ||
+    !zone.data.active ||
+    zone.data.activeSinceTick === null ||
+    engine.time.tickCount <= zone.data.activeSinceTick
+  ) {
+    return null;
+  }
+  return zone.data.zoneTypeId;
+}
+
+/**
+ * Tells whether an activity is permitted at a location (spec 015 FR-009): true when the cell lies
+ * in an active zone whose type unlocks the activity (`activityUnlocks`, DECISIONS D-81), from the
+ * tick after the zone became active.
+ *
+ * @param engine - The engine.
+ * @param mapId - Map id.
+ * @param cellIndex - Cell index.
+ * @param activityId - Activity id, e.g. `baking`.
+ * @returns True when a valid zone unlocks the activity here.
+ */
+export function isActivityPermittedAt(
+  engine: GameEngine,
+  mapId: number,
+  cellIndex: number,
+  activityId: string,
+): boolean {
+  const typeId = effectiveZoneTypeAt(engine, mapId, cellIndex);
+  const type = typeId === null ? undefined : engine.content.zones.find(typeId);
+  return type?.activityUnlocks.includes(activityId) ?? false;
+}
+
+/**
+ * The value of an `entity.modifier` effect that applies to an entity while it stands in an active
+ * zone (spec 015 FR-010, DECISIONS D-11): the modifier ends when the entity leaves the tiles. A
+ * cell is in one zone only, so effects of several zones never stack; several effects of one
+ * modifier in one zone add up.
+ *
+ * @param engine - The engine.
+ * @param entityId - Entity with a `Position`.
+ * @param modifierId - Modifier id, e.g. `mood.bonus`.
+ * @returns Milli value, 0 when the entity stands outside an active zone with that effect.
+ */
+export function zoneModifierMilliFor(
+  engine: GameEngine,
+  entityId: EntityId,
+  modifierId: string,
+): number {
+  const entity = engine.store.get(entityId);
+  const place = entity === undefined ? undefined : getComponent(entity, positionComponent);
+  const typeId =
+    place === undefined ? null : effectiveZoneTypeAt(engine, place.mapId, place.cellIndex);
+  const type = typeId === null ? undefined : engine.content.zones.find(typeId);
+  return (type?.effects ?? [])
+    .filter((effect) => effect.modifierId === modifierId)
+    .reduce((sum, effect) => sum + effect.value, 0);
+}
