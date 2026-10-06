@@ -13,7 +13,7 @@ import { EntityInspection } from "./EntityInspection";
 afterEach(cleanup);
 
 describe("EntityInspection", () => {
-  // @covers 024:FR-007 024:FR-020 024:FR-039
+  // @covers 024:FR-007 024:FR-020 024:FR-039 028:SC-007
   it("shows a character with tabs for overview, inventory and journal", () => {
     const host = startedHost();
     renderPanel(<EntityInspection entityId={firstEntityOf(host, "peasant")} />, host);

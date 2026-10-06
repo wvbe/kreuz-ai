@@ -8,4 +8,5 @@ Small shared components.
 - `ErrorBoundary.tsx` - message and retry instead of a blank page.
 - `NeedBar.tsx`, `StackList.tsx`, `KeyValueList.tsx`, `Checklist.tsx`, `Tabs.tsx` - building blocks for panels (props documented in TSDoc; styles in `widgets.css`).
 - `EntityLink.tsx` - `Link` (text button) and `EntityLink` (selects an entity and centres the map), `selectAndFocus(host, id)`.
+- `KeepInStockButton.tsx` - the "Keep in stock..." action of material records, inventory rows and recipe cards.
 - `placeOfEntity.ts`, `formatMilli.ts` - where an entity is (from its `entity` view); thousandths as one-decimal text.

@@ -18,3 +18,5 @@ three.js, tested with `@react-three/test-renderer` (no WebGL):
 DOM:
 - `MapViewport.tsx` - owns the camera, turns pointer and keyboard input into hover, selection and camera moves, draws badges and the hover label. With a `stroke` tool (`MapStrokeTool`) a left drag collects cells (paint or rectangle) instead of panning.
 - `Breadcrumb.tsx` - sub-map breadcrumb.
+- `StructureLayer.tsx`, `structureGeometry.ts`, `buildZoneOverlays.ts` - the models on zones: the dwelling model of each level (Hovel, Cottage, Timber-Framed House, Burgher House), the red at-risk pennant, the Bell Tower with its ring after `bell-tower.rang` (spec 024 FR-033, FR-042, FR-044; D-233).
+- `DoorLayer.tsx` - the doors as one instanced mesh whose leaves swing open while an entity stands in the doorway (FR-016).

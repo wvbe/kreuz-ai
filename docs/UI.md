@@ -88,3 +88,11 @@ Map tools: `ToolStore` modes `Place`, `Paint` (`PaintAction.Designate|AddTiles|R
 - The three.js layers run under `@react-three/test-renderer`; `MapCanvas` itself needs WebGL and is replaced by a stub through `AppServices.mapCanvas`.
 - `testing/mapGestures.ts` hovers, clicks and drags cells of the rendered map; the command panels are tested by driving the UI and asserting the queries after `host.step(1)`.
 - `testing/runScenarioThroughHost.test.ts` runs the checkpoint C command list through the host and requires the CLI's state hash.
+
+## Models, indicators and links added by the audit (D-233)
+
+- Dwelling zones are drawn with the model of their level and a red pennant while the downgrade streak runs; a Bell Tower has its model and a ring for a moment after it rang; doors swing open while an entity stands in them; wild animals have their own shape; the Notice Post has a model (`map/README.md`).
+- The citizen overview shows the behavior tree and its running node, the zone the citizen stands in and the title, and offers "Appoint as Steward" or "Dismiss".
+- "Keep in stock..." is on material records and recipe cards of the content browser and on inventory rows; it opens the Government screen on Standing orders with the material filled in. Material and recipe names of the Flow view and the workstation panel open the content browser on that entry.
+- The content browser lists 14 categories (humanoid prototypes and name lists were added to the 12 of D-152).
+- Pending updates name the other routes that can deliver them: the Notice Post and the next bell ring (query `pending-routes`).

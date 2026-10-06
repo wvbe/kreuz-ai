@@ -5,6 +5,7 @@ The inspection panels of the side dock (spec 024, plan 6.3), driven by the selec
 - `InspectionPanel.tsx` - the registered side panel: the selected entity, else the selected tile, else "Nothing selected."
 - `EntityInspection.tsx` - picks the view by what the entity is: character, zone, dwelling, workstation, build site, stockpile or anything else (name, kind, position, tabs).
 - `CitizenOverview.tsx`, `InventoryTab.tsx`, `JournalTab.tsx` - a character's overview (action, need bars, mood, skills, traits, factions and offices), the Inventory tab (stacks, weights, slots) and the Journal tab with a link to the chronicle.
+- `describeActiveNode.ts` - names the behavior tree node a citizen runs, for the overview.
 - `ZoneInspection.tsx`, `zoneChecklist.ts` - zone type, status, requirement checklist built from the zone type and the zone's gaps, workers, aggregated stored goods.
 - `DwellingInspection.tsx` - level, residents, streaks against the grace days, checklists to keep and to reach a level; an inactive room falls back to the zone view.
 - `WorkstationInspection.tsx`, `BuildSiteInspection.tsx`, `StockpileInspection.tsx` - workstation, build site and storage views.

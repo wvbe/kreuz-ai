@@ -7,4 +7,5 @@
 - `SettingsScreen.tsx` - preferences and save or load.
 - `SelectionDock.tsx` - the side dock; its first panel is the inspection panel (`../panels`).
 - `ContentScreen.tsx` - the content browser: live search over the `content-registries` query, interlinked entries, `Unlocks at <Tier>` from `unlocks`.
+- `contentRequests.ts` - `openContentEntry(host, kind, id)`: other screens link a material or recipe to the content browser, which opens on it.
 - `PlaceholderScreen.tsx` - stand-in for screens of task 6.4 not yet built.
