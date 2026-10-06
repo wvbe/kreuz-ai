@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadContent } from "../content/ContentLoader";
+import { getComponent } from "../ecs/Entity";
+import { positionComponent } from "../map/positionComponent";
 import type { GameEngine } from "../engine/GameEngine";
 import { isBoardPaused, requireBoard } from "../jobs/jobBoards";
 import { pauseBoard } from "../jobs/boardPause";
@@ -32,6 +34,7 @@ function names(world: ZoneTestWorld): string[] {
 // @covers 015:FR-003 015:FR-004 015:FR-006 015:FR-008 015:FR-012 015:FR-014 015:FR-015
 // @covers 015:SC-001 015:SC-002 015:SC-003 015:SC-007
 // @covers 017:SC-007
+// @covers 018:FR-007 018:FR-008 018:FR-009 018:SC-002
 describe("ZoneService.designate", () => {
   it("paints a 5x5 area into one zone with ascending tiles", () => {
     const world = createZoneWorld({ content: loadVillageBakeryContent() });
@@ -203,6 +206,30 @@ describe("ZoneService timing and status", () => {
     expect(isInActiveZoneOfType(world.engine, world.mapId, 33, "pantry")).toBe(true);
     expect(storage.decayModifierMilli(chest)).toBe(500);
     expect(storage.decayModifierMilli(world.spawn("peasant", 34))).toBe(1000);
+  });
+
+  it("lifts the Pantry decay modifier when the zone goes or the storage leaves it (018 FR-009, SC-002)", () => {
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
+    world.walls(3, 3, 2, 2);
+    const [zoneId] = world.designate("pantry", world.rect(3, 3, 2, 2));
+    const chest = world.chest(33);
+    const storage = getStorageService(world.engine);
+    world.run(2);
+    expect(storage.decayModifierMilli(chest)).toBe(500);
+    const place = getComponent(chest, positionComponent);
+    world.engine.maps.moveEntity(chest.id, 77);
+    if (place !== undefined) {
+      place.cellIndex = 77;
+    }
+    expect(storage.decayModifierMilli(chest)).toBe(1000);
+    world.engine.maps.moveEntity(chest.id, 33);
+    if (place !== undefined) {
+      place.cellIndex = 33;
+    }
+    expect(storage.decayModifierMilli(chest)).toBe(500);
+    world.command("DeleteZone", { zoneId: zoneId ?? 0 });
+    world.run(1);
+    expect(storage.decayModifierMilli(chest)).toBe(1000);
   });
 
   it("re-detects a room when a wall is added or removed and keeps doors as walls", () => {

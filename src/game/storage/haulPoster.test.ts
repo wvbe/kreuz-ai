@@ -30,6 +30,7 @@ function haulPostings(world: ReturnType<typeof createStorageWorld>) {
   );
 }
 
+// @covers 018:FR-015
 describe("haulableMaterialIds", () => {
   it("is the outputs of the job types (logs, wheat), not personal belongings", () => {
     const world = createStorageWorld();

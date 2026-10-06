@@ -41,6 +41,7 @@ function route(overrides: Partial<StorageRoute>): StorageRoute {
   };
 }
 
+// @covers 018:FR-003 018:FR-005 018:FR-010 018:SC-004
 describe("compareRoutes", () => {
   const table: { name: string; better: Partial<StorageRoute>; worse: Partial<StorageRoute> }[] = [
     {

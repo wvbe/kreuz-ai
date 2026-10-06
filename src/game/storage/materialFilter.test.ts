@@ -8,6 +8,7 @@ import {
   normalizeFilter,
 } from "./materialFilter";
 
+// @covers 018:FR-004 018:FR-005 018:SC-003
 describe("normalizeFilter", () => {
   it("fills missing lists, sorts, de-duplicates", () => {
     expect(normalizeFilter({ categories: ["food", "drink", "food"] })).toEqual({

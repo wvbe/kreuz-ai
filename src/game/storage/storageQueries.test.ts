@@ -32,6 +32,7 @@ function deny(entity: Entity, actorId: number, operation: InventoryOperation): v
   ]);
 }
 
+// @covers 018:FR-011 018:FR-012 018:FR-013 018:SC-007
 describe("isLoosePile and isStorageEntity and listStorage", () => {
   it("counts chests and loose piles, not citizens, boards or queryable:false inventories", () => {
     const world = createStorageWorld();

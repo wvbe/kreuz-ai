@@ -54,6 +54,7 @@ function setup(logs = 12) {
   return { world, chest, pile, hauler };
 }
 
+// @covers 018:FR-005 018:FR-015 018:SC-003
 describe("createHaulExecutor and registerHauling", () => {
   it("is registered by the engine and walks source, then storage, and stores the goods", () => {
     const { world, chest, pile, hauler } = setup();

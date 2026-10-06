@@ -24,6 +24,7 @@ function query(engine: GameEngine, name: string, args: JsonValue): JsonValue {
   return registration.run(args, engine);
 }
 
+// @covers 018:FR-003 018:FR-004 018:FR-014
 describe("registerStorage", () => {
   it("is idempotent and returns the engine's service", () => {
     const world = createStorageWorld();

@@ -46,6 +46,7 @@ function hasHaulTask(world: StorageTestWorld, entityId: number): boolean {
   );
 }
 
+// @covers 018:FR-014 018:SC-006
 describe("hauling invariants", () => {
   it("conserves every log over 1000 ticks with interruptions and keeps reservations honest", () => {
     const { world, chests, settlers } = build();

@@ -10,6 +10,7 @@ function breadRemaining(world: StorageTestWorld, entityId: number): number {
   return slot?.remainingMilli ?? -1;
 }
 
+// @covers 018:FR-008 018:FR-014
 describe("StorageService reported goods", () => {
   it("marks once, keeps entries sorted and retains only wanted ones", () => {
     const service = getStorageService(createStorageWorld().engine);

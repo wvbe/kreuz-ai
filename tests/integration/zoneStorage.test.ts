@@ -24,6 +24,7 @@ function request(world: ZoneTestWorld, extra: Partial<RouteRequest> = {}): Route
 }
 
 // @covers 015:FR-011 015:SC-006
+// @covers 018:FR-010 018:SC-004
 describe("zone routing tier 0 (deliverToZoneId)", () => {
   it("prefers storage inside the named zone over a nearer, higher-priority stockpile", () => {
     const world = createZoneWorld();

@@ -5,6 +5,7 @@ import {
   stockpileDataSchema,
 } from "./stockpileComponent";
 
+// @covers 018:FR-003 018:FR-014
 describe("stockpileComponent", () => {
   it("defaults to priority 50 and no filter", () => {
     expect(stockpileComponent.name).toBe("Stockpile");

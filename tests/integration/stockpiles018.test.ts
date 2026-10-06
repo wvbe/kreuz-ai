@@ -34,6 +34,8 @@ function filterOf(categories: string[], materialIds: string[] = []) {
   return { Stockpile: { priority: 50, filter: { categories, materialIds } } };
 }
 
+// @covers 018:FR-003 018:FR-005 018:FR-011 018:FR-012 018:FR-013 018:FR-015 018:SC-003
+// @covers 018:SC-005 018:SC-007
 describe("018 US2: stockpile storage", () => {
   it("delivers 8 stone into the stockpile's storage, not onto the ground; a full storage is skipped", () => {
     const world = createStorageWorld();

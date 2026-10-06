@@ -7,6 +7,7 @@ import {
 } from "../inventory/inventoryTypes";
 import { createStorageWorld, setRules } from "./testStorageWorld";
 
+// @covers 018:FR-001 018:SC-001
 describe("createStorageWorld", () => {
   it("spawns chests, piles and gives items", () => {
     const world = createStorageWorld();
