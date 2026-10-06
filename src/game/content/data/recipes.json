@@ -75,5 +75,1182 @@
     "durationTicks": 36,
     "workstationTag": "workbench",
     "skillId": "masonry"
+  },
+  {
+    "id": "saw_pine_planks",
+    "name": "Saw Pine Planks",
+    "inputs": [
+      {
+        "materialId": "pine_log",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 4
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "sawmill",
+    "skillId": "carpentry"
+  },
+  {
+    "id": "saw_birch_planks",
+    "name": "Saw Birch Planks",
+    "inputs": [
+      {
+        "materialId": "birch_log",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "birch_plank",
+        "quantity": 4
+      }
+    ],
+    "durationTicks": 18,
+    "workstationTag": "sawmill",
+    "skillId": "carpentry"
+  },
+  {
+    "id": "burn_charcoal",
+    "name": "Burn Charcoal",
+    "inputs": [
+      {
+        "materialId": "oak_log",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "charcoal",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 40,
+    "workstationTag": "charcoal_kiln",
+    "skillId": null
+  },
+  {
+    "id": "smelt_iron",
+    "name": "Smelt Iron",
+    "inputs": [
+      {
+        "materialId": "iron_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "coal",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 36,
+    "workstationTag": "smelter",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "smelt_copper",
+    "name": "Smelt Copper",
+    "inputs": [
+      {
+        "materialId": "copper_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "coal",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "copper_ingot",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "smelter",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "alloy_bronze",
+    "name": "Alloy Bronze",
+    "inputs": [
+      {
+        "materialId": "copper_ingot",
+        "quantity": 1
+      },
+      {
+        "materialId": "tin_ore",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "bronze_ingot",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 40,
+    "workstationTag": "smelter",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_nails",
+    "name": "Forge Nails",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "nails",
+        "quantity": 10
+      }
+    ],
+    "durationTicks": 20,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_hammer",
+    "name": "Forge Hammer",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_hammer",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_chisel",
+    "name": "Forge Chisel",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_chisel",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "craft_saw",
+    "name": "Craft Saw",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "saw",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_axe",
+    "name": "Forge Axe",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "axe",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 28,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_pickaxe",
+    "name": "Forge Pickaxe",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "pickaxe",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 28,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_sickle",
+    "name": "Forge Sickle",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "sickle",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 22,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_hoe",
+    "name": "Forge Hoe",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "hoe",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 22,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "craft_fishing_rod",
+    "name": "Craft Fishing Rod",
+    "inputs": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "linen_thread",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "fishing_rod",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "workbench",
+    "skillId": "carpentry"
+  },
+  {
+    "id": "forge_needle",
+    "name": "Forge Needle",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "needle",
+        "quantity": 3
+      }
+    ],
+    "durationTicks": 18,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_sword",
+    "name": "Forge Sword",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 3
+      },
+      {
+        "materialId": "leather",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_sword",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 60,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_shield",
+    "name": "Forge Shield",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_shield",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 40,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_spear",
+    "name": "Forge Spear",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "spear",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "craft_bow",
+    "name": "Craft Bow",
+    "inputs": [
+      {
+        "materialId": "birch_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "linen_thread",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "bow",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "workbench",
+    "skillId": "carpentry"
+  },
+  {
+    "id": "fletch_arrows",
+    "name": "Fletch Arrows",
+    "inputs": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "arrow",
+        "quantity": 10
+      }
+    ],
+    "durationTicks": 20,
+    "workstationTag": "workbench",
+    "skillId": "carpentry"
+  },
+  {
+    "id": "craft_leather_armor",
+    "name": "Craft Leather Armor",
+    "inputs": [
+      {
+        "materialId": "leather",
+        "quantity": 4
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "leather_armor",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 50,
+    "workstationTag": "workbench",
+    "skillId": "leatherworking"
+  },
+  {
+    "id": "forge_chainmail",
+    "name": "Forge Chainmail",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 6
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_chainmail",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 120,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "forge_helm",
+    "name": "Forge Helm",
+    "inputs": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "iron_helm",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 36,
+    "workstationTag": "anvil",
+    "skillId": "smithing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "spin_linen_thread",
+    "name": "Spin Linen Thread",
+    "inputs": [
+      {
+        "materialId": "flax",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "linen_thread",
+        "quantity": 3
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "spinning_wheel",
+    "skillId": "weaving",
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "spin_wool_thread",
+    "name": "Spin Wool Thread",
+    "inputs": [
+      {
+        "materialId": "raw_wool",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "wool_thread",
+        "quantity": 3
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "spinning_wheel",
+    "skillId": "weaving",
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "weave_linen_cloth",
+    "name": "Weave Linen Cloth",
+    "inputs": [
+      {
+        "materialId": "linen_thread",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "linen_cloth",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "loom",
+    "skillId": "weaving",
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "weave_wool_cloth",
+    "name": "Weave Wool Cloth",
+    "inputs": [
+      {
+        "materialId": "wool_thread",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "wool_cloth",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "loom",
+    "skillId": "weaving",
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "sew_peasant_clothing",
+    "name": "Sew Peasant Clothing",
+    "inputs": [
+      {
+        "materialId": "linen_cloth",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "peasant_clothing",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "tailoring_bench",
+    "skillId": "tailoring",
+    "unlockTier": "village"
+  },
+  {
+    "id": "sew_fine_clothing",
+    "name": "Sew Fine Clothing",
+    "inputs": [
+      {
+        "materialId": "wool_cloth",
+        "quantity": 2
+      },
+      {
+        "materialId": "linen_thread",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "fine_clothing",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 48,
+    "workstationTag": "tailoring_bench",
+    "skillId": "tailoring",
+    "unlockTier": "village"
+  },
+  {
+    "id": "sew_monks_habit",
+    "name": "Sew Monk's Habit",
+    "inputs": [
+      {
+        "materialId": "wool_cloth",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "monks_habit",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "tailoring_bench",
+    "skillId": "tailoring",
+    "unlockTier": "village"
+  },
+  {
+    "id": "twist_rope",
+    "name": "Twist Rope",
+    "inputs": [
+      {
+        "materialId": "flax",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 20,
+    "workstationTag": "rope_walk",
+    "skillId": null
+  },
+  {
+    "id": "tan_hide",
+    "name": "Tan Hide",
+    "inputs": [
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      },
+      {
+        "materialId": "oak_bark",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "leather",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 48,
+    "workstationTag": "tanning_rack",
+    "skillId": "leatherworking",
+    "unlockTier": "village"
+  },
+  {
+    "id": "scrape_parchment",
+    "name": "Scrape Parchment",
+    "inputs": [
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "parchment",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 36,
+    "workstationTag": "parchment_frame",
+    "skillId": "leatherworking",
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "cut_granite_block",
+    "name": "Cut Granite Block",
+    "inputs": [
+      {
+        "materialId": "granite",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "stone_block",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 32,
+    "workstationTag": "masons_bench",
+    "skillId": "masonry"
+  },
+  {
+    "id": "fire_bricks",
+    "name": "Fire Bricks",
+    "inputs": [
+      {
+        "materialId": "clay",
+        "quantity": 4
+      },
+      {
+        "materialId": "coal",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "brick",
+        "quantity": 6
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "kiln",
+    "skillId": "masonry",
+    "unlockTier": "village"
+  },
+  {
+    "id": "mix_plaster",
+    "name": "Mix Plaster",
+    "inputs": [
+      {
+        "materialId": "limestone",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "plaster",
+        "quantity": 3
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "masons_bench",
+    "skillId": "masonry"
+  },
+  {
+    "id": "blow_glass_pane",
+    "name": "Blow Glass Pane",
+    "inputs": [
+      {
+        "materialId": "sand",
+        "quantity": 2
+      },
+      {
+        "materialId": "coal",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "glass_pane",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 60,
+    "workstationTag": "kiln",
+    "skillId": "glassblowing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "grind_rye_flour",
+    "name": "Grind Rye Flour",
+    "inputs": [
+      {
+        "materialId": "rye",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "flour",
+        "quantity": 3
+      }
+    ],
+    "durationTicks": 12,
+    "workstationTag": "grinding_mill",
+    "skillId": null
+  },
+  {
+    "id": "bake_rye_bread",
+    "name": "Bake Rye Bread",
+    "inputs": [
+      {
+        "materialId": "flour",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "rye_bread",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 20,
+    "workstationTag": "oven",
+    "skillId": "baking"
+  },
+  {
+    "id": "malt_barley",
+    "name": "Malt Barley",
+    "inputs": [
+      {
+        "materialId": "barley",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "malt",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "malting_floor",
+    "skillId": "brewing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "brew_ale",
+    "name": "Brew Ale",
+    "inputs": [
+      {
+        "materialId": "malt",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "ale",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 36,
+    "workstationTag": "brewing_vat",
+    "skillId": "brewing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "brew_mead",
+    "name": "Brew Mead",
+    "inputs": [
+      {
+        "materialId": "honey",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "mead",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 40,
+    "workstationTag": "brewing_vat",
+    "skillId": "brewing",
+    "unlockTier": "village"
+  },
+  {
+    "id": "press_cheese",
+    "name": "Press Cheese",
+    "inputs": [
+      {
+        "materialId": "milk",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "cheese",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 30,
+    "workstationTag": "cheese_press",
+    "skillId": "cooking",
+    "unlockTier": "village"
+  },
+  {
+    "id": "churn_butter",
+    "name": "Churn Butter",
+    "inputs": [
+      {
+        "materialId": "milk",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "butter",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "churn",
+    "skillId": "cooking",
+    "unlockTier": "village"
+  },
+  {
+    "id": "dry_meat",
+    "name": "Dry Meat",
+    "inputs": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 2
+      },
+      {
+        "materialId": "salt",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "dried_meat",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 48,
+    "workstationTag": "drying_rack",
+    "skillId": "cooking",
+    "unlockTier": "village"
+  },
+  {
+    "id": "salt_fish",
+    "name": "Salt Fish",
+    "inputs": [
+      {
+        "materialId": "raw_fish",
+        "quantity": 2
+      },
+      {
+        "materialId": "salt",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "salted_fish",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 36,
+    "workstationTag": "salting_table",
+    "skillId": "cooking",
+    "unlockTier": "village"
+  },
+  {
+    "id": "cook_pottage",
+    "name": "Cook Pottage",
+    "inputs": [
+      {
+        "materialId": "vegetables",
+        "quantity": 2
+      },
+      {
+        "materialId": "barley",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "pottage",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 20,
+    "workstationTag": "cooking_pot",
+    "skillId": "cooking"
+  },
+  {
+    "id": "cook_stew",
+    "name": "Cook Stew",
+    "inputs": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 1
+      },
+      {
+        "materialId": "vegetables",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "stew",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 24,
+    "workstationTag": "cooking_pot",
+    "skillId": "cooking"
+  },
+  {
+    "id": "roast_meat",
+    "name": "Roast Meat",
+    "inputs": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "roast_meat",
+        "quantity": 1
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "oven",
+    "skillId": "cooking"
+  },
+  {
+    "id": "cook_porridge",
+    "name": "Cook Porridge",
+    "inputs": [
+      {
+        "materialId": "barley",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "porridge",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 12,
+    "workstationTag": "cooking_pot",
+    "skillId": "cooking"
+  },
+  {
+    "id": "make_preserves",
+    "name": "Make Preserves",
+    "inputs": [
+      {
+        "materialId": "fruit",
+        "quantity": 2
+      },
+      {
+        "materialId": "honey",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "fruit_preserves",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 28,
+    "workstationTag": "cooking_pot",
+    "skillId": "cooking"
+  },
+  {
+    "id": "press_wine",
+    "name": "Press Wine",
+    "inputs": [
+      {
+        "materialId": "grapes",
+        "quantity": 4
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "wine",
+        "quantity": 2
+      }
+    ],
+    "durationTicks": 40,
+    "workstationTag": "wine_press",
+    "skillId": "brewing",
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "dip_candles",
+    "name": "Dip Candles",
+    "inputs": [
+      {
+        "materialId": "tallow",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "candle",
+        "quantity": 4
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "candle_mold",
+    "skillId": null
+  },
+  {
+    "id": "mold_beeswax_candles",
+    "name": "Mold Beeswax Candles",
+    "inputs": [
+      {
+        "materialId": "beeswax",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "materialId": "candle",
+        "quantity": 3
+      }
+    ],
+    "durationTicks": 16,
+    "workstationTag": "candle_mold",
+    "skillId": null
   }
 ]

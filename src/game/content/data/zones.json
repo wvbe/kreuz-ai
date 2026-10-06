@@ -240,5 +240,493 @@
       }
     ],
     "unlockTier": "village"
+  },
+  {
+    "id": "smithy",
+    "name": "Smithy",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "forge",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "tag",
+          "ref": "anvil",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["smithing"],
+    "unlockTier": "village"
+  },
+  {
+    "id": "tannery",
+    "name": "Tannery",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "tanning_rack",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["leatherworking"],
+    "unlockTier": "village"
+  },
+  {
+    "id": "pottery",
+    "name": "Pottery",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "kiln",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["pottery"],
+    "unlockTier": "village"
+  },
+  {
+    "id": "brewery",
+    "name": "Brewery",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "brewing_vat",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "tag",
+          "ref": "malting_floor",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["brewing"],
+    "unlockTier": "village"
+  },
+  {
+    "id": "weaving_hall",
+    "name": "Weaving Hall",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "loom",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "tag",
+          "ref": "spinning_wheel",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["weaving"],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "kitchen",
+    "name": "Kitchen",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "cooking_pot",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "butchers_block",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["cooking"],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "smokehouse",
+    "name": "Smokehouse",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "drying_rack",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["preserving"],
+    "unlockTier": "village"
+  },
+  {
+    "id": "masons_workshop",
+    "name": "Mason's Workshop",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "masons_bench",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["masonry"],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "scriptorium",
+    "name": "Scriptorium",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "bookcase",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "lectern",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["scholarship"],
+    "unlockTier": "chartered_town"
+  },
+  {
+    "id": "wine_cellar",
+    "name": "Wine Cellar",
+    "requiresRoom": true,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "wine_rack",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "barrel",
+          "count": 1
+        }
+      ]
+    ],
+    "effects": [
+      {
+        "modifierId": "inventory.decay.rate",
+        "value": 0.3
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "armory",
+    "name": "Armory",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "weapon_rack",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "armor_stand",
+          "count": 1
+        }
+      ]
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "great_hall",
+    "name": "Great Hall",
+    "requiresRoom": true,
+    "minTiles": 12,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "long_table",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "hearth",
+          "count": 1
+        }
+      ]
+    ],
+    "effects": [
+      {
+        "modifierId": "mood.bonus",
+        "value": 5.0
+      },
+      {
+        "modifierId": "social.bonus",
+        "value": 10.0
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "tavern",
+    "name": "Tavern",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "table",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "bench",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "barrel",
+          "count": 1
+        }
+      ]
+    ],
+    "effects": [
+      {
+        "modifierId": "social.bonus",
+        "value": 5.0
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "chapel",
+    "name": "Chapel",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "altar",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "candelabra",
+          "count": 1
+        }
+      ]
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 10.0
+      }
+    ],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "church",
+    "name": "Church",
+    "requiresRoom": true,
+    "minTiles": 16,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "altar",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "candelabra",
+          "count": 2
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "lectern",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "prayer_bench",
+          "count": 2
+        }
+      ]
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 20.0
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "cloister",
+    "name": "Cloister",
+    "requiresRoom": true,
+    "minTiles": 10,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "prayer_bench",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "bookcase",
+          "count": 1
+        }
+      ]
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 5.0
+      },
+      {
+        "modifierId": "mood.bonus",
+        "value": 3.0
+      }
+    ],
+    "unlockTier": "chartered_town"
+  },
+  {
+    "id": "barracks",
+    "name": "Barracks",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "straw_pallet",
+          "count": 2
+        }
+      ],
+      [
+        {
+          "kind": "id",
+          "ref": "weapon_rack",
+          "count": 1
+        }
+      ]
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "pasture",
+    "name": "Pasture",
+    "requiresRoom": false,
+    "minTiles": 12,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "trough",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["animal_husbandry"],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "charcoal_yard",
+    "name": "Charcoal Yard",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "charcoal_kiln",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["charcoal_burning"],
+    "unlockTier": "hamlet"
+  },
+  {
+    "id": "apiary_yard",
+    "name": "Apiary Yard",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "apiary",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["beekeeping"],
+    "unlockTier": "village"
   }
 ]
