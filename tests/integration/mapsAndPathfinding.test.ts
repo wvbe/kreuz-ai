@@ -145,9 +145,7 @@ describe("several maps share one clock", () => {
     requireComponent(underground, positionComponent).mapId = target.mapId;
     requireComponent(underground, positionComponent).cellIndex = target.cellIndex;
     expect(target.mapId).toBe(cave.mapId);
-    expect(engine.maps.queryCell(cave.mapId, target.cellIndex).occupants).toContain(
-      underground.id,
-    );
+    expect(engine.maps.queryCell(cave.mapId, target.cellIndex).occupants).toContain(underground.id);
     const before = engine.time.tickCount;
     engine.runTicks(20);
     expect(engine.time.tickCount).toBe(before + 20);

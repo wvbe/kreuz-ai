@@ -20,6 +20,8 @@ describe("hashText", () => {
 });
 
 describe("hashSaveText", () => {
+  // @covers 006:FR-006a
+  // @covers 006:SC-002
   it("ignores the timestamp", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(10);

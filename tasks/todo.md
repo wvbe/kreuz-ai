@@ -79,4 +79,5 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
   - [x] Performance (D-112): `docs/PERFORMANCE.md`, `npm run perf`, `tests/integration/performanceBudgets.test.ts`; quadratic hot spots fixed (`ReachCache` for `reachable`, `EntityStore.structureRevision` for `listBoards`): 200 citizens 11 ms to 4 ms per tick, 400 citizens 35 ms to 10 ms
   - [x] Traceability groundwork (D-113): `npm run fr-coverage` writes `docs/FR-COVERAGE.md` (not gated; 7.2 decides the rule)
 - [ ] 7.2 Spec→test traceability audit, docs, CLI manual
+  - Audit 001-012 (D-190): `docs/audit/NNN.md` per spec, every id named by a test except two noted gaps; see the Gaps lists
 - [ ] **Final:** all specs implemented, `npm run ci` green, playable in terminal and browser

@@ -33,6 +33,10 @@ function queuedNames(engine: GameEngine): string[] {
 }
 
 describe("GameEngine newGame", () => {
+  // @covers 007:FR-001
+  // @covers 007:FR-002
+  // @covers 007:FR-013
+  // @covers 007:SC-004
   it("creates an idle game at tick 0 with only the government faction", () => {
     const engine = createEngine();
     expect(engine.hasGame).toBe(false);
@@ -54,6 +58,9 @@ describe("GameEngine newGame", () => {
     });
   });
 
+  // @covers 007:FR-007
+  // @covers 007:FR-009
+  // @covers 007:FR-012
   it("stores explicit options and passes the seed to the PRNG without touching entropy", () => {
     let draws = 0;
     const engine = createEngine({
@@ -77,6 +84,7 @@ describe("GameEngine newGame", () => {
     });
   });
 
+  // @covers 007:FR-008
   it("draws the seed from the entropy source exactly once and records it in the save", () => {
     let draws = 0;
     const engine = createEngine({
@@ -102,6 +110,7 @@ describe("GameEngine newGame", () => {
     expect(() => engine.newGame({ seed: 1 })).not.toThrow();
   });
 
+  // @covers 007:FR-010
   it("rejects invalid options with the exact message and keeps the running game", () => {
     const engine = createEngine();
     engine.newGame({ seed: 5 });
@@ -122,6 +131,7 @@ describe("GameEngine newGame", () => {
     expect(engine.newGame(typo).ignoredFields).toEqual(["dificulty"]);
   });
 
+  // @covers 007:FR-003
   it("fully replaces a previous game", () => {
     const engine = createEngine();
     engine.newGame({ seed: 1, mapSize: MapSize.Small });
@@ -135,6 +145,7 @@ describe("GameEngine newGame", () => {
     expect(queuedNames(engine)).toEqual(["entity.spawned", "game.started"]);
   });
 
+  // @covers 007:FR-007
   it("creates the starting map when mapSize is given, independent of difficulty", () => {
     const small = createEngine();
     small.newGame({ seed: 42, mapSize: MapSize.Small, difficulty: Difficulty.Peaceful });
@@ -147,6 +158,7 @@ describe("GameEngine newGame", () => {
     expect(small.getMap(2)).toBeUndefined();
   });
 
+  // @covers 007:FR-017
   it("requires the government faction prototype (ContentValidationError, nothing changes)", () => {
     const files = {
       ...bundledContentFiles,
@@ -169,6 +181,9 @@ describe("GameEngine newGame", () => {
     expect(() => engine.newGame()).toThrow(ContentValidationError);
   });
 
+  // @covers 007:FR-014
+  // @covers 011:FR-007
+  // @covers 010:FR-013
   it("keeps two engines isolated", () => {
     const first = createEngine();
     const second = createEngine();
@@ -197,6 +212,9 @@ describe("GameEngine loadGame and saveGame", () => {
     return engine;
   }
 
+  // @covers 007:FR-004
+  // @covers 007:FR-005
+  // @covers 007:SC-003
   it("round-trips a save given as text or as an object", () => {
     const source = runningEngine();
     const text = source.saveGame({ timestamp: "2026-10-05T12:00:00.000Z" });
@@ -211,6 +229,7 @@ describe("GameEngine loadGame and saveGame", () => {
     expect(fromObject.hasGame).toBe(true);
   });
 
+  // @covers 010:FR-016
   it("emits game.loaded and drains the queue", () => {
     const source = runningEngine();
     const engine = createEngine();
@@ -223,6 +242,8 @@ describe("GameEngine loadGame and saveGame", () => {
     expect(engine.bus.getQueue()).toEqual([]);
   });
 
+  // @covers 007:FR-005
+  // @covers 007:SC-003
   it("continues identically after save and load", () => {
     const uninterrupted = runningEngine();
     const resumed = runningEngine();
@@ -233,6 +254,7 @@ describe("GameEngine loadGame and saveGame", () => {
     expect(loaded.getStateHash()).toBe(uninterrupted.getStateHash());
   });
 
+  // @covers 007:FR-006
   it("leaves the game untouched when a load fails", () => {
     const engine = runningEngine();
     const before = engine.saveGame();
@@ -277,6 +299,7 @@ describe("GameEngine loadGame and saveGame", () => {
 });
 
 describe("GameEngine query facade", () => {
+  // @covers 007:FR-016
   it("returns copies that do not write through", () => {
     const engine = createEngine();
     engine.newGame({ seed: 1 });
@@ -307,6 +330,7 @@ describe("GameEngine query facade", () => {
   });
 
   // @covers 001:FR-006
+  // @covers 007:FR-016
   it("summarizes the state and the clock", () => {
     const engine = createEngine();
     expect(engine.getState().hasGame).toBe(false);
@@ -516,6 +540,8 @@ describe("GameEngine registerSystem", () => {
     );
   });
 
+  // @covers 007:FR-015
+  // @covers 007:SC-008
   it("runs init hooks in dependency order, before newGame returns", () => {
     const engine = createEngine();
     const order: string[] = [];
@@ -528,6 +554,8 @@ describe("GameEngine registerSystem", () => {
     expect(order).toEqual(["early:1", "late:1"]);
   });
 
+  // @covers 007:FR-015
+  // @covers 007:SC-008
   it("rejects a missing dependency and a cycle before the game changes", () => {
     const engine = createEngine();
     engine.newGame({ seed: 1 });

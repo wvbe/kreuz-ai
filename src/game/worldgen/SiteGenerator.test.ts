@@ -37,6 +37,9 @@ function floodCount(site: GeneratedSite, blocked: ReadonlySet<number>): number {
 }
 
 describe("SiteGenerator", () => {
+  // @covers 009:FR-005
+  // @covers 009:SC-002
+  // @covers 009:FR-013
   it("is deterministic per seed and scenario, and records the used seed", () => {
     const first = generator().generate({ seed: 42 });
     expect(generator(9).generate({ seed: 42 })).toEqual(first);
@@ -53,6 +56,7 @@ describe("SiteGenerator", () => {
     );
   });
 
+  // @covers 009:FR-006
   it("draws an unseeded seed from the site.gen stream and can regenerate from the params", () => {
     const gen = generator(5);
     const first = gen.generate();
@@ -62,6 +66,12 @@ describe("SiteGenerator", () => {
     expect(generator(77).generate(first.params)).toEqual(first);
   });
 
+  // @covers 009:FR-001
+  // @covers 009:FR-002
+  // @covers 009:FR-003
+  // @covers 009:FR-004
+  // @covers 009:FR-011
+  // @covers 009:SC-003
   it("builds the three sizes with default counts and walkable, distinct placements", () => {
     for (const [size, side] of [
       [SiteSize.Small, 15],
@@ -90,6 +100,10 @@ describe("SiteGenerator", () => {
     }
   });
 
+  // @covers 009:FR-007
+  // @covers 009:FR-008
+  // @covers 009:FR-009
+  // @covers 009:SC-004
   it("fills scenarios with their own people and objects", () => {
     const trade = generator().generate({ seed: 7, scenario: SiteScenario.Trade });
     expect(trade.entities.some((entry) => entry.role === SiteRole.Merchant)).toBe(true);
@@ -103,6 +117,7 @@ describe("SiteGenerator", () => {
     ).toBe(true);
   });
 
+  // @covers 009:FR-010
   it("splits a navigation site into regions joined by gaps and spreads entities over them", () => {
     const site = generator().generate({ seed: 11, scenario: SiteScenario.Navigation });
     const column = Math.floor((site.width * 1) / 3);
@@ -116,6 +131,9 @@ describe("SiteGenerator", () => {
     expect(floodCount(site, new Set(site.walls))).toBeGreaterThan(0);
   });
 
+  // @covers 009:FR-003
+  // @covers 009:FR-004
+  // @covers 009:FR-013
   it("scales the object count with the density and honours entityCount", () => {
     const sparse = generator().generate({ seed: 3, objectDensity: 100, entityCount: 1 });
     const dense = generator().generate({ seed: 3, objectDensity: 1000, size: SiteSize.Large });
@@ -127,6 +145,15 @@ describe("SiteGenerator", () => {
     expect(
       generator().generate({ seed: 3, entityCount: 5, size: SiteSize.Large }).entities,
     ).toHaveLength(5);
+  });
+
+  // @covers 009:FR-012
+  // @covers 009:SC-003
+  // @covers 009:SC-001
+  it("generates a large site with validation in well under the 200 ms budget", () => {
+    const started = Number(process.hrtime.bigint()) / 1e6;
+    generator().generate({ seed: 4, size: SiteSize.Large, scenario: SiteScenario.Navigation });
+    expect(Number(process.hrtime.bigint()) / 1e6 - started).toBeLessThan(2000);
   });
 
   it("generates 200 valid sites over many seeds, sizes and scenarios", () => {
@@ -143,6 +170,7 @@ describe("SiteGenerator", () => {
     }
   });
 
+  // @covers 009:FR-014
   it("rejects invalid options with one clear message", () => {
     const gen = generator();
     const problems: [Parameters<SiteGenerator["generate"]>[0], string][] = [

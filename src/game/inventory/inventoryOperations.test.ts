@@ -108,6 +108,7 @@ describe("store", () => {
   });
 
   // @covers 005:FR-021a
+  // @covers 010:FR-018
   it("emits inventory.item.stored when the bus queue is processed", () => {
     const { context, bus, events } = createTestContext();
     const entity = createInventoryEntity(7);
@@ -576,10 +577,10 @@ describe("synchronous visibility and speed", () => {
     const entity = createInventoryEntity(1, { slotCount: 101, slots });
     let best = Number.POSITIVE_INFINITY;
     for (let round = 0; round < 5; round += 1) {
-      const started = performance.now();
+      const started = Number(process.hrtime.bigint()) / 1e6;
       store(context, entity, "feather", 100);
       retrieve(context, entity, "wood", 50);
-      best = Math.min(best, performance.now() - started);
+      best = Math.min(best, Number(process.hrtime.bigint()) / 1e6 - started);
       store(context, entity, "wood", 50);
       retrieve(context, entity, "feather", 100);
     }
@@ -587,4 +588,3 @@ describe("synchronous visibility and speed", () => {
     expect(getTotal(entity, "wood")).toBe(5000);
   });
 });
-

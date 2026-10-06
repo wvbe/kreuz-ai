@@ -556,6 +556,8 @@ describe("TaskSystem waits", () => {
     expect(world.log).toEqual([`woke#${task}@4`]);
   });
 
+  // @covers 010:FR-012
+  // @covers 010:SC-008
   it("wakes an event wait with the matching payload only", () => {
     const world = createWorld();
     const worker = spawnWorker(world);

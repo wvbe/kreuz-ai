@@ -55,6 +55,7 @@ describe("SystemRegistry", () => {
     );
   });
 
+  // @covers 007:SC-008
   it("rejects cycles and names them", () => {
     const registry = new SystemRegistry<Log>();
     const log: Log = [];

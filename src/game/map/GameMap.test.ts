@@ -218,6 +218,9 @@ describe("GameMap on a square grid", () => {
 
   // @covers 004:FR-017
   // @covers 004:SC-010
+  // @covers 006:FR-003
+  // @covers 006:FR-007
+  // @covers 006:FR-008
   it("serializes terrain and links without geometry and restores identically", () => {
     const map = new GameMap(squareState(3, 2), { terrain });
     map.setTerrain(4, "road");

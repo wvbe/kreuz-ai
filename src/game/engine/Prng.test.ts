@@ -7,6 +7,10 @@ function hex(value: number): string {
 }
 
 describe("PrngStream.fromInit / nextU32 (reference PCG32 vectors)", () => {
+  // @covers 011:FR-003
+  // @covers 011:FR-013
+  // @covers 011:FR-015
+  // @covers 011:SC-004
   it("matches the official pcg32 demo output for seed 42, sequence 54", () => {
     const stream = PrngStream.fromInit([0, 42], [0, 54]);
     const drawn = Array.from({ length: 6 }, () => hex(stream.nextU32()));
@@ -20,17 +24,22 @@ describe("PrngStream.fromInit / nextU32 (reference PCG32 vectors)", () => {
 });
 
 describe("Prng.create / seed", () => {
+  // @covers 011:FR-002
   it("accepts the boundary seeds 0 and 2^32-1", () => {
     expect(Prng.create({ seed: 0 }).seed).toBe(0);
     expect(Prng.create({ seed: 4294967295 }).seed).toBe(4294967295);
   });
 
+  // @covers 011:FR-002
+  // @covers 011:FR-014
   it("rejects invalid seeds", () => {
     for (const bad of [-1, 4294967296, 1.5, Number.NaN]) {
       expect(() => Prng.create({ seed: bad })).toThrow(PrngError);
     }
   });
 
+  // @covers 011:FR-001
+  // @covers 011:FR-007
   it("calls the injected entropy exactly once when no seed is given and records it", () => {
     let calls = 0;
     const prng = Prng.create({
@@ -45,6 +54,7 @@ describe("Prng.create / seed", () => {
     expect(prng.serialize().seed).toBe(777);
   });
 
+  // @covers 011:FR-001
   it("requires a seed or entropy", () => {
     expect(() => Prng.create({})).toThrow(PrngError);
   });
@@ -55,6 +65,8 @@ describe("Prng.create / seed", () => {
 });
 
 describe("determinism and golden vector", () => {
+  // @covers 011:FR-004
+  // @covers 011:SC-001
   it("same seed gives identical sequences", () => {
     const left = Prng.create({ seed: 12345 }).stream("main");
     const right = Prng.create({ seed: 12345 }).stream("main");
@@ -69,19 +81,26 @@ describe("determinism and golden vector", () => {
     expect(Prng.create({ seed: 1 }).stream("other").nextU32()).not.toBe(base);
   });
 
+  // @covers 011:FR-004
+  // @covers 011:FR-015
   it("produces the committed golden values for seed 12345", () => {
     const stream = Prng.create({ seed: 12345 }).stream("main");
     const first = Array.from({ length: 4 }, () => hex(stream.nextU32()));
     expect(first).toEqual(["9372b076", "dcae3ad5", "80e40988", "5bc2fb08"]);
   });
 
+  // @covers 011:SC-003
+  // @covers 011:FR-015
   it("reproduces a committed checksum over 1e6 draws", () => {
     const stream = Prng.create({ seed: 12345 }).stream("main");
+    const started = Number(process.hrtime.bigint()) / 1e6;
     let checksum = 0;
     for (let draw = 0; draw < 1_000_000; draw += 1) {
       checksum = (Math.imul(checksum, 31) + stream.nextU32()) >>> 0;
     }
     expect(checksum).toBe(1972476307);
+    // Spec 011 SC-003: a million values per second; the budget here is ten times that.
+    expect(Number(process.hrtime.bigint()) / 1e6 - started).toBeLessThan(10_000);
   });
 });
 
@@ -100,6 +119,8 @@ describe("PrngStream helpers", () => {
     expect(() => sample.nextBelow(4294967297)).toThrow(PrngError);
   });
 
+  // @covers 011:FR-005
+  // @covers 011:FR-014
   it("nextInt is inclusive at both ends and validates", () => {
     const sample = stream();
     const seen = new Set<number>();
@@ -113,6 +134,7 @@ describe("PrngStream helpers", () => {
     expect(() => sample.nextInt(0.5, 2)).toThrow(PrngError);
   });
 
+  // @covers 011:FR-006
   it("chancePermille handles the extremes and validates", () => {
     const sample = stream();
     for (let draw = 0; draw < 200; draw += 1) {
@@ -129,6 +151,7 @@ describe("PrngStream helpers", () => {
     expect(() => sample.chancePermille(0.5)).toThrow(PrngError);
   });
 
+  // @covers 011:FR-005
   it("choice covers every element and rejects empty arrays", () => {
     const sample = stream();
     const seen = new Set<string>();
@@ -139,6 +162,10 @@ describe("PrngStream helpers", () => {
     expect(() => sample.choice([])).toThrow(PrngError);
   });
 
+  // @covers 011:FR-006
+  // @covers 011:FR-016
+  // @covers 011:SC-006
+  // @covers 011:FR-014
   it("weighted follows integer weights and validates", () => {
     const sample = stream();
     const counts = { alpha: 0, beta: 0, gamma: 0 };
@@ -155,6 +182,7 @@ describe("PrngStream helpers", () => {
     expect(() => sample.weighted(["a", "b"], [4294967296, 1])).toThrow(PrngError);
   });
 
+  // @covers 011:FR-006
   it("shuffle permutes in place deterministically", () => {
     const items = [1, 2, 3, 4, 5, 6, 7, 8];
     const original = [...items];
@@ -168,6 +196,7 @@ describe("PrngStream helpers", () => {
     expect(single).toEqual([1]);
   });
 
+  // @covers 011:FR-008
   it("serialize and loadState round-trip a stream", () => {
     const sample = stream();
     sample.nextU32();
@@ -181,13 +210,38 @@ describe("PrngStream helpers", () => {
   });
 });
 
+describe("Prng state size", () => {
+  // @covers 011:SC-005
+  it("stays under 1 KB of JSON for the eleven named streams of the game", () => {
+    const prng = Prng.create({ seed: 4294967295 });
+    for (const name of [
+      "world.gen",
+      "site.gen",
+      "identity.names",
+      "housing.immigration",
+      "diplomacy.ai",
+      "diplomacy.resolve",
+      "skill.output",
+      "content.traits",
+      "ai.risk",
+      "ai.decide",
+      "ai.wander",
+    ]) {
+      prng.stream(name).nextU32();
+    }
+    expect(JSON.stringify(prng.serialize()).length).toBeLessThan(1024);
+  });
+});
+
 describe("Prng.stream", () => {
+  // @covers 011:FR-010
   it("returns the same live stream for the same name and rejects empty names", () => {
     const prng = Prng.create({ seed: 5 });
     expect(prng.stream("x")).toBe(prng.stream("x"));
     expect(() => prng.stream("")).toThrow(PrngError);
   });
 
+  // @covers 011:FR-010
   it("streams are independent of each other's progress", () => {
     const left = Prng.create({ seed: 5 });
     const right = Prng.create({ seed: 5 });
@@ -199,6 +253,9 @@ describe("Prng.stream", () => {
 });
 
 describe("Prng.serialize / fromState", () => {
+  // @covers 011:FR-008
+  // @covers 011:FR-009
+  // @covers 011:FR-011
   it("restores mid-sequence through JSON exactly", () => {
     const prng = Prng.create({ seed: 2024 });
     for (let draw = 0; draw < 37; draw += 1) {
@@ -217,6 +274,8 @@ describe("Prng.serialize / fromState", () => {
     expect(json.length).toBeLessThan(1000);
   });
 
+  // @covers 011:FR-008
+  // @covers 011:FR-011
   it("serializes streams in name order and is stable", () => {
     const prng = Prng.create({ seed: 1 });
     prng.stream("b");
@@ -227,6 +286,7 @@ describe("Prng.serialize / fromState", () => {
     );
   });
 
+  // @covers 011:FR-014
   it("rejects corrupt state", () => {
     const good = Prng.create({ seed: 1 });
     good.stream("a");
@@ -245,6 +305,7 @@ describe("Prng.serialize / fromState", () => {
 });
 
 describe("Prng.setSeed", () => {
+  // @covers 011:FR-012
   it("re-seeds existing streams in place to match a fresh generator", () => {
     const prng = Prng.create({ seed: 1 });
     const held = prng.stream("a");

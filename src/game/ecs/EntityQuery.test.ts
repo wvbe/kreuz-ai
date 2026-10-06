@@ -172,6 +172,7 @@ describe("getEntitiesByProperty and getEntitiesByProperties", () => {
 
   // @covers 002:FR-008
   // @covers 002:SC-007
+  // @covers 002:FR-011
   it("gives the same answer after a JSON round trip", () => {
     const counters = new IdCounters();
     const store = createStore(counters);

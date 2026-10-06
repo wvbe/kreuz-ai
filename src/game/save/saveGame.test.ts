@@ -8,6 +8,10 @@ import { defaultSaveTimestamp } from "./saveTypes";
 import { createSaveWorld } from "./testSaveWorld";
 
 describe("serializeGame", () => {
+  // @covers 006:FR-001
+  // @covers 006:FR-002
+  // @covers 006:FR-004
+  // @covers 006:FR-004a
   it("contains exactly the DECISIONS D-05 root keys plus registered sections", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(5);
@@ -32,6 +36,7 @@ describe("serializeGame", () => {
     expect(root["systems"]).toEqual({ trade: { bells: 0 } });
   });
 
+  // @covers 006:FR-006a
   it("uses the host-injected timestamp and rejects malformed ones", () => {
     const world = createSaveWorld();
     expect(serializeGame(world.parts, { timestamp: "2026-10-05T10:00:00.000Z" })["timestamp"]).toBe(
@@ -52,6 +57,7 @@ describe("serializeGame", () => {
     expect(() => serializeGame(world.parts)).toThrow(/systems.broken/);
   });
 
+  // @covers 006:FR-011
   it("is read-only: saving does not change the game", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(20);
@@ -62,6 +68,8 @@ describe("serializeGame", () => {
 });
 
 describe("saveGame", () => {
+  // @covers 006:FR-011
+  // @covers 006:FR-013
   it("returns valid UTF-8 JSON text with canonical key order", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(12);
@@ -85,6 +93,7 @@ describe("saveGame", () => {
     );
   });
 
+  // @covers 006:FR-009
   it("captures in-flight tasks as plain records (spec 006 US1 AC2)", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(25);

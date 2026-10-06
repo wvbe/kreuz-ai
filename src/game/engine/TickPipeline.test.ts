@@ -98,6 +98,7 @@ describe("TickPipeline", () => {
     ]);
   });
 
+  // @covers 010:SC-001
   it("flushes tick.begin before any system and drains the bus last", () => {
     const { pipeline, bus } = createPipeline();
     const log: string[] = [];

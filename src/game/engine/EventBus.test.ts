@@ -21,18 +21,21 @@ function collect(bus: EventBus, pattern: string): string[] {
 }
 
 describe("isValidEventName / isValidEventPattern", () => {
+  // @covers 010:FR-002
   it("accepts lowercase kebab-case dot names", () => {
     expect(isValidEventName("inventory.item.stored")).toBe(true);
     expect(isValidEventName("error.system-failed")).toBe(true);
     expect(isValidEventName("tick.begin")).toBe(true);
   });
 
+  // @covers 010:FR-002
   it("rejects empty, uppercase, underscore and wildcard names", () => {
     for (const bad of ["", "Inventory.item", "a_b.c", "a..b", ".a", "a.", "a.*", "a b"]) {
       expect(isValidEventName(bad)).toBe(false);
     }
   });
 
+  // @covers 010:FR-005
   it("allows wildcards only as the last segment", () => {
     for (const good of ["a.*", "a.b.**", "*", "**", "a.b"]) {
       expect(isValidEventPattern(good)).toBe(true);
@@ -44,6 +47,12 @@ describe("isValidEventName / isValidEventPattern", () => {
 });
 
 describe("eventNameMatches", () => {
+  // @covers 010:FR-001
+  // @covers 010:FR-003
+  // @covers 010:FR-004
+  // @covers 010:FR-005
+  // @covers 010:FR-019
+  // @covers 010:SC-005
   it("handles exact, single-segment and multi-segment wildcards", () => {
     expect(eventNameMatches("inventory.item.*", "inventory.item.stored")).toBe(true);
     expect(eventNameMatches("inventory.item.*", "inventory.item.stack.merged")).toBe(false);
@@ -87,6 +96,8 @@ describe("cloneEventPayload", () => {
 });
 
 describe("EventBus emit / subscribe / processQueue", () => {
+  // @covers 010:FR-009
+  // @covers 010:FR-014
   it("delivers queued events FIFO only at processQueue with the payload", () => {
     const bus = new EventBus();
     const received: JsonValue[] = [];
@@ -112,6 +123,8 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(() => bus.subscribe("a.*.b", () => undefined)).toThrow(EventBusError);
   });
 
+  // @covers 010:FR-010
+  // @covers 010:SC-007
   it("calls subscribers in registration order across exact and wildcard patterns", () => {
     const bus = new EventBus();
     const order: string[] = [];
@@ -124,6 +137,8 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(order).toEqual(["exact", "star", "globstar", "exact2"]);
   });
 
+  // @covers 010:FR-006
+  // @covers 010:FR-007
   it("once subscriptions fire a single time, including on wildcards", () => {
     const bus = new EventBus();
     let hits = 0;
@@ -134,6 +149,7 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(hits).toBe(1);
   });
 
+  // @covers 010:FR-008
   it("unsubscribe stops delivery, including mid-drain, and reports unknown handles", () => {
     const bus = new EventBus();
     let second = 0;
@@ -149,6 +165,7 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(bus.unsubscribe(9999)).toBe(false);
   });
 
+  // @covers 010:FR-011
   it("a subscriber added during processing sees later events but not the current one", () => {
     const bus = new EventBus();
     const lateSeen: string[] = [];
@@ -163,6 +180,7 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(lateSeen).toEqual(["a.second"]);
   });
 
+  // @covers 010:FR-011
   it("receivers are resolved at processing time (late subscriber gets queued events)", () => {
     const bus = new EventBus();
     bus.emit("a.b", 7);
@@ -171,6 +189,7 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(seen).toEqual(["a.b"]);
   });
 
+  // @covers 010:FR-009a
   it("delivers nested emits after the current event, in the same drain, FIFO", () => {
     const bus = new EventBus();
     const order: string[] = [];
@@ -188,6 +207,8 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(bus.getQueue()).toEqual([]);
   });
 
+  // @covers 010:FR-017
+  // @covers 010:SC-006
   it("isolates a throwing subscriber and reports it to the sink", () => {
     const reports: EventBusErrorReport[] = [];
     const bus = new EventBus((report) => reports.push(report));
@@ -215,6 +236,7 @@ describe("EventBus emit / subscribe / processQueue", () => {
     expect(reports[0]?.message).toBe("text");
   });
 
+  // @covers 010:FR-009a
   it("caps nesting depth, drops the overflowing emit, and still empties the queue", () => {
     const reports: EventBusErrorReport[] = [];
     const bus = new EventBus((report) => reports.push(report));
@@ -268,6 +290,9 @@ describe("EventBus emit / subscribe / processQueue", () => {
 });
 
 describe("EventBus serialize / restore", () => {
+  // @covers 010:FR-015
+  // @covers 010:FR-016
+  // @covers 010:SC-007
   it("round-trips the queue through JSON and keeps order", () => {
     const bus = new EventBus();
     bus.emit("a.one", { count: 1 });
@@ -315,7 +340,10 @@ describe("EventBus serialize / restore", () => {
     expect(thrown).toBeInstanceOf(EventBusError);
   });
 
+  // @covers 010:SC-003
+  // @covers 010:SC-004
   it("serializes 150 events and restores them", () => {
+    const started = Number(process.hrtime.bigint()) / 1e6;
     const bus = new EventBus();
     for (let index = 0; index < 150; index += 1) {
       bus.emit("a.b", { index });
@@ -323,5 +351,9 @@ describe("EventBus serialize / restore", () => {
     const state = JSON.parse(JSON.stringify(bus.serialize())) as ReturnType<EventBus["serialize"]>;
     new EventBus().restore(state);
     expect(state.queue).toHaveLength(150);
+    for (const entry of state.queue) {
+      expect(Object.keys(entry).sort()).toEqual(["depth", "name", "payload"]);
+    }
+    expect(Number(process.hrtime.bigint()) / 1e6 - started).toBeLessThan(1000);
   });
 });

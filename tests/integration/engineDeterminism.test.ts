@@ -91,6 +91,8 @@ describe("engine determinism (spec 007, Constitution I)", () => {
   // @covers 004:SC-012
   // @covers 005:FR-028
   // @covers 005:SC-008
+  // @covers 007:FR-011
+  // @covers 007:SC-006
   it("gives the same state hash for the same seed and a different one for another seed", () => {
     expect(run(31, totalTicks).getStateHash()).toBe(run(31, totalTicks).getStateHash());
     expect(run(31, totalTicks).getStateHash()).not.toBe(run(32, totalTicks).getStateHash());
@@ -118,6 +120,8 @@ describe("engine determinism (spec 007, Constitution I)", () => {
     expect(bread?.remainingMilli).toBeLessThan(864_000);
   });
 
+  // @covers 010:SC-002
+  // @covers 011:SC-002
   it("continues identically after a mid-run save and load", () => {
     const uninterrupted = run(77, totalTicks);
     for (const splitAt of [1, 7, 100, 233]) {
@@ -149,6 +153,8 @@ describe("engine determinism (spec 007, Constitution I)", () => {
     expect(right.getStateHash()).toBe(pure.getStateHash());
   });
 
+  // @covers 007:FR-014
+  // @covers 007:SC-005
   it("repeated newGame and loadGame leave no residue", () => {
     const engine = createWorldEngine();
     engine.newGame({ seed: 9, mapSize: MapSize.Small });

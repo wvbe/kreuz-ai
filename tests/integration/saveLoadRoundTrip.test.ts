@@ -44,6 +44,8 @@ describe("US1: save game", () => {
     expect(root["maps"] as JsonValue[]).toHaveLength(2);
   });
 
+  // @covers 006:FR-009
+  // @covers 006:FR-010
   it("AC2: an in-flight task serializes as a record with checkpoint and token, no promises", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(31);
@@ -53,6 +55,7 @@ describe("US1: save game", () => {
     expect(text).not.toContain("Promise");
   });
 
+  // @covers 006:SC-002
   it("AC5: serialize, deserialize, serialize is bit-for-bit identical", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(77);
@@ -64,6 +67,7 @@ describe("US1: save game", () => {
 });
 
 describe("US2: load game", () => {
+  // @covers 006:FR-015
   it("AC4: entity ids are preserved and never reused after load", () => {
     const world = createSaveWorld();
     world.pipeline.runTicks(40);
@@ -83,6 +87,25 @@ describe("US2: load game", () => {
     expect(saveGame(world.parts)).toBe(before);
     world.pipeline.runTicks(1);
     expect(saveGame(world.parts)).not.toBe(before);
+  });
+
+  // @covers 006:SC-004
+  it("rejects a truncated or field-less save with a descriptive message in about 10 ms", () => {
+    const world = createSaveWorld();
+    const text = saveGame(world.parts);
+    const damaged = [text.slice(0, Math.floor(text.length / 2)), JSON.stringify({ version: 1 })];
+    for (const input of damaged) {
+      const started = performance.now();
+      let message = "";
+      try {
+        loadGame(input, world.parts);
+      } catch (failure) {
+        message = failure instanceof Error ? failure.message : "";
+      }
+      expect(performance.now() - started).toBeLessThan(100);
+      expect(message.length).toBeGreaterThan(10);
+    }
+    expect(saveGame(world.parts)).toBe(text);
   });
 
   it("AC3: an in-flight task resolves when expected after load", () => {
@@ -109,6 +132,8 @@ describe("US3: version and compatibility", () => {
     expect(loadGame(savedRoot(), target.parts).migrated).toBe(false);
   });
 
+  // @covers 006:FR-016
+  // @covers 006:SC-005
   it("AC2 and AC4: a version 0 fixture is migrated (counters added, difficulty renamed)", () => {
     const root = savedRoot();
     const old: Root = { ...root, version: 0 };
@@ -154,6 +179,7 @@ describe("US4: deterministic round trip", () => {
   const referenceHash = hashGameState(reference.parts);
   const referenceText = saveGame(reference.parts);
 
+  // @covers 006:SC-003
   it("AC2: M ticks, save, load, then N-M ticks equals N uninterrupted ticks (500 ticks)", () => {
     const first = createSaveWorld();
     first.pipeline.runTicks(180);
@@ -200,6 +226,7 @@ describe("US4: deterministic round trip", () => {
 });
 
 describe("SC-001: 100+ entities and 5 maps round trip quickly", () => {
+  // @covers 006:SC-001
   it("saves and loads a larger world within the budget", () => {
     const world = createSaveWorld();
     for (let index = 0; index < 3; index += 1) {

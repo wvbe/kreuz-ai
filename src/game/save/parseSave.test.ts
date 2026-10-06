@@ -37,6 +37,7 @@ function v0Root(root: Root): Root {
 }
 
 describe("isoTimestampPattern", () => {
+  // @covers 006:FR-006a
   it("matches ISO 8601 UTC with milliseconds only", () => {
     expect(isoTimestampPattern.test("2026-10-05T12:00:00.000Z")).toBe(true);
     expect(isoTimestampPattern.test("2026-10-05")).toBe(false);
@@ -71,6 +72,7 @@ describe("parseSave", () => {
     expect(() => parseSave("", options)).toThrow(InvalidSaveFormatError);
   });
 
+  // @covers 006:FR-014
   it("rejects non-object roots and fractional numbers", () => {
     const { root, options } = freshRoot();
     expect(() => parseSave("[1]", options)).toThrow(/must be a JSON object/);
@@ -82,6 +84,7 @@ describe("parseSave", () => {
     );
   });
 
+  // @covers 006:FR-001
   it("rejects a missing, fractional or negative version", () => {
     const { root, options } = freshRoot();
     expect(() => parseSave(without(root, "version"), options)).toThrow(/valid integer version/);
@@ -89,6 +92,7 @@ describe("parseSave", () => {
     expect(() => parseSave({ ...root, version: -1 }, options)).toThrow(InvalidSaveFormatError);
   });
 
+  // @covers 006:FR-012
   it("rejects a newer version with UnsupportedSaveVersionError", () => {
     const { root, options } = freshRoot();
     const attempt = (): void => {
@@ -165,6 +169,8 @@ describe("parseSave", () => {
     }
   });
 
+  // @covers 006:FR-016
+  // @covers 006:SC-005
   it("migrates a version 0 save forward: counters, systems default, difficulty rename", () => {
     const { root, options } = freshRoot();
     const parsed = parseSave(v0Root(root), options);

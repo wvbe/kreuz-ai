@@ -21,6 +21,9 @@ function savedAt(ticks: number): { text: string; root: Root } {
 }
 
 describe("loadGame", () => {
+  // @covers 006:FR-005
+  // @covers 006:FR-015
+  // @covers 006:SC-002
   it("restores everything: save(load(save(x))) equals save(x)", () => {
     const { text } = savedAt(45);
     const target = createSaveWorld(7);
@@ -34,6 +37,7 @@ describe("loadGame", () => {
     expect(target.ledger).toEqual({ ticksSeen: 45, bells: 2 });
   });
 
+  // @covers 006:FR-012
   it("accepts an already parsed object", () => {
     const { text, root } = savedAt(20);
     const target = createSaveWorld(3);
@@ -41,6 +45,8 @@ describe("loadGame", () => {
     expect(saveGame(target.parts)).toBe(text);
   });
 
+  // @covers 006:FR-006
+  // @covers 006:FR-015
   it("rebuilds the occupant index from Position components (spec 006 SC-007)", () => {
     const { text } = savedAt(40);
     const target = createSaveWorld();
@@ -53,6 +59,8 @@ describe("loadGame", () => {
     }
   });
 
+  // @covers 011:FR-009
+  // @covers 011:SC-002
   it("keeps the PRNG continuing mid-sequence (SC-006)", () => {
     const original = createSaveWorld();
     original.pipeline.runTicks(33);

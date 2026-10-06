@@ -31,6 +31,7 @@ describe("stableStringify", () => {
     expect(JSON.parse(stableStringify(value))).toEqual(value);
   });
 
+  // @covers 006:FR-014
   it("rejects fractions, -0, NaN and infinities, naming the path", () => {
     expect(() => stableStringify({ list: [1.5] })).toThrow(/\$\.list\[0\]/);
     expect(() => stableStringify(-0)).toThrow(InvalidSaveFormatError);

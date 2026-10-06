@@ -371,6 +371,7 @@ describe("MapRegistry entity placement", () => {
     expect(() => fixture.registry.removeEntity(1)).toThrow(MapError);
   });
 
+  // @covers 010:FR-013
   it("emits terrain and obstruction events through the shared bus", () => {
     const { fixture, mapId } = hamlet();
     const map = fixture.registry.require(mapId);
@@ -434,6 +435,8 @@ describe("MapRegistry save and load", () => {
     expect(copy.registry.childrenOf(1).map((map) => map.id)).toEqual([2]);
   });
 
+  // @covers 006:FR-006
+  // @covers 006:SC-007
   it("rebuilds occupants from Position components after loading the entity store", () => {
     const original = populated();
     const components = new ComponentRegistry();

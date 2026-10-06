@@ -23,6 +23,7 @@ function messageOf(json: string): string {
 }
 
 describe("parseGameInitOptions", () => {
+  // @covers 007:FR-007
   it("applies the defaults", () => {
     expect(parseGameInitOptions(undefined)).toEqual({
       difficulty: Difficulty.Steady,
@@ -53,6 +54,7 @@ describe("parseGameInitOptions", () => {
     expect(parseGameInitOptions({ seed: maxSeed }).seed).toBe(maxSeed);
   });
 
+  // @covers 007:FR-010
   it("rejects an unknown difficulty with the exact message of spec 007 US4", () => {
     expect(messageOf('{"difficulty":"super-hard"}')).toBe(
       "Invalid difficulty: 'super-hard'. Valid values: peaceful, steady, harsh.",
