@@ -2,7 +2,7 @@ import type { DwellingView, LevelRequirements } from "../../../game/housing/hous
 import { useQuery } from "../engine/useGameState";
 import { Checklist } from "../ui/Checklist";
 import { KeyValueList } from "../ui/KeyValueList";
-import { EntityNameLink } from "./EntityName";
+import { EntityNameLink } from "./EntityNameLink";
 import { PrimaryStatus } from "./PrimaryStatus";
 import { humanizeId } from "./reasonText";
 import { ZoneInspection } from "./ZoneInspection";

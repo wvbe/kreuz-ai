@@ -4,14 +4,14 @@ The inspection panels of the side dock (spec 024, plan 6.3), driven by the selec
 
 - `InspectionPanel.tsx` - the registered side panel: the selected entity, else the selected tile, else "Nothing selected."
 - `EntityInspection.tsx` - picks the view by what the entity is: character, zone, dwelling, workstation, build site, stockpile or anything else (name, kind, position, tabs).
-- `CitizenSections.tsx` - overview (action, need bars, mood, skills, traits, factions and offices), Inventory tab, Journal tab with a link to the chronicle.
+- `CitizenOverview.tsx`, `InventoryTab.tsx`, `JournalTab.tsx` - a character's overview (action, need bars, mood, skills, traits, factions and offices), the Inventory tab (stacks, weights, slots) and the Journal tab with a link to the chronicle.
 - `ZoneInspection.tsx`, `zoneChecklist.ts` - zone type, status, requirement checklist built from the zone type and the zone's gaps, workers, aggregated stored goods.
 - `DwellingInspection.tsx` - level, residents, streaks against the grace days, checklists to keep and to reach a level; an inactive room falls back to the zone view.
-- `ObjectInspection.tsx` - workstation, build site and stockpile views.
+- `WorkstationInspection.tsx`, `BuildSiteInspection.tsx`, `StockpileInspection.tsx` - workstation, build site and storage views.
 - `TileInspection.tsx`, `OccupantCycler.tsx` - terrain, move cost, buildable, zone, occupants and the "Next on this tile" cycle button.
 - `PrimaryStatus.tsx`, `WhyPopover.tsx` - the first line of every inspection (state and primary reason) and the "why?" popover that runs `explain` and draws the cause chain (subjects are links; a repeated subject is drawn once; at most 12 links).
 - `reasonText.ts`, `statusViews.ts` - reason and activity sentences, id to words, and the string-typed views of `explain`.
-- `EntityName.tsx`, `entityViews.ts` - entity display names and links, component and material lookups.
+- `EntityNameLink.tsx`, `entityViews.ts` - entity display names and links, component and material lookups.
 - `panels.css` - styles of the panels and the content browser.
 
 Reusable building blocks live in `../ui` (`NeedBar`, `StackList`, `KeyValueList`, `Checklist`, `Link`, `EntityLink`, `Tabs`).

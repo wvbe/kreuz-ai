@@ -1,9 +1,8 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { EngineProvider } from "../engine/EngineProvider";
-import { EngineHost } from "../engine/EngineHost";
-import { ExplanationView } from "./WhyPopover";
+import { buildBlockedBakery, renderPanel, startedHost } from "../testing/renderPanel";
+import { ExplanationView, WhyPopover } from "./WhyPopover";
 import type { StatusChainLink, StatusExplanation } from "./statusViews";
 
 afterEach(cleanup);
@@ -22,12 +21,29 @@ function link(kind: string, id: number, next: number | null): StatusChainLink {
 }
 
 function show(explanation: StatusExplanation): void {
-  render(
-    <EngineProvider host={new EngineHost()}>
-      <ExplanationView explanation={explanation} />
-    </EngineProvider>,
-  );
+  renderPanel(<ExplanationView explanation={explanation} />, startedHost());
 }
+
+describe("WhyPopover", () => {
+  it("opens on click and explains the subject from the engine", () => {
+    const host = startedHost("village");
+    const { oven } = buildBlockedBakery(host);
+    renderPanel(<WhyPopover id={oven} />, host);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "why?" }));
+    expect(screen.getByRole("dialog", { name: "Why?" })).toBeTruthy();
+    expect(screen.getByRole("list", { name: "Cause chain" })).toBeTruthy();
+  });
+
+  it("explains a production order by its kind", () => {
+    const host = startedHost("village");
+    buildBlockedBakery(host);
+    renderPanel(<WhyPopover id={1} kind="ProductionOrder" />, host);
+    fireEvent.click(screen.getByRole("button", { name: "why?" }));
+    expect(screen.getByText(/Missing input: flour/)).toBeTruthy();
+    expect(screen.getByText("Workstation #", { exact: false })).toBeTruthy();
+  });
+});
 
 describe("ExplanationView", () => {
   it("draws a looping chain once per subject and says it loops", () => {

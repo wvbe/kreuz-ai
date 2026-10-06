@@ -8,7 +8,7 @@ import { KeyValueList } from "../ui/KeyValueList";
 import { StackList } from "../ui/StackList";
 import type { StackRow } from "../ui/StackList";
 import { useMaterialInfo } from "./entityViews";
-import { EntityNameLink } from "./EntityName";
+import { EntityNameLink } from "./EntityNameLink";
 import { PrimaryStatus } from "./PrimaryStatus";
 import { humanizeId } from "./reasonText";
 import { zoneChecklist } from "./zoneChecklist";

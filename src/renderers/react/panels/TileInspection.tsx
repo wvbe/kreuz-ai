@@ -5,7 +5,7 @@ import type { ZoneView } from "../../../game/zones/zoneTypes";
 import { useQuery } from "../engine/useGameState";
 import { EntityLink } from "../ui/EntityLink";
 import { KeyValueList } from "../ui/KeyValueList";
-import { EntityNameLink } from "./EntityName";
+import { EntityNameLink } from "./EntityNameLink";
 import { OccupantCycler } from "./OccupantCycler";
 import { humanizeId } from "./reasonText";
 import "./panels.css";

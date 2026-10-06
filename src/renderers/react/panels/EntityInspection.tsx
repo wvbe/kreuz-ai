@@ -5,16 +5,16 @@ import { useQuery } from "../engine/useGameState";
 import { Link } from "../ui/EntityLink";
 import { KeyValueList } from "../ui/KeyValueList";
 import { Tabs } from "../ui/Tabs";
-import { CitizenOverview, InventoryTab, JournalTab } from "./CitizenSections";
+import { CitizenOverview } from "./CitizenOverview";
 import { componentOf } from "./entityViews";
-import { useEntityName } from "./EntityName";
+import { useEntityName } from "./EntityNameLink";
 import { DwellingInspection } from "./DwellingInspection";
 import { OccupantCycler } from "./OccupantCycler";
-import {
-  BuildSiteInspection,
-  StockpileInspection,
-  WorkstationInspection,
-} from "./ObjectInspection";
+import { BuildSiteInspection } from "./BuildSiteInspection";
+import { InventoryTab } from "./InventoryTab";
+import { JournalTab } from "./JournalTab";
+import { StockpileInspection } from "./StockpileInspection";
+import { WorkstationInspection } from "./WorkstationInspection";
 import { PrimaryStatus } from "./PrimaryStatus";
 import { humanizeId } from "./reasonText";
 import { ZoneInspection } from "./ZoneInspection";

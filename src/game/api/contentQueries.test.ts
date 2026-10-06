@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadContent } from "../content/ContentLoader";
 import { MapSize } from "../map/mapSize";
-import { ContentKind } from "./contentQueries";
+import { ContentKind, buildContentEntryView, buildContentRegistriesView } from "./contentQueries";
 import type { ContentEntryView, ContentRegistriesView } from "./contentQueries";
 import { GameSession } from "./GameSession";
 
@@ -56,5 +56,17 @@ describe("content queries", () => {
     const started = session();
     expect(entry(started, ContentKind.Material, "no_such_material")).toBeNull();
     expect(started.query.run("content-entry", { kind: "nonsense", id: "x" }).ok).toBe(false);
+  });
+
+  it("builds the views straight from the content registries", () => {
+    const content = loadContent();
+    const registries = buildContentRegistriesView(content);
+    expect(
+      registries.categories.find((category) => category.kind === ContentKind.Terrain)?.entries
+        .length,
+    ).toBeGreaterThan(3);
+    const grass = buildContentEntryView(content, ContentKind.Terrain, "grassland");
+    expect(grass?.fields["buildable"]).toBe(true);
+    expect(buildContentEntryView(content, ContentKind.Recipe, "no_such_recipe")).toBeNull();
   });
 });

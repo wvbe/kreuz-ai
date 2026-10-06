@@ -1,24 +1,12 @@
-import type { EntityDetailView } from "../../../game/api/Views";
 import type { IdentityView } from "../../../game/identity/identityViews";
 import type { NeedsView } from "../../../game/ai/aiViews";
 import type { MembershipView } from "../../../game/factions/factionViews";
-import type { JournalView } from "../../../game/chronicle/chronicleViews";
 import type { SkillsView, TraitsView } from "../../../game/skills/skillViews";
-import { useEngineHost } from "../engine/useEngineHost";
 import { useQuery } from "../engine/useGameState";
-import { Screen } from "../navigation/Screen";
-import { EntityLink, Link } from "../ui/EntityLink";
+import { EntityLink } from "../ui/EntityLink";
 import { KeyValueList } from "../ui/KeyValueList";
 import { NeedBar } from "../ui/NeedBar";
-import { StackList } from "../ui/StackList";
-import { componentOf, useMaterialInfo } from "./entityViews";
-import type { InventoryData } from "./entityViews";
 import "./panels.css";
-
-/**
- * Journal lines the Journal tab shows (the newest ones); the chronicle holds the rest.
- */
-export const journalLinesShown = 8;
 
 /**
  * Overview of a character: current action, needs with their values, mood and health, skills
@@ -106,72 +94,6 @@ export function CitizenOverview(props: { entityId: number }) {
           ))}
         </ul>
       )}
-    </div>
-  );
-}
-
-/**
- * The Inventory tab: stacks with quantities and weights, slots used and the weight limit.
- *
- * @param props - The entity's `entity` view.
- * @returns The tab content.
- */
-export function InventoryTab(props: { detail: EntityDetailView }) {
-  const inventory = componentOf<InventoryData>(props.detail, "Inventory");
-  const slots = inventory?.slots ?? [];
-  const info = useMaterialInfo(slots.map((slot) => slot.materialId));
-  if (inventory === undefined) {
-    return <p className="kv-dim">This has no inventory.</p>;
-  }
-  return (
-    <StackList
-      stacks={slots.map((slot) => ({
-        materialId: slot.materialId,
-        quantity: slot.quantity,
-        ...(info.get(slot.materialId) === undefined
-          ? {}
-          : {
-              name: info.get(slot.materialId)?.name,
-              unitWeightMilli: info.get(slot.materialId)?.weightMilli,
-            }),
-      }))}
-      slotCount={inventory.slotCount}
-      weightLimitMilli={inventory.weightLimitMilli}
-      emptyText="Carrying nothing."
-    />
-  );
-}
-
-/**
- * The Journal tab: the newest journal lines of a citizen and a link to the chronicle.
- *
- * @param props - The citizen's id.
- * @returns The tab content.
- */
-export function JournalTab(props: { entityId: number }) {
-  const host = useEngineHost();
-  const journal = useQuery<JournalView | null>("journal", { entityId: props.entityId });
-  const entries = journal.ok && journal.data !== null ? journal.data.entries : [];
-  const shown = entries.slice(-journalLinesShown).reverse();
-  return (
-    <div>
-      {shown.length === 0 ? (
-        <p className="kv-dim">Nothing written yet.</p>
-      ) : (
-        <ul className="kv-journal">
-          {shown.map((entry) => (
-            <li key={entry.momentId}>
-              <span className="kv-dim">Day {entry.day}:</span> {entry.text}
-            </li>
-          ))}
-        </ul>
-      )}
-      <Link
-        label="Open the chronicle"
-        onClick={() => {
-          host.navigation.navigate(Screen.Chronicle);
-        }}
-      />
     </div>
   );
 }

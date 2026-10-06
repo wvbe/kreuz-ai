@@ -145,7 +145,7 @@ export function ContentScreen() {
   return (
     <section className="kv-screen kv-content" aria-label="Content browser">
       <div className="kv-content-list">
-        <h2>Content</h2>
+        <h2>Content browser</h2>
         <input
           type="search"
           aria-label="Search content"
