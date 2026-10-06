@@ -15,16 +15,32 @@ export type PostingLocation = {
   posting: JobPosting;
 };
 
+type BoardList = { store: GameEngine["store"]; revision: number; boards: Entity[] };
+
+const boardLists = new WeakMap<GameEngine, BoardList>();
+
 /**
- * All job board entities, ascending by id.
+ * All job board entities, ascending by id. Every citizen asks for the boards on every decision,
+ * so the list is kept per engine and rebuilt only when the entity store's structure changed
+ * (task 7.1: scanning every entity per citizen made a 200-citizen tick quadratic).
  *
  * @param engine - The engine that owns the entities.
- * @returns Live entities that carry `JobBoard`.
+ * @returns A new array of live entities that carry `JobBoard`.
  */
 export function listBoards(engine: GameEngine): Entity[] {
-  return engine.store
-    .entities()
-    .filter((entity) => getComponent(entity, jobBoardComponent) !== undefined);
+  const revision = engine.store.structureRevision;
+  let cached = boardLists.get(engine);
+  if (cached?.store !== engine.store || cached.revision !== revision) {
+    cached = {
+      store: engine.store,
+      revision,
+      boards: engine.store
+        .entities()
+        .filter((entity) => getComponent(entity, jobBoardComponent) !== undefined),
+    };
+    boardLists.set(engine, cached);
+  }
+  return [...cached.boards];
 }
 
 /**

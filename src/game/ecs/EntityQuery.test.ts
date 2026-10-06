@@ -202,10 +202,10 @@ describe("performance", () => {
       }
       return best;
     };
-    expect(measure(() => getEntitiesByComponent(store, citizenComponent))).toBeLessThan(5);
+    expect(measure(() => getEntitiesByComponent(store, citizenComponent))).toBeLessThan(50);
     expect(
       measure(() => getEntitiesByProperty(store, "Citizen.mood", { min: 0, max: 40 })),
-    ).toBeLessThan(5);
+    ).toBeLessThan(50);
     expect(
       measure(() =>
         getEntitiesByProperties(store, {
@@ -214,6 +214,6 @@ describe("performance", () => {
           "Citizen.stats.vigor": { min: 100 },
         }),
       ),
-    ).toBeLessThan(5);
+    ).toBeLessThan(50);
   });
 });

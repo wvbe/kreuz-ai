@@ -80,6 +80,7 @@ export class EntityStore {
   private versions = new Map<EntityId, number>();
   private pending = new Set<EntityId>();
   private readonly hooks: BeforeDeleteHook[] = [];
+  private structure = 0;
 
   /**
    * Creates an empty store.
@@ -87,6 +88,18 @@ export class EntityStore {
    * @param options - Registries, counters and optional bus of the owning engine.
    */
   constructor(private readonly options: EntityStoreOptions) {}
+
+  /**
+   * Runtime-only counter that changes whenever the set of entities or the set of components of
+   * an entity changes (spawn, deletion request, removal, component added or removed, restore),
+   * never for changes inside a component. A cache of "the entities that have component X" stays
+   * valid while it is unchanged. Never serialized.
+   *
+   * @returns The counter.
+   */
+  get structureRevision(): number {
+    return this.structure;
+  }
 
   /**
    * Number of live entities, including ones flagged for deletion.
@@ -113,6 +126,7 @@ export class EntityStore {
     const entity: Entity = { id, prototype: prototypeId, components };
     this.entityMap.set(id, entity);
     this.versions.set(id, 0);
+    this.structure += 1;
     const { mapId, cellIndex } = readPosition(entity);
     this.options.bus?.emit("entity.spawned", { entityId: id, prototypeId, mapId, cellIndex });
     return entity;
@@ -266,6 +280,9 @@ export class EntityStore {
    */
   requestDelete(id: EntityId): void {
     this.require(id);
+    if (!this.pending.has(id)) {
+      this.structure += 1;
+    }
     this.pending.add(id);
   }
 
@@ -307,6 +324,7 @@ export class EntityStore {
       });
     }
     this.pending.clear();
+    this.structure += 1;
     return removed;
   }
 
@@ -385,9 +403,11 @@ export class EntityStore {
     this.entityMap = next;
     this.versions = new Map([...next.keys()].map((id) => [id, 0]));
     this.pending = new Set();
+    this.structure += 1;
   }
 
   private bumpVersion(id: EntityId): void {
+    this.structure += 1;
     this.versions.set(id, (this.versions.get(id) ?? 0) + 1);
   }
 }

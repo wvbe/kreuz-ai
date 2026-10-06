@@ -181,6 +181,37 @@ describe("EntityStore components", () => {
   });
 });
 
+describe("EntityStore.structureRevision", () => {
+  it("changes with spawns, component changes and deletions, but not with edits inside a component", () => {
+    const { store } = createFixture();
+    const start = store.structureRevision;
+    const entity = store.spawn("rock");
+    const spawned = store.structureRevision;
+    expect(spawned).toBeGreaterThan(start);
+    store.addComponent(entity.id, inventoryComponent);
+    const added = store.structureRevision;
+    expect(added).toBeGreaterThan(spawned);
+    const inventory = entity.components["Inventory"];
+    if (inventory !== undefined) {
+      inventory["coins"] = 3;
+    }
+    expect(store.structureRevision).toBe(added);
+    store.removeComponent(entity.id, inventoryComponent);
+    const removed = store.structureRevision;
+    expect(removed).toBeGreaterThan(added);
+    store.requestDelete(entity.id);
+    const requested = store.structureRevision;
+    expect(requested).toBeGreaterThan(removed);
+    store.requestDelete(entity.id);
+    expect(store.structureRevision).toBe(requested);
+    store.flushDeletions();
+    expect(store.structureRevision).toBeGreaterThan(requested);
+    const before = store.structureRevision;
+    store.restore(JSON.parse(JSON.stringify(store.serialize())) as JsonValue);
+    expect(store.structureRevision).toBeGreaterThan(before);
+  });
+});
+
 describe("EntityStore deletion", () => {
   it("defers removal until flushDeletions and never reuses ids", () => {
     const { store, bus, events } = createFixture();

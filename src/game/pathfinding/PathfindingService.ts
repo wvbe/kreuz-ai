@@ -13,6 +13,7 @@ import type {
   RouteResult,
 } from "./pathTypes";
 import { reachableCells } from "./reachableCells";
+import { ReachCache } from "./ReachCache";
 import { searchPath } from "./searchPath";
 import type { SearchOutcome } from "./searchPath";
 import { searchRoute } from "./searchRoute";
@@ -45,6 +46,9 @@ const mapChangeEvents = ["map.terrain.changed", "map.cell.obstruction.changed"];
  */
 export class PathfindingService {
   private readonly cache: PathCache;
+  private readonly reachCache = new ReachCache();
+  private reachHits = 0;
+  private reachMisses = 0;
 
   /**
    * Creates the service and subscribes it to the map-change events.
@@ -129,11 +133,24 @@ export class PathfindingService {
    * @param mapId - Map id.
    * @param from - Start cell index.
    * @param maxCost - Optional cost bound.
-   * @returns Reachable cells, ascending cell index; empty for an unknown map or cell.
+   * @returns Reachable cells, ascending cell index; empty for an unknown map or cell. The list
+   * may be shared with later answers (a bounded cache keyed on the map revision, never stale):
+   * do not change it.
    */
-  reachable(mapId: number, from: number, maxCost?: number): ReachableCell[] {
+  reachable(mapId: number, from: number, maxCost?: number): readonly ReachableCell[] {
     const map = this.options.maps.get(mapId);
-    return map === undefined ? [] : reachableCells(map, from, maxCost);
+    if (map === undefined) {
+      return [];
+    }
+    const cached = this.reachCache.get(map, from, maxCost);
+    if (cached !== undefined) {
+      this.reachHits += 1;
+      return cached;
+    }
+    this.reachMisses += 1;
+    const cells = reachableCells(map, from, maxCost);
+    this.reachCache.set(map, from, maxCost, cells);
+    return cells;
   }
 
   /**
@@ -172,10 +189,23 @@ export class PathfindingService {
   }
 
   /**
-   * Empties the cache; results are unaffected.
+   * How many `reachable` questions were answered from the cache and how many needed a search
+   * since the last {@link PathfindingService.clearCache}.
+   *
+   * @returns The counters.
+   */
+  get reachStats(): { hits: number; misses: number } {
+    return { hits: this.reachHits, misses: this.reachMisses };
+  }
+
+  /**
+   * Empties the caches; results are unaffected.
    */
   clearCache(): void {
     this.cache.clear();
+    this.reachCache.clear();
+    this.reachHits = 0;
+    this.reachMisses = 0;
   }
 
   private minStepCost(): number {

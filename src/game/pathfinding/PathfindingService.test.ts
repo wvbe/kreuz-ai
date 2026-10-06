@@ -204,4 +204,21 @@ describe("PathfindingService.reachable and findPathBreak", () => {
     expect(service.findPathBreak(map.id, 0, [1, 2])).toBe(1);
     expect(service.findPathBreak(77, 0, [1])).toBe(0);
   });
+
+  it("serves a repeated reachability question from its cache until the map changes", () => {
+    const world = createPathTestWorld();
+    const map = createAsciiMap(world, ["...."]);
+    const service = createService(world);
+    const first = service.reachable(map.id, 0);
+    expect(service.reachable(map.id, 0)).toBe(first);
+    expect(service.reachStats).toEqual({ hits: 1, misses: 1 });
+    expect(service.reachable(map.id, 0, 10)).not.toBe(first);
+    map.setObstruction(2, BlockReason.Wall);
+    const second = service.reachable(map.id, 0);
+    expect(second).not.toBe(first);
+    expect(second.map((entry) => entry.cell)).toEqual([0, 1]);
+    service.clearCache();
+    expect(service.reachStats).toEqual({ hits: 0, misses: 0 });
+    expect(service.reachable(map.id, 0)).not.toBe(second);
+  });
 });

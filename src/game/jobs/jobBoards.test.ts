@@ -23,6 +23,19 @@ describe("job board queries", () => {
     expect(getBoard(world.engine, 1)).toBeNull();
   });
 
+  it("keeps the board list current when boards appear and disappear, and hands out copies", () => {
+    const world = createJobWorld();
+    const first = listBoards(world.engine);
+    first.pop();
+    expect(listBoards(world.engine).map((board) => board.id)).toEqual([world.boardId]);
+    const second = world.spawn("job_board", 9);
+    expect(listBoards(world.engine).map((board) => board.id)).toEqual([world.boardId, second.id]);
+    world.engine.store.requestDelete(second.id);
+    expect(listBoards(world.engine).map((board) => board.id)).toEqual([world.boardId]);
+    world.engine.store.flushDeletions();
+    expect(listBoards(world.engine).map((board) => board.id)).toEqual([world.boardId]);
+  });
+
   it("requireBoard throws UnknownBoard for entities that are not boards", () => {
     const world = createJobWorld();
     expect(requireBoard(world.engine, world.boardId).data.postings).toEqual([]);
