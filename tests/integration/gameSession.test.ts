@@ -347,7 +347,7 @@ describe("GameSession end to end", () => {
           ? { id: 1 }
           : name === "dwellings-at-or-above"
             ? { level: "hovel" }
-            : name === "map"
+            : name === "map" || name === "map-geometry" || name === "map-entities"
               ? { mapId: 1 }
               : name === "cell"
                 ? { mapId: 1, cell: 0 }
