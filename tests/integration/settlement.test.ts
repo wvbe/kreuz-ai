@@ -110,6 +110,7 @@ function stateWithoutOptions(session: GameSession): string {
 describe("settlement tiers: the scripted opening (seed 42, Small, player commands only)", () => {
   // the scenario itself is run (passes, deterministic) by tests/e2e/scenarios.test.ts; this plays
   // it once with a plain session (no debug spawn) and continues from its end state
+  // @covers 027:SC-001
   it("passes with real commands only, then promotes to Village on the next day boundary once population and dwellings are there", () => {
     expect(readFileSync(scenarioPath, "utf8")).not.toContain("debugSpawn");
     const created: GameSession[] = [];
@@ -149,6 +150,7 @@ describe("settlement tiers: the scripted opening (seed 42, Small, player command
 });
 
 describe("settlement tiers: locked content is rejected at every gate and opens with the tier", () => {
+  // @covers 027:FR-008 027:SC-002
   it("rejects a locked building, zone and recipe with the reason and creates nothing", () => {
     const session = newSession({}, lockedPack());
     const rejected: JsonValue[] = [];
@@ -187,6 +189,7 @@ describe("settlement tiers: locked content is rejected at every gate and opens w
     expect(menu.ok && JSON.stringify(menu.data)).toContain("Unlocks at Village");
   });
 
+  // @covers 027:FR-008
   it("keeps locked content registered, browsable and tradeable", () => {
     const session = newSession({}, lockedPack());
     const unlocks = session.query.run("unlocks", { lockedOnly: true });
@@ -198,6 +201,7 @@ describe("settlement tiers: locked content is rejected at every gate and opens w
     expect(session.engine.content.furniture.has("oven")).toBe(true);
   });
 
+  // @covers 027:FR-012
   it("opens the gates as soon as the tier is reached", () => {
     const session = newSession({}, lockedPack());
     const rejected: JsonValue[] = [];
@@ -214,6 +218,7 @@ describe("settlement tiers: locked content is rejected at every gate and opens w
     expect(count(session, "zones")).toBe(1);
   });
 
+  // @covers 027:FR-021 027:FR-022
   it("starts at a given tier with its content unlocked, no tier event and no milestone", () => {
     const events: string[] = [];
     const session = new GameSession(lockedPack());
@@ -245,6 +250,7 @@ describe("settlement tiers: locked content is rejected at every gate and opens w
 });
 
 describe("difficulty changes only decay, need decay and hostility", () => {
+  // @covers 027:FR-016 027:SC-004
   it("gives the same map and entities at tick 0 whatever the difficulty (only initOptions differ)", () => {
     const sessions = [Difficulty.Peaceful, Difficulty.Steady, Difficulty.Harsh].map((difficulty) =>
       newSession({ difficulty }),
@@ -257,6 +263,7 @@ describe("difficulty changes only decay, need decay and hostility", () => {
     expect(new Set(sessions.map((session) => session.engine.getStateHash())).size).toBe(3);
   });
 
+  // @covers 027:FR-015
   it("feeds the multipliers of the difficulty to need decay and to NPC hostility", () => {
     const read = (difficulty: Difficulty): number[] => {
       const engine = newSession({ difficulty }).engine;
@@ -270,6 +277,7 @@ describe("difficulty changes only decay, need decay and hostility", () => {
     expect(read(Difficulty.Harsh)).toEqual([1300, 1500]);
   });
 
+  // @covers 027:FR-015 027:SC-005
   it("scales item decay by the difficulty: 0.5, 1.0 and 1.5 of the steady rate", () => {
     const remaining = (difficulty: Difficulty): number => {
       const engine = newSession({ difficulty }).engine;
@@ -308,6 +316,7 @@ function breadRemaining(engine: GameSession["engine"]): number {
 }
 
 describe("settlement state survives save and load", () => {
+  // @covers 027:FR-023
   it("keeps the tier, reach ticks and milestones and re-emits nothing after a load", () => {
     const session = newSession({ startingTier: "village" });
     const engine = session.engine;

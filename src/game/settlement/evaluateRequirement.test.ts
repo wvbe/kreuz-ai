@@ -9,6 +9,7 @@ import { recordMilestone } from "./recordMilestone";
 import { createSettlementWorld } from "./testSettlementWorld";
 
 describe("settlementPopulation", () => {
+  // @covers 027:FR-017
   it("counts the members of the government faction", () => {
     const world = createSettlementWorld();
     expect(settlementPopulation(world.engine)).toBe(0);
@@ -18,6 +19,7 @@ describe("settlementPopulation", () => {
 });
 
 describe("evaluateRequirement", () => {
+  // @covers 027:FR-003 027:FR-017
   it("reports population current, target and the one-line label", () => {
     const world = createSettlementWorld();
     world.addSettlers(5);
@@ -50,6 +52,7 @@ describe("evaluateRequirement", () => {
     expect(evaluateRequirement(world.engine, requirement).met).toBe(true);
   });
 
+  // @covers 027:FR-003
   it("counts active zones of the listed types", () => {
     const world = createSettlementWorld();
     const requirement: TierRequirement = {

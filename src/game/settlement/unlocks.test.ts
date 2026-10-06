@@ -7,6 +7,7 @@ import { createSettlementWorld } from "./testSettlementWorld";
 import { buildUnlockViews, getUnlockedAt, isUnlocked } from "./unlocks";
 
 describe("unlocks", () => {
+  // @covers 027:FR-007
   it("lists every kind of content with its tier and lock text", () => {
     const world = createSettlementWorld({ content: loadVillageBakeryContent() });
     const rows = buildUnlockViews(world.engine);
@@ -37,6 +38,7 @@ describe("unlocks", () => {
     ]);
   });
 
+  // @covers 027:FR-009
   it("answers isUnlocked from the tier in force", () => {
     const world = createSettlementWorld({ content: loadVillageBakeryContent() });
     expect(isUnlocked(world.engine, LockedContentKind.Furniture, "oven")).toBe(false);
@@ -46,6 +48,7 @@ describe("unlocks", () => {
     expect(isUnlocked(world.engine, LockedContentKind.DwellingLevel, "burgher_house")).toBe(false);
   });
 
+  // @covers 027:FR-009
   it("lists what a tier unlocks", () => {
     const world = createSettlementWorld({ content: loadVillageBakeryContent() });
     const village = getUnlockedAt(world.engine, SettlementTier.Village).map((row) => row.contentId);

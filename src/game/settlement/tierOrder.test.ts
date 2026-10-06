@@ -3,6 +3,7 @@ import { SettlementTier } from "../content/contentTypes";
 import { hasReachedTier, nextTierOf, orderedTiers, tierRank } from "./tierOrder";
 
 describe("tier order", () => {
+  // @covers 027:FR-001
   it("lists the four tiers in ascending order", () => {
     expect(orderedTiers).toEqual([
       SettlementTier.Hamlet,

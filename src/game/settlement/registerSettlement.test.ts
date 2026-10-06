@@ -19,6 +19,7 @@ describe("registerSettlement", () => {
     expect(registerSettlement(engine)).toBe(getSettlementService(engine));
   });
 
+  // @covers 027:FR-002
   it("gives the government both components and feeds the job service's tier source", () => {
     const engine = newEngine();
     engine.newGame({ seed: 1 });
@@ -31,6 +32,7 @@ describe("registerSettlement", () => {
     expect(getJobService(engine).currentTier()).toBe("village");
   });
 
+  // @covers 027:FR-021 027:FR-022
   it("starts at the startingTier with every lower tier reached at tick 0 and no milestone", () => {
     const engine = newEngine();
     engine.newGame({ seed: 1, startingTier: SettlementTier.MarketTown });
@@ -61,6 +63,7 @@ describe("registerSettlement", () => {
     expect(getSettlementService(engine).tier()).toBe(SettlementTier.Hamlet);
   });
 
+  // @covers 027:FR-023
   it("restores the tier of a saved game when it loads", () => {
     const first = newEngine();
     first.newGame({ seed: 5, startingTier: SettlementTier.Village });
@@ -83,6 +86,7 @@ describe("registerSettlement", () => {
     expect(settlementProgressOf(engine)?.tier).toBe("hamlet");
   });
 
+  // @covers 027:FR-004
   it("runs the tier check only on the first tick of a day", () => {
     const world = createSettlementWorld();
     world.engine.runTicks(300);

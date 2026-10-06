@@ -16,6 +16,7 @@ describe("initOptionsSchema", () => {
     expect(initOptionsSchema.parse({ ...valid, typo: 1 })).toEqual(valid);
   });
 
+  // @covers 027:FR-013
   it("rejects bad seeds and unknown difficulties", () => {
     expect(initOptionsSchema.safeParse({ ...valid, seed: -1 }).success).toBe(false);
     expect(initOptionsSchema.safeParse({ ...valid, seed: 2 ** 32 }).success).toBe(false);

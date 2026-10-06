@@ -9,6 +9,7 @@ function milestonesOf(world: ReturnType<typeof createSettlementWorld>): string[]
 }
 
 describe("subscribeMilestones", () => {
+  // @covers 027:FR-019 027:FR-020
   it("records the throne room once, however often it is activated again", () => {
     const world = createSettlementWorld();
     for (let round = 0; round < 3; round += 1) {
@@ -48,6 +49,7 @@ describe("subscribeMilestones", () => {
     ]);
   });
 
+  // @covers 027:FR-019
   it("records a master craftsman only for a settlement member", () => {
     const world = createSettlementWorld();
     const [member] = world.addSettlers(1);

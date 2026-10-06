@@ -4,6 +4,7 @@ import { recordMilestone } from "./recordMilestone";
 import { createSettlementWorld } from "./testSettlementWorld";
 
 describe("recordMilestone", () => {
+  // @covers 027:FR-020 027:FR-025
   it("records a milestone once with its tick and subjects and queues the event", () => {
     const world = createSettlementWorld();
     world.engine.runTicks(5);

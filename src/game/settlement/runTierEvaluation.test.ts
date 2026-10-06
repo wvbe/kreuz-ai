@@ -26,6 +26,7 @@ const easyTiers: JsonValue[] = [
 ];
 
 describe("runTierEvaluation", () => {
+  // @covers 027:FR-004 027:FR-025
   it("promotes at the day boundary, stores the reach tick and queues the event", () => {
     const world = createSettlementWorld({ content: contentWithTiers(easyTiers) });
     world.addSettlers(3);
@@ -36,6 +37,7 @@ describe("runTierEvaluation", () => {
     expect(getSettlementService(world.engine).tier()).toBe(SettlementTier.Village);
   });
 
+  // @covers 027:FR-004
   it("advances at most one tier per evaluation even when two tiers' requirements hold", () => {
     const world = createSettlementWorld({ content: contentWithTiers(easyTiers) });
     world.addSettlers(3);

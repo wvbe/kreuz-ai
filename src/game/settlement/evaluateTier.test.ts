@@ -5,6 +5,7 @@ import { getSettlementService } from "./settlementServiceRegistry";
 import { createSettlementWorld } from "./testSettlementWorld";
 
 describe("evaluateTier", () => {
+  // @covers 027:FR-006
   it("lists the next tier's requirements with their progress and changes nothing", () => {
     const world = createSettlementWorld();
     world.addSettlers(6);

@@ -1278,6 +1278,10 @@
       {
         "modifierId": "comfort.bonus",
         "value": 1
+      },
+      {
+        "modifierId": "social.bonus",
+        "value": 1
       }
     ],
     "constructionTicks": 22,
@@ -1291,7 +1295,7 @@
         "quantity": 1
       }
     ],
-    "unlockTier": "village"
+    "unlockTier": "hamlet"
   },
   {
     "id": "chair",

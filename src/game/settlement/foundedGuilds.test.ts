@@ -6,6 +6,7 @@ import { foundedGuilds } from "./foundedGuilds";
 import { createSettlementWorld } from "./testSettlementWorld";
 
 describe("foundedGuilds", () => {
+  // @covers 027:FR-018
   it("counts a guild only with a leader and enough settlement members (spec 027 FR-018)", () => {
     const world = createSettlementWorld();
     const guild = spawnContentFaction(world.engine, "guild_bakers");

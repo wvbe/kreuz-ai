@@ -25,6 +25,7 @@ describe("floorDivide", () => {
 });
 
 describe("combineMilli", () => {
+  // @covers 027:FR-014
   it("truncates a product with a permille multiplier", () => {
     expect(combineMilli(1000, 1000)).toBe(1000);
     expect(combineMilli(1000, 500)).toBe(500);
@@ -32,6 +33,7 @@ describe("combineMilli", () => {
     expect(combineMilli(333, 500)).toBe(166);
   });
 
+  // @covers 027:FR-014
   it("keeps a minimum magnitude of 1 and returns 0 for zero factors", () => {
     expect(combineMilli(1, 1)).toBe(1);
     expect(combineMilli(0, 1000)).toBe(0);

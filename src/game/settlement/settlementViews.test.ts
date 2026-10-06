@@ -12,6 +12,7 @@ describe("buildSettlementProgressView", () => {
     expect(buildSettlementProgressView(engine)).toBeNull();
   });
 
+  // @covers 027:FR-001 027:FR-006
   it("shows the tier, its noun, the next tier's checklist and the counters", () => {
     const world = createSettlementWorld();
     world.addSettlers(6);
@@ -35,6 +36,7 @@ describe("buildSettlementProgressView", () => {
 });
 
 describe("buildMilestoneViews", () => {
+  // @covers 027:FR-019
   it("lists all seven milestones and marks the reached ones", () => {
     const world = createSettlementWorld();
     expect(buildMilestoneViews(world.engine)).toHaveLength(7);

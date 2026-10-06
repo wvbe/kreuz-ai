@@ -6,6 +6,7 @@ import {
 } from "./settlementProgressComponent";
 
 describe("settlementProgressComponent", () => {
+  // @covers 027:FR-002
   it("defaults to a Hamlet reached at tick 0 without milestones", () => {
     expect(settlementProgressComponent.defaults()).toEqual({
       tier: "hamlet",

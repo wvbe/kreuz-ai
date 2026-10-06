@@ -31,6 +31,7 @@ describe("contentConstantsSchema", () => {
 });
 
 describe("settlementTierSchema", () => {
+  // @covers 027:FR-003
   it("parses each requirement kind", () => {
     const tier = settlementTierSchema.parse({
       tier: "village",
@@ -51,6 +52,7 @@ describe("settlementTierSchema", () => {
 });
 
 describe("difficultyModeSchema", () => {
+  // @covers 027:FR-013
   it("converts multipliers to permille", () => {
     expect(
       difficultyModeSchema.parse({

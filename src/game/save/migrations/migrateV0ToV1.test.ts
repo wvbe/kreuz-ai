@@ -21,6 +21,7 @@ function v0Root(difficulty: string): JsonObject {
   };
 }
 
+// @covers 027:FR-024
 describe("migrateV0ToV1", () => {
   it("renames the old difficulty names", () => {
     expect(migrateV0ToV1(v0Root("normal"))["initOptions"]).toMatchObject({ difficulty: "steady" });
