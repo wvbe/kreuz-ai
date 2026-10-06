@@ -112,6 +112,7 @@ describe("traitSchema", () => {
 describe("humanoidPrototypeSchema", () => {
   const humanoid = { id: "farmer", name: "Farmer", behaviorTreeId: "basic_needs" };
 
+  // @covers 022:FR-020
   it("applies defaults, scales skills and bounds trait slots", () => {
     expect(
       humanoidPrototypeSchema.parse({ ...humanoid, startingSkills: { farming: 30 } }),

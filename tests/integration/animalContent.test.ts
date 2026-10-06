@@ -20,6 +20,7 @@ function leaves(node: BehaviorNode): BehaviorNode[] {
 }
 
 describe("animal prototypes (spec 022 US11)", () => {
+  // @covers 022:FR-011
   it("has the 7 livestock and 6 wild animals of the spec, each with a tree", () => {
     expect(content.animals.ids()).toEqual([...livestock, ...wild].sort());
     expect(content.animals.size).toBe(13);
@@ -96,6 +97,7 @@ describe("behavior trees (spec 022 US14)", () => {
     "predator_behavior",
   ];
 
+  // @covers 022:FR-014
   it("has the 7 trees of the spec, the v0 trees and the animal trees of the cross-reference item 8", () => {
     expect(content.behaviorTrees.ids()).toEqual(
       expect.arrayContaining([
@@ -109,6 +111,7 @@ describe("behavior trees (spec 022 US14)", () => {
     expect(content.behaviorTrees.size).toBe(11);
   });
 
+  // @covers 022:FR-014
   it("keeps every tree within the depth limit of five", () => {
     for (const tree of content.behaviorTrees.all()) {
       expect(measureTreeDepth(tree.root)).toBeLessThanOrEqual(5);
@@ -139,6 +142,7 @@ describe("behavior trees (spec 022 US14)", () => {
     expect(tree("mason")).toBe("daily_routine");
   });
 
+  // @covers 022:FR-014
   it("registers every handler the trees name with an engine (checked at load)", () => {
     expect(() => createAiWorld()).not.toThrow();
   });

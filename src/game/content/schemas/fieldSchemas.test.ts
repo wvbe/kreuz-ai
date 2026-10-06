@@ -14,6 +14,7 @@ import {
 } from "./fieldSchemas";
 
 describe("field schemas", () => {
+  // @covers 022:FR-019
   it("validates ids", () => {
     expect(contentIdSchema.safeParse("oak_log").success).toBe(true);
     expect(contentIdSchema.safeParse("Oak").success).toBe(false);
@@ -34,6 +35,7 @@ describe("field schemas", () => {
     expect(fractionSchema.safeParse(1.5).success).toBe(false);
   });
 
+  // @covers 022:FR-020
   it("validates plain integers", () => {
     expect(countSchema.safeParse(0).success).toBe(true);
     expect(positiveSchema.safeParse(0).success).toBe(false);

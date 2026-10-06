@@ -148,6 +148,7 @@ describe("material content (spec 022 US1)", () => {
     expect(content.materials.ids().length).toBeGreaterThanOrEqual(86);
   });
 
+  // @covers 022:FR-016
   it("gives every material a positive stack limit, weight and (but for water) value in milli", () => {
     for (const id of content.materials.ids()) {
       const material = content.materials.require(id);
@@ -200,6 +201,7 @@ describe("material content (spec 022 US1)", () => {
     }
   });
 
+  // @covers 022:FR-020
   it("has at least 15 food materials, each with a perishability or a non-perishable staple category", () => {
     const food = content.materials
       .ids()
@@ -287,6 +289,7 @@ describe("furniture content (spec 022 US3)", () => {
     }
   });
 
+  // @covers 022:FR-022
   it("unlocks the tiers of the spec zone column and the owner decisions", () => {
     const tierOf = (id: string): SettlementTier =>
       content.furniture.require(id).unlockTier ?? SettlementTier.Hamlet;

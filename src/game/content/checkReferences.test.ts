@@ -27,6 +27,7 @@ describe("checkReferences", () => {
     expect(issues[0]).toMatchObject({ file: ContentFile.NameLists, id: "common_13c" });
   });
 
+  // @covers 022:FR-015
   it("reports every dangling reference of a record, not just the first", () => {
     const content = parsed();
     const recipe = content.recipes.find((entry) => entry.id === "bake_bread");

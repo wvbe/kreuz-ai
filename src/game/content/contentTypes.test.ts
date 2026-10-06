@@ -21,6 +21,7 @@ describe("content conformance against spec 022 (task 5.4a, D-120)", () => {
   const content = loadContent();
   const tierOf = (tier: string | undefined): number => tierRank(tier ?? SettlementTier.Hamlet);
 
+  // @covers 022:FR-002 022:FR-004
   it("holds at least the spec's recipes and zone types", () => {
     expect(content.recipes.ids().length).toBeGreaterThanOrEqual(specRecipes);
     expect(content.zones.ids().length).toBeGreaterThanOrEqual(specZones);
@@ -105,6 +106,7 @@ describe("content conformance against spec 022 (task 5.4a, D-120)", () => {
     }
   });
 
+  // @covers 022:SC-003
   it("resolves every zone furniture requirement to furniture", () => {
     const tags = new Set(content.furniture.all().flatMap((piece) => piece.tags));
     for (const zone of content.zones.all()) {
@@ -145,6 +147,7 @@ describe("content conformance against spec 022 (task 5.4a, D-120)", () => {
     }
   });
 
+  // @covers 022:FR-015 022:SC-003
   it("keeps every tier reachable from a Hamlet start", () => {
     expect(validateTierReachability(content)).toEqual([]);
   });

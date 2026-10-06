@@ -76,6 +76,7 @@ function registerPackHandlers(handlers: BehaviorHandlerRegistry): void {
 }
 
 describe("loadContent (vertical-slice pack v0)", () => {
+  // @covers 022:SC-001
   it("loads without errors and exposes every category", () => {
     const content = loadContent();
     expect(content.terrain.ids().length).toBeGreaterThanOrEqual(21);
@@ -97,6 +98,7 @@ describe("loadContent (vertical-slice pack v0)", () => {
     expect(content.materials.currencyId).toBe("silver_penny");
   });
 
+  // @covers 022:FR-016
   it("converts authored decimals to fixed point", () => {
     const content = loadContent();
     expect(content.materials.require("bread").valueMilli).toBe(2000);
@@ -133,12 +135,14 @@ describe("loadContent (vertical-slice pack v0)", () => {
     expect(second.materials.has("extra_item")).toBe(false);
   });
 
+  // @covers 022:FR-015
   it("freezes loaded records", () => {
     const content = loadContent();
     expect(Object.isFrozen(content.skills.require("farming"))).toBe(true);
     expect(Object.isFrozen(content.constants)).toBe(true);
   });
 
+  // @covers 022:FR-014
   it("checks behavior tree handlers when a handler registry is given", () => {
     const handlers = new BehaviorHandlerRegistry();
     expect(() => loadContent({ handlers })).toThrow(ContentValidationError);
@@ -159,6 +163,7 @@ describe("loadContent (vertical-slice pack v0)", () => {
 });
 
 describe("loadContentPack", () => {
+  // @covers 022:FR-018
   it("loads from parsed JSON without touching the filesystem", () => {
     const content = loadContentPack(clonePack());
     expect(content.skills.require("baking").titleNoun).toBe("Baker");
@@ -173,6 +178,7 @@ describe("loadContentPack", () => {
     expect(issues).toContainEqual(expect.objectContaining({ file: ContentFile.Needs, id: null }));
   });
 
+  // @covers 022:FR-015 022:FR-018
   it("rejects duplicate ids naming file, id and field", () => {
     const pack = clonePack();
     const skills = records(pack, ContentFile.Skills);
@@ -188,6 +194,7 @@ describe("loadContentPack", () => {
     ]);
   });
 
+  // @covers 022:FR-015
   it("collects errors of several files in one pass", () => {
     const pack = clonePack();
     const need = records(pack, ContentFile.Needs)[0];
@@ -367,6 +374,7 @@ describe("invalid records per category", () => {
     expect(files).toContain(ContentFile.NameFormats);
   });
 
+  // @covers 022:FR-023
   it("rejects constants where downgrade grace does not exceed upgrade grace", () => {
     const pack = clonePack();
     const constants = pack[ContentFile.ContentConstants];
@@ -576,6 +584,7 @@ describe("dangling references", () => {
     );
   });
 
+  // @covers 022:FR-018
   it("rejects incomplete enum tables (tiers, difficulties, dwelling levels, moments)", () => {
     const pack = clonePack();
     pack[ContentFile.SettlementTiers] = records(pack, ContentFile.SettlementTiers).slice(0, 3);

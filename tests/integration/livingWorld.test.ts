@@ -40,6 +40,7 @@ function removeAllBread(engine: GameEngine): void {
 }
 
 describe("Checkpoint B: settlers live autonomously (seed 42, Small)", () => {
+  // @covers 022:SC-007
   it("keeps all six alive for two game days, moving, eating, with hunger never at zero", () => {
     const engine = newGame();
     const ids = settlerIds(engine);

@@ -51,6 +51,7 @@ describe("Checkpoint C: the playable loop (seed 42, Small, player commands only)
     expect(second).toEqual(first);
   });
 
+  // @covers 022:SC-002
   it("feeds six settlers for 14 days: bread eaten every day, nobody dies, nothing unexplained", () => {
     const eaten: { tick: number; materialId: string }[] = [];
     const created: GameSession[] = [];

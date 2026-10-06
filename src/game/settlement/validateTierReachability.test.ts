@@ -46,6 +46,7 @@ describe("validateTierReachability", () => {
     expect(validateTierReachability(loadContent())).toEqual([]);
   });
 
+  // @covers 022:FR-015 027:SC-009
   it("fails when a required zone type unlocks at the tier it should open (FR-010)", () => {
     const content = patched(ContentFile.Zones, "throne_room", (record) => ({
       ...record,

@@ -47,6 +47,12 @@ const restrictedSyntax = (extra = []) => [
     selector: "TSUnionType > TSLiteralType[literal.type='Literal']",
     message: "023 FR-005: use an enum instead of a literal-value union type.",
   },
+  {
+    selector:
+      "CallExpression[callee.object.name='z'][callee.property.name='enum'] > ArrayExpression > Literal[value=/./]",
+    message:
+      "023 FR-005: Zod schemas take an enum (z.enum(MyEnum) or members of it), not string literals.",
+  },
   ...extra,
 ];
 

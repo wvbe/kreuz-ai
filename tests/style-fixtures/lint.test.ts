@@ -57,6 +57,17 @@ describe("023 lint rules fire on fixtures", () => {
     expect(await rulesFired(code, gamePath)).toContain("no-restricted-syntax");
   });
 
+  it("FR-005 Zod enum of string literals instead of an enum", async () => {
+    const literals = documented(
+      'import { z } from "zod";\nexport const fixtureSchema = z.enum(["a", "b"]);\n',
+    );
+    expect(await rulesFired(literals, gamePath)).toContain("no-restricted-syntax");
+    const members = documented(
+      'import { z } from "zod";\nexport enum Kind {\n  A = "a",\n}\nexport const fixtureSchema = z.enum([Kind.A]);\nexport const wholeSchema = z.enum(Kind);\n',
+    );
+    expect(await rulesFired(members, gamePath)).not.toContain("no-restricted-syntax");
+  });
+
   it("FR-006 any and unknown", async () => {
     const anyCode = documented("export type Fixture = { value: any };\n");
     expect(await rulesFired(anyCode, gamePath)).toContain("@typescript-eslint/no-explicit-any");
@@ -101,6 +112,14 @@ describe("023 lint rules fire on fixtures", () => {
     expect(await rulesFired("export enum Fixture {\n  A = 'a',\n}\n", gamePath)).toContain(
       "jsdoc/require-jsdoc",
     );
+  });
+
+  it("FR-012 undocumented parameters and returns", async () => {
+    const code =
+      "/**\n * Adds one.\n */\nexport function addOne(value: number): number {\n  return value + 1;\n}\n";
+    const fired = await rulesFired(code, gamePath);
+    expect(fired).toContain("jsdoc/require-param");
+    expect(fired).toContain("jsdoc/require-returns");
   });
 
   it("FR-011 one-line TSDoc", async () => {
