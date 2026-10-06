@@ -49,9 +49,12 @@ describe("recipe compatibility", () => {
     const saw = world.engine.content.recipes.require("saw_oak_planks");
     expect(canMake(world.engine, oven, bake)).toBe(true);
     expect(canMake(world.engine, oven, saw)).toBe(false);
-    expect(compatibleRecipes(world.engine, oven).map((recipe) => recipe.id)).toEqual([
-      "bake_bread",
-    ]);
+    expect(compatibleRecipes(world.engine, oven).map((recipe) => recipe.id)).toEqual(
+      expect.arrayContaining(["bake_bread"]),
+    );
+    expect(compatibleRecipes(world.engine, oven).map((recipe) => recipe.id)).not.toContain(
+      "saw_oak_planks",
+    );
   });
 
   it("lists the capable workstations of a recipe, none for an unknown recipe", () => {

@@ -67,7 +67,7 @@ describe("buildOrderView and buildOrderViews", () => {
   it("reports Paused without a blocked reason and lists live orders ascending", () => {
     const world = readyWorld();
     const bread = world.standing({ materialId: "bread" });
-    const flour = world.standing({ materialId: "flour" });
+    const flour = world.standing({ materialId: "flour", recipeId: "grind_flour" });
     world.command("PauseStandingOrder", { orderId: bread });
     world.command("DeleteStandingOrder", { orderId: flour });
     const views = buildOrderViews(world.engine);

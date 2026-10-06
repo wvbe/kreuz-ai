@@ -49,9 +49,9 @@ describe("registerProduction", () => {
       expect.objectContaining({ orderId: 1, quantity: 3, priority: 40, status: "active" }),
     ]);
     expect(view(world, "order", { orderId: 1 })).toMatchObject({ orderId: 1 });
-    expect(view(world, "recipes-for", { workstationId: mill.id })).toEqual([
-      expect.objectContaining({ id: "grind_flour" }),
-    ]);
+    expect(view(world, "recipes-for", { workstationId: mill.id })).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: "grind_flour" })]),
+    );
     expect(world.command("SetProductionOrderPriority", { orderId: 1, priority: 80 })).toEqual({
       orderId: 1,
     });

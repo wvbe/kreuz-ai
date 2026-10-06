@@ -184,7 +184,13 @@ describe("runStewardReview", () => {
     const world = readyWorld();
     world.spawn("grinding_mill", 32);
     world.standing({ materialId: "oak_plank", priority: 40 });
-    world.standing({ materialId: "flour", priority: 90, targetQuantity: 8, restockThreshold: 4 });
+    world.standing({
+      materialId: "flour",
+      recipeId: "grind_flour",
+      priority: 90,
+      targetQuantity: 8,
+      restockThreshold: 4,
+    });
     world.standing({ materialId: "bread", priority: 90, targetQuantity: 8, restockThreshold: 4 });
     const started = world.record("standing-order.restock.started") as { orderId: number }[];
     world.runToReview();
@@ -257,7 +263,11 @@ describe("runStewardReview", () => {
     world.throneRoom(5, 5);
     world.steward(2);
     world.spawn("workbench", 30);
-    const id = world.standing({ materialId: "iron_ingot", targetQuantity: 6 });
+    const id = world.standing({
+      materialId: "iron_ingot",
+      recipeId: "smelt_ingot",
+      targetQuantity: 6,
+    });
     getJobService(world.engine).setTierSource(() => "hamlet");
     world.runToReview();
     expect(runsOf(world, id)).toEqual([]);

@@ -103,10 +103,10 @@ describe("resolveRecipe", () => {
     });
     const locked = createAiWorld({ content });
     getJobService(locked.engine).setTierSource(() => "hamlet");
-    expect(kindOf(() => resolveRecipe(locked.engine, "iron_ingot", undefined))).toBe(
+    expect(kindOf(() => resolveRecipe(locked.engine, "iron_ingot", "smelt_ingot"))).toBe(
       StandingOrderErrorKind.ContentLocked,
     );
     getJobService(locked.engine).setTierSource(() => "village");
-    expect(resolveRecipe(locked.engine, "iron_ingot", undefined).recipeId).toBe("smelt_ingot");
+    expect(resolveRecipe(locked.engine, "iron_ingot", "smelt_ingot").recipeId).toBe("smelt_ingot");
   });
 });

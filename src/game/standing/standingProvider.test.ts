@@ -13,7 +13,7 @@ describe("standingProvider", () => {
   it("lists the live orders as subjects, not deleted ones", () => {
     const world = createStandingWorld();
     const bread = world.standing({ materialId: "bread" });
-    const flour = world.standing({ materialId: "flour" });
+    const flour = world.standing({ materialId: "flour", recipeId: "grind_flour" });
     expect(standingProvider.subjects(world.engine)).toEqual([ref(bread), ref(flour)]);
     world.command("DeleteStandingOrder", { orderId: bread });
     expect(standingProvider.subjects(world.engine)).toEqual([ref(flour)]);

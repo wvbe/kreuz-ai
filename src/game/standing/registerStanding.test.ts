@@ -79,7 +79,11 @@ describe("registerStanding", () => {
     const zoneId = world.zone("stockpile", [40]);
     const zoned = world.standing({ materialId: "bread", scope: { zoneId } });
     expect(world.orderOf(zoned).scope).toBe(StandingOrderScope.Zone);
-    const whole = world.standing({ materialId: "flour", scope: "settlement" });
+    const whole = world.standing({
+      materialId: "flour",
+      recipeId: "grind_flour",
+      scope: "settlement",
+    });
     expect(world.orderOf(whole).scope).toBe(StandingOrderScope.Settlement);
     expect(() =>
       world.command("CreateStandingOrder", { materialId: "oak_plank", scope: "x" }),

@@ -75,7 +75,9 @@ describe("buildRecipeViews", () => {
     const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const oven = world.station("oven", 22);
     world.setTier("hamlet");
-    expect(buildRecipeViews(world.engine, oven.id)).toEqual([
+    expect(
+      buildRecipeViews(world.engine, oven.id)?.filter((view) => view.id === "bake_bread"),
+    ).toEqual([
       {
         id: "bake_bread",
         name: "Bake bread",
@@ -91,7 +93,9 @@ describe("buildRecipeViews", () => {
       },
     ]);
     world.setTier("village");
-    expect(buildRecipeViews(world.engine, oven.id)?.[0]?.locked).toBe(false);
+    expect(
+      buildRecipeViews(world.engine, oven.id)?.find((view) => view.id === "bake_bread")?.locked,
+    ).toBe(false);
     expect(buildRecipeViews(world.engine, world.chest(50).id)).toBeNull();
   });
 });

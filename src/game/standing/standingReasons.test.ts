@@ -100,7 +100,7 @@ describe("standingReasons", () => {
     world.userBoard();
     world.throneRoom(5, 5);
     world.steward(2);
-    const id = world.standing({ materialId: "iron_ingot" });
+    const id = world.standing({ materialId: "iron_ingot", recipeId: "smelt_ingot" });
     getJobService(world.engine).setTierSource(() => "hamlet");
     const reasons = standingReasons(world.engine, world.orderOf(id));
     expect(reasons).toEqual([
@@ -156,7 +156,11 @@ describe("standingReasons", () => {
     world.spawn("oven", 30);
     world.spawn("grinding_mill", 32);
     const bread = world.standing({ materialId: "bread" });
-    const flour = world.standing({ materialId: "flour", targetQuantity: 10 });
+    const flour = world.standing({
+      materialId: "flour",
+      recipeId: "grind_flour",
+      targetQuantity: 10,
+    });
     runStewardReview(world.engine, world.engine.time.tickCount + 1);
     world.orderOf(bread).restocking = true;
     const missing = standingReasons(world.engine, world.orderOf(bread)).find(

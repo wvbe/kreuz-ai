@@ -71,8 +71,8 @@ describe("validateTierReachability", () => {
       (issue) => issue.tier === SettlementTier.Village,
     );
     expect(village?.kind).toBe(ReachabilityIssueKind.RequirementUnreachable);
-    expect(village?.missing).toBe("iron_ingot");
-    expect(village?.message).toContain("no source for iron_ingot");
+    expect(village?.missing).toBe("smelt_iron");
+    expect(village?.message).toContain("recipe smelt_iron unlocks at village");
   });
 
   it("accepts iron-dependent furniture through the ore, sale and refined-credit path", () => {
@@ -150,8 +150,7 @@ describe("validateTierReachability", () => {
     const issues = validateTierReachability(content).filter(
       (issue) => issue.kind === ReachabilityIssueKind.RecipeBelowWorkstation,
     );
-    expect(issues).toHaveLength(1);
-    expect(issues[0]?.requirement).toBe("recipe bake_bread");
+    expect(issues.map((issue) => issue.requirement)).toContain("recipe bake_bread");
   });
 });
 

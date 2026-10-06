@@ -138,7 +138,13 @@ describe("createStandingOrder", () => {
     const world = createStandingWorld({ content });
     world.standing({ materialId: "bread" });
     expect(
-      kindOf(() => createStandingOrder(world.engine, { materialId: "flour", targetQuantity: 5 })),
+      kindOf(() =>
+        createStandingOrder(world.engine, {
+          materialId: "flour",
+          recipeId: "grind_flour",
+          targetQuantity: 5,
+        }),
+      ),
     ).toBe(StandingOrderErrorKind.TooManyOrders);
   });
 

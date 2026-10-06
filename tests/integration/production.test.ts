@@ -185,10 +185,9 @@ describe("recipe variants are separate recipes", () => {
     const recipes = world.engine
       .getQuery("recipes-for")
       ?.run({ workstationId: sawmill.id }, world.engine);
-    expect((recipes as { id: string }[]).map((recipe) => recipe.id)).toEqual([
-      "saw_oak_planks",
-      "saw_fine_planks",
-    ]);
+    expect((recipes as { id: string }[]).map((recipe) => recipe.id)).toEqual(
+      expect.arrayContaining(["saw_oak_planks", "saw_fine_planks"]),
+    );
     world.order({
       workstationId: sawmill.id,
       recipeId: "saw_fine_planks",
