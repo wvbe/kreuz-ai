@@ -33,7 +33,7 @@
     {
       "command": {
         "kind": "SetZoneMaterialFilter",
-        "zoneId": 19,
+        "zoneId": 26,
         "filter": { "categories": ["wood"] }
       }
     },
@@ -55,7 +55,7 @@
         "value": "wood"
       }
     },
-    { "command": { "kind": "DeleteZone", "zoneId": 19 } },
+    { "command": { "kind": "DeleteZone", "zoneId": 26 } },
     { "step": 1 },
     { "assert": { "query": "zones", "path": "length", "op": "eq", "value": 0 } },
     { "replay": true }

@@ -3,6 +3,7 @@ import { aiStateComponent } from "../../src/game/behavior/aiStateComponent";
 import { BehaviorHandlerRegistry } from "../../src/game/behavior/BehaviorHandlerRegistry";
 import { NodeStatus } from "../../src/game/behavior/behaviorTypes";
 import { merchantComponent } from "../../src/game/trade/merchantComponent";
+import { animalComponent } from "../../src/game/fauna/animalComponent";
 import { envoyComponent } from "../../src/game/diplomacy/envoyComponent";
 import { settlementChronicleComponent } from "../../src/game/settlement/settlementChronicleComponent";
 import { settlementProgressComponent } from "../../src/game/settlement/settlementProgressComponent";
@@ -36,13 +37,39 @@ import { taskQueueComponent } from "../../src/game/task/taskQueueComponent";
 
 function createHandlers(): BehaviorHandlerRegistry {
   const handlers = new BehaviorHandlerRegistry();
-  handlers.registerCondition("any_need_below_critical", () => NodeStatus.Failure);
-  handlers.registerAction("satisfy_critical_need", () => NodeStatus.Success);
-  handlers.registerAction("idle_wander", () => NodeStatus.Success);
-  handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
-  handlers.registerAction("claim_job", () => NodeStatus.Failure);
-  handlers.registerCondition("household_needs_goods", () => NodeStatus.Failure);
-  handlers.registerAction("fetch_household_goods", () => NodeStatus.Failure);
+  for (const id of [
+    "any_need_below_critical",
+    "jobs_available",
+    "household_needs_goods",
+    "zone_available",
+    "hostile_animal_near",
+    "animal_hungry",
+    "threat_near",
+    "humanoid_near",
+    "prey_near",
+    "no_guard_near",
+    "animal_aggressive",
+    "hunt_urge",
+  ]) {
+    handlers.registerCondition(id, () => NodeStatus.Failure);
+  }
+  for (const id of [
+    "satisfy_critical_need",
+    "idle_wander",
+    "claim_job",
+    "fetch_household_goods",
+    "go_to_zone",
+    "engage_threat",
+    "flee_from_threat",
+    "graze",
+    "wander_animal",
+    "stalk_prey",
+    "attack_prey",
+    "steal_prey",
+    "attack_intruder",
+  ]) {
+    handlers.registerAction(id, () => NodeStatus.Success);
+  }
   return handlers;
 }
 
@@ -75,6 +102,7 @@ describe("content pack v0 with the kernel", () => {
       envoyComponent,
       settlementProgressComponent,
       settlementChronicleComponent,
+      animalComponent,
     ]) {
       components.register(definition);
     }
@@ -106,7 +134,9 @@ describe("content pack v0 with the kernel", () => {
     const content = loadContent();
     const handlers = createHandlers();
     const trees = content.createBehaviorTreeRegistry(handlers);
-    expect(trees.ids()).toEqual(["basic_needs", "idle_wander"]);
+    expect(trees.ids()).toEqual(
+      expect.arrayContaining(["basic_needs", "idle_wander", "daily_routine", "predator_behavior"]),
+    );
     expect(trees.require("basic_needs").root.type).toBe("selector");
   });
 
@@ -138,6 +168,7 @@ describe("content pack v0 with the kernel", () => {
     components.register(envoyComponent);
     components.register(settlementProgressComponent);
     components.register(settlementChronicleComponent);
+    components.register(animalComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

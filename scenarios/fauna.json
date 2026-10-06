@@ -1,0 +1,90 @@
+{
+  "name": "fauna",
+  "seed": 42,
+  "options": { "difficulty": "steady", "mapSize": 0 },
+  "steps": [
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    { "assert": { "query": "animals", "path": "animals.length", "op": "gt", "value": 0 } },
+    { "assert": { "query": "animals", "path": "animals.0.entityId", "op": "eq", "value": 19 } },
+    {
+      "assert": { "query": "animals", "path": "animals.0.prototypeId", "op": "eq", "value": "deer" }
+    },
+    { "assert": { "query": "animals", "path": "animals.0.kind", "op": "eq", "value": "wild" } },
+    {
+      "assert": {
+        "query": "animals",
+        "args": { "kind": "livestock" },
+        "path": "animals.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": { "id": 20 },
+        "path": "components.TaskQueue.history.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    { "step": 288 },
+    {
+      "assert": {
+        "query": "entity",
+        "args": { "id": 20 },
+        "path": "components.TaskQueue.history.length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    {
+      "command": {
+        "kind": "PostJob",
+        "boardId": 2,
+        "jobTypeId": "hunt.game",
+        "mapId": 1,
+        "cellIndex": 250,
+        "entityId": 19,
+        "priority": 90
+      }
+    },
+    { "step": 150 },
+    {
+      "assert": {
+        "query": "animals",
+        "args": { "prototypeId": "deer" },
+        "path": "animals.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": { "id": 7 },
+        "path": "components.Inventory.slots.3.materialId",
+        "op": "eq",
+        "value": "raw_meat"
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": { "id": 7 },
+        "path": "components.Inventory.slots.3.quantity",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    { "step": 650 },
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    { "assertHash": { "label": "after-hunt" } },
+    { "saveLoad": true },
+    { "assertHash": { "label": "after-hunt" } },
+    { "step": 288 },
+    { "assert": { "query": "animals", "path": "animals.length", "op": "gt", "value": 0 } },
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } }
+  ]
+}

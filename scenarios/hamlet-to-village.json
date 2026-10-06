@@ -169,13 +169,13 @@
         "query": "traders",
         "path": "traders.0.entityId",
         "op": "eq",
-        "value": 50
+        "value": 57
       }
     },
     {
       "command": {
         "kind": "TradeBuy",
-        "traderId": 50,
+        "traderId": 57,
         "materialId": "nails",
         "quantity": 40
       }
