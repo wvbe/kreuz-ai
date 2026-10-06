@@ -96,6 +96,19 @@ respond 1 accept                     # reject costs 3 standing; counter just clo
 
 A refused act shows `command.rejected` on the next step, and `diplomacy.act.refused` says why: `HostileGate`, `TargetLeaderless`, `InsufficientFunds`. An envoy that cannot reach anyone gives up after 576 ticks and the gift comes back to the treasury. `scenarios/diplomacy.json` plays gifts to the Barony and the agreement that follows (faction ids 10, 13 and 16 for seed 42; `diplomacy` shows yours).
 
+## Growing (settlement tiers)
+
+The settlement starts as a Hamlet. Once a day (at the start of the day) the game checks what the next tier needs and promotes at most one tier; nothing is ever lost again. Village needs 8 settlers, 4 dwellings and an active throne room (a walled zone of at least 9 cells with a table, designated as `throne_room`); settlers and dwellings come with the housing task (4.5), so for now a Hamlet can show the throne room done and the rest open.
+
+```
+tier                                 # the tier, when each was reached, the next tier's checklist ([x] met)
+unlocks                              # what is still locked and where it opens ("Unlocks at Village")
+unlocks village                      # what Village will open
+milestones                           # seven firsts: throne room, worship space, market, guild, master craftsman, trade agreement, dwelling upgrade
+```
+
+Locked buildings, zones, recipes and jobs are listed and can be looked at, but placing, designating, ordering or posting them is refused until the tier is reached. `scenarios/tier-progress.json` builds the throne room from the Checkpoint C opening (about 12 game days).
+
 ## When something is wrong
 
 - `why <entityId>` explains a settler, `why order <id>` a production order, `why posting <id>` a posting; every idle citizen has a reason (`NoJobsAvailable`, `AwaitingDecision`, ...).

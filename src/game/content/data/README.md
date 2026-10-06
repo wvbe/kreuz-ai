@@ -18,7 +18,7 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `zones.json` | 7 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
 | `jobs.json` | 11 jobs (a `priority` field per job type since D-54) | 20+ |
-| `factions.json` | 1 guild (`guild_bakers`) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | 9 guilds + 3 religious |
+| `factions.json` | 3 guilds (`guild_bakers`, `guild_masons`, `guild_carpenters`) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | 9 guilds + 3 religious |
 | `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |
 | `name-lists.json` | `common_13c`: 62 given names, 41 bynames (meets the 60/40 minimum) | keep, extend |
 | `humanoid-prototypes.json` | peasant, farmer, carpenter, baker | 20+ |

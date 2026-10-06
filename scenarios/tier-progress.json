@@ -1,0 +1,223 @@
+{
+  "name": "tier-progress",
+  "seed": 42,
+  "options": { "difficulty": "steady", "mapSize": 0 },
+  "steps": [
+    { "assert": { "query": "settlement-progress", "path": "tier", "op": "eq", "value": "hamlet" } },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "nextTier",
+        "op": "eq",
+        "value": "village"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.length",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.0.label",
+        "op": "eq",
+        "value": "population 6/8"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.2.met",
+        "op": "eq",
+        "value": false
+      }
+    },
+    { "assert": { "query": "milestones", "path": "length", "op": "eq", "value": 7 } },
+    {
+      "assert": {
+        "query": "unlocks",
+        "args": { "lockedOnly": true },
+        "path": "length",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "unlocks",
+        "args": { "tier": "village" },
+        "path": "0.lockText",
+        "op": "eq",
+        "value": "Unlocks at Village"
+      }
+    },
+    {
+      "command": { "kind": "DesignateZone", "zoneTypeId": "stockpile", "mapId": 1, "cells": [257] }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    { "command": { "kind": "PlaceFurniture", "furnitureId": "chest", "mapId": 1, "cell": 335 } },
+    {
+      "command": { "kind": "PlaceFurniture", "furnitureId": "workbench", "mapId": 1, "cell": 283 }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    { "command": { "kind": "PlaceWall", "mapId": 1, "cells": [297, 298, 329, 353, 355, 385] } },
+    { "command": { "kind": "PlaceDoor", "mapId": 1, "cell": 325 } },
+    { "command": { "kind": "PlaceFurniture", "furnitureId": "oven", "mapId": 1, "cell": 326 } },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    { "step": 100 },
+    {
+      "command": { "kind": "CreateProductionOrder", "recipeId": "cut_stone_block", "quantity": 4 }
+    },
+    { "step": 700 },
+    { "command": { "kind": "CreateProductionOrder", "recipeId": "grind_flour", "quantity": 60 } },
+    { "command": { "kind": "CreateProductionOrder", "recipeId": "bake_bread", "quantity": 120 } },
+    { "step": 640 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 1440 } },
+    { "assert": { "query": "settlement-progress", "path": "evaluations", "op": "eq", "value": 5 } },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "lastEvaluationTick",
+        "op": "eq",
+        "value": 1440
+      }
+    },
+    { "assert": { "query": "settlement-progress", "path": "tier", "op": "eq", "value": "hamlet" } },
+    { "assert": { "query": "milestones", "path": "0.reached", "op": "eq", "value": false } },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [215, 216, 234, 235, 240, 263, 267, 286, 289, 312]
+      }
+    },
+    { "command": { "kind": "PlaceDoor", "mapId": 1, "cell": 314 } },
+    { "command": { "kind": "PlaceFurniture", "furnitureId": "table", "mapId": 1, "cell": 265 } },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "throne_room",
+        "mapId": 1,
+        "cells": [236, 237, 238, 239, 264, 265, 266, 287, 288]
+      }
+    },
+    {
+      "command": { "kind": "CreateProductionOrder", "recipeId": "cut_stone_block", "quantity": 24 }
+    },
+    { "step": 864 },
+    { "assertHash": { "label": "day-8" } },
+    { "saveLoad": true },
+    { "step": 1152 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 3456 } },
+    { "assert": { "query": "zones", "path": "4.zoneTypeId", "op": "eq", "value": "throne_room" } },
+    { "assert": { "query": "zones", "path": "4.status", "op": "eq", "value": "active" } },
+    {
+      "assert": {
+        "query": "milestones",
+        "path": "0.milestone",
+        "op": "eq",
+        "value": "throne-room-established"
+      }
+    },
+    { "assert": { "query": "milestones", "path": "0.reached", "op": "eq", "value": true } },
+    {
+      "assert": {
+        "query": "milestones",
+        "path": "4.milestone",
+        "op": "eq",
+        "value": "first-master-craftsman"
+      }
+    },
+    { "assert": { "query": "milestones", "path": "4.reached", "op": "eq", "value": true } },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "milestones.length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.2.met",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.2.label",
+        "op": "eq",
+        "value": "active throne_room zone 1/1"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.0.met",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.1.met",
+        "op": "eq",
+        "value": false
+      }
+    },
+    { "step": 576 },
+    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 4032 } },
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    { "assert": { "query": "settlement-progress", "path": "tier", "op": "eq", "value": "hamlet" } },
+    {
+      "assert": { "query": "settlement-progress", "path": "evaluations", "op": "eq", "value": 14 }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "milestones.length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    { "assertHash": { "label": "day-14" } },
+    { "replay": true }
+  ]
+}
