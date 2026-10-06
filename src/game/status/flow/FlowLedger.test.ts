@@ -19,6 +19,7 @@ function entry(
 }
 
 describe("FlowLedger.record", () => {
+  // @covers 025:FR-011
   it("adds up units with the same material, direction, source and subject", () => {
     const ledger = new FlowLedger();
     ledger.record(2, entry("bread", 2));
@@ -38,6 +39,7 @@ describe("FlowLedger.record", () => {
 });
 
 describe("FlowLedger.prune", () => {
+  // @covers 025:FR-011
   it("keeps the current day and the last ledgerWindowDays complete days", () => {
     const ledger = new FlowLedger();
     for (let day = 0; day <= 12; day += 1) {
@@ -67,6 +69,7 @@ describe("FlowLedger.dayList", () => {
 });
 
 describe("FlowLedger.createSection", () => {
+  // @covers 025:FR-014
   it("round-trips through JSON", () => {
     const ledger = new FlowLedger();
     ledger.record(4, entry("bread", 2));

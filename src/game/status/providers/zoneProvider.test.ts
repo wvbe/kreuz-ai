@@ -17,6 +17,7 @@ describe("zoneProvider", () => {
     ).toBeNull();
   });
 
+  // @covers 025:FR-005
   it("is Blocked with ZoneRequirementsUnmet and the gaps while the room is open", () => {
     const world = createStatusWorld();
     const [zoneId] = world.designate("bakery", world.rect(2, 2, 2, 2));

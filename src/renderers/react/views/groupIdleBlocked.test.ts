@@ -22,7 +22,7 @@ describe("groupIdleBlocked", () => {
     expect(groupIdleBlocked([])).toEqual([]);
   });
 
-  // @covers 024:FR-026
+  // @covers 024:FR-026 025:FR-017
   it("groups by primary reason, rows and groups oldest first", () => {
     const groups = groupIdleBlocked([
       row(1, BlockedReasonKind.MissingInput, 50),

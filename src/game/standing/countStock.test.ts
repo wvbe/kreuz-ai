@@ -29,6 +29,7 @@ function order(overrides: Partial<StandingOrder> = {}): StandingOrder {
 }
 
 describe("countStock", () => {
+  // @covers 026:FR-006 026:FR-007
   it("sums the storage furniture of the settlement and ignores loose piles", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     world.give(world.chest(30), "bread", 5);
@@ -38,6 +39,7 @@ describe("countStock", () => {
     expect(countStock(world.engine, order({ materialId: "flour" }))).toBe(0);
   });
 
+  // @covers 026:FR-006
   it("counts unreserved units in workstation inventories, not locked inputs (settlement only)", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     const oven = world.spawn("oven", 30);
@@ -53,6 +55,7 @@ describe("countStock", () => {
     expect(countStock(world.engine, order())).toBe(1);
   });
 
+  // @covers 026:FR-006
   it("counts what a courier running haul.deliver carries", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     const courier = world.settler(40);
@@ -69,6 +72,7 @@ describe("countStock", () => {
     expect(countStock(world.engine, order())).toBe(getTotal(courier, "bread"));
   });
 
+  // @covers 026:FR-006
   it("counts only the furniture on the tiles of a zone for a zone scope", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     const zoneId = world.zone("stockpile", [30, 31, 50, 51]);

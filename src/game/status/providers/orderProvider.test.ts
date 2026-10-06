@@ -22,6 +22,7 @@ describe("orderProvider", () => {
     ).toBeNull();
   });
 
+  // @covers 025:FR-005
   it("is Blocked with the missing input, naming the material and the amounts", () => {
     const world = createStatusWorld();
     const { oven } = world.bakery();

@@ -23,6 +23,7 @@ describe("loosePileProvider", () => {
     ).toBeNull();
   });
 
+  // @covers 025:FR-005
   it("is Blocked with NoStorageDestination for a material no storage accepts", () => {
     const world = createStatusWorld();
     const pile = world.pile(44, [{ materialId: "oak_log", quantity: 3 }]);

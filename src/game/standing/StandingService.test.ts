@@ -65,6 +65,7 @@ describe("StandingService", () => {
     expect(service.runsOf(5)).toEqual([]);
   });
 
+  // @covers 026:FR-026
   it("round-trips through the root section `stewardship`", () => {
     const service = filled();
     const section = service.createSection();

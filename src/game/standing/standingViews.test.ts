@@ -20,6 +20,7 @@ function readyWorld(): StandingTestWorld {
 }
 
 describe("buildOrderView and buildOrderViews", () => {
+  // @covers 026:FR-005
   it("shows the fields, the counted stock and the derived state of an order", () => {
     const world = readyWorld();
     world.give(world.chest(31), "oak_plank", 17);

@@ -12,6 +12,7 @@ import { PrimaryStatus } from "./PrimaryStatus";
 afterEach(cleanup);
 
 describe("PrimaryStatus", () => {
+  // @covers 025:FR-016 025:SC-006
   it("starts with the state and primary reason of a blocked workstation, with a why button", () => {
     const host = startedHost("village");
     const { oven } = buildBlockedBakery(host);

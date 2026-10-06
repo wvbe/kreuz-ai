@@ -60,6 +60,7 @@ describe("boardProvider", () => {
     });
   });
 
+  // @covers 025:FR-005
   it("reports a change that waits for a Town Crier as AwaitingTownCrier", () => {
     const world = createStatusWorld();
     requireBoard(world.engine, world.boardId).data.mode = JobBoardMode.UserManaged;

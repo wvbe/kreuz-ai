@@ -32,6 +32,7 @@ describe("standingProvider", () => {
     });
   });
 
+  // @covers 025:FR-005 026:FR-014 026:FR-025
   it("is Blocked with NoSteward and NoSeatOfGovernment without an office (US3)", () => {
     const world = createStandingWorld();
     const id = world.standing();

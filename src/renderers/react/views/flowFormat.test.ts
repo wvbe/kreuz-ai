@@ -44,7 +44,7 @@ describe("flowFormat", () => {
     expect(trendArrow(TrendDirection.Flat)).toBe("→");
   });
 
-  // @covers 024:FR-027
+  // @covers 024:FR-027 025:FR-018
   it("sorts the largest deficit first", () => {
     expect(
       sortByDeficit([row("b", 500), row("a", -3000), row("c", -3000), row("d", -10)]).map(

@@ -45,6 +45,7 @@ describe("listNoticePosts and servingPost", () => {
     expect(listNoticePosts(world.engine).map((post) => post.id)).toEqual([first.id, second.id]);
   });
 
+  // @covers 026:FR-021
   it("serves a board within noticePostRadius hops and no board beyond it", () => {
     const world = world60();
     const board = boardAt(world, 20);
@@ -98,6 +99,7 @@ describe("noticePostRoute and the crier", () => {
     expect(getCrierService(world.engine).route(board).destinationId).toBe(post.id);
   });
 
+  // @covers 026:FR-021 026:FR-023
   it("delivers an update of a served board at the post (via NoticePost)", () => {
     const world = world60();
     const board = boardAt(world, 50);
@@ -122,6 +124,7 @@ describe("activeBellTowers and ringBells", () => {
     return world;
   }
 
+  // @covers 026:FR-022
   it("lists a bell tower while its zone is active and holds a bell", () => {
     const world = towerWorld();
     const towers = activeBellTowers(world.engine);
@@ -153,6 +156,7 @@ describe("activeBellTowers and ringBells", () => {
     expect(getCrierService(world.engine).updates()).toHaveLength(1);
   });
 
+  // @covers 026:FR-022 026:FR-023
   it("rings, announces itself and applies the updates within bellRadius, queued or on a crier", () => {
     const world = towerWorld();
     const radius = world.engine.content.constants.bellRadius;

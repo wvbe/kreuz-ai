@@ -3,6 +3,7 @@ import { findSeat } from "./findSeat";
 import { createStandingWorld } from "./testStandingWorld";
 
 describe("findSeat", () => {
+  // @covers 026:FR-013
   it("is null without an active throne room", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     expect(findSeat(world.engine)).toBeNull();

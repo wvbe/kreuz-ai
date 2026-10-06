@@ -16,6 +16,7 @@ describe("registerStanding", () => {
     expect(registerStanding(world.engine)).toBe(getStandingService(world.engine));
   });
 
+  // @covers 026:FR-005
   it("registers the commands, the queries and the status provider", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });
     expect(engine.commandKinds()).toEqual(
@@ -41,6 +42,7 @@ describe("registerStanding", () => {
     ).toContain(StatusSubjectKind.StandingOrder);
   });
 
+  // @covers 026:FR-008
   it("runs the system at the steward slot, after the housing evaluation (D-19)", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });
     const order = engine.pipeline.getSystemOrder();
@@ -55,6 +57,7 @@ describe("registerStanding", () => {
     expect(housingAt).toBeLessThan(standingAt);
   });
 
+  // @covers 026:FR-005
   it("creates, edits, pauses, resumes and deletes orders through the commands", () => {
     const world = createStandingWorld();
     const id = world.standing({ materialId: "bread", priority: 60 });
@@ -97,6 +100,7 @@ describe("registerStanding", () => {
     ).toThrow();
   });
 
+  // @covers 026:FR-005
   it("appoints and dismisses the Steward, sets his board and asks for a review", () => {
     const world = createStandingWorld();
     const settler = world.settler(22);
@@ -141,6 +145,7 @@ describe("registerStanding", () => {
     expect(getStandingService(world.engine).state.stewardEntityId).toBeNull();
   });
 
+  // @covers 026:FR-026 026:SC-005
   it("saves and loads the orders, the runs on the way and the Steward (spec 026 FR-026)", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     world.userBoard();

@@ -31,6 +31,7 @@ describe("StatusTracker.observe", () => {
     expect(tracker.get(subject)?.state).toBe(StatusState.Active);
   });
 
+  // @covers 025:FR-006
   it("holds a stall for the grace period: no event at grace-1, one at grace with sinceTick = first tick", () => {
     const tracker = new StatusTracker();
     const start = 100;
@@ -69,6 +70,7 @@ describe("StatusTracker.observe", () => {
     expect(published?.sinceTick).toBe(40);
   });
 
+  // @covers 025:FR-007
   it("re-emits on a settled primary change with the previous reason and an unchanged sinceTick", () => {
     const tracker = new StatusTracker();
     for (let tick = 0; tick <= statusGraceTicks; tick += 1) {
@@ -133,6 +135,7 @@ describe("StatusTracker.observe", () => {
     expect(tracker.get(subject)?.sinceTick).toBe(60);
   });
 
+  // @covers 025:FR-002
   it("moves between Idle and Blocked as a state change", () => {
     const tracker = new StatusTracker();
     tracker.observe(subject, paused, 0);
@@ -199,6 +202,7 @@ describe("StatusTracker.get and records", () => {
 });
 
 describe("StatusTracker.createSection", () => {
+  // @covers 025:FR-014
   it("round-trips the records, including a pending change", () => {
     const tracker = new StatusTracker();
     for (let tick = 0; tick <= statusGraceTicks; tick += 1) {

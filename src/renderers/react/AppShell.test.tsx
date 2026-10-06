@@ -56,4 +56,26 @@ describe("AppShell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
     expect(screen.queryByText(/nonsense/)).toBeNull();
   });
+
+  // @covers 026:SC-008 024:FR-030
+  it("creates a standing order in three interactions from a material in an inventory row", () => {
+    const app = renderApp();
+    app.start();
+    const peasant = app.host.session.query.entities({ prototype: "peasant", limit: 1 }).entities[0];
+    act(() => {
+      app.host.selection.selectEntity(peasant?.id ?? 0, null);
+    });
+    fireEvent.click(screen.getByRole("tab", { name: "Inventory" }));
+    // interaction 1: the action on the bread row
+    fireEvent.click(screen.getByRole("button", { name: "Keep bread in stock" }));
+    expect(app.host.navigation.getSnapshot().screen).toBe(Screen.StandingOrders);
+    // interaction 2: the target, interaction 3: submit
+    fireEvent.change(screen.getByLabelText("Keep this many"), { target: { value: "20" } });
+    fireEvent.click(screen.getByRole("button", { name: "Create standing order" }));
+    act(() => {
+      app.host.step(1);
+    });
+    const orders = app.host.store.query("standing-orders", {});
+    expect(orders.ok && JSON.stringify(orders.data)).toContain('"materialId":"bread"');
+  });
 });

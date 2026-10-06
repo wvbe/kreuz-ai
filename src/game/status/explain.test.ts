@@ -31,6 +31,7 @@ describe("evaluateSubject", () => {
     expect(evaluateSubject(world.engine, { kind: StatusSubjectKind.Dwelling, id: 1 })).toBeNull();
   });
 
+  // @covers 025:FR-004
   it("sorts the reasons by precedence", () => {
     const world = createStatusWorld();
     world.setSynthetic(1, {
@@ -83,6 +84,7 @@ describe("explain", () => {
     expect(explanation?.end).toBe(ChainEnd.Complete);
   });
 
+  // @covers 025:FR-010
   it("follows the cause of the primary reason down the chain", () => {
     const world = createStatusWorld();
     world.setSynthetic(1, blockedBy(order(2)));
@@ -115,6 +117,7 @@ describe("explain", () => {
     expect(explanation?.end).toBe(ChainEnd.Cycle);
   });
 
+  // @covers 025:FR-010
   it("caps the number of followed causes at maxExplanationDepth", () => {
     const world = createStatusWorld();
     for (let id = 1; id <= 12; id += 1) {

@@ -61,6 +61,7 @@ function soak(engine: GameEngine, ticks: number, violations: Violation[]): numbe
 }
 
 describe("invariant: every non-working citizen has a primary reason", () => {
+  // @covers 025:SC-001
   it("holds every 12th tick of a two-day seed-42 game", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });
     engine.newGame({ seed: 42, mapSize: MapSize.Small });
@@ -72,6 +73,7 @@ describe("invariant: every non-working citizen has a primary reason", () => {
     expect(citizens).toHaveLength(6);
   });
 
+  // @covers 025:SC-001
   it("holds in a busy colony: bakery orders, construction, hauling and gathering", () => {
     const world = bakeryColony();
     const violations: Violation[] = [];
@@ -112,6 +114,7 @@ function bakeryColony(): StatusTestWorld {
 }
 
 describe("flow ledger conservation", () => {
+  // @covers 025:SC-004
   it("produced - consumed equals the change of the world's stock for every material in the ledger", () => {
     const world = createStatusWorld();
     const { oven } = world.bakery();
@@ -141,6 +144,7 @@ describe("flow ledger conservation", () => {
 });
 
 describe("determinism and save/load of the status state", () => {
+  // @covers 025:SC-002
   it("two runs of seed 42 end with identical settle records and ledgers", () => {
     const left = new GameEngine(loadContent(), { entropy: () => 1 });
     const right = new GameEngine(loadContent(), { entropy: () => 1 });
@@ -157,6 +161,7 @@ describe("determinism and save/load of the status state", () => {
     expect(left.getStateHash()).toBe(right.getStateHash());
   });
 
+  // @covers 025:FR-014 025:SC-005
   it("a save in the middle gives the same end state, statuses and ledger as running on", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });
     engine.newGame({ seed: 42, mapSize: MapSize.Small });

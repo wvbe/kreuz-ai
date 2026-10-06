@@ -13,6 +13,7 @@ const stalled: SubjectStatus = {
 const fine: SubjectStatus = { state: StatusState.Active, activity: null, reasons: [] };
 
 describe("listSubjects", () => {
+  // @covers 025:FR-008
   it("visits providers in registration order and the subjects of each in its own order", () => {
     const world = createStatusWorld();
     const settler = world.settler(11);
@@ -33,6 +34,7 @@ describe("listSubjects", () => {
 });
 
 describe("runStatusPass", () => {
+  // @covers 025:FR-007 025:SC-001
   it("emits status.blocked once the stall has held the grace period, sinceTick = its first tick", () => {
     const world = createStatusWorld();
     world.setSynthetic(1, stalled);
@@ -61,6 +63,7 @@ describe("runStatusPass", () => {
     expect(world.statusEvents).toEqual([]);
   });
 
+  // @covers 025:FR-007
   it("emits status.unblocked with the stalled ticks and status.unblocked removed when it vanishes", () => {
     const world = createStatusWorld();
     world.setSynthetic(1, stalled);

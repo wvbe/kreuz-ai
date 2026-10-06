@@ -93,6 +93,7 @@ describe("standing-orders scenario (task 4.3, spec 026)", () => {
     expect(loadScenario().steps.some((step) => "debugSpawn" in step)).toBe(false);
   });
 
+  // @covers 026:FR-008
   it("reviews once a day at tick of day 72, and the first review comes with the throne room", () => {
     const completed = run.events.filter((event) => event.name === "steward.review.completed");
     expect(completed.length).toBeGreaterThanOrEqual(4);
@@ -109,6 +110,7 @@ describe("standing-orders scenario (task 4.3, spec 026)", () => {
     );
   });
 
+  // @covers 026:SC-001
   it("starts restocking, queues runs and delivers them by crier (via TownCrier)", () => {
     const started = run.events.filter((event) => event.name === "standing-order.restock.started");
     expect(started.length).toBeGreaterThanOrEqual(2);
@@ -117,6 +119,7 @@ describe("standing-orders scenario (task 4.3, spec 026)", () => {
     expect(delivered.every((event) => field(event.payload, "via") === "TownCrier")).toBe(true);
   });
 
+  // @covers 026:SC-001
   it("makes every bread and flour production order out of a Steward run", () => {
     const created = run.events.filter((event) => event.name === "production.order.created");
     const food = created.filter((event) => {
@@ -148,6 +151,7 @@ describe("standing-orders scenario (task 4.3, spec 026)", () => {
     expect(orders.ok && Array.isArray(orders.data) ? orders.data.length : 0).toBe(2);
   });
 
+  // @covers 026:SC-005
   it(
     "resumes identically from a save at every phase: before the throne room, with runs on the way, in flight",
     () => {
@@ -169,6 +173,7 @@ describe("standing-orders scenario (task 4.3, spec 026)", () => {
     longTimeout,
   );
 
+  // @covers 026:SC-004
   it("is deterministic: the same script ends in the same hash", () => {
     const again = play();
     expect(again.session.stateHash()).toBe(run.session.stateHash());

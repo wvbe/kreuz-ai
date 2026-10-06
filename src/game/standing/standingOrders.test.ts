@@ -34,6 +34,7 @@ function readyWorld() {
 }
 
 describe("defaultThreshold", () => {
+  // @covers 026:FR-003
   it("is floor(target x 0.75) and stays below the target", () => {
     const world = createStandingWorld();
     expect(defaultThreshold(world.engine, 20)).toBe(15);
@@ -44,6 +45,7 @@ describe("defaultThreshold", () => {
 });
 
 describe("createStandingOrder", () => {
+  // @covers 026:FR-001 026:FR-002 026:FR-003
   it("resolves the recipe, applies the default threshold and starts satisfied", () => {
     const world = createStandingWorld();
     const events = world.record("standing-order.created");
@@ -83,6 +85,7 @@ describe("createStandingOrder", () => {
     });
   });
 
+  // @covers 026:FR-004
   it("rejects invalid quantities and priorities and changes nothing", () => {
     const world = createStandingWorld();
     for (const request of [
@@ -99,6 +102,7 @@ describe("createStandingOrder", () => {
     expect(getStandingService(world.engine).state.nextOrderId).toBe(1);
   });
 
+  // @covers 026:FR-004
   it("rejects a duplicate for the same material and scope but allows another scope", () => {
     const world = createStandingWorld();
     world.standing({ materialId: "bread" });
@@ -111,6 +115,7 @@ describe("createStandingOrder", () => {
     ).toMatchObject({ scope: StandingOrderScope.Zone, zoneId });
   });
 
+  // @covers 026:FR-004
   it("rejects an unknown zone and a board that is not user-managed", () => {
     const world = createStandingWorld();
     expect(
@@ -129,6 +134,7 @@ describe("createStandingOrder", () => {
     ).toBe(StandingOrderErrorKind.BoardNotUserManaged);
   });
 
+  // @covers 026:FR-004 026:FR-027
   it("stops at maxStandingOrders", () => {
     const constants = bundledContentFiles[ContentFile.ContentConstants];
     const content = loadContentPack({
@@ -157,6 +163,7 @@ describe("createStandingOrder", () => {
 });
 
 describe("updateStandingOrder", () => {
+  // @covers 026:FR-024
   it("changes target, threshold, priority and board and queues the event", () => {
     const world = createStandingWorld();
     const boardId = world.userBoard();
@@ -212,6 +219,7 @@ describe("updateStandingOrder", () => {
 });
 
 describe("setStandingOrderPaused", () => {
+  // @covers 026:FR-024
   it("pauses and resumes with one event each and nothing for a no-op", () => {
     const world = createStandingWorld();
     const id = world.standing({ materialId: "bread" });

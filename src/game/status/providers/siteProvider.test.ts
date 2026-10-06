@@ -21,6 +21,7 @@ describe("siteProvider", () => {
     ).toBeNull();
   });
 
+  // @covers 025:FR-005
   it("is Blocked with MissingInput when no storage can supply a material and no producer exists", () => {
     const world = createStatusWorld({ content: loadVillageBakeryContent() });
     const id = world.place("wall", 44);
@@ -39,6 +40,7 @@ describe("siteProvider", () => {
     });
   });
 
+  // @covers 025:FR-009
   it("points a missing material at the stalled producer of it", () => {
     const world = createStatusWorld({ content: loadVillageBakeryContent() });
     const mill = world.station("sawmill", 22);

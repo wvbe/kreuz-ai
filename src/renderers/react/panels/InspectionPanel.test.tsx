@@ -50,7 +50,7 @@ describe("InspectionPanel in the dock", () => {
 });
 
 describe("why popover in the dock", () => {
-  // @covers 024:FR-007 024:FR-008 024:FR-025
+  // @covers 024:FR-007 024:FR-008 024:FR-025 025:SC-007
   it("shows the primary reason first and follows the cause chain by clicking its subjects", () => {
     const app = village();
     const { oven, mill } = buildBlockedBakery(app.host);

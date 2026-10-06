@@ -33,6 +33,7 @@ describe("citizenProvider", () => {
     expect(citizenProvider.evaluate(world.engine, citizen(oven.id), context)).toBeNull();
   });
 
+  // @covers 025:FR-002
   it("is Idle without a task and no job on the board: NoJobsAvailable", () => {
     const world = createStatusWorld();
     const settler = world.spawn("peasant", 55, noAiOverride);

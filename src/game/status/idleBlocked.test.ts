@@ -32,6 +32,7 @@ describe("buildIdleBlockedView", () => {
     expect(settled[0]?.reasons[0]?.kind).toBe(BlockedReasonKind.MissingInput);
   });
 
+  // @covers 025:FR-017
   it("sorts by sinceTick ascending, then kind and id, and filters by state and kind", () => {
     const world = createStatusWorld();
     world.setSynthetic(5, stalled("a"));

@@ -171,7 +171,7 @@ describe("MapScreen", () => {
     ).toHaveLength(1);
   });
 
-  // @covers 024:FR-025
+  // @covers 024:FR-025 025:FR-016
   it("shows badges for settled idle citizens and hides them in the settings", () => {
     const app = startGame();
     act(() => {

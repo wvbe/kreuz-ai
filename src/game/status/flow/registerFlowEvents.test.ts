@@ -19,6 +19,7 @@ function emit(world: StatusTestWorld, name: string, payload: JsonValue): void {
 }
 
 describe("registerFlowEvents", () => {
+  // @covers 025:FR-012
   it("counts a finished craft: inputs consumed and outputs produced, attributed to the workstation (Recipe)", () => {
     const world = createStatusWorld();
     emit(world, "production.crafting.completed", {
@@ -47,6 +48,7 @@ describe("registerFlowEvents", () => {
     ]);
   });
 
+  // @covers 025:FR-012
   it("counts construction consumption and deconstruction yield", () => {
     const world = createStatusWorld();
     emit(world, "construction.job.completed", {
@@ -69,6 +71,7 @@ describe("registerFlowEvents", () => {
     ]);
   });
 
+  // @covers 025:FR-012
   it("counts gathering outputs of a completed job against the worker, but not what a hauler moved", () => {
     const world = createStatusWorld();
     emit(world, "jobboard.job.completed", {
@@ -92,6 +95,7 @@ describe("registerFlowEvents", () => {
     ]);
   });
 
+  // @covers 025:FR-012
   it("counts need consumption, spoilage and household consumption", () => {
     const world = createStatusWorld();
     const settler = world.settler(11);

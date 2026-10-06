@@ -4,6 +4,7 @@ import { subjectOfEntity } from "./subjectOfEntity";
 import { createStatusWorld } from "./testStatusWorld";
 
 describe("subjectOfEntity", () => {
+  // @covers 025:FR-001
   it("recognises citizens, workstations, sites, zones, boards and loose piles", () => {
     const world = createStatusWorld();
     const settler = world.settler(11);

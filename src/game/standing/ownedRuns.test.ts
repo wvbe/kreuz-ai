@@ -45,6 +45,7 @@ function withRuns(count: number, delivered: number) {
 }
 
 describe("queueRun", () => {
+  // @covers 026:FR-009 026:FR-018
   it("creates a pending add with a Steward-origin update on the board", () => {
     const { world, runs } = withRuns(2, 0);
     expect(runs.map((run) => run.runId)).toEqual([1, 2]);
@@ -64,6 +65,7 @@ describe("queueRun", () => {
 });
 
 describe("applyRun", () => {
+  // @covers 026:FR-012
   it("turns a run into a production order of one craft with the order's priority", () => {
     const { world, runs, order } = withRuns(1, 1);
     order.priority = 77;
@@ -90,6 +92,7 @@ describe("applyRun", () => {
 });
 
 describe("runStatus", () => {
+  // @covers 026:FR-009
   it("is Claimed while a craft of the order runs and Open otherwise", () => {
     const { world, runs } = withRuns(2, 2);
     world.claim((runs[0] as (typeof runs)[number]).runId);
@@ -118,12 +121,14 @@ describe("runStatus", () => {
 });
 
 describe("withdrawable and withdrawRun", () => {
+  // @covers 026:FR-009
   it("lists pending adds first, then open runs, newest first, never claimed ones", () => {
     const { world, id, runs } = withRuns(5, 3);
     world.claim((runs[0] as (typeof runs)[number]).runId);
     expect(withdrawable(world.engine, id).map((run) => run.runId)).toEqual([5, 4, 3, 2]);
   });
 
+  // @covers 026:FR-018
   it("takes a pending add off the crier's queue and abandons its update", () => {
     const { world, runs } = withRuns(1, 0);
     const abandoned = world.record("jobboard.update.abandoned");
@@ -136,6 +141,7 @@ describe("withdrawable and withdrawRun", () => {
     expect(getCrierService(world.engine).updates()).toEqual([]);
   });
 
+  // @covers 026:FR-018
   it("cancels the production order of an open run and refuses a claimed one", () => {
     const { world, runs } = withRuns(2, 2);
     world.claim((runs[0] as (typeof runs)[number]).runId);

@@ -67,6 +67,7 @@ describe("statusKey", () => {
 });
 
 describe("isImmediateReason", () => {
+  // @covers 025:FR-006
   it("is true for the spec 025 FR-006 kinds only", () => {
     expect(isImmediateReason(makeReason(BlockedReasonKind.Paused))).toBe(true);
     expect(isImmediateReason(makeReason(BlockedReasonKind.NoOrders))).toBe(true);
@@ -75,6 +76,7 @@ describe("isImmediateReason", () => {
 });
 
 describe("sortReasons", () => {
+  // @covers 025:FR-004
   it("orders by precedence and keeps the source order of equal kinds", () => {
     const sorted = sortReasons([
       makeReason(BlockedReasonKind.OutputBlocked, { materialId: "bread" }),
@@ -99,6 +101,7 @@ describe("sortReasons", () => {
     ]);
   });
 
+  // @covers 025:FR-003 025:FR-004
   it("lists the 23 spec kinds first, in the FR-004 order", () => {
     expect(reasonPrecedence.slice(0, 5)).toEqual([
       BlockedReasonKind.Paused,

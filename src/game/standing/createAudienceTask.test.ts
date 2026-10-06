@@ -21,6 +21,7 @@ describe("createAudienceTask", () => {
     expect(handler.requires).toEqual(["Position"]);
   });
 
+  // @covers 026:FR-015
   it("walks to the throne room, stays stewardAudienceTicks and is done", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     world.throneRoom(5, 5);

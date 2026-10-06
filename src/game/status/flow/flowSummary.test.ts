@@ -40,6 +40,7 @@ function breadWorld(): StatusTestWorld {
 }
 
 describe("buildFlowRow", () => {
+  // @covers 025:FR-013
   it("averages the complete days: produced 6, consumed 8, net -2, stock 10, 5 days of supply", () => {
     const world = breadWorld();
     const row = buildFlowRow(world.engine, "bread");
@@ -65,6 +66,7 @@ describe("buildFlowRow", () => {
     ]);
   });
 
+  // @covers 025:FR-013
   it("has no days of supply for a surplus and uses the current day while none is complete", () => {
     const world = createStatusWorld();
     add(world, 0, "flour", FlowDirection.Produced, FlowSource.Recipe, 4);

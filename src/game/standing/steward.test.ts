@@ -25,6 +25,7 @@ function kindOf(action: () => void): StandingOrderErrorKind | null {
 }
 
 describe("isEligibleSteward", () => {
+  // @covers 026:FR-013
   it("accepts a citizen of the player faction who is no Town Crier", () => {
     const world = createStandingWorld();
     const settler = world.settler(22);
@@ -55,6 +56,7 @@ describe("appointSteward and dismissSteward", () => {
     expect(getStandingService(world.engine).state.stewardEntityId).toBe(settler.id);
   });
 
+  // @covers 026:FR-004 026:FR-013
   it("refuses an ineligible citizen with IneligibleSteward", () => {
     const world = createStandingWorld();
     const crier = world.crier(23);
@@ -64,6 +66,7 @@ describe("appointSteward and dismissSteward", () => {
     expect(getStandingService(world.engine).state.stewardEntityId).toBeNull();
   });
 
+  // @covers 026:FR-016
   it("replaces the old Steward with reason Replaced", () => {
     const world = createStandingWorld();
     const dismissed = world.record("steward.dismissed");
@@ -86,6 +89,7 @@ describe("appointSteward and dismissSteward", () => {
     expect(dismissed).toEqual([{ entityId: settler.id, reason: StewardVacancyReason.Dismissed }]);
   });
 
+  // @covers 026:FR-013
   it("keeps the Steward from being appointed Town Crier", () => {
     const world = createStandingWorld();
     const settler = world.steward(22);
@@ -120,6 +124,7 @@ describe("setStewardBoard", () => {
 });
 
 describe("requestStewardReview", () => {
+  // @covers 026:FR-017
   it("records one request, collapses repeats and is spent by the next review pass", () => {
     const world = createStandingWorld();
     const skipped = world.record("steward.review.skipped");
@@ -142,6 +147,7 @@ describe("checkStewardOffice", () => {
     expect(checkStewardOffice(createStandingWorld().engine)).toBe(false);
   });
 
+  // @covers 026:FR-016
   it("vacates with Died when the entity is gone", () => {
     const world = createStandingWorld();
     const dismissed = world.record("steward.dismissed");
@@ -152,6 +158,7 @@ describe("checkStewardOffice", () => {
     expect(dismissed).toEqual([{ entityId: settler.id, reason: StewardVacancyReason.Died }]);
   });
 
+  // @covers 026:FR-016
   it("vacates with LeftFaction when the Steward leaves the player faction", () => {
     const world = createStandingWorld();
     const dismissed = world.record("steward.dismissed");

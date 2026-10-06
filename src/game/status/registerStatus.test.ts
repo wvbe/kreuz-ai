@@ -40,6 +40,7 @@ describe("registerStatus", () => {
     expect(registerStatus(world.engine)).toBe(getStatusService(world.engine));
   });
 
+  // @covers 025:FR-001 025:FR-005
   it("registers the providers of every subject kind that exists in 3.x", () => {
     const world = createStatusWorld();
     const kinds = getStatusService(world.engine)
@@ -59,6 +60,7 @@ describe("registerStatus", () => {
     ]);
   });
 
+  // @covers 025:FR-010
   it("answers the explain query by subject kind or by entity id, and null for the unknown", () => {
     const world = createStatusWorld();
     const settler = world.spawn("peasant", 55, { AiState: { treeId: null } });
@@ -74,6 +76,7 @@ describe("registerStatus", () => {
     expect(query(world, "explain", { id: 999, kind: StatusSubjectKind.JobPosting })).toBeNull();
   });
 
+  // @covers 025:FR-010 025:FR-013
   it("answers idle-blocked with filters, and flow and flow-of from the ledger", () => {
     const world = createStatusWorld();
     world.setSynthetic(1, stalled);
@@ -111,6 +114,7 @@ describe("registerStatus", () => {
     expect(getStatusService(world.engine).ledger.dayList()).toHaveLength(0);
   });
 
+  // @covers 025:FR-014 025:SC-005
   it("saves and loads the settle state and the ledger: same hash, no spurious events", () => {
     const world = createStatusWorld();
     world.setSynthetic(1, stalled);

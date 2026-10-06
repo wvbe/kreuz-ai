@@ -13,7 +13,7 @@ import {
 describe("contentConstantsSchema", () => {
   const constants = bundledContentFiles[ContentFile.ContentConstants];
 
-  // @covers 022:FR-023 022:FR-016
+  // @covers 022:FR-023 022:FR-016 026:FR-027
   it("converts ratios and percentages and rejects out-of-range values", () => {
     const parsed = contentConstantsSchema.parse(constants);
     expect(parsed.bynameChance).toBe(850);

@@ -3,6 +3,7 @@ import { StandingOrderError } from "./StandingOrderError";
 import { StandingOrderErrorKind } from "./standingTypes";
 
 describe("StandingOrderError", () => {
+  // @covers 026:FR-004
   it("puts the kind in front of the message and keeps the candidates", () => {
     const error = new StandingOrderError(StandingOrderErrorKind.AmbiguousRecipe, "two recipes", [
       "a",

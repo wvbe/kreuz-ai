@@ -51,6 +51,7 @@ describe("nearestUserBoard", () => {
 });
 
 describe("resolvePostingBoard", () => {
+  // @covers 026:FR-019
   it("prefers the order's board, then the Steward's board, then the nearest one", () => {
     const world = setup();
     const near = userBoardAt(world, 7 * 20 + 7);

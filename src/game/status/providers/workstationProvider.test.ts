@@ -29,6 +29,7 @@ describe("workstationProvider", () => {
     ).toBeNull();
   });
 
+  // @covers 025:FR-002
   it("is Idle with NoOrders without an active order", () => {
     const world = createStatusWorld();
     const oven = world.station("oven", 22);
@@ -37,6 +38,7 @@ describe("workstationProvider", () => {
     expect(status?.reasons.map((reason) => reason.kind)).toEqual([BlockedReasonKind.NoOrders]);
   });
 
+  // @covers 025:FR-009
   it("is Blocked with MissingInput and follows the producer chain to the mill", () => {
     const world = createStatusWorld();
     const { oven } = world.bakery();

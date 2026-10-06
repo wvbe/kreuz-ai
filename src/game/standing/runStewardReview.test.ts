@@ -29,6 +29,7 @@ function runsOf(world: StandingTestWorld, orderId: number) {
 }
 
 describe("runStewardReview", () => {
+  // @covers 026:FR-010
   it("starts restocking at the threshold and queues the runs the deficit needs (US1)", () => {
     const world = readyWorld();
     const chest = world.chest(31);
@@ -47,6 +48,7 @@ describe("runStewardReview", () => {
     ]);
   });
 
+  // @covers 026:SC-003
   it("posts nothing while the stock is above the threshold or at the target (US2.1)", () => {
     const world = readyWorld();
     const chest = world.chest(31);
@@ -60,6 +62,7 @@ describe("runStewardReview", () => {
     expect(runsOf(world, id)).toEqual([]);
   });
 
+  // @covers 026:SC-002
   it("restocks at the threshold exactly (inclusive) and caps the runs at maxOpenRunsPerOrder (US2.6)", () => {
     const world = readyWorld();
     world.give(world.chest(31), "oak_plank", 15);
@@ -77,6 +80,7 @@ describe("runStewardReview", () => {
     expect(runsOf(empty, wide)).toHaveLength(empty.engine.content.constants.maxOpenRunsPerOrder);
   });
 
+  // @covers 026:SC-002
   it("queues nothing more while a restocking order already owns the runs its deficit needs (US2.3)", () => {
     const world = readyWorld();
     const chest = world.chest(31);
@@ -140,6 +144,7 @@ describe("runStewardReview", () => {
     expect(runsOf(world, id).map((run) => run.runId)).toEqual([1]);
   });
 
+  // @covers 026:FR-014
   it("skips the review without a Steward and keeps the runs (US3.1)", () => {
     const world = readyWorld();
     const skipped = world.record("steward.review.skipped");
@@ -154,6 +159,7 @@ describe("runStewardReview", () => {
     expect(runsOf(world, id)).toHaveLength(before);
   });
 
+  // @covers 026:FR-014
   it("skips the review without an active throne room (US3.2)", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     world.userBoard();
@@ -168,6 +174,7 @@ describe("runStewardReview", () => {
     expect(getStandingService(world.engine).state.lastReviewTick).toBeNull();
   });
 
+  // @covers 026:FR-015
   it("sends the Steward to an audience, once per review (US3.5)", () => {
     const world = readyWorld();
     const stewardId = getStandingService(world.engine).state.stewardEntityId as number;
@@ -180,6 +187,7 @@ describe("runStewardReview", () => {
     expect(again.filter((task) => task.type === audienceTaskType)).toHaveLength(1);
   });
 
+  // @covers 026:FR-011
   it("evaluates orders by priority, highest first, then by id (FR-011)", () => {
     const world = readyWorld();
     world.spawn("grinding_mill", 32);
@@ -223,6 +231,7 @@ describe("runStewardReview", () => {
     expect(runsOf(world, id)).toEqual([]);
   });
 
+  // @covers 026:FR-019
   it("moves unclaimed runs when the resolved board changes (FR-019)", () => {
     const world = readyWorld();
     const id = world.standing({ targetQuantity: 6, restockThreshold: 4 });

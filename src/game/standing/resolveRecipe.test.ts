@@ -20,6 +20,7 @@ describe("resolveRecipe", () => {
   const world = createAiWorld();
   getJobService(world.engine).setTierSource(() => "chartered_town");
 
+  // @covers 026:FR-002
   it("takes the single recipe that makes a material", () => {
     expect(resolveRecipe(world.engine, "bread", undefined)).toEqual({
       materialId: "bread",
@@ -58,6 +59,7 @@ describe("resolveRecipe", () => {
     );
   });
 
+  // @covers 026:FR-002 026:FR-004
   it("lists the candidates of an ambiguous material", () => {
     const recipes = bundledContentFiles[ContentFile.Recipes];
     const extra = loadContentPack({
@@ -84,6 +86,7 @@ describe("resolveRecipe", () => {
     }
   });
 
+  // @covers 026:FR-004
   it("refuses a recipe the settlement tier has not unlocked", () => {
     const recipes = bundledContentFiles[ContentFile.Recipes];
     const content = loadContentPack({

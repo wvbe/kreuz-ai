@@ -150,7 +150,7 @@ describe("NotificationCenter", () => {
     ]);
   });
 
-  // @covers 024:FR-028
+  // @covers 024:FR-028 025:FR-019
   it("groups status.blocked per reason kind, counts up, limits groups and honours mutes", () => {
     const blocked = (kind: string, id: number, state = "Blocked") => ({
       subject: { kind: "Workstation", id },

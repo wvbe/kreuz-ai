@@ -29,6 +29,7 @@ describe("preferredZone", () => {
     expect(preferredZone(world.engine, "bread")).toBeNull();
   });
 
+  // @covers 026:FR-020
   it("makes storage routing rank the zone's chest first and keep the others as fallback (FR-020)", () => {
     const world = createStandingWorld({ width: 20, height: 20 });
     const near = world.chest(5 * 20 + 6);

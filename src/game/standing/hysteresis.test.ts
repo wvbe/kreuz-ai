@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { desiredRuns, HysteresisEvent, stepHysteresis } from "./hysteresis";
 
 describe("stepHysteresis", () => {
+  // @covers 026:SC-003
   it("stays satisfied above the threshold, also while the stock is short of the target", () => {
     expect(stepHysteresis(false, 17, 20, 15)).toEqual({
       restocking: false,
@@ -10,6 +11,7 @@ describe("stepHysteresis", () => {
     expect(stepHysteresis(false, 20, 20, 15).restocking).toBe(false);
   });
 
+  // @covers 026:FR-010
   it("starts restocking at the threshold (inclusive)", () => {
     expect(stepHysteresis(false, 15, 20, 15)).toEqual({
       restocking: true,
@@ -36,6 +38,7 @@ describe("desiredRuns", () => {
     expect(desiredRuns(false, 0, 20, 4, 5)).toBe(0);
   });
 
+  // @covers 026:FR-010
   it("is the deficit in whole runs, capped by the run limit", () => {
     expect(desiredRuns(true, 5, 20, 4, 5)).toBe(4);
     expect(desiredRuns(true, 17, 20, 4, 5)).toBe(1);

@@ -14,6 +14,7 @@ function statusOf(world: HousingTestWorld, id: number) {
   return evaluateSubject(world.engine, { kind: StatusSubjectKind.Dwelling, id });
 }
 
+// @covers 025:FR-005
 describe("dwellingProvider", () => {
   it("lists the dwellings as subjects", () => {
     const world = createHousingWorld({ width: 20, height: 12 });

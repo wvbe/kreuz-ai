@@ -23,7 +23,7 @@ function shownHost(): EngineHost {
 }
 
 describe("IdleBlockedScreen", () => {
-  // @covers 024:FR-026
+  // @covers 024:FR-026 025:FR-017
   it("groups rows by reason; the settling ones are listed on request", () => {
     shownHost();
     expect(screen.getByRole("heading", { name: "Idle and blocked", level: 2 })).toBeTruthy();

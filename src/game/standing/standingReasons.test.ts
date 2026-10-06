@@ -33,6 +33,7 @@ describe("standingReasons", () => {
     expect(standingState(world.orderOf(id), reasons)).toBe(StandingOrderState.Paused);
   });
 
+  // @covers 026:FR-025
   it("reports NoSeatOfGovernment and NoSteward in the 025 precedence (US3.1, US3.2)", () => {
     const world = createStandingWorld();
     const id = world.standing();
@@ -79,6 +80,7 @@ describe("standingReasons", () => {
     expect(kinds(world, id)).toEqual([BlockedReasonKind.ScopeZoneMissing]);
   });
 
+  // @covers 026:FR-025
   it("reports LockedByTier for a recipe the tier has not unlocked", () => {
     const recipes = bundledContentFiles[ContentFile.Recipes];
     const content = loadContentPack({
@@ -112,6 +114,7 @@ describe("standingReasons", () => {
     ]);
   });
 
+  // @covers 026:FR-025
   it("reports AwaitingTownCrier while a run waits for a crier (US4.2)", () => {
     const world = readyWorld();
     world.spawn("sawmill", 30);
@@ -151,6 +154,7 @@ describe("standingReasons", () => {
     });
   });
 
+  // @covers 025:FR-009
   it("points a missing input at the standing order that makes it", () => {
     const world = readyWorld();
     world.spawn("oven", 30);
