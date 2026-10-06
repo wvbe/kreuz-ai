@@ -26,7 +26,7 @@ describe("AppShell", () => {
       ["Chronicle", "Chronicle"],
       ["Flow", "Production flow"],
       ["Idle and blocked", "Idle and blocked"],
-      ["Standing orders", "Standing orders"],
+      ["Government", "Government"],
       ["Settings", "Settings"],
       ["New game", "New game"],
     ] as const) {
