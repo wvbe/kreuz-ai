@@ -37,6 +37,42 @@ function loadIssues(pack: ContentPackFiles): readonly ContentIssue[] {
   throw new Error("expected the pack to be rejected");
 }
 
+function registerPackHandlers(handlers: BehaviorHandlerRegistry): void {
+  for (const id of [
+    "any_need_below_critical",
+    "jobs_available",
+    "household_needs_goods",
+    "zone_available",
+    "hostile_animal_near",
+    "animal_hungry",
+    "threat_near",
+    "humanoid_near",
+    "prey_near",
+    "no_guard_near",
+    "animal_aggressive",
+    "hunt_urge",
+  ]) {
+    handlers.registerCondition(id, () => NodeStatus.Failure);
+  }
+  for (const id of [
+    "satisfy_critical_need",
+    "idle_wander",
+    "claim_job",
+    "fetch_household_goods",
+    "go_to_zone",
+    "engage_threat",
+    "flee_from_threat",
+    "graze",
+    "wander_animal",
+    "stalk_prey",
+    "attack_prey",
+    "steal_prey",
+    "attack_intruder",
+  ]) {
+    handlers.registerAction(id, () => NodeStatus.Success);
+  }
+}
+
 describe("loadContent (vertical-slice pack v0)", () => {
   it("loads without errors and exposes every category", () => {
     const content = loadContent();
@@ -49,7 +85,10 @@ describe("loadContent (vertical-slice pack v0)", () => {
       expect.arrayContaining(["baker", "carpenter", "farmer", "peasant"]),
     );
     expect(content.humanoids.size).toBeGreaterThanOrEqual(23);
-    expect(content.behaviorTrees.ids()).toEqual(["basic_needs", "idle_wander"]);
+    expect(content.behaviorTrees.ids()).toEqual(
+      expect.arrayContaining(["basic_needs", "idle_wander", "daily_routine", "livestock_behavior"]),
+    );
+    expect(content.behaviorTrees.size).toBeGreaterThanOrEqual(11);
     expect(content.enginePrototypes.has("government_faction")).toBe(true);
     expect(content.nameLists.require("common_13c").givenNames.length).toBeGreaterThanOrEqual(60);
     expect(content.nameLists.require("common_13c").bynames.length).toBeGreaterThanOrEqual(40);
@@ -101,13 +140,7 @@ describe("loadContent (vertical-slice pack v0)", () => {
   it("checks behavior tree handlers when a handler registry is given", () => {
     const handlers = new BehaviorHandlerRegistry();
     expect(() => loadContent({ handlers })).toThrow(ContentValidationError);
-    handlers.registerCondition("any_need_below_critical", () => NodeStatus.Failure);
-    handlers.registerAction("satisfy_critical_need", () => NodeStatus.Success);
-    handlers.registerAction("idle_wander", () => NodeStatus.Success);
-    handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
-    handlers.registerAction("claim_job", () => NodeStatus.Failure);
-    handlers.registerCondition("household_needs_goods", () => NodeStatus.Failure);
-    handlers.registerAction("fetch_household_goods", () => NodeStatus.Failure);
+    registerPackHandlers(handlers);
     expect(() => loadContent({ handlers })).not.toThrow();
     const issues = (() => {
       const partial = new BehaviorHandlerRegistry();
@@ -119,7 +152,7 @@ describe("loadContent (vertical-slice pack v0)", () => {
       return [];
     })();
     expect(issues[0]?.file).toBe(ContentFile.BehaviorTrees);
-    expect(issues[0]?.id).toMatch(/^(basic_needs|idle_wander)$/);
+    expect(issues[0]?.id).toMatch(/^[a-z_]+$/);
   });
 });
 

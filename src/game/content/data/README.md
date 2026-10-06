@@ -19,10 +19,10 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `recipes.json` | 59 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
 | `jobs.json` | 36 jobs: the 23 of spec 022 plus `build.supply`, the terrain, fruit, grape, charity and animal jobs (a `priority` field per job type since D-54, `charges` since D-130) | final except zone contexts, see `docs/content-crossrefs-5.4.md` |
 | `factions.json` | 9 guilds, 3 religious (`parish_church`, `monastic_order`, `mendicant_friars`, no zones yet) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | zones for the religious factions |
-| `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |
+| `behavior-trees.json` | 11 trees (task 5.3 part 2b, D-141): `idle_wander`, `basic_needs`, the 7 of spec 022 US14 (`daily_routine`, `worker_cycle`, `guard_patrol`, `merchant_routine`, `priest_routine`, `livestock_behavior`, `predator_behavior`) and `prey_behavior` (deer, rabbit) and `fox_behavior`; role trees reference each other with `run_tree` | done |
 | `name-lists.json` | `common_13c`: 62 given names, 41 bynames (meets the 60/40 minimum) | keep, extend |
-| `humanoid-prototypes.json` | 23 prototypes; the 19 new ones draw extended traits and use `basic_needs` until the tree catalogue exists | equipment and trees per `docs/content-crossrefs-5.3.md` |
-| `animal-prototypes.json` | empty | 6 livestock + 5 wild |
+| `humanoid-prototypes.json` | 23 prototypes; the 19 new ones draw extended traits and use `daily_routine` (guard and soldier `guard_patrol`, merchant `merchant_routine`, priest and monk `priest_routine`); the v0 four keep `basic_needs` | equipment and trees per `docs/content-crossrefs-5.3.md` |
+| `animal-prototypes.json` | 13 prototypes (task 5.3 part 2b, D-140): 7 livestock and 6 wild with products, drops, diet, prey, radii and tree; `zoneId` of livestock stays unset until a `pasture` zone exists | done |
 | `engine-prototypes.json` | `government_faction` (no components yet), `wall`, `door`, `zone`, `furniture_piece` (test and construction stand-in: `Position` + `Furniture`), `job_board`, `chest` (furniture storage and stockpile), `loose_pile`, `build_site` (task 3.5: `Position`, a non-queryable 16-slot staging `Inventory`, `BuildSite`) | add `diplomatic_envoy` with its components |
 | `dwelling-levels.json` | 4 levels, placeholder numbers | tuned (spec 029) |
 | `settlement-tiers.json` | 4 tiers with the 027 default requirements | tuned, more zone requirements |

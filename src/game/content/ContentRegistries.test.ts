@@ -27,6 +27,7 @@ import { envoyComponent } from "../diplomacy/envoyComponent";
 import { settlementChronicleComponent } from "../settlement/settlementChronicleComponent";
 import { settlementProgressComponent } from "../settlement/settlementProgressComponent";
 import { traderComponent } from "../trade/traderComponent";
+import { animalComponent } from "../fauna/animalComponent";
 import { loadContent } from "./ContentLoader";
 
 function components(): ComponentRegistry {
@@ -41,6 +42,7 @@ function components(): ComponentRegistry {
   registry.register(citizenComponent);
   for (const definition of [
     identityComponent,
+    animalComponent,
     needsComponent,
     moodComponent,
     healthComponent,
@@ -62,6 +64,42 @@ function components(): ComponentRegistry {
   return registry;
 }
 
+function registerPackHandlers(handlers: BehaviorHandlerRegistry): void {
+  for (const id of [
+    "any_need_below_critical",
+    "jobs_available",
+    "household_needs_goods",
+    "zone_available",
+    "hostile_animal_near",
+    "animal_hungry",
+    "threat_near",
+    "humanoid_near",
+    "prey_near",
+    "no_guard_near",
+    "animal_aggressive",
+    "hunt_urge",
+  ]) {
+    handlers.registerCondition(id, () => NodeStatus.Failure);
+  }
+  for (const id of [
+    "satisfy_critical_need",
+    "idle_wander",
+    "claim_job",
+    "fetch_household_goods",
+    "go_to_zone",
+    "engage_threat",
+    "flee_from_threat",
+    "graze",
+    "wander_animal",
+    "stalk_prey",
+    "attack_prey",
+    "steal_prey",
+    "attack_intruder",
+  ]) {
+    handlers.registerAction(id, () => NodeStatus.Success);
+  }
+}
+
 describe("ContentRegistries", () => {
   it("fills the inventory and map registries", () => {
     const content = loadContent();
@@ -79,6 +117,8 @@ describe("ContentRegistries", () => {
       expect.arrayContaining([
         "baker",
         "build_site",
+        "deer",
+        "sheep",
         "carpenter",
         "chest",
         "diplomatic_envoy",
@@ -117,15 +157,11 @@ describe("ContentRegistries", () => {
     const content = loadContent();
     const handlers = new BehaviorHandlerRegistry();
     expect(() => content.createBehaviorTreeRegistry(handlers)).toThrow();
-    handlers.registerCondition("any_need_below_critical", () => NodeStatus.Failure);
-    handlers.registerAction("satisfy_critical_need", () => NodeStatus.Success);
-    handlers.registerAction("idle_wander", () => NodeStatus.Success);
-    handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
-    handlers.registerAction("claim_job", () => NodeStatus.Failure);
-    handlers.registerCondition("household_needs_goods", () => NodeStatus.Failure);
-    handlers.registerAction("fetch_household_goods", () => NodeStatus.Failure);
+    registerPackHandlers(handlers);
     const trees = content.createBehaviorTreeRegistry(handlers);
-    expect(trees.ids()).toEqual(["basic_needs", "idle_wander"]);
+    expect(trees.ids()).toEqual(
+      expect.arrayContaining(["basic_needs", "idle_wander", "daily_routine", "worker_cycle"]),
+    );
     expect(content.createBehaviorTreeRegistry(handlers)).not.toBe(trees);
   });
 });

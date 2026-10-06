@@ -173,7 +173,11 @@ export const humanoidPrototypeSchema = z
 export type HumanoidPrototypeContent = z.infer<typeof humanoidPrototypeSchema>;
 
 /**
- * Authored animal prototype (spec 022 animal record).
+ * Authored animal prototype (spec 022 animal record). `products` are the periodic yields of a
+ * live animal (one set every `productIntervalTicks`, 0 = none), `drops` what butchering or
+ * hunting yields; `dietTerrainIds` are the terrains it grazes on, `preyIds` the animal prototypes
+ * a predator hunts, `fleeRadiusCost` / `detectionRadiusCost` are path-cost radii (0 = never
+ * flees / detects nothing) and `aggressive` animals attack intruders (DECISIONS D-140).
  */
 export const animalPrototypeSchema = z
   .object({
@@ -187,6 +191,12 @@ export const animalPrototypeSchema = z
     habitatTerrainIds: z.array(contentIdSchema).default([]),
     behaviorTreeId: contentIdSchema,
     threatLevel: countSchema.default(0),
+    dietTerrainIds: z.array(contentIdSchema).default([]),
+    preyIds: z.array(contentIdSchema).default([]),
+    productIntervalTicks: countSchema.default(0),
+    fleeRadiusCost: countSchema.default(0),
+    detectionRadiusCost: countSchema.default(0),
+    aggressive: z.boolean().default(false),
   })
   .strict();
 

@@ -1,1 +1,256 @@
-[]
+[
+  {
+    "id": "sheep",
+    "name": "Sheep",
+    "kind": "livestock",
+    "products": [
+      {
+        "materialId": "raw_wool",
+        "quantity": 2
+      }
+    ],
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 3
+      }
+    ],
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "productIntervalTicks": 1152,
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "cow",
+    "name": "Cow",
+    "kind": "livestock",
+    "products": [
+      {
+        "materialId": "milk",
+        "quantity": 3
+      }
+    ],
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 8
+      }
+    ],
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "productIntervalTicks": 288,
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "goat",
+    "name": "Goat",
+    "kind": "livestock",
+    "products": [
+      {
+        "materialId": "milk",
+        "quantity": 2
+      }
+    ],
+    "drops": [
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      },
+      {
+        "materialId": "raw_meat",
+        "quantity": 3
+      }
+    ],
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil", "rocky"],
+    "productIntervalTicks": 288,
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "pig",
+    "name": "Pig",
+    "kind": "livestock",
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 6
+      },
+      {
+        "materialId": "tallow",
+        "quantity": 2
+      }
+    ],
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil", "forest_oak"],
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "chicken",
+    "name": "Chicken",
+    "kind": "livestock",
+    "products": [
+      {
+        "materialId": "eggs",
+        "quantity": 2
+      }
+    ],
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 1
+      }
+    ],
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "productIntervalTicks": 288,
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "horse",
+    "name": "Horse",
+    "kind": "livestock",
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "donkey",
+    "name": "Donkey",
+    "kind": "livestock",
+    "tendingSkillId": "animal_husbandry",
+    "behaviorTreeId": "livestock_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "deer",
+    "name": "Deer",
+    "kind": "wild",
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 6
+      },
+      {
+        "materialId": "raw_hide",
+        "quantity": 2
+      }
+    ],
+    "habitatTerrainIds": ["forest_oak", "forest_pine", "forest_birch"],
+    "behaviorTreeId": "prey_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "fleeRadiusCost": 80,
+    "detectionRadiusCost": 80
+  },
+  {
+    "id": "rabbit",
+    "name": "Rabbit",
+    "kind": "wild",
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 1
+      }
+    ],
+    "habitatTerrainIds": ["grassland", "forest_birch"],
+    "behaviorTreeId": "prey_behavior",
+    "dietTerrainIds": ["grassland", "fertile_soil"],
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  },
+  {
+    "id": "boar",
+    "name": "Boar",
+    "kind": "wild",
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 5
+      },
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      },
+      {
+        "materialId": "tallow",
+        "quantity": 1
+      }
+    ],
+    "habitatTerrainIds": ["forest_oak", "forest_pine", "forest_birch"],
+    "behaviorTreeId": "predator_behavior",
+    "threatLevel": 2,
+    "dietTerrainIds": ["grassland", "fertile_soil", "forest_oak"],
+    "detectionRadiusCost": 20,
+    "aggressive": true
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf",
+    "kind": "wild",
+    "drops": [
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      }
+    ],
+    "habitatTerrainIds": ["forest_pine", "forest_oak", "rocky"],
+    "behaviorTreeId": "predator_behavior",
+    "threatLevel": 3,
+    "dietTerrainIds": ["forest_pine", "forest_oak", "grassland"],
+    "preyIds": ["sheep", "goat", "cow", "pig", "chicken", "rabbit", "deer"],
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 80
+  },
+  {
+    "id": "bear",
+    "name": "Bear",
+    "kind": "wild",
+    "drops": [
+      {
+        "materialId": "raw_meat",
+        "quantity": 10
+      },
+      {
+        "materialId": "raw_hide",
+        "quantity": 3
+      }
+    ],
+    "habitatTerrainIds": ["forest_pine"],
+    "behaviorTreeId": "predator_behavior",
+    "threatLevel": 4,
+    "dietTerrainIds": ["forest_pine", "forest_oak"],
+    "detectionRadiusCost": 60,
+    "aggressive": true
+  },
+  {
+    "id": "fox",
+    "name": "Fox",
+    "kind": "wild",
+    "drops": [
+      {
+        "materialId": "raw_hide",
+        "quantity": 1
+      }
+    ],
+    "habitatTerrainIds": ["forest_oak", "forest_birch", "grassland"],
+    "behaviorTreeId": "fox_behavior",
+    "threatLevel": 1,
+    "dietTerrainIds": ["grassland", "fertile_soil", "forest_oak"],
+    "preyIds": ["chicken"],
+    "fleeRadiusCost": 60,
+    "detectionRadiusCost": 60
+  }
+]

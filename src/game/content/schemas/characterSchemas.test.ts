@@ -143,6 +143,29 @@ describe("animalPrototypeSchema", () => {
     expect(animalPrototypeSchema.parse(sheep).threatLevel).toBe(0);
     expect(animalPrototypeSchema.safeParse({ ...sheep, kind: "pet" }).success).toBe(false);
   });
+
+  it("defaults the behavior fields (D-140) and rejects negative radii", () => {
+    const wolf = animalPrototypeSchema.parse({
+      id: "wolf",
+      name: "Wolf",
+      kind: "wild",
+      behaviorTreeId: "predator_behavior",
+    });
+    expect(wolf).toMatchObject({
+      dietTerrainIds: [],
+      preyIds: [],
+      productIntervalTicks: 0,
+      fleeRadiusCost: 0,
+      detectionRadiusCost: 0,
+      aggressive: false,
+    });
+    expect(animalPrototypeSchema.safeParse({ ...wolf, detectionRadiusCost: -1 }).success).toBe(
+      false,
+    );
+    expect(
+      animalPrototypeSchema.parse({ ...wolf, preyIds: ["sheep"], aggressive: true }),
+    ).toMatchObject({ preyIds: ["sheep"], aggressive: true });
+  });
 });
 
 describe("factionSchema", () => {

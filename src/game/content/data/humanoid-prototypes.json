@@ -96,7 +96,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "defaultFactionIds": ["guild_smiths"]
   },
   {
@@ -114,7 +114,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "defaultFactionIds": ["guild_masons"]
   },
   {
@@ -132,7 +132,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "defaultFactionIds": ["guild_brewers"]
   },
   {
@@ -150,7 +150,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "defaultFactionIds": ["guild_weavers"]
   },
   {
@@ -168,7 +168,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "defaultFactionIds": ["guild_tanners"]
   },
   {
@@ -186,7 +186,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "defaultFactionIds": ["guild_potters"]
   },
   {
@@ -204,7 +204,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "fisherman",
@@ -221,7 +221,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "herbalist",
@@ -238,7 +238,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "miner",
@@ -255,7 +255,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "lumberjack",
@@ -272,7 +272,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "shepherd",
@@ -289,7 +289,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "guard",
@@ -306,7 +306,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "guard_patrol",
     "needPriority": ["safety", "rest", "hunger", "social", "comfort", "faith"]
   },
   {
@@ -324,7 +324,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "guard_patrol",
     "needPriority": ["safety", "rest", "hunger", "social", "comfort", "faith"]
   },
   {
@@ -345,7 +345,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "merchant_routine",
     "defaultFactionIds": ["guild_merchants"],
     "sellsItems": true,
     "needPriority": ["social", "hunger", "rest", "comfort", "safety", "faith"]
@@ -365,7 +365,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "priest_routine",
     "defaultFactionIds": ["parish_church"],
     "needPriority": ["faith", "social", "hunger", "rest", "comfort", "safety"]
   },
@@ -385,7 +385,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "priest_routine",
     "defaultFactionIds": ["monastic_order"],
     "needPriority": ["faith", "social", "hunger", "rest", "comfort", "safety"]
   },
@@ -404,7 +404,7 @@
     ],
     "traitSlots": 2,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs"
+    "behaviorTreeId": "daily_routine"
   },
   {
     "id": "noble",
@@ -425,7 +425,7 @@
     ],
     "traitSlots": 3,
     "drawExtendedTraits": true,
-    "behaviorTreeId": "basic_needs",
+    "behaviorTreeId": "daily_routine",
     "needPriority": ["comfort", "social", "hunger", "rest", "safety", "faith"]
   }
 ]

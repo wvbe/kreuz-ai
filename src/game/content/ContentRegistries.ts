@@ -7,6 +7,7 @@ import type { PrototypeDefinition } from "../ecs/PrototypeRegistry";
 import { MaterialRegistry } from "../inventory/MaterialRegistry";
 import { TerrainRegistry } from "../map/TerrainRegistry";
 import { ContentTable } from "./ContentTable";
+import { animalPrototypeDefinition } from "./animalPrototypeDefinition";
 import { humanoidPrototypeDefinition } from "./humanoidPrototypeDefinition";
 import type { ParsedContent } from "./parseContentPack";
 import type {
@@ -135,8 +136,9 @@ export class ContentRegistries {
   }
 
   /**
-   * Creates a fresh `PrototypeRegistry` holding every engine prototype and every humanoid
-   * prototype (see {@link humanoidPrototypeDefinition}). The component registry must already
+   * Creates a fresh `PrototypeRegistry` holding every engine prototype, every humanoid
+   * prototype (see {@link humanoidPrototypeDefinition}) and every animal prototype (see
+   * {@link animalPrototypeDefinition}). The component registry must already
    * contain the components the prototypes use (`Position`, `Inventory`, `TaskQueue`, `AiState`).
    *
    * @param components - The engine's component registry.
@@ -165,6 +167,9 @@ export class ContentRegistries {
           startValueMilli: this.constants.needStartValue,
         }),
       );
+    }
+    for (const animal of this.animals.all()) {
+      prototypes.register(animalPrototypeDefinition(animal));
     }
   }
 

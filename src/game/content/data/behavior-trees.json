@@ -59,5 +59,439 @@
         }
       ]
     }
+  },
+  {
+    "id": "worker_cycle",
+    "root": {
+      "type": "sequence",
+      "children": [
+        {
+          "type": "condition",
+          "id": "jobs_available"
+        },
+        {
+          "type": "action",
+          "id": "claim_job"
+        }
+      ]
+    }
+  },
+  {
+    "id": "daily_routine",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "any_need_below_critical"
+            },
+            {
+              "type": "action",
+              "id": "satisfy_critical_need"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "household_needs_goods"
+            },
+            {
+              "type": "action",
+              "id": "fetch_household_goods"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "run_tree",
+          "params": {
+            "treeId": "worker_cycle"
+          }
+        },
+        {
+          "type": "action",
+          "id": "run_tree",
+          "params": {
+            "treeId": "idle_wander"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "guard_patrol",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "any_need_below_critical"
+            },
+            {
+              "type": "action",
+              "id": "satisfy_critical_need"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "hostile_animal_near"
+            },
+            {
+              "type": "action",
+              "id": "engage_threat"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "run_tree",
+          "params": {
+            "treeId": "daily_routine"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "merchant_routine",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "any_need_below_critical"
+            },
+            {
+              "type": "action",
+              "id": "satisfy_critical_need"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "zone_available",
+              "params": {
+                "zoneTypes": "market"
+              }
+            },
+            {
+              "type": "action",
+              "id": "go_to_zone",
+              "params": {
+                "zoneTypes": "market"
+              }
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "run_tree",
+          "params": {
+            "treeId": "daily_routine"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "priest_routine",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "any_need_below_critical"
+            },
+            {
+              "type": "action",
+              "id": "satisfy_critical_need"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "zone_available",
+              "params": {
+                "zoneTypes": "chapel,church,cloister"
+              }
+            },
+            {
+              "type": "action",
+              "id": "go_to_zone",
+              "params": {
+                "zoneTypes": "chapel,church,cloister"
+              }
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "run_tree",
+          "params": {
+            "treeId": "daily_routine"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "livestock_behavior",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "threat_near",
+              "params": {
+                "from": "predator"
+              }
+            },
+            {
+              "type": "action",
+              "id": "flee_from_threat",
+              "params": {
+                "from": "predator"
+              }
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "animal_hungry"
+            },
+            {
+              "type": "action",
+              "id": "graze"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "wander_animal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "predator_behavior",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "prey_near"
+            },
+            {
+              "type": "condition",
+              "id": "no_guard_near"
+            },
+            {
+              "type": "condition",
+              "id": "hunt_urge"
+            },
+            {
+              "type": "action",
+              "id": "stalk_prey"
+            },
+            {
+              "type": "action",
+              "id": "attack_prey"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "humanoid_near"
+            },
+            {
+              "type": "selector",
+              "children": [
+                {
+                  "type": "sequence",
+                  "children": [
+                    {
+                      "type": "condition",
+                      "id": "animal_aggressive"
+                    },
+                    {
+                      "type": "action",
+                      "id": "attack_intruder"
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "children": [
+                    {
+                      "type": "condition",
+                      "id": "threat_near"
+                    },
+                    {
+                      "type": "action",
+                      "id": "flee_from_threat"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "animal_hungry"
+            },
+            {
+              "type": "action",
+              "id": "graze"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "wander_animal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "prey_behavior",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "threat_near"
+            },
+            {
+              "type": "action",
+              "id": "flee_from_threat"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "animal_hungry"
+            },
+            {
+              "type": "action",
+              "id": "graze"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "wander_animal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fox_behavior",
+    "root": {
+      "type": "selector",
+      "children": [
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "threat_near"
+            },
+            {
+              "type": "action",
+              "id": "flee_from_threat"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "prey_near"
+            },
+            {
+              "type": "condition",
+              "id": "no_guard_near"
+            },
+            {
+              "type": "condition",
+              "id": "hunt_urge"
+            },
+            {
+              "type": "action",
+              "id": "stalk_prey"
+            },
+            {
+              "type": "action",
+              "id": "steal_prey"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
+              "id": "animal_hungry"
+            },
+            {
+              "type": "action",
+              "id": "graze"
+            }
+          ]
+        },
+        {
+          "type": "action",
+          "id": "wander_animal"
+        }
+      ]
+    }
   }
 ]
