@@ -51,7 +51,7 @@ export function recordRelationshipEvent(
     }
     entry = { otherId, affinityMilli: 0, lastTick: tick, history: [] };
     data.entries.push(entry);
-    data.entries.sort((a, b) => a.otherId - b.otherId);
+    data.entries.sort((left, right) => left.otherId - right.otherId);
   }
   entry.affinityMilli = Math.max(
     -affinityLimitMilli,

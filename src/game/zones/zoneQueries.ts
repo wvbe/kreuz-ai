@@ -77,7 +77,13 @@ export function isInActiveZoneOfType(
 }
 
 /**
- * The active zone that covers a cell, once its effects count (the tick after it became active).
+ * The type of the active zone that covers a cell, once its effects count (the tick after it
+ * became active).
+ *
+ * @param engine - The engine.
+ * @param mapId - Map id.
+ * @param cellIndex - Cell index.
+ * @returns The zone type id, or null when no active zone with effects covers the cell.
  */
 function effectiveZoneTypeAt(engine: GameEngine, mapId: number, cellIndex: number): string | null {
   const service = getZoneService(engine);

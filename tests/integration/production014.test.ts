@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getTotal } from "../inventory/inventoryQueries";
-import { contentWithRecipes, createProductionWorld } from "./testProductionWorld";
+import { getTotal } from "../../src/game/inventory/inventoryQueries";
+import {
+  contentWithRecipes,
+  createProductionWorld,
+} from "../../src/game/production/testProductionWorld";
 
 const byproductRecipe = {
   id: "bake_with_chaff",
