@@ -1001,3 +1001,17 @@ Wildcard subscribers in use: `status.*`, `settlement.**`, `inventory.item.*`, `h
 
 ### D-75 `road_stone` is Fast, not Fastest (deviation from spec 022 US10)
 - The A* heuristic of `PathfindingService` uses the cheapest passable terrain cost as its minimum step cost. A terrain of cost 5 (Fastest) lowers it from 7 to 5, which changes expansion order and tie-breaking, so paths of existing scenarios (`tier-progress`: one settler fewer on day 14) changed although the world has no stone road. To keep every existing scenario unchanged, `road_stone` has cost 7 (Fast) like `road_dirt`, the spec's own table says "Yes (fast)" for both. Making it Fastest (5) needs the scenarios to be re-recorded together with the change; task 5.4 or a later balance pass may do that.
+
+## Phase 5.4a: the pending recipe and zone queue lands (D-120 .. D-123)
+
+### D-120 All pending records moved unchanged; the queue file is gone
+- Every one of the 55 recipes and 20 zones of `docs/content-pending-5.2.json` resolved against the 5.1 and 5.3 packs (materials, furniture, skills), so no id had to be added or adapted. The pack now holds 59 recipes and 39 zone types, the spec totals, and `docs/content-pending-5.2.json` is deleted. The `landed + pending == total` test is replaced by a conformance test (counts at least the spec minima, inputs sourced or listed as gaps, workstation and zone tags resolve, tier sanity, `validateTierReachability`).
+
+### D-121 Recipe unlock tiers follow the workstation
+- The authored recipes had no `unlockTier` (Hamlet), which `validateTierReachability` rejects when the workstation unlocks later (FR-011). 36 recipes got the tier of their cheapest workstation (30 Village, 6 Market Town), per the furniture tiers of D-73. No existing recipe changed.
+
+### D-122 Source gaps are a declared list, not terrain harvestables
+- The conformance test counts as source only recipes, jobs, zone crops, trader stock and the founders' kit (jobs do not read terrain `harvestable`). Raw inputs with no source (pine_log, birch_log, copper_ore, tin_ore, flax, raw_wool, raw_hide, oak_bark, granite, clay, sand, rye, barley, honey, milk, raw_meat, salt, raw_fish, vegetables, fruit, grapes, tallow, beeswax) are listed in `docs/content-crossrefs-5.4.md`, which the test reads; an undeclared gap fails, a stale listed one does not. The jobs and animals tasks delete lines as sources land.
+
+### D-123 `throne_room` keeps its `table` requirement
+- Spec 022 asks for a `throne` (10 tiles). The scenarios (tier-progress, standing, chronicle, housing) build a table in the throne room, so changing the requirement would break them; it stays as recorded in D-80 and `docs/content-crossrefs-5.2.md`.

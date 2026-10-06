@@ -58,6 +58,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
   - [x] part 1: skills (21), traits (32), needs, humanoids (23), factions (15), name list (D-90..D-92; open ids in `docs/content-crossrefs-5.3.md`)
   - [ ] part 2: animals, behavior trees, jobs
 - [ ] 5.4 Content conformance test (counts, references, Hamlet→Village reachability)
+  - [x] 5.4a Pending queue landed (59 recipes, 39 zone types), strict conformance test in `src/game/content/contentTypes.test.ts`, source gaps in `docs/content-crossrefs-5.4.md` (D-120..D-123)
 
 ## Phase 6 — React renderer (024)
 - [ ] 6.1 Shell: EngineHost (owns clock), store/hooks, Vite app, new/save/load
