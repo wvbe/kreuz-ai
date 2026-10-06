@@ -70,15 +70,31 @@ A travelling trader arrives about day 3, stays two days, and comes back every si
 
 ```
 traders                              # is a trader here? what does it sell and buy?
-trade quote sell 39 iron_ore 8       # what it pays for 8 ore
-trade sell 39 iron_ore 8             # settlers fetch the ore from the chests (mining is automatic) and sell it
+trade quote sell 50 iron_ore 8       # what it pays for 8 ore
+trade sell 50 iron_ore 8             # settlers fetch the ore from the chests (mining is automatic) and sell it
 trade orders                         # progress: order #1 sell iron_ore 8/8 ... Done
 ledger                               # trader_caravan: 4 iron_ingot may still be bought, credit 4 (iron_ore x 0.5)
-trade buy 39 iron_ingot 4            # five would be refused (trade.order.refused: RefinedCreditExhausted)
+trade buy 50 iron_ingot 4            # five would be refused (trade.order.refused: RefinedCreditExhausted)
 treasury                             # coins: wages are paid from here, sales fill it, purchases empty it
 ```
 
-The ids are those of your game (`traders` shows the trader's). A settler carries the goods or the coins, so trips take time and each costs the 1 coin wage. Bought goods are hauled into the chests. If the trader leaves before an order is done, the order waits for the next visit; unspent credit and the stock the trader keeps for you wait too. `scenarios/trade-ore-for-iron.json` plays this with the commands above (seed 42: ids 39 and 40).
+The ids are those of your game (`traders` shows the trader's). A settler carries the goods or the coins, so trips take time and each costs the 1 coin wage. Bought goods are hauled into the chests. If the trader leaves before an order is done, the order waits for the next visit; unspent credit and the stock the trader keeps for you wait too. `scenarios/trade-ore-for-iron.json` plays this with the commands above (seed 42: ids 50 and 59).
+
+## Neighbours (diplomacy)
+
+Three factions live beyond the map edge: the travelling merchants, the Barony of Ashford (wary and quarrelsome) and the Abbey of St Wulfric (friendly). Each has a leader; your messages travel by envoy, so a gift or an agreement needs a few hundred ticks to arrive. Standing runs from -100 to 100 and is read in bands (hostile below -30, wary, neutral, friendly from 20, allied from 70); below -30 a faction will not trade and its members will not take your jobs. It drifts back toward neutral by a point every second day.
+
+```
+diplomacy                            # who they are, how they see you and you them, how far an envoy walks
+gift 13 400                          # 400 coins from the treasury to the Barony: +25 in its eyes when it arrives
+directives                           # your envoys: arrival tick, cargo, the tick it gives up (576 after sending)
+envoy 13 agreement                   # a trade agreement: accepted once the Barony's standing toward you is 20 or more
+agreements                           # 10 % off at that faction's traders
+proposals                            # what they offer you (they send overtures and agreements too)
+respond 1 accept                     # reject costs 3 standing; counter just closes it
+```
+
+A refused act shows `command.rejected` on the next step, and `diplomacy.act.refused` says why: `HostileGate`, `TargetLeaderless`, `InsufficientFunds`. An envoy that cannot reach anyone gives up after 576 ticks and the gift comes back to the treasury. `scenarios/diplomacy.json` plays gifts to the Barony and the agreement that follows (faction ids 10, 13 and 16 for seed 42; `diplomacy` shows yours).
 
 ## When something is wrong
 

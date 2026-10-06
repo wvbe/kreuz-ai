@@ -1,0 +1,128 @@
+{
+  "name": "diplomacy",
+  "seed": 42,
+  "options": { "difficulty": "steady", "mapSize": 0 },
+  "steps": [
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    { "assert": { "query": "factions-diplomacy", "path": "length", "op": "eq", "value": 3 } },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.name",
+        "op": "eq",
+        "value": "Barony of Ashford"
+      }
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.theirAttitude",
+        "op": "eq",
+        "value": "wary"
+      }
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.ourAttitude",
+        "op": "eq",
+        "value": "wary"
+      }
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "2.theirAttitude",
+        "op": "eq",
+        "value": "friendly"
+      }
+    },
+    { "assert": { "query": "agreements", "path": "length", "op": "eq", "value": 0 } },
+    { "assert": { "query": "treasury", "path": "balance", "op": "eq", "value": 1000 } },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "trade-agreement",
+        "targetFactionId": 13
+      }
+    },
+    { "step": 1 },
+    { "assert": { "query": "directives", "path": "length", "op": "eq", "value": 1 } },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 13,
+        "gift": { "coins": 400 }
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 13,
+        "gift": { "coins": 200 }
+      }
+    },
+    { "step": 1 },
+    { "assert": { "query": "treasury", "path": "balance", "op": "lte", "value": 400 } },
+    { "assert": { "query": "directives", "path": "length", "op": "eq", "value": 3 } },
+    { "assert": { "query": "directives", "path": "1.status", "op": "eq", "value": "traveling" } },
+    { "assert": { "query": "directives", "path": "1.cargo.0.quantity", "op": "eq", "value": 400 } },
+    { "step": 150 },
+    { "saveLoad": true },
+    { "assert": { "query": "directives", "path": "length", "op": "eq", "value": 3 } },
+    { "assert": { "query": "directives", "path": "2.status", "op": "eq", "value": "traveling" } },
+    { "step": 450 },
+    { "assert": { "query": "directives", "path": "0.status", "op": "eq", "value": "delivered" } },
+    { "assert": { "query": "agreements", "path": "length", "op": "eq", "value": 0 } },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.theirStanding",
+        "op": "gte",
+        "value": 20
+      }
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.theirAttitude",
+        "op": "eq",
+        "value": "friendly"
+      }
+    },
+    {
+      "assert": { "query": "factions-diplomacy", "path": "1.hostile", "op": "eq", "value": false }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "trade-agreement",
+        "targetFactionId": 13
+      }
+    },
+    { "step": 1 },
+    { "assertHash": { "label": "agreement-sent" } },
+    { "step": 480 },
+    { "assert": { "query": "agreements", "path": "length", "op": "eq", "value": 1 } },
+    {
+      "assert": {
+        "query": "agreements",
+        "path": "0.factionBName",
+        "op": "eq",
+        "value": "Barony of Ashford"
+      }
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.tradeAgreement",
+        "op": "eq",
+        "value": true
+      }
+    },
+    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
+    { "replay": true }
+  ]
+}
