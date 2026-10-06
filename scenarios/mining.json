@@ -1,0 +1,83 @@
+{
+  "name": "mining",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "debugSpawn": {
+        "prototypeId": "chest",
+        "mapId": 1,
+        "cells": [255, 256]
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "iron_ore"
+        },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assertHash": {
+        "label": "day1"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 576
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "iron_ore"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "limestone"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}

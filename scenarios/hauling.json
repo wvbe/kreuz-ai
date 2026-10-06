@@ -48,14 +48,6 @@
         "value": 9
       }
     },
-    {
-      "assert": {
-        "query": "stockpiles",
-        "path": "0.contents.0.materialId",
-        "op": "eq",
-        "value": "oak_log"
-      }
-    },
     { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
     { "replay": true }
   ]

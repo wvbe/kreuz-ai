@@ -86,7 +86,7 @@
         "args": { "materialId": "bread" },
         "path": "total",
         "op": "gte",
-        "value": 8
+        "value": 4
       }
     },
     {

@@ -39,6 +39,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 3.4 Zones & rooms (015) - `Zone` entities, requirement grammar + status/`zone.*` events (D-11 timing), merge/split commands, skill affinity, storage tiers 0/1 + zone filter, board pausing, `zones`/`zone` verbs + map overlay, D-48
 - [x] 3.5 Construction (016) - `build_site` blueprints, `validatePlacement` with structured reasons, supply (`build.supply`, `Supply` reservations) and build (`build.construct`) jobs on the board, walls/doors that obstruct cells, completion by prototype, cancel/deconstruct with refunds, build definitions for every v0 piece, `build`/`sites` verbs, `scenarios/build-bakery.json`, D-50; tools and `NoQualifiedWorker` not modelled
 - [x] 3.6 Status explanations & flow (025)
+- [x] 3.7a Gathering & farming (014/022 gap) - `src/game/gathering`: crop plots on fertile cells of active `farm_field` zones (`Fallow`/`Sown`/`Ripe`, grown by `cropGrowthTicks`, `seasonModifier` hook = 1000), `farm.sow` / `farm.harvest` / `mine.ore` / `quarry.stone` executors with output bonus and skill XP, finite deposits (per-cell charges, depletion to `cave_floor`), stock-threshold and bounded auto-posters, field status reasons, `crops` query and `fields` verb, `mining` skill, `scenarios/farming.json` and `mining.json`, D-52
 - [ ] **Checkpoint C (playable in terminal):** scripted e2e farm → bakery → bread eaten; `why` explains every idle citizen
 
 ## Phase 4 — Society and progression

@@ -1,0 +1,153 @@
+{
+  "name": "farming",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "debugSpawn": {
+        "prototypeId": "chest",
+        "mapId": 1,
+        "cells": [255, 256]
+      }
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "wheat"
+        },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [230, 258, 259, 279, 280, 281]
+      }
+    },
+    {
+      "step": 3
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "0.zoneTypeId",
+        "op": "eq",
+        "value": "farm_field"
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "0.status",
+        "op": "eq",
+        "value": "active"
+      }
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "length",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "0.stage",
+        "op": "eq",
+        "value": "Fallow"
+      }
+    },
+    {
+      "step": 285
+    },
+    {
+      "assertHash": {
+        "label": "day1"
+      }
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "0.stage",
+        "op": "eq",
+        "value": "Sown"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "0.stage",
+        "op": "eq",
+        "value": "Sown"
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assertHash": {
+        "label": "day3"
+      }
+    },
+    {
+      "step": 576
+    },
+    {
+      "assertHash": {
+        "label": "day5"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "wheat"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "entity",
+        "args": {
+          "id": 4
+        },
+        "path": "components.Skills.values.farming",
+        "op": "gt",
+        "value": 30000
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}
