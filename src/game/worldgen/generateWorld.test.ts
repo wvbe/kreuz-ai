@@ -79,12 +79,13 @@ describe("generateWorld through newGame", () => {
     }
   });
 
-  it("only draws from the world.gen, content.traits and identity.names streams", () => {
+  it("only draws from the world.gen, world.fauna, content.traits and identity.names streams", () => {
     const engine = start(42, MapSize.Small);
     expect(Object.keys(engine.prng.serialize().streams)).toEqual([
       traitStreamName,
       identityStreamName,
       "trade.visit",
+      "world.fauna",
       worldGenStreamName,
     ]);
   });

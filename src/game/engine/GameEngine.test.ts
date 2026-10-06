@@ -313,7 +313,7 @@ describe("GameEngine query facade", () => {
     engine.runTicks(300);
     const state = engine.getState();
     // settlement kit (9) plus three NPC factions, their six members and two envoys under way
-    expect(state.entityCount).toBe(20);
+    expect(state.entityCount).toBe(27);
     expect(state.mapCount).toBe(1);
     expect(state.time).toEqual({
       tick: 300,
@@ -380,6 +380,7 @@ describe("GameEngine registerSystem", () => {
     expect(engine.getQuery("demo.none")).toBeUndefined();
     expect(engine.queryNames()).toEqual([
       "agreements",
+      "animals",
       "build-menu",
       "chronicle",
       "construction-queue",

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { getAiService } from "../aiServiceRegistry";
 import { adjustNeed } from "../needs/needAccess";
 import { createAiWorld } from "../testAiWorld";
 import { isDueForDecision, runAiDecisions } from "./runAiDecisions";
@@ -32,6 +33,17 @@ describe("isDueForDecision", () => {
     expect(isDueForDecision(world.engine, farmer)).toBe(false);
     adjustNeed(farmer, "hunger", -65_000);
     expect(isDueForDecision(world.engine, farmer)).toBe(true);
+  });
+
+  it("wakes a busy entity when a registered wake check asks for it", () => {
+    const world = createAiWorld();
+    const farmer = world.spawn("farmer", 0);
+    world.engine.tasks.enqueue(farmer.id, { type: "ai.idle", data: { ticks: 5 }, priority: 10 });
+    expect(isDueForDecision(world.engine, farmer)).toBe(false);
+    getAiService(world.engine).registerWakeCheck((_engine, entity) => entity.id === farmer.id);
+    expect(isDueForDecision(world.engine, farmer)).toBe(true);
+    world.engine.tasks.enqueue(farmer.id, { type: "ai.idle", data: { ticks: 5 }, priority: 100 });
+    expect(isDueForDecision(world.engine, farmer)).toBe(false);
   });
 
   it("wakes an idle entity only when a need is critical", () => {

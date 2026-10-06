@@ -16,6 +16,7 @@ describe("SessionQuery", () => {
   it("lists the kernel queries", () => {
     expect(startedSession().query.names()).toEqual([
       "agreements",
+      "animals",
       "build-menu",
       "cell",
       "chronicle",

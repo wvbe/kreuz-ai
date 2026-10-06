@@ -2,7 +2,7 @@
 
 Slot 5 of the tick pipeline (DECISIONS section 2).
 
-- `runAiDecisions.ts` - `isDueForDecision` and `runAiDecisions`. Per entity in ascending id: an entity with a behavior tree and a task queue is **due** when its queue is empty, or when all its tasks are below need priority (100) while a need is critical. A task at need priority or above makes the entity committed and it is left alone. A due entity gets one `engine.behavior.tick`; leaves enqueue tasks, the task system runs them at slot 6.
+- `runAiDecisions.ts` - `isDueForDecision` and `runAiDecisions`. Per entity in ascending id: an entity with a behavior tree and a task queue is **due** when its queue is empty, or when all its tasks are below need priority (100) while a need is critical. A busy entity below need priority is also due when a registered wake check says so (`AiService.registerWakeCheck`; animals use it to notice a threat while they stroll). A task at need priority or above makes the entity committed and it is left alone. A due entity gets one `engine.behavior.tick`; leaves enqueue tasks, the task system runs them at slot 6.
 
 ## Plugging in work (jobs)
 

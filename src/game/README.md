@@ -18,6 +18,8 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [factions](factions/README.md) - `Faction` / `Citizen` components, derived membership, leaders, standing data, dangling-reference clean-up.
 - [identity](identity/README.md) - names from the content lists, derived titles, offices, styled names.
 - [ai](ai/README.md) - settler AI: needs, mood, utility decisions, behavior handlers, movement task, starvation.
+- [fauna](fauna/README.md) - animals (022 US11): the `Animal` component, 13 prototypes, senses, flee / graze / hunt handlers for the animal trees, hunger and periodic products, the `tend.animals` / `butcher.animal` / `hunt.game` executors, the `animals` query.
+- [roles](roles/README.md) - handlers of the role trees of 022 US14 (`go_to_zone`, `zone_available`, `hostile_animal_near`, `engage_threat`).
 - [jobs](jobs/README.md) - job boards, postings, claim order, job type executors, `fell.trees`, wages.
 - [storage](storage/README.md) - reservations, `Furniture` / `Stockpile`, tiered routing, hauling (`haul.deliver`), stock queries, storage decay.
 - [zones](zones/README.md) - zones and rooms: `Zone`, the furniture requirement grammar, status and `zone.*` events, merge and split, skill affinity, board pausing, zone hooks of storage.

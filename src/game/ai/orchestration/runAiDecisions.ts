@@ -3,6 +3,7 @@ import { getComponent } from "../../ecs/Entity";
 import type { Entity } from "../../ecs/Entity";
 import type { GameEngine } from "../../engine/GameEngine";
 import { taskQueueComponent } from "../../task/taskQueueComponent";
+import { getAiService } from "../aiServiceRegistry";
 import { AiTaskPriority } from "../aiTypes";
 import { criticalNeedsOf } from "../needs/needAccess";
 
@@ -13,6 +14,8 @@ import { criticalNeedsOf } from "../needs/needAccess";
  * - only tasks below {@link AiTaskPriority.Need} (wandering, standing, claimed jobs) while one of
  *   its needs is critical, so a critical need redirects it within the same tick (the new task
  *   outranks and interrupts the other one at slot 6).
+ * - only tasks below {@link AiTaskPriority.Need} while a registered wake check asks for a decision
+ *   (an animal that noticed a threat).
  * An entity that already has a task at need priority or above is committed and left alone.
  *
  * @param engine - The engine.
@@ -31,7 +34,10 @@ export function isDueForDecision(engine: GameEngine, entity: Entity): boolean {
   if (queue.tasks.some((task) => task.priority >= AiTaskPriority.Need)) {
     return false;
   }
-  return criticalNeedsOf(engine.content.needs, entity).length > 0;
+  return (
+    criticalNeedsOf(engine.content.needs, entity).length > 0 ||
+    getAiService(engine).shouldWake(engine, entity)
+  );
 }
 
 /**

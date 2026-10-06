@@ -26,6 +26,13 @@ export type ItemAvailability = (
 export type BedPolicy = (engine: GameEngine, sleeper: Entity, bed: Entity) => number | null;
 
 /**
+ * Decides whether an entity that is busy with a low-priority task (and has no critical need)
+ * should be given a decision anyway, for example an animal that sees a threat. It must be cheap
+ * and deterministic: it is asked for every busy entity every tick.
+ */
+export type WakeCheck = (engine: GameEngine, entity: Entity) => boolean;
+
+/**
  * Per-engine AI state that is code, not game state: the extension hooks other tasks plug into
  * (need sources, the difficulty multiplier) and the pathfinding service. Nothing here is saved;
  * the hooks are registered when the systems are set up, and `difficulty` is refreshed by the
@@ -38,6 +45,7 @@ export class AiService {
   private currentDifficulty: Difficulty | null = null;
   private availabilityHook: ItemAvailability | null = null;
   private bedPolicyHook: BedPolicy | null = null;
+  private readonly wakeChecks: WakeCheck[] = [];
 
   /**
    * Creates the service.
@@ -147,6 +155,26 @@ export class AiService {
    */
   bedRank(engine: GameEngine, sleeper: Entity, bed: Entity): number | null {
     return this.bedPolicyHook === null ? 0 : this.bedPolicyHook(engine, sleeper, bed);
+  }
+
+  /**
+   * Adds a wake check (see {@link WakeCheck}); checks run in registration order.
+   *
+   * @param check - The check to add.
+   */
+  registerWakeCheck(check: WakeCheck): void {
+    this.wakeChecks.push(check);
+  }
+
+  /**
+   * Whether some wake check wants a busy entity to decide now.
+   *
+   * @param engine - The engine.
+   * @param entity - The busy entity.
+   * @returns True when any registered check says so.
+   */
+  shouldWake(engine: GameEngine, entity: Entity): boolean {
+    return this.wakeChecks.some((check) => check(engine, entity));
   }
 
   /**

@@ -65,6 +65,8 @@ import { storageSystemId } from "../storage/storageTypes";
 import { factionsSystemId } from "../factions/factionTypes";
 import { registerIdentity } from "../identity/registerIdentity";
 import { registerChronicle } from "../chronicle/registerChronicle";
+import { registerFauna } from "../fauna/registerFauna";
+import { registerRoles } from "../roles/registerRoles";
 import { registerDeathHook } from "../chronicle/registerDeathHook";
 import { identitySystemId } from "../identity/identityTypes";
 import { registerSkills, skillsSystemId } from "../skills/registerSkills";
@@ -683,6 +685,8 @@ export class GameEngine {
     registerHousing(this);
     registerStanding(this);
     registerChronicle(this);
+    registerFauna(this);
+    registerRoles(this);
     this.registerSystem({
       id: "world.starting-map",
       dependencies: [

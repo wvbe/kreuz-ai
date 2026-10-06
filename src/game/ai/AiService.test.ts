@@ -89,4 +89,14 @@ describe("AiService", () => {
     service.setBedPolicy(null);
     expect(service.bedRank(world.engine, farmer, bed)).toBe(0);
   });
+
+  it("asks the registered wake checks whether a busy entity should decide (registerWakeCheck, shouldWake)", () => {
+    const world = createAiWorld();
+    const service = getAiService(world.engine);
+    const farmer = world.spawn("farmer", 0);
+    expect(service.shouldWake(world.engine, farmer)).toBe(false);
+    service.registerWakeCheck((_engine, entity) => entity.id === farmer.id);
+    expect(service.shouldWake(world.engine, farmer)).toBe(true);
+    expect(service.shouldWake(world.engine, world.spawn("farmer", 1))).toBe(false);
+  });
 });
