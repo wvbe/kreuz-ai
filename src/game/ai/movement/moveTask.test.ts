@@ -41,6 +41,7 @@ describe("createMoveTask", () => {
     expect(world.engine.taskHandlers.has("move")).toBe(true);
   });
 
+  // @covers 003:FR-010
   it("walks one cell per tick on normal terrain and reports the events", () => {
     const world = createAiWorld();
     const settler = world.spawn("peasant", 0, noAi);
@@ -125,6 +126,7 @@ describe("createMoveTask", () => {
     expect(lastOutcome(world, settler.id)).toEqual({ outcome: "Failed", reason: "unreachable" });
   });
 
+  // @covers 012:SC-004
   it("re-plans around a cell that becomes blocked", () => {
     const world = createAiWorld();
     const settler = world.spawn("peasant", 0, noAi);

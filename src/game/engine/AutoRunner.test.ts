@@ -37,6 +37,7 @@ function createFakeScheduler(): FakeScheduler {
 }
 
 describe("AutoRunner", () => {
+  // @covers 001:FR-007
   it("schedules one tick per interval and chains the next", () => {
     const time = new GameTime();
     const scheduler = createFakeScheduler();
@@ -60,6 +61,8 @@ describe("AutoRunner", () => {
     expect(scheduler.pending()).toHaveLength(1);
   });
 
+  // @covers 001:FR-005
+  // @covers 001:SC-003
   it("re-reads speed and interval before every tick", () => {
     const time = new GameTime();
     const scheduler = createFakeScheduler();
@@ -115,6 +118,8 @@ describe("AutoRunner", () => {
     expect(scheduler.pending()).toEqual([]);
   });
 
+  // @covers 001:FR-005
+  // @covers 001:SC-006
   it("drives a pipeline: 2x speed gives 2 ticks per base interval, each tick still +1", () => {
     const bus = new EventBus();
     const time = new GameTime(bus);
@@ -130,6 +135,7 @@ describe("AutoRunner", () => {
     expect(time.tickCount).toBe(2);
   });
 
+  // @covers 001:SC-002
   it("keeps polling while the game is paused without advancing time", () => {
     const bus = new EventBus();
     const time = new GameTime(bus);

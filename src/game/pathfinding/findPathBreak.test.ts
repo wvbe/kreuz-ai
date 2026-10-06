@@ -14,6 +14,7 @@ describe("findPathBreak", () => {
     expect(findPathBreak(map, 99, [1])).toBe(0);
   });
 
+  // @covers 012:FR-006
   it("detects an obstacle that appeared on the path", () => {
     const map = createAsciiMap(createPathTestWorld(), ["....", "...."]);
     map.setObstruction(2, BlockReason.Wall);

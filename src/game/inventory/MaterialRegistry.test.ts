@@ -12,6 +12,10 @@ const wood: MaterialDefinition = {
 };
 
 describe("materialDefinitionSchema", () => {
+  // @covers 005:FR-003
+  // @covers 005:FR-003a
+  // @covers 005:FR-016
+  // @covers 005:FR-019
   it("accepts valid definitions and rejects bad ids, limits and unknown fields", () => {
     expect(materialDefinitionSchema.safeParse(wood).success).toBe(true);
     expect(materialDefinitionSchema.safeParse({ ...wood, id: "Wood" }).success).toBe(false);

@@ -22,6 +22,8 @@ describe("cellSpacing", () => {
 });
 
 describe("generateOutdoorTerrain", () => {
+  // @covers 004:SC-014
+  // @covers 004:FR-016
   it("is a pure function of geometry, stream and village", () => {
     expect(paint(42)).toEqual(paint(42));
     expect(paint(42).terrain).not.toEqual(paint(43).terrain);

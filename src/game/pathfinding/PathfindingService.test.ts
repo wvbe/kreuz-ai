@@ -47,6 +47,8 @@ describe("PathfindingService.findPath", () => {
     expect(() => service.findPath(map.id, 0, 2, { maxExpansions: 0 })).toThrow(RangeError);
   });
 
+  // @covers 012:FR-006
+  // @covers 012:FR-007
   it("gives the same answer cold and warm, on two independent services", () => {
     const rows = ["..m...", ".#.#..", "...,,.", "m#....", "......"];
     const worldA = createPathTestWorld();
@@ -102,6 +104,7 @@ describe("PathfindingService.findPath", () => {
     expect(service.findPath(map.id, 0, 11, tight)).toEqual(budgetFailure);
   });
 
+  // @covers 012:FR-006
   it("invalidates cached paths on setTerrain and setObstruction (sync and by event)", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, ["...", "..."]);
@@ -194,6 +197,8 @@ describe("PathfindingService.findRoute", () => {
 });
 
 describe("PathfindingService.reachable and findPathBreak", () => {
+  // @covers 012:FR-006
+  // @covers 012:FR-010
   it("answers reachability and path validity questions", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, ["..#."]);

@@ -43,6 +43,8 @@ function fullData(): InventoryData {
 }
 
 describe("inventoryComponent", () => {
+  // @covers 005:FR-001
+  // @covers 005:FR-002
   it("is named Inventory with empty open defaults", () => {
     expect(inventoryComponent.name).toBe("Inventory");
     expect(inventoryComponent.defaults()).toEqual({
@@ -67,6 +69,9 @@ describe("inventoryComponent", () => {
     expect(inventoryComponent.defaults().slots).toEqual([]);
   });
 
+  // @covers 005:FR-026
+  // @covers 005:FR-027
+  // @covers 005:SC-005
   it("round-trips a full inventory through JSON exactly", () => {
     const data = fullData();
     const parsed = inventoryComponent.schema.parse(JSON.parse(JSON.stringify(data)));
@@ -108,6 +113,7 @@ describe("inventoryDataSchema", () => {
     ).toBe(false);
   });
 
+  // @covers 005:FR-022
   it("rejects duplicate equipment names and unknown rule enums", () => {
     const base = fullData();
     expect(

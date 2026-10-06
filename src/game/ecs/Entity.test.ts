@@ -23,11 +23,14 @@ function getBalance(entity: WithComponent<typeof inventory>): number {
 const entity: Entity = { id: 1, prototype: "citizen", components: { Inventory: { coins: 7 } } };
 
 describe("hasComponent", () => {
+  // @covers 003:SC-003
   it("is true only for present components", () => {
     expect(hasComponent(entity, inventory)).toBe(true);
     expect(hasComponent(entity, position)).toBe(false);
   });
 
+  // @covers 003:FR-004
+  // @covers 003:FR-005
   it("narrows the type so required-component functions compile", () => {
     if (hasComponent(entity, inventory)) {
       expect(getBalance(entity)).toBe(7);
@@ -37,6 +40,7 @@ describe("hasComponent", () => {
     getBalance(entity);
   });
 
+  // @covers 003:FR-005
   it("narrows cumulatively across two components", () => {
     const both: Entity = {
       id: 2,

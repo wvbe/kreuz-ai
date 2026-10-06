@@ -21,6 +21,7 @@ function plain(materialId: string, quantity: number): InventorySlot {
 }
 
 describe("requireInventory", () => {
+  // @covers 005:SC-007
   it("returns the live data and throws NoInventory without the component", () => {
     const entity = createInventoryEntity(1);
     expect(requireInventory(entity)).toBe(entity.components.Inventory);
@@ -34,6 +35,8 @@ describe("requireInventory", () => {
 });
 
 describe("canStore", () => {
+  // @covers 005:FR-010
+  // @covers 005:SC-002
   it("uses the corrected arithmetic: wood 8/50 with 2 free slots fits 60 and up to 142", () => {
     const entity = createInventoryEntity(1, { slotCount: 3, slots: [plain("wood", 8)] });
     expect(canStore(materials, entity, "wood", 60)).toEqual({ fits: true, maxFittable: 142 });
@@ -41,6 +44,8 @@ describe("canStore", () => {
     expect(canStore(materials, entity, "wood", 143)).toEqual({ fits: false, maxFittable: 142 });
   });
 
+  // @covers 005:FR-010
+  // @covers 005:SC-002
   it("limits by weight too and reports the smaller bound", () => {
     const entity = createInventoryEntity(1, { weightLimitMilli: 50000 });
     expect(canStore(materials, entity, "stone", 11)).toEqual({ fits: false, maxFittable: 10 });
@@ -68,6 +73,8 @@ describe("canStore", () => {
 });
 
 describe("canRetrieve", () => {
+  // @covers 005:FR-011
+  // @covers 005:SC-002
   it("reports availability and the held quantity", () => {
     const entity = createInventoryEntity(1, { slots: [plain("cheese", 10), plain("cheese", 5)] });
     expect(canRetrieve(materials, entity, "cheese", 10)).toEqual({ available: true, quantity: 15 });
@@ -103,6 +110,8 @@ describe("availableSlots", () => {
 });
 
 describe("currentWeight and availableWeight", () => {
+  // @covers 005:FR-016
+  // @covers 005:SC-011
   it("sums exact milli weights including equipment", () => {
     const entity = createInventoryEntity(1, {
       weightLimitMilli: 50000,
@@ -113,6 +122,7 @@ describe("currentWeight and availableWeight", () => {
     expect(availableWeight(materials, entity)).toBe(26000);
   });
 
+  // @covers 005:FR-018
   it("is null without a limit and zero when over the limit", () => {
     expect(availableWeight(materials, createInventoryEntity(1))).toBeNull();
     const over = createInventoryEntity(2, { weightLimitMilli: 1000, slots: [plain("stone", 1)] });

@@ -32,6 +32,10 @@ describe("prototypeSchema", () => {
 });
 
 describe("PrototypeRegistry", () => {
+  // @covers 003:FR-001
+  // @covers 003:FR-002
+  // @covers 003:SC-001
+  // @covers 003:SC-002
   it("instantiates defaults, prototype overrides and spawn overrides in that order", () => {
     const { prototypes } = createRegistries();
     prototypes.register({
@@ -51,6 +55,7 @@ describe("PrototypeRegistry", () => {
     });
   });
 
+  // @covers 003:FR-003
   it("makes instances independent of each other and of the registry", () => {
     const { prototypes } = createRegistries();
     prototypes.register({ id: "chest", components: { Inventory: { items: ["a"] } } });

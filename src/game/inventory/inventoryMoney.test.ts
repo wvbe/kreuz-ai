@@ -23,6 +23,7 @@ describe("getBalance", () => {
 });
 
 describe("credit", () => {
+  // @covers 005:FR-012
   it("US4 AC1: puts money into a slot", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -49,6 +50,7 @@ describe("credit", () => {
 });
 
 describe("debit", () => {
+  // @covers 005:FR-012
   it("US4 AC2: reduces the balance", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -57,6 +59,8 @@ describe("debit", () => {
     expect(getBalance(context, entity)).toBe(100);
   });
 
+  // @covers 005:FR-013
+  // @covers 005:SC-003
   it("US4 AC3: insufficient funds reject and leave the balance unchanged", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -82,6 +86,7 @@ describe("debit", () => {
 });
 
 describe("money conservation", () => {
+  // @covers 005:SC-004
   it("US4 AC4: debit plus credit across two entities conserves the total", () => {
     const { context } = createTestContext();
     const first = createInventoryEntity(1);
@@ -93,6 +98,7 @@ describe("money conservation", () => {
     expect(getBalance(context, first) + getBalance(context, second)).toBe(750);
   });
 
+  // @covers 005:SC-004
   it("US5 AC4: transferring money conserves the total", () => {
     const { context } = createTestContext();
     const first = createInventoryEntity(1);

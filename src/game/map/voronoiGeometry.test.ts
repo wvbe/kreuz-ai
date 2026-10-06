@@ -80,6 +80,8 @@ describe("buildVoronoiGeometry", () => {
     expect(hashGeometry(buildVoronoiGeometry({ ...small, relaxPasses: 0 }))).not.toBe(base);
   });
 
+  // @covers 004:FR-001
+  // @covers 004:SC-001
   it("has distinct sites, ascending symmetric adjacency and a valid step unit", () => {
     const geometry = buildVoronoiGeometry(small);
     expect(geometry.gridType).toBe(GridType.Voronoi);

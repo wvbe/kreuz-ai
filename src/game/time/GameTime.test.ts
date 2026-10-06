@@ -30,12 +30,15 @@ function recordEvents(bus: EventBus): GameEvent[] {
 }
 
 describe("calendar constants and helpers", () => {
+  // @covers 001:FR-001
   it("pins 12 ticks per hour, 288 per day and a 336 day year", () => {
     expect(ticksPerHour).toBe(12);
     expect(ticksPerDay).toBe(288);
     expect(daysPerYear).toBe(336);
   });
 
+  // @covers 001:FR-001
+  // @covers 001:FR-011
   it("derives hours, days, weeks, months, years from the tick only", () => {
     expect(toGameHours(0)).toBe(0);
     expect(toGameHours(11)).toBe(0);
@@ -50,6 +53,17 @@ describe("calendar constants and helpers", () => {
     expect(tickOfDay(288 * 3 + 5)).toBe(5);
     expect(hourOfDay(288 * 3 + 5)).toBe(0);
     expect(hourOfDay(288 * 3 + 12 * 13 + 1)).toBe(13);
+  });
+
+  // @covers 001:SC-001
+  it("runs one million ticks headless with exact integer time", () => {
+    const time = new GameTime();
+    for (let count = 0; count < 1_000_000; count += 1) {
+      time.advance();
+    }
+    expect(time.tickCount).toBe(1_000_000);
+    expect(Number.isSafeInteger(time.tickCount)).toBe(true);
+    expect(time.toDay() * ticksPerDay + time.tickOfDay()).toBe(1_000_000);
   });
 
   it("stays exact near the end of the safe integer range", () => {
@@ -70,6 +84,7 @@ describe("isSpeedSetting", () => {
 });
 
 describe("computeTickDelayMs", () => {
+  // @covers 001:FR-005
   it("matches the spec 001 interval table", () => {
     expect(computeTickDelayMs(6250, SpeedSetting.Normal)).toBe(6250);
     expect(computeTickDelayMs(6250, SpeedSetting.Double)).toBe(3125);
@@ -94,6 +109,7 @@ describe("GameTime", () => {
     expect(time.tickIntervalMs).toBe(6250);
   });
 
+  // @covers 001:FR-001
   it("advance adds exactly one tick and derives calendar values", () => {
     const time = new GameTime();
     for (let tick = 0; tick < 1000; tick += 1) {
@@ -118,6 +134,9 @@ describe("GameTime", () => {
     expect(() => time.advance()).toThrow(GameTimeError);
   });
 
+  // @covers 001:FR-002
+  // @covers 001:FR-003
+  // @covers 001:SC-002
   it("pause and resume emit events once and are idempotent", () => {
     const bus = new EventBus();
     const seen = recordEvents(bus);
@@ -134,6 +153,7 @@ describe("GameTime", () => {
     expect(seen[0]?.payload).toEqual({ tick: 1 });
   });
 
+  // @covers 001:FR-004
   it("setSpeed accepts the five speeds and rejects everything else unchanged", () => {
     const bus = new EventBus();
     const seen = recordEvents(bus);
@@ -157,6 +177,7 @@ describe("GameTime", () => {
     }
   });
 
+  // @covers 001:FR-005
   it("setTickIntervalMs validates integers within bounds", () => {
     const time = new GameTime();
     time.setTickIntervalMs(100);
@@ -169,6 +190,10 @@ describe("GameTime", () => {
     expect(time.tickIntervalMs).toBe(100);
   });
 
+  // @covers 001:FR-002
+  // @covers 001:FR-008
+  // @covers 001:SC-004
+  // @covers 001:SC-007
   it("round-trips through JSON (500 hours at 2x paused)", () => {
     const time = new GameTime();
     time.restore({ tickCount: 6000, paused: true, speed: 2000, tickIntervalMs: 6250 });
@@ -180,6 +205,7 @@ describe("GameTime", () => {
     expect(clone.toGameHours()).toBe(500);
   });
 
+  // @covers 001:FR-009
   it("restore throws on invalid state and keeps the current state", () => {
     const time = new GameTime();
     time.advance();
@@ -202,6 +228,8 @@ describe("GameTime", () => {
     expect(time.serialize()).toEqual(before);
   });
 
+  // @covers 001:FR-010
+  // @covers 001:SC-005
   it("two clocks given the same operations end identical", () => {
     const left = new GameTime();
     const right = new GameTime();

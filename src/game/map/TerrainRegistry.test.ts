@@ -34,6 +34,7 @@ describe("terrainDefinitionSchema", () => {
 });
 
 describe("TerrainRegistry", () => {
+  // @covers 004:FR-013
   it("registers, looks up and lists terrain ascending", () => {
     const registry = new TerrainRegistry();
     registry.registerAll([water, grass]);

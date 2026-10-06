@@ -3,6 +3,7 @@ import { reachableCells } from "./reachableCells";
 import { createAsciiMap, createPathTestWorld } from "./pathTestWorld";
 
 describe("reachableCells", () => {
+  // @covers 012:FR-010
   it("lists the walled-in region with cheapest costs, ascending by cell", () => {
     const map = createAsciiMap(createPathTestWorld(), ["..#.", "..#.", "..#."]);
     const cells = reachableCells(map, 0);

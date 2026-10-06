@@ -27,6 +27,7 @@ describe("PathCache", () => {
     expect([cache.size, cache.hits, cache.misses]).toEqual([0, 0, 0]);
   });
 
+  // @covers 012:FR-006
   it("drops an entry once its map changed", () => {
     const map = createAsciiMap(createPathTestWorld(), ["..."]);
     const cache = new PathCache();

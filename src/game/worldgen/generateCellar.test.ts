@@ -17,6 +17,8 @@ function start(seed: number): { engine: GameEngine; villageCell: number } {
 }
 
 describe("generateCellarTerrain", () => {
+  // @covers 004:FR-016a
+  // @covers 004:SC-009
   it("paints two to five non-overlapping rooms connected by corridors", () => {
     for (let seed = 1; seed <= 20; seed += 1) {
       const stream = start(seed).engine.prng.stream("world.gen");
@@ -30,6 +32,7 @@ describe("generateCellarTerrain", () => {
     }
   });
 
+  // @covers 004:SC-014
   it("rejects sizes that cannot hold two rooms and is deterministic", () => {
     const stream = start(1).engine.prng.stream("world.gen");
     expect(() => generateCellarTerrain(stream, 5, 5)).toThrow(WorldGenError);
@@ -60,6 +63,7 @@ describe("generateCellar", () => {
     expect(cellar.roomCount).toBeGreaterThanOrEqual(2);
   });
 
+  // @covers 004:FR-012
   it("links both ways so an entity can walk down and up", () => {
     const { engine, villageCell } = start(42);
     const cellar = generateCellar(engine.maps, engine.prng.stream("world.gen"), {

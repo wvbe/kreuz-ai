@@ -233,6 +233,9 @@ describe("TaskSystem registration", () => {
 });
 
 describe("TaskSystem.enqueue and priority order", () => {
+  // @covers 003:FR-006
+  // @covers 003:FR-007
+  // @covers 003:SC-004
   it("executes tasks highest priority first: [1, 10, 5] runs as [10, 5, 1] (US3.1)", () => {
     const world = createWorld();
     const worker = spawnWorker(world);
@@ -260,6 +263,8 @@ describe("TaskSystem.enqueue and priority order", () => {
     expect(queueOf(world, worker).tasks).toEqual([]);
   });
 
+  // @covers 003:FR-007
+  // @covers 003:SC-004
   it("breaks priority ties by ascending task id and runs one step per tick per entity", () => {
     const world = createWorld();
     const first = spawnWorker(world);
@@ -302,6 +307,8 @@ describe("TaskSystem.enqueue and priority order", () => {
 });
 
 describe("TaskSystem interrupt, cancel and priority matrix", () => {
+  // @covers 003:FR-008
+  // @covers 003:SC-005
   it("interrupt cancels the running task gracefully and clears the queue within one tick (US3.2)", () => {
     const world = createWorld();
     const worker = spawnWorker(world);
@@ -392,6 +399,7 @@ describe("TaskSystem interrupt, cancel and priority matrix", () => {
     });
   });
 
+  // @covers 003:FR-006
   it("reprioritizing a pending task reorders the queue without losing state (US3.3)", () => {
     const world = createWorld();
     const worker = spawnWorker(world);
@@ -463,6 +471,7 @@ describe("TaskSystem interrupt, cancel and priority matrix", () => {
     expect(queueOf(world, worker).tasks).toEqual([]);
   });
 
+  // @covers 003:FR-008
   it("deleting an entity cancels its tasks ungracefully with entity_deleted", () => {
     const world = createWorld();
     const worker = spawnWorker(world);
@@ -534,6 +543,8 @@ describe("TaskSystem history and events", () => {
 });
 
 describe("TaskSystem waits", () => {
+  // @covers 003:FR-009
+  // @covers 003:SC-006
   it("wakes a tick wait at the requested tick and runs the resume step", () => {
     const world = createWorld();
     const worker = spawnWorker(world);
@@ -609,6 +620,9 @@ describe("TaskSystem waits", () => {
 });
 
 describe("TaskSystem child tasks", () => {
+  // @covers 003:FR-012
+  // @covers 003:SC-007
+  // @covers 003:SC-013
   it("runs sequential children through one parent whose phase advances (US4.3 replacement)", () => {
     const world = createWorld();
     const worker = spawnWorker(world);
@@ -731,6 +745,7 @@ describe("TaskSystem child tasks", () => {
 });
 
 describe("TaskSystem component requirements", () => {
+  // @covers 003:FR-008
   it("fails a task with component_removed instead of throwing when a required component disappears", () => {
     const world = createWorld();
     const entity = world.store.spawn("tooled").id;

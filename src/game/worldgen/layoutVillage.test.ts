@@ -42,6 +42,8 @@ describe("layoutVillage", () => {
     expect(layout.plots.every((cell) => terrain[cell] === WorldTerrain.FertileSoil)).toBe(true);
   });
 
+  // @covers 004:FR-016a
+  // @covers 004:SC-014
   it("builds roads out of adjacent cells (Delaunay edges) and is deterministic", () => {
     const { layout } = lay(7);
     const outside = layout.roads.filter((cell) => cell !== layout.center);

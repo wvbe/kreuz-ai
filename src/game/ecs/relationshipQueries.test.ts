@@ -78,6 +78,7 @@ function ids(entities: { id: number }[]): number[] {
 }
 
 describe("getRelatedIds / getRelatedEntities", () => {
+  // @covers 002:FR-005
   it("resolves both directions with ascending ids", () => {
     const { store, relationships } = setup();
     const factionA = store.spawn("faction");
@@ -104,6 +105,8 @@ describe("getRelatedIds / getRelatedEntities", () => {
     expect(getRelatedIds(store, relationships, faction.id, "factions")).toEqual([]);
   });
 
+  // @covers 002:FR-005
+  // @covers 002:FR-006
   it("throws on a dangling forward reference and for unknown entities or relationships", () => {
     const { store, relationships } = setup();
     const citizen = store.spawn("citizen", { Citizen: { factions: [99] } });
@@ -130,6 +133,8 @@ describe("getRelatedIds / getRelatedEntities", () => {
     expect(() => getRelatedIds(store, relationships, citizen.id, "broken")).toThrow(EcsError);
   });
 
+  // @covers 002:FR-008
+  // @covers 002:SC-007
   it("works identically after a JSON round trip", () => {
     const { store, relationships, counters } = setup();
     store.spawn("faction");
@@ -143,6 +148,7 @@ describe("getRelatedIds / getRelatedEntities", () => {
 });
 
 describe("getRelatedEntity", () => {
+  // @covers 002:FR-006
   it("returns the lowest-id target, or null", () => {
     const { store, relationships } = setup();
     store.spawn("faction");
@@ -167,6 +173,7 @@ describe("traverseRelated", () => {
     expect(ids(traverseRelated(store, relationships, first.id, "students"))).toEqual([2, 3]);
   });
 
+  // @covers 002:SC-004
   it("limits and validates depth", () => {
     const { store, relationships } = setup();
     let previous = store.spawn("citizen");
@@ -185,6 +192,7 @@ describe("traverseRelated", () => {
 });
 
 describe("clearReferencesTo", () => {
+  // @covers 002:FR-006a
   it("nulls single references and drops list entries, including pending deletes", () => {
     const { store, relationships } = setup();
     const faction = store.spawn("faction");

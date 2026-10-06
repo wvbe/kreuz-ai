@@ -5,6 +5,8 @@ import { GridType } from "./mapTypes";
 describe("buildSquareGeometry", () => {
   const geometry = buildSquareGeometry(4, 3);
 
+  // @covers 004:FR-001
+  // @covers 004:SC-001
   it("indexes cells row-major and reports extent and centres in milli-tiles", () => {
     expect(geometry.gridType).toBe(GridType.Square);
     expect(geometry.cellCount).toBe(12);

@@ -34,6 +34,7 @@ describe("taskQueueComponent", () => {
     expect(taskHistoryCapacity).toBe(8);
   });
 
+  // @covers 003:FR-014
   it("round-trips every task state through JSON", () => {
     const queue: TaskQueueData = {
       tasks: [

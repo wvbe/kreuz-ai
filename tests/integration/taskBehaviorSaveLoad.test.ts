@@ -246,6 +246,7 @@ describe("task runtime and behavior trees survive save and load", () => {
   reference.pipeline.runTicks(totalTicks);
   const finalState = snapshot(reference);
 
+  // @covers 003:SC-012
   it("finishes the errands (the scenario is not vacuous)", () => {
     const done = reference.store
       .entities()
@@ -260,6 +261,8 @@ describe("task runtime and behavior trees survive save and load", () => {
     expect(snapshot(again)).toBe(finalState);
   });
 
+  // @covers 003:FR-015
+  // @covers 003:SC-009
   it("saving at every tick, loading into a fresh world and continuing ends byte-identical", () => {
     const seen = { waitingOnEvent: false, running: false, behaviorRunning: false };
     for (let split = 1; split < totalTicks; split += 1) {
@@ -278,6 +281,7 @@ describe("task runtime and behavior trees survive save and load", () => {
     expect(seen).toEqual({ waitingOnEvent: true, running: true, behaviorRunning: true });
   });
 
+  // @covers 003:FR-014
   it("everything saved is plain JSON that round-trips unchanged", () => {
     const world = createWorld();
     world.pipeline.runTicks(40);

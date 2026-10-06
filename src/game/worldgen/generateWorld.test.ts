@@ -34,6 +34,8 @@ function countTerrain(engine: GameEngine): Map<string, number> {
 }
 
 describe("generateWorld through newGame", () => {
+  // @covers 004:FR-016a
+  // @covers 004:SC-014
   it("gives the same terrain hash for the same seed and size, on separate engines", () => {
     const first = terrainHash(start(42, MapSize.Small).maps.require(1));
     expect(terrainHash(start(42, MapSize.Small).maps.require(1))).toBe(first);
@@ -185,6 +187,8 @@ describe("generateWorld content requirements", () => {
 });
 
 describe("generateWorld save and load", () => {
+  // @covers 004:SC-013
+  // @covers 004:SC-010
   it("round-trips a generated world exactly", () => {
     const engine = start(42, MapSize.Small);
     engine.runTicks(20);

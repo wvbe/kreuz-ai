@@ -7,6 +7,7 @@ import { searchRoute } from "./searchRoute";
 const budget = 100000;
 
 describe("searchRoute", () => {
+  // @covers 012:FR-005
   it("US2.1: crosses an exit/entrance link and ends on the other map", () => {
     const world = createPathTestWorld();
     const first = createAsciiMap(world, ["....."]);
@@ -55,6 +56,7 @@ describe("searchRoute", () => {
     expect(searchRoute(world.maps, from, target, budget).result.kind).toBe(PathResultKind.NoPath);
   });
 
+  // @covers 012:FR-005
   it("US2.3: routes A to C through B", () => {
     const world = createPathTestWorld();
     const north = createAsciiMap(world, ["..."]);

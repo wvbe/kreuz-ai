@@ -35,6 +35,7 @@ const denyAll = [
 ];
 
 describe("store", () => {
+  // @covers 005:FR-006
   it("US1 AC1: stores 8 wood into one slot leaving 2 open", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slotCount: 3 });
@@ -42,6 +43,7 @@ describe("store", () => {
     expect(requireInventory(entity).slots).toEqual([plain("wood", 8)]);
   });
 
+  // @covers 005:FR-004
   it("US1 AC2: fills the existing stack first and overflows into a new slot", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slotCount: 3, slots: [plain("stone", 8)] });
@@ -49,6 +51,8 @@ describe("store", () => {
     expect(requireInventory(entity).slots).toEqual([plain("stone", 10), plain("stone", 3)]);
   });
 
+  // @covers 005:FR-008
+  // @covers 005:SC-003
   it("US1 AC3: a full inventory rejects with InventoryFullError and stays unchanged", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slotCount: 1, slots: [plain("wood", 50)] });
@@ -58,6 +62,7 @@ describe("store", () => {
     expect(snapshot(requireInventory(entity))).toBe(before);
   });
 
+  // @covers 005:FR-003
   it("US2 AC1/AC2: separate slots per material and a new stack at the limit", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -68,6 +73,7 @@ describe("store", () => {
     expect(requireInventory(entity).slots.map((slot) => slot.quantity)).toEqual([20, 30, 5]);
   });
 
+  // @covers 005:SC-003
   it("rejects partial fits as a whole (all or nothing)", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slotCount: 1, slots: [plain("wood", 40)] });
@@ -90,6 +96,7 @@ describe("store", () => {
     }
   });
 
+  // @covers 005:FR-017
   it("US7: weight limit rejects even with free slots; no limit means no check", () => {
     const { context } = createTestContext();
     const citizen = createInventoryEntity(1, { weightLimitMilli: 50000 });
@@ -100,6 +107,7 @@ describe("store", () => {
     expect(getTotal(chest, "stone")).toBe(200);
   });
 
+  // @covers 005:FR-021a
   it("emits inventory.item.stored when the bus queue is processed", () => {
     const { context, bus, events } = createTestContext();
     const entity = createInventoryEntity(7);
@@ -121,6 +129,8 @@ describe("store", () => {
     expect(() => store(quiet, createInventoryEntity(2), "wood", 1)).not.toThrow();
   });
 
+  // @covers 005:FR-020
+  // @covers 005:FR-020a
   it("starts perishable stacks fresh and merges later stores with a weighted floor (US8 AC2)", () => {
     const { context, bus, events } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -157,6 +167,7 @@ describe("store", () => {
 });
 
 describe("storeUpTo", () => {
+  // @covers 005:FR-015
   it("US6 AC1: stores what fits and returns the remainder", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slotCount: 1, slots: [plain("wood", 45)] });
@@ -172,6 +183,7 @@ describe("storeUpTo", () => {
     expect(events).toEqual([]);
   });
 
+  // @covers 005:SC-009
   it("US6 AC3: exactly fitting quantities leave no remainder; stored + remainder is conserved", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slotCount: 2, weightLimitMilli: 60000 });
@@ -190,6 +202,7 @@ describe("storeUpTo", () => {
 });
 
 describe("retrieve", () => {
+  // @covers 005:FR-007
   it("US1 AC4: removes the quantity and returns it", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slots: [plain("stone", 5)] });
@@ -197,6 +210,8 @@ describe("retrieve", () => {
     expect(requireInventory(entity).slots).toEqual([plain("stone", 2)]);
   });
 
+  // @covers 005:FR-009
+  // @covers 005:SC-003
   it("US1 AC5: asking for more than held rejects with InsufficientItemsError and no change", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slots: [plain("stone", 2)] });
@@ -204,6 +219,7 @@ describe("retrieve", () => {
     expect(requireInventory(entity).slots).toEqual([plain("stone", 2)]);
   });
 
+  // @covers 005:FR-005
   it("US2 AC3: reclaims emptied slots and drains smallest stacks first", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, {
@@ -216,6 +232,7 @@ describe("retrieve", () => {
     expect(requireInventory(entity).slots).toHaveLength(2);
   });
 
+  // @covers 005:FR-021a
   it("validates input and emits inventory.item.retrieved", () => {
     const { context, bus, events } = createTestContext();
     const entity = createInventoryEntity(3, { slots: [plain("wood", 9)] });
@@ -241,6 +258,8 @@ describe("retrieve", () => {
 });
 
 describe("transfer", () => {
+  // @covers 003:FR-013
+  // @covers 005:FR-014
   it("US5 AC1: moves items and keeps the total", () => {
     const { context, bus, events } = createTestContext();
     const source = createInventoryEntity(1, { slots: [plain("wood", 20)] });
@@ -257,6 +276,8 @@ describe("transfer", () => {
     ]);
   });
 
+  // @covers 005:FR-014
+  // @covers 005:SC-006
   it("US5 AC2: a full destination rejects with DestinationFullError and changes nothing", () => {
     const { context } = createTestContext();
     const source = createInventoryEntity(1, { slots: [plain("wood", 5)] });
@@ -290,6 +311,8 @@ describe("transfer", () => {
     expect(getTotal(destination, "stone")).toBe(0);
   });
 
+  // @covers 005:SC-006
+  // @covers 005:SC-003
   it("is atomic when the destination check passes late: nothing is written on any failure path", () => {
     const { context } = createTestContext();
     const source = createInventoryEntity(1, { slots: [plain("wood", 30)] });
@@ -341,6 +364,8 @@ describe("permissions on operations", () => {
     ...denyAll,
   ];
 
+  // @covers 005:FR-025
+  // @covers 005:FR-025a
   it("US10 AC1/AC3: a locked chest denies strangers, open inventories allow anyone", () => {
     const { context } = createTestContext();
     const chest = createInventoryEntity(1, { slots: [plain("wood", 5)], rules: denyAll });
@@ -357,6 +382,8 @@ describe("permissions on operations", () => {
     expect(() => retrieve(context, chest, "wood", 1)).not.toThrow();
   });
 
+  // @covers 005:FR-025a
+  // @covers 005:SC-003
   it("transfer checks Retrieve on the source and Store on the destination for the actor", () => {
     const { context } = createTestContext();
     const actor = { ...context, actor: 9 };
@@ -404,6 +431,8 @@ describe("equip and unequip", () => {
     ];
   });
 
+  // @covers 005:FR-022
+  // @covers 005:FR-024
   it("US9 AC1: moves an item from storage into the slot", () => {
     const { context, bus, events } = createTestContext();
     const entity = createInventoryEntity(1, { slots: [plain("sword", 1)], equipment: slots });
@@ -436,6 +465,7 @@ describe("equip and unequip", () => {
     ]);
   });
 
+  // @covers 005:FR-023
   it("US9 AC3: rejects incompatible items and unknown slots", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, { slots: [plain("bread", 1)], equipment: slots });
@@ -456,6 +486,8 @@ describe("equip and unequip", () => {
     expect(requireInventory(entity).equipment[0]?.materialId).toBeNull();
   });
 
+  // @covers 005:FR-024
+  // @covers 005:SC-006
   it("a swap that cannot return the old item is rejected atomically", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1, {
@@ -518,3 +550,41 @@ describe("equip and unequip", () => {
     expect(requireInventory(entity).slots).toEqual([plain("sword", 1)]);
   });
 });
+
+describe("synchronous visibility and speed", () => {
+  // @covers 005:FR-001a 005:SC-001a 005:FR-029 005:SC-012
+  it("returns results at once and shows them to queries in the same tick, events only after the queue runs", () => {
+    const { context, bus, events } = createTestContext();
+    const entity = createInventoryEntity(1);
+    const result = store(context, entity, "wood", 7);
+    expect(result).not.toBeInstanceOf(Promise);
+    expect(getTotal(entity, "wood")).toBe(7);
+    expect(events).toHaveLength(0);
+    retrieve(context, entity, "wood", 2);
+    expect(getTotal(entity, "wood")).toBe(5);
+    bus.processQueue();
+    expect(events.map((event) => event.name)).toEqual([
+      "inventory.item.stored",
+      "inventory.item.retrieved",
+    ]);
+  });
+
+  // @covers 005:SC-001
+  it("stores and retrieves on 100 slots and 10000 items inside ten times the 1 ms budget", () => {
+    const { context } = createTestContext();
+    const slots = Array.from({ length: 100 }, () => plain("wood", 50));
+    const entity = createInventoryEntity(1, { slotCount: 101, slots });
+    let best = Number.POSITIVE_INFINITY;
+    for (let round = 0; round < 5; round += 1) {
+      const started = performance.now();
+      store(context, entity, "feather", 100);
+      retrieve(context, entity, "wood", 50);
+      best = Math.min(best, performance.now() - started);
+      store(context, entity, "wood", 50);
+      retrieve(context, entity, "feather", 100);
+    }
+    expect(best).toBeLessThan(10);
+    expect(getTotal(entity, "wood")).toBe(5000);
+  });
+});
+

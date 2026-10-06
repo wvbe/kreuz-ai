@@ -68,6 +68,7 @@ describe("MapRegistry.createMap", () => {
     expect(fixture.events[1]?.payload).toEqual({ mapId: 2, gridType: "square" });
   });
 
+  // @covers 004:FR-006
   it("maps MapSize to dimensions per DECISIONS D-06", () => {
     const fixture = createFixture();
     const small = fixture.registry.createMap({
@@ -85,6 +86,7 @@ describe("MapRegistry.createMap", () => {
     expect([square.width, square.height, square.cellCount]).toEqual([40, 30, 1200]);
   });
 
+  // @covers 004:FR-006
   it("rejects invalid options without burning an id", () => {
     const fixture = createFixture();
     const make = (options: Parameters<MapRegistry["createMap"]>[0]): void => {
@@ -166,6 +168,8 @@ describe("MapRegistry sub-maps and links", () => {
     expect(() => fixture.registry.childrenOf(99)).toThrow(MapError);
   });
 
+  // @covers 004:FR-012
+  // @covers 004:SC-008
   it("moves an entity through links between a voronoi map and a square sub-map and back", () => {
     const { fixture, main, hut } = world();
     fixture.registry.linkMaps({
@@ -254,6 +258,8 @@ describe("MapRegistry sub-maps and links", () => {
     expect(next.id).toBe(cellar + 1);
   });
 
+  // @covers 004:FR-010
+  // @covers 004:SC-006
   it("supports a main map plus five sub-maps", () => {
     const fixture = createFixture();
     const main = fixture.registry.createMap({
@@ -295,6 +301,8 @@ describe("MapRegistry entity placement", () => {
     return { fixture, mapId: map.id };
   }
 
+  // @covers 004:FR-003
+  // @covers 004:FR-015
   it("places entities, allows co-location and lists occupants in the cell query", () => {
     const { fixture, mapId } = hamlet();
     fixture.registry.placeEntity(5, mapId, 42);
@@ -310,6 +318,8 @@ describe("MapRegistry entity placement", () => {
     });
   });
 
+  // @covers 004:FR-004
+  // @covers 004:FR-005
   it("throws a clear error when placing into a wall, water or out of bounds", () => {
     const { fixture, mapId } = hamlet();
     const map = fixture.registry.require(mapId);
@@ -328,6 +338,7 @@ describe("MapRegistry entity placement", () => {
     expect(blocked.terrainType).toBe("grass");
   });
 
+  // @covers 004:FR-004
   it("moves entities within a map and blocks moves into obstructions", () => {
     const { fixture, mapId } = hamlet();
     fixture.registry.placeEntity(1, mapId, 0);
@@ -401,6 +412,9 @@ describe("MapRegistry save and load", () => {
     return fixture;
   }
 
+  // @covers 004:FR-017
+  // @covers 004:FR-018
+  // @covers 004:SC-010
   it("round-trips through JSON and regenerates identical geometry and adjacency", () => {
     const original = populated();
     const text = JSON.stringify(original.registry.serialize());
@@ -463,6 +477,7 @@ describe("MapRegistry save and load", () => {
     expect(() => fixture.registry.rebuildOccupants([lost])).toThrow(MapError);
   });
 
+  // @covers 004:FR-018
   it("rejects corrupt saves and keeps the current maps", () => {
     const original = populated();
     const good = JSON.parse(JSON.stringify(original.registry.serialize())) as {

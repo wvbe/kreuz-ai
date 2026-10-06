@@ -30,6 +30,7 @@ const storing = InventoryOperation.Store;
 const retrieving = InventoryOperation.Retrieve;
 
 describe("isOperationAllowed", () => {
+  // @covers 005:FR-025a
   it("allows everything with no rules and for the system actor", () => {
     const open = createInventoryEntity(1);
     const locked = createInventoryEntity(2, {
@@ -56,6 +57,8 @@ describe("isOperationAllowed", () => {
     expect(isOperationAllowed(actingAs(20, false), data, retrieving)).toBe(false);
   });
 
+  // @covers 005:FR-025
+  // @covers 005:FR-025a
   it("lets the first matching rule win, so order decides deny versus grant", () => {
     const denyFirst = createInventoryEntity(1, {
       rules: [

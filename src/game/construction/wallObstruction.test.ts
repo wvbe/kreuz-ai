@@ -8,6 +8,7 @@ import {
 } from "./wallObstruction";
 
 describe("applyWallObstruction", () => {
+  // @covers 004:FR-014
   it("obstructs the cell of a wall and ignores doors and other entities", () => {
     const world = createConstructionWorld();
     const map = world.engine.maps.require(world.mapId);
@@ -61,6 +62,8 @@ describe("clearWallObstruction", () => {
 });
 
 describe("rebuildWallObstructions", () => {
+  // @covers 004:FR-014
+  // @covers 004:SC-013
   it("derives the obstructions from the wall entities, also after a load", () => {
     const world = createConstructionWorld();
     world.wall(30);

@@ -60,6 +60,7 @@ function ids(entities: Entity[]): number[] {
 }
 
 describe("parsePropertyPath", () => {
+  // @covers 002:FR-002
   it("splits component and field path", () => {
     expect(parsePropertyPath("Citizen.stats.vigor")).toEqual({
       component: "Citizen",
@@ -84,6 +85,8 @@ describe("matchesProperty", () => {
   seed(store, 3);
   const citizen = store.require(3);
 
+  // @covers 002:FR-002
+  // @covers 002:FR-003
   it("handles equality, ranges, contains and nested paths", () => {
     expect(matchesProperty(citizen, "Citizen.status", "active")).toBe(true);
     expect(matchesProperty(citizen, "Citizen.status", "idle")).toBe(false);
@@ -107,6 +110,9 @@ describe("matchesProperty", () => {
 });
 
 describe("getEntitiesByComponent", () => {
+  // @covers 002:FR-001
+  // @covers 002:FR-007
+  // @covers 002:SC-005
   it("returns matches in ascending id order, empty for unknown components", () => {
     const store = createStore();
     seed(store, 30);
@@ -119,6 +125,7 @@ describe("getEntitiesByComponent", () => {
     expect(getEntitiesByComponent(createStore(), "Citizen")).toEqual([]);
   });
 
+  // @covers 002:FR-013
   it("sees entities added later and skips entities pending deletion", () => {
     const store = createStore();
     seed(store, 2);
@@ -128,6 +135,7 @@ describe("getEntitiesByComponent", () => {
     expect(ids(getEntitiesByComponent(store, "Citizen"))).toEqual([3, 4]);
   });
 
+  // @covers 002:FR-013
   it("returns a new array so mutating it does not affect the store", () => {
     const store = createStore();
     seed(store, 3);
@@ -137,6 +145,8 @@ describe("getEntitiesByComponent", () => {
 });
 
 describe("getEntitiesByProperty and getEntitiesByProperties", () => {
+  // @covers 002:FR-002
+  // @covers 002:FR-003
   it("filters by equality, range and contains", () => {
     const store = createStore();
     seed(store, 22);
@@ -147,6 +157,7 @@ describe("getEntitiesByProperty and getEntitiesByProperties", () => {
     expect(() => getEntitiesByProperty(store, "Citizen", "x")).toThrow(EcsError);
   });
 
+  // @covers 002:FR-004
   it("combines filters with AND", () => {
     const store = createStore();
     seed(store, 22);
@@ -159,6 +170,8 @@ describe("getEntitiesByProperty and getEntitiesByProperties", () => {
     expect(() => getEntitiesByProperties(store, { Bad: 1 })).toThrow(EcsError);
   });
 
+  // @covers 002:FR-008
+  // @covers 002:SC-007
   it("gives the same answer after a JSON round trip", () => {
     const counters = new IdCounters();
     const store = createStore(counters);
@@ -173,6 +186,9 @@ describe("getEntitiesByProperty and getEntitiesByProperties", () => {
 });
 
 describe("EntityQuery", () => {
+  // @covers 002:FR-009
+  // @covers 002:FR-012
+  // @covers 002:SC-008
   it("chains steps immutably and runs on terminals", () => {
     const store = createStore();
     seed(store, 22);
@@ -190,6 +206,7 @@ describe("EntityQuery", () => {
 });
 
 describe("performance", () => {
+  // @covers 002:FR-010
   it("1000-entity component, property and AND queries each finish under 5 ms", () => {
     const store = createStore();
     seed(store, 1000);
@@ -215,5 +232,45 @@ describe("performance", () => {
         }),
       ),
     ).toBeLessThan(50);
+  });
+
+  // @covers 002:FR-010 002:SC-001 002:SC-002 002:SC-003 002:SC-006
+  it("10000-entity component, property and 3-filter queries stay inside ten times the spec budgets", () => {
+    const store = createStore();
+    seed(store, 10_000);
+    const measure = (action: () => object): number => {
+      let best = Number.POSITIVE_INFINITY;
+      for (let round = 0; round < 5; round += 1) {
+        const start = process.hrtime.bigint();
+        action();
+        best = Math.min(best, Number(process.hrtime.bigint() - start) / 1e6);
+      }
+      return best;
+    };
+    expect(measure(() => getEntitiesByComponent(store, citizenComponent))).toBeLessThan(50);
+    expect(
+      measure(() => getEntitiesByProperty(store, "Citizen.mood", { min: 0, max: 40 })),
+    ).toBeLessThan(100);
+    expect(
+      measure(() =>
+        getEntitiesByProperties(store, {
+          "Citizen.status": "active",
+          "Citizen.factions": { contains: 99 },
+          "Citizen.stats.vigor": { min: 100 },
+        }),
+      ),
+    ).toBeLessThan(150);
+  });
+
+  // @covers 002:SC-010 002:SC-005
+  it("100000 repeated queries keep returning the identical list without growing the store", () => {
+    const store = createStore();
+    seed(store, 20);
+    const first = ids(getEntitiesByProperty(store, "Citizen.status", "idle"));
+    for (let round = 0; round < 100_000; round += 1) {
+      getEntitiesByComponent(store, citizenComponent);
+    }
+    expect(ids(getEntitiesByProperty(store, "Citizen.status", "idle"))).toEqual(first);
+    expect(getEntitiesByComponent(store, citizenComponent)).toHaveLength(20);
   });
 });

@@ -66,6 +66,8 @@ function ecsKind(action: () => void): EcsErrorKind | null {
 }
 
 describe("EntityStore spawn and lookup", () => {
+  // @covers 003:FR-002
+  // @covers 003:SC-002
   it("assigns ascending ids starting at 1 and applies prototype defaults and overrides", () => {
     const { store } = createFixture();
     const first = store.spawn("citizen", { Inventory: { coins: 9 } });
@@ -82,6 +84,7 @@ describe("EntityStore spawn and lookup", () => {
     expect(ecsKind(() => store.spawn("ghost"))).toBe(EcsErrorKind.UnknownPrototype);
   });
 
+  // @covers 003:FR-003
   it("keeps instances independent", () => {
     const { store } = createFixture();
     const left = store.spawn("citizen");
@@ -112,6 +115,7 @@ describe("EntityStore spawn and lookup", () => {
 });
 
 describe("EntityStore components", () => {
+  // @covers 003:FR-017
   it("adds and removes components at runtime and narrows with hasComponent", () => {
     const { store, bus, events } = createFixture();
     const entity = store.spawn("rock");
@@ -168,6 +172,7 @@ describe("EntityStore components", () => {
     ).toBe(EcsErrorKind.MissingComponent);
   });
 
+  // @covers 003:FR-017
   it("version counts component adds and removes and resets on load", () => {
     const { store } = createFixture();
     const entity = store.spawn("rock");
@@ -282,6 +287,8 @@ describe("EntityStore serialization", () => {
     return fixture;
   }
 
+  // @covers 003:FR-014
+  // @covers 003:SC-008
   it("round-trips through JSON and keeps counters so deleted ids stay unused", () => {
     const source = populated();
     const json = JSON.stringify(source.store.serialize());
@@ -295,6 +302,7 @@ describe("EntityStore serialization", () => {
     expect(target.counters.peek(CounterName.EntityId)).toBe(5);
   });
 
+  // @covers 003:FR-014
   it("serializes components sorted by name and as an independent copy", () => {
     const { store } = populated();
     const state = store.serialize();

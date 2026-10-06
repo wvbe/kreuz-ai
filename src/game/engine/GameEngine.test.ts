@@ -306,6 +306,7 @@ describe("GameEngine query facade", () => {
     expect(engine.getEntity(entity.id)).toBeUndefined();
   });
 
+  // @covers 001:FR-006
   it("summarizes the state and the clock", () => {
     const engine = createEngine();
     expect(engine.getState().hasGame).toBe(false);

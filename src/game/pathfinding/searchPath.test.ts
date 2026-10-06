@@ -82,6 +82,8 @@ function randomMap(world: PathTestWorld, stream: PrngStream, index: number): Gam
 }
 
 describe("searchPath scenarios (spec 012)", () => {
+  // @covers 012:FR-001
+  // @covers 012:FR-003
   it("US1.1: empty square map, (5,5) to (15,15) is the Manhattan distance", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(
@@ -94,6 +96,7 @@ describe("searchPath scenarios (spec 012)", () => {
     expect(found.cells.at(-1)).toBe(map.squareCell(15, 15));
   });
 
+  // @covers 012:FR-002
   it("US1.2: goes around a wall instead of through it", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, ["........", "...#....", "........"]);
@@ -102,6 +105,9 @@ describe("searchPath scenarios (spec 012)", () => {
     expect(found.cost).toBe(70);
   });
 
+  // @covers 004:FR-008
+  // @covers 012:FR-004
+  // @covers 012:SC-005
   it("US1.3: an enclosed start has no path, an enclosed target has none either", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, [".#...", "#.#..", ".#...", "....."]);
@@ -126,6 +132,7 @@ describe("searchPath scenarios (spec 012)", () => {
     expect(run(map, 4, 4).result.kind).toBe(PathResultKind.AlreadyThere);
   });
 
+  // @covers 012:FR-009
   it("US4: prefers cheap road over grass, never enters impassable terrain", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, ["......", ",,,,,,", "~~~~~."]);
@@ -139,6 +146,7 @@ describe("searchPath scenarios (spec 012)", () => {
     );
   });
 
+  // @covers 012:SC-005
   it("an out-of-range or fractional cell is an invalid position, without throwing", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, ["..."]);
@@ -178,6 +186,10 @@ describe("searchPath scenarios (spec 012)", () => {
 });
 
 describe("searchPath determinism and optimality", () => {
+  // @covers 004:FR-007
+  // @covers 012:FR-001
+  // @covers 012:FR-003
+  // @covers 012:SC-001
   it("matches a brute-force Dijkstra on 200 random square and voronoi maps", () => {
     const stream = Prng.create({ seed: 20261005 }).stream("test.pathfinding");
     let compared = 0;
@@ -219,6 +231,9 @@ describe("searchPath determinism and optimality", () => {
     expect(compared).toBeGreaterThan(300);
   });
 
+  // @covers 004:FR-007
+  // @covers 004:SC-005
+  // @covers 012:SC-001
   it("gives identical paths for identical input on two independent worlds", () => {
     const rows = ["..m...", ".#.#..", "...,,.", "m#....", "......"];
     const first = createAsciiMap(createPathTestWorld(), rows);
@@ -230,6 +245,7 @@ describe("searchPath determinism and optimality", () => {
     }
   });
 
+  // @covers 012:SC-001
   it("breaks ties by lowest cell index without randomness", () => {
     const world = createPathTestWorld();
     const map = createAsciiMap(world, ["...", "...", "..."]);
@@ -237,6 +253,7 @@ describe("searchPath determinism and optimality", () => {
     expect(expectFound(run(map, 0, 4).result).cells).toEqual([1, 4]);
   });
 
+  // @covers 012:FR-008
   it("expands each cell at most once on a 64x64 voronoi map with 20% walls", () => {
     const world = createPathTestWorld();
     const map = createVoronoiTestMap(world, 64 * 64, 42);

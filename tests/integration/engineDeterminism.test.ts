@@ -85,6 +85,12 @@ function run(seed: number, ticks: number): GameEngine {
 }
 
 describe("engine determinism (spec 007, Constitution I)", () => {
+  // @covers 003:FR-016
+  // @covers 003:SC-010
+  // @covers 004:FR-019
+  // @covers 004:SC-012
+  // @covers 005:FR-028
+  // @covers 005:SC-008
   it("gives the same state hash for the same seed and a different one for another seed", () => {
     expect(run(31, totalTicks).getStateHash()).toBe(run(31, totalTicks).getStateHash());
     expect(run(31, totalTicks).getStateHash()).not.toBe(run(32, totalTicks).getStateHash());

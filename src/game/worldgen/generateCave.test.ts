@@ -32,6 +32,7 @@ describe("generateCaveTerrain", () => {
     }
   });
 
+  // @covers 004:SC-014
   it("is deterministic for the same stream state and rejects tiny sizes", () => {
     const left = generateCaveTerrain(start(7).engine.prng.stream("world.gen"), 24, 16);
     const right = generateCaveTerrain(start(7).engine.prng.stream("world.gen"), 24, 16);
@@ -43,6 +44,9 @@ describe("generateCaveTerrain", () => {
 });
 
 describe("generateCave", () => {
+  // @covers 004:FR-016
+  // @covers 004:FR-016a
+  // @covers 004:SC-009
   it("creates a linked sub-map whose floor is fully reachable from the entrance", () => {
     const { engine, villageCell } = start(42);
     const stream = engine.prng.stream("world.gen");

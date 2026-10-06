@@ -67,6 +67,9 @@ describe("mapStateSchema", () => {
 describe("GameMap on a square grid", () => {
   const terrain = createTerrain();
 
+  // @covers 004:FR-001
+  // @covers 004:FR-002
+  // @covers 004:SC-001
   it("exposes dimensions, neighbours and coordinate sugar", () => {
     const map = new GameMap(squareState(4, 3), { terrain });
     expect(map.gridType).toBe(GridType.Square);
@@ -108,6 +111,8 @@ describe("GameMap on a square grid", () => {
     expect(() => map.squareCoordinates(99)).toThrow(MapError);
   });
 
+  // @covers 004:FR-013
+  // @covers 004:FR-015
   it("looks up movement cost and passability from terrain", () => {
     const map = new GameMap(squareState(3, 1), { terrain });
     map.setTerrain(1, "road");
@@ -170,6 +175,9 @@ describe("GameMap on a square grid", () => {
     expect(() => map.fill("lava")).toThrow(MapError);
   });
 
+  // @covers 004:FR-004
+  // @covers 004:FR-005
+  // @covers 004:FR-014
   it("obstructions block cells, terrain reasons win, and changes emit events", () => {
     const bus = new EventBus();
     const events = collect(bus);
@@ -208,6 +216,8 @@ describe("GameMap on a square grid", () => {
     expect(() => map.addLink({ cell: 9, targetMapId: 7, targetCell: 0 })).toThrow(MapError);
   });
 
+  // @covers 004:FR-017
+  // @covers 004:SC-010
   it("serializes terrain and links without geometry and restores identically", () => {
     const map = new GameMap(squareState(3, 2), { terrain });
     map.setTerrain(4, "road");
@@ -252,6 +262,8 @@ describe("GameMap on a square grid", () => {
 describe("GameMap on a voronoi grid", () => {
   const terrain = createTerrain();
 
+  // @covers 004:FR-017
+  // @covers 004:FR-018
   it("regenerates identical geometry from params and does not serialize it", () => {
     const first = new GameMap(voronoiState(300, 42), { terrain });
     first.setTerrain(10, "river");
@@ -267,6 +279,8 @@ describe("GameMap on a voronoi grid", () => {
     expect(() => second.squareCoordinates(0)).toThrow(MapError);
   });
 
+  // @covers 004:FR-002
+  // @covers 004:FR-015
   it("returns ascending neighbours on both grid kinds (shared contract)", () => {
     const maps = [
       new GameMap(squareState(12, 12), { terrain }),
@@ -285,6 +299,7 @@ describe("GameMap on a voronoi grid", () => {
     }
   });
 
+  // @covers 004:FR-018
   it("rejects mismatched grid fields on load", () => {
     const state = voronoiState(20, 1);
     expect(() => new GameMap({ ...state, width: 4, height: 5 }, { terrain })).toThrow(MapError);

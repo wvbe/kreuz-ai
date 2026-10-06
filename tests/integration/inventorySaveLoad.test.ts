@@ -90,6 +90,10 @@ function exercise(world: ReturnType<typeof createWorld>, holders: Entity[]): voi
 }
 
 describe("inventory save and load", () => {
+  // @covers 005:FR-026
+  // @covers 005:FR-026a
+  // @covers 005:FR-027
+  // @covers 005:SC-005
   it("round-trips a populated world byte for byte and keeps behaving identically", () => {
     const world = createWorld();
     const holders = populate(world, 40);

@@ -53,6 +53,7 @@ function drain(world: TradeTestWorld, keep: number): void {
 }
 
 describe("trade.buy job", () => {
+  // @covers 003:FR-011
   it("a settler buys goods with coins from the treasury and the goods are hauled into storage", () => {
     const { world, traderId, chestId } = setup();
     const start = world.treasury();

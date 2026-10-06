@@ -11,6 +11,8 @@ describe("neutralDecayModifiers", () => {
 });
 
 describe("decayInventory", () => {
+  // @covers 005:FR-021
+  // @covers 005:SC-010
   it("US8 AC1: a 576 tick cheese stack expires on exactly tick 576 and emits the event", () => {
     const { context, bus, events } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -61,6 +63,7 @@ describe("decayInventory", () => {
     expect(getTotal(entity, "wood")).toBe(5);
   });
 
+  // @covers 005:FR-020
   it("scales by zone, difficulty and the stack decay rate", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1);
@@ -83,6 +86,7 @@ describe("decayInventory", () => {
     expect(decayInventory({ id: 2, prototype: "rock", components: {} }, undefined)).toEqual([]);
   });
 
+  // @covers 005:FR-026
   it("US8 AC5: remaining time survives JSON exactly", () => {
     const { context } = createTestContext();
     const entity = createInventoryEntity(1);

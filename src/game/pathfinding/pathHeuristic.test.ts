@@ -17,12 +17,14 @@ describe("integerSqrt", () => {
 });
 
 describe("cellHeuristic", () => {
+  // @covers 012:FR-001
   it("is Manhattan distance times the minimum step cost on square maps", () => {
     const map = createAsciiMap(createPathTestWorld(), ["......", "......", "......"]);
     expect(cellHeuristic(map, 0, map.squareCell(5, 2), 5)).toBe(35);
     expect(cellHeuristic(map, 7, 7, 5)).toBe(0);
   });
 
+  // @covers 012:FR-001
   it("never overestimates the true cost on voronoi maps", () => {
     const world = createPathTestWorld();
     const map = createVoronoiTestMap(world, 120, 11);
