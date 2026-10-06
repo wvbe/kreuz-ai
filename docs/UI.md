@@ -28,6 +28,14 @@ EngineHost  owns GameSession + the clock (AutoRunner behind a Scheduler: the onl
 - `GameStore` bumps a version after every tick, command, step, new or loaded game. Hooks re-evaluate per version; each distinct query runs once per version.
 - The map: `MapScreen` reads `maps`, `map`, `map-geometry`, `map-entities`, `zones`, `crops`, `idle-blocked`, `validate-placement`, `identity-of`; `MapViewport` owns the camera and input; `MapCanvas` (three.js) draws. Details in `src/renderers/react/map/README.md`.
 
+## Status, flow, chronicle and settlement views (plan 6.5)
+
+- **Idle and blocked** (`views/IdleBlockedScreen.tsx`): subjects grouped by the kind of their primary reason, oldest stall first; a row selects the subject and centres the camera (`selection.requestFocus`). The reason line is modern English (`views/blockedReasonText.ts`).
+- **Flow** (`views/FlowScreen.tsx`): per material produced, consumed and net per day, stock, days of supply and a trend arrow, largest deficit first; a row expands into the FlowSource totals and the producers and consumers (links to the subjects). "Keep in stock..." calls `openStandingOrderForm(materialId)` (`views/standingOrderRequests.ts`); the standing-orders panel registers its form with `setStandingOrderFormOpener`.
+- **Chronicle** (`views/ChronicleScreen.tsx`): Major moments newest first, filter by kind or citizen id, full journal of a citizen. Other panels open it with `openCitizenJournal(host, id)` or `openChronicle(host)` from `views/chronicleRequests.ts`; `CitizenJournal` is the component for a citizen panel's Journal tab.
+- **Settlement** (`views/SettlementProgressPanel.tsx`): tier and noun, the next tier's requirement checklist with a progress bar each, what the next tier unlocks and the seven milestones. It is a side panel beside the map and the body of the Settlement screen.
+- **Toasts** (`notifications/`): tier and milestone reached, Major moments, housing and Steward tidings (over `toastBurstLimit` per game hour they fold into "N more tidings"), grouped `status.blocked` toasts with one switch per reason kind in Settings. A toast with a subject is a button that focuses it. Push your own with `host.toasts.push(kind, text, expiresAtTick, onActivate)`.
+
 ## Hooks and stores for panels
 
 ```tsx

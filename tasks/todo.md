@@ -66,8 +66,8 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 6.2 Map canvas, camera, picking, entity primitives, overlays
 - [x] 6.3 Inspection panels, why-popover, citizen/journal (+ content browser of 6.5; D-150..D-155)
 - [ ] 6.4 Command UIs (build, zones, walls, boards, standing orders, steward, directives, pending list)
-- [ ] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
-- [ ] 6.6 jsdom UI smoke tests running the shared scenario JSON
+- [x] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
+- [x] 6.6 jsdom UI smoke tests running the shared scenario JSON
 
 ## Phase 7 — Hardening
 - [x] 7.1 Scenario snapshot library, perf success criteria, 10k-tick soak with invariants
