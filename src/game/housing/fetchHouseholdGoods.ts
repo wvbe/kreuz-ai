@@ -42,6 +42,11 @@ const fetchDataSchema = z
     materialId: z.string().min(1),
     quantity: z.number().int().min(1),
     sourceId: z.number().int().min(1),
+    /**
+     * Units the settler took from the source and has not delivered yet (the settler's own goods
+     * of the same material are never touched).
+     */
+    taken: z.number().int().min(0).default(0),
   })
   .strict();
 
@@ -81,6 +86,8 @@ function arriveAtSource(engine: GameEngine, context: TaskContext, data: FetchDat
     data.materialId,
     quantity,
   );
+  data.taken = quantity;
+  context.task.data = { ...data };
   return goHome(engine, context, data);
 }
 
@@ -103,7 +110,7 @@ function deposit(engine: GameEngine, context: TaskContext, data: FetchData): Ste
   if (record === null) {
     return failStep(noHouseholdStorageReason);
   }
-  let held = getTotal(context.entity, data.materialId);
+  let held = Math.min(data.taken, getTotal(context.entity, data.materialId));
   for (const storage of dwellingStorage(engine, record.zone)) {
     if (held < 1) {
       break;

@@ -88,6 +88,29 @@ describe("planNeed", () => {
     expect([far.id, twin.id]).not.toContain(plan?.sourceId);
   });
 
+  it("finds built beds: furniture pieces named by their furniture id", () => {
+    const world = createAiWorld();
+    const farmer = world.spawn("farmer", 0);
+    const piece = world.spawn("furniture_piece", 3, { Furniture: { furnitureId: "wooden_bed" } });
+    const plan = planNeed(world.engine, farmer, world.engine.content.needs.require("rest"));
+    expect(plan?.sourceId).toBe(piece.id);
+  });
+
+  it("prefers a better ranked bed over a nearer one and skips forbidden beds", () => {
+    const world = createAiWorld();
+    world.engine.prototypes.register({ id: "wooden_bed", components: { Position: {} } });
+    const farmer = world.spawn("farmer", 0);
+    const near = world.spawn("wooden_bed", 2);
+    const far = world.spawn("wooden_bed", 9);
+    const forbidden = world.spawn("wooden_bed", 1);
+    getAiService(world.engine).setBedPolicy((_engine, _sleeper, bed) =>
+      bed.id === forbidden.id ? null : bed.id === far.id ? 0 : 1,
+    );
+    const plan = planNeed(world.engine, farmer, world.engine.content.needs.require("rest"));
+    expect(plan?.sourceId).toBe(far.id);
+    expect([near.id, forbidden.id]).not.toContain(plan?.sourceId);
+  });
+
   it("ignores beds that cannot be reached and beds on other maps", () => {
     const world = createAiWorld();
     world.engine.prototypes.register({ id: "wooden_bed", components: { Position: {} } });

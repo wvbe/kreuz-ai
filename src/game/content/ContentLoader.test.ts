@@ -103,6 +103,8 @@ describe("loadContent (vertical-slice pack v0)", () => {
     handlers.registerAction("idle_wander", () => NodeStatus.Success);
     handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
     handlers.registerAction("claim_job", () => NodeStatus.Failure);
+    handlers.registerCondition("household_needs_goods", () => NodeStatus.Failure);
+    handlers.registerAction("fetch_household_goods", () => NodeStatus.Failure);
     expect(() => loadContent({ handlers })).not.toThrow();
     const issues = (() => {
       const partial = new BehaviorHandlerRegistry();

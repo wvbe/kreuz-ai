@@ -54,6 +54,7 @@ describe("registerStatus", () => {
       StatusSubjectKind.JobBoard,
       StatusSubjectKind.JobPosting,
       StatusSubjectKind.LoosePile,
+      StatusSubjectKind.Dwelling,
       StatusSubjectKind.StandingOrder,
     ]);
   });

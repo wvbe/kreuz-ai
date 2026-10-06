@@ -10,12 +10,16 @@ import {
   canDepositInto,
   canRetrieveFrom,
   findSources,
+  householdOwnerOf,
   isLoosePile,
   isStorageEntity,
   listStorage,
+  listStorageFor,
   stockOf,
 } from "./storageQueries";
 import { ReservationKind } from "./storageTypes";
+import { assignHome } from "../housing/household";
+import { createHousingWorld } from "../housing/testHousingWorld";
 import { createStorageWorld, setRules } from "./testStorageWorld";
 
 function deny(entity: Entity, actorId: number, operation: InventoryOperation): void {
@@ -166,5 +170,59 @@ describe("findSources", () => {
     const settler = world.spawn("peasant", 10);
     world.engine.store.removeComponent(settler.id, { name: "Position" });
     expect(findSources(world.engine, settler, "oak_log", 1)).toEqual([]);
+  });
+});
+
+describe("household storage (spec 029 FR-017)", () => {
+  const options = { width: 16, height: 12 };
+
+  it("knows which dwelling owns a storage entity", () => {
+    const world = createHousingWorld(options);
+    const zone = world.dwelling(2, 2, { beds: 2 });
+    const inside = world.chest(world.tiles(zone)[3] as number);
+    const outside = world.chest(170);
+    expect(householdOwnerOf(world.engine, inside)).toBe(zone);
+    expect(householdOwnerOf(world.engine, outside)).toBeNull();
+  });
+
+  it("leaves household storage out of settlement stock and everyone else's sources", () => {
+    const world = createHousingWorld(options);
+    const zone = world.dwelling(2, 2, { beds: 2 });
+    const inside = world.chest(world.tiles(zone)[3] as number);
+    const outside = world.chest(170);
+    world.give(inside, "bread", 3);
+    world.give(outside, "bread", 2);
+    expect(listStorage(world.engine).map((entity) => entity.id)).toEqual([outside.id]);
+    expect(stockOf(world.engine, "bread").total).toBe(2);
+    const stranger = world.settler(171);
+    expect(
+      findSources(world.engine, stranger, "bread", 9).map((source) => source.entityId),
+    ).toEqual([outside.id]);
+  });
+
+  it("offers a resident its own household's storage, and not when it asks for outside goods only", () => {
+    const world = createHousingWorld(options);
+    const zone = world.dwelling(2, 2, { beds: 2 });
+    const inside = world.chest(world.tiles(zone)[3] as number);
+    const outside = world.chest(170);
+    world.give(inside, "bread", 3);
+    world.give(outside, "bread", 2);
+    const resident = world.settler(171);
+    assignHome(world.engine, resident.id, zone, 0);
+    expect(listStorageFor(world.engine, resident, true).map((entity) => entity.id)).toEqual([
+      inside.id,
+      outside.id,
+    ]);
+    expect(listStorageFor(world.engine, resident, false).map((entity) => entity.id)).toEqual([
+      outside.id,
+    ]);
+    expect(
+      findSources(world.engine, resident, "bread", 9)
+        .map((source) => source.entityId)
+        .sort((left, right) => left - right),
+    ).toEqual([inside.id, outside.id]);
+    expect(
+      findSources(world.engine, resident, "bread", 9, false).map((source) => source.entityId),
+    ).toEqual([outside.id]);
   });
 });

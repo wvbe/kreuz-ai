@@ -74,4 +74,19 @@ describe("AiService", () => {
     service.setItemAvailability(null);
     expect(service.itemsAvailable(world.engine, holder, consumer, "bread", 2)).toBe(2);
   });
+
+  it("ranks every bed 0 until a bed policy says otherwise (setBedPolicy, bedRank)", () => {
+    const world = createAiWorld();
+    const service = getAiService(world.engine);
+    // The engine's housing system installs its household bed policy; start from the default.
+    service.setBedPolicy(null);
+    const farmer = world.spawn("farmer", 0);
+    const bed = world.spawn("farmer", 5);
+    expect(service.bedRank(world.engine, farmer, bed)).toBe(0);
+    service.setBedPolicy((_engine, sleeper, candidate) => (sleeper.id === candidate.id ? 0 : null));
+    expect(service.bedRank(world.engine, farmer, bed)).toBeNull();
+    expect(service.bedRank(world.engine, bed, bed)).toBe(0);
+    service.setBedPolicy(null);
+    expect(service.bedRank(world.engine, farmer, bed)).toBe(0);
+  });
 });

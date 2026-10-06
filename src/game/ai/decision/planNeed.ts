@@ -22,8 +22,8 @@ function findNearestBed(
   if (position === undefined) {
     return null;
   }
-  const ai = getAiService(engine);
-  const pathfinding = ai.pathfinding;
+  const service = getAiService(engine);
+  const pathfinding = service.pathfinding;
   let best: { bedId: number; cellIndex: number; cost: number; rank: number } | null = null;
   for (const candidate of engine.store.entities()) {
     // Built furniture is a `furniture_piece` whose `Furniture.furnitureId` names the content
@@ -35,7 +35,7 @@ function findNearestBed(
       continue;
     }
     const bedPosition = getComponent(candidate, positionComponent);
-    const rank = ai.bedRank(engine, entity, candidate);
+    const rank = service.bedRank(engine, entity, candidate);
     if (rank === null || bedPosition === undefined || bedPosition.mapId !== position.mapId) {
       continue;
     }

@@ -118,6 +118,8 @@ describe("ContentRegistries", () => {
     handlers.registerAction("idle_wander", () => NodeStatus.Success);
     handlers.registerCondition("jobs_available", () => NodeStatus.Failure);
     handlers.registerAction("claim_job", () => NodeStatus.Failure);
+    handlers.registerCondition("household_needs_goods", () => NodeStatus.Failure);
+    handlers.registerAction("fetch_household_goods", () => NodeStatus.Failure);
     const trees = content.createBehaviorTreeRegistry(handlers);
     expect(trees.ids()).toEqual(["basic_needs", "idle_wander"]);
     expect(content.createBehaviorTreeRegistry(handlers)).not.toBe(trees);

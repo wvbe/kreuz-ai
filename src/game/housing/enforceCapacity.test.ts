@@ -10,14 +10,14 @@ describe("evictionOrder", () => {
   it("puts the latest assignment first and the higher id first on ties (FR-012)", () => {
     const world = createHousingWorld(options);
     const zone = world.dwelling(2, 2, { beds: 2 });
-    const [a, b, c] = [world.settler(170), world.settler(171), world.settler(172)];
-    assignHome(world.engine, a.id, zone, 10);
-    assignHome(world.engine, b.id, zone, 30);
-    assignHome(world.engine, c.id, zone, 30);
+    const [first, second, third] = [world.settler(170), world.settler(171), world.settler(172)];
+    assignHome(world.engine, first.id, zone, 10);
+    assignHome(world.engine, second.id, zone, 30);
+    assignHome(world.engine, third.id, zone, 30);
     expect(evictionOrder(residentsOf(world.engine, zone)).map((entity) => entity.id)).toEqual([
-      c.id,
-      b.id,
-      a.id,
+      third.id,
+      second.id,
+      first.id,
     ]);
   });
 });
