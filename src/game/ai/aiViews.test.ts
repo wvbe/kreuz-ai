@@ -33,6 +33,7 @@ function withTasks(tasks: TaskRecord[]): Entity {
   return { id: 1, prototype: "farmer", components: { TaskQueue: { tasks, history: [] } } };
 }
 
+// @covers 013:FR-018
 describe("describeCurrentAction", () => {
   it("is idle without tasks or a queue", () => {
     expect(describeCurrentAction(withTasks([]))).toBe("idle");

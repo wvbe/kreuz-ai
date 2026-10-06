@@ -19,6 +19,7 @@ function contentWith(humanoid: HumanoidPrototypeContent): RoleContentView {
   };
 }
 
+// @covers 013:FR-003 013:FR-008 013:SC-001
 describe("roleOf", () => {
   it("is Worker for ordinary prototypes", () => {
     expect(roleOf(content, entity("farmer", { farming: 30_000 }))).toBe(Role.Worker);

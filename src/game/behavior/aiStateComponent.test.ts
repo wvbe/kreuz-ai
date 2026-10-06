@@ -3,6 +3,7 @@ import { ComponentRegistry } from "../ecs/ComponentRegistry";
 import { EcsErrorKind } from "../ecs/EcsError";
 import { aiStateComponent } from "./aiStateComponent";
 
+// @covers 013:FR-018
 describe("aiStateComponent", () => {
   it("defaults to idle with no tree", () => {
     expect(aiStateComponent.defaults()).toEqual({

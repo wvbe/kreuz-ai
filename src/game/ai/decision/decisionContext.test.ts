@@ -3,6 +3,7 @@ import { adjustNeed } from "../needs/needAccess";
 import { createAiWorld } from "../testAiWorld";
 import { buildDecisionContext, WealthClass, wealthClassOf } from "./decisionContext";
 
+// @covers 013:FR-009 013:FR-010 013:FR-011 013:SC-003
 describe("wealthClassOf", () => {
   it("classifies by the thresholds of the content constants (poor < 50, wealthy > 500)", () => {
     expect(wealthClassOf(0, 50, 500)).toBe(WealthClass.Poor);

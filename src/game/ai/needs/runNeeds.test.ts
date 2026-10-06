@@ -28,6 +28,7 @@ function healthOf(world: ReturnType<typeof createAiWorld>, id: number): number {
   return (world.engine.store.require(id).components["Health"] as { valueMilli: number }).valueMilli;
 }
 
+// @covers 013:FR-001 013:FR-002 013:FR-018
 describe("runNeedsTick", () => {
   it("decays every need linearly by its authored rate", () => {
     const world = createAiWorld();

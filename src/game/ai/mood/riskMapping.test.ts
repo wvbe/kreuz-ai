@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Prng } from "../../engine/Prng";
 import { riskSuccessPermille, rollRisk } from "./riskMapping";
 
+// @covers 013:FR-005 013:SC-001
 describe("riskSuccessPermille", () => {
   it.each([
     [10_000, 200],

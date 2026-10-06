@@ -9,6 +9,7 @@ function entityWithTraits(ids: string[]): Entity {
   return { id: 1, prototype: "farmer", components: { Traits: { ids } } };
 }
 
+// @covers 013:FR-001 013:FR-002
 describe("clampMeter", () => {
   it("keeps values inside 0..100000", () => {
     expect(clampMeter(-5)).toBe(0);

@@ -5,6 +5,7 @@ import { createAiWorld, removeItems } from "../testAiWorld";
 import { consumeMoodMilli, consumeMoodTicks, consumeNeedItem } from "./consumeNeedItem";
 import { adjustNeed, getNeedValue } from "./needAccess";
 
+// @covers 013:FR-002 013:FR-023 013:FR-004
 describe("consumeNeedItem", () => {
   it("takes one item, raises the need, adds a mood boost and emits need.item.consumed", () => {
     const world = createAiWorld();

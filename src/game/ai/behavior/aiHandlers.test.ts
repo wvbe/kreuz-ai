@@ -44,6 +44,7 @@ function tasksOf(
   }));
 }
 
+// @covers 013:FR-003 013:FR-011 013:FR-012
 describe("handler ids", () => {
   it("are the ids the v0 behavior trees name", () => {
     expect(anyNeedBelowCriticalId).toBe("any_need_below_critical");

@@ -7,6 +7,7 @@ function entry(otherId: number, affinityMilli = 0): RelationshipEntry {
   return { otherId, affinityMilli, lastTick: 0, history: [] };
 }
 
+// @covers 013:FR-006 013:FR-007 013:SC-006
 describe("relationshipsComponent", () => {
   it("defaults to no relationships", () => {
     expect(relationshipsComponent.name).toBe("Relationships");

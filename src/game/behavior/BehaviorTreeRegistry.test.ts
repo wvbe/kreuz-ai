@@ -29,6 +29,7 @@ function reference(from: string, target: string): BehaviorTreeDefinition {
   return { id: from, root: action("run_tree", target) };
 }
 
+// @covers 013:FR-013 013:FR-015 013:FR-016 013:FR-017 013:SC-008
 describe("BehaviorTreeRegistry.register", () => {
   it("registers the 'if starving then beg, else work' tree from JSON", () => {
     const registry = new BehaviorTreeRegistry(handlers());

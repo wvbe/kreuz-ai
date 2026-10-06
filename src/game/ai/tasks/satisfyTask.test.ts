@@ -49,6 +49,7 @@ function lastOutcome(world: AiTestWorld, id: number): { outcome: string; reason:
   return { outcome: last?.outcome ?? "none", reason: last?.reason ?? null };
 }
 
+// @covers 013:FR-002 013:FR-023
 describe("satisfyTaskData", () => {
   it("wraps the plan as JSON", () => {
     const plan: NeedPlan = {

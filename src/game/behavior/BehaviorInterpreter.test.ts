@@ -85,6 +85,7 @@ function aiOf(setup: Setup): {
   return entity.components["AiState"] as never;
 }
 
+// @covers 013:FR-012 013:FR-013 013:FR-021 013:FR-022 013:SC-008 013:SC-013
 describe("BehaviorInterpreter selector and sequence", () => {
   const conditional: BehaviorTreeDefinition = {
     id: "villager",

@@ -17,6 +17,7 @@ import {
 const wallClockFactor = 10;
 const dayTicks = 144;
 
+// @covers 013:FR-019 013:FR-020 013:SC-007
 describe("performance budgets (wall clock, spec figure x 10; the real figures are `npm run perf`)", () => {
   it("007 SC-001: a game is bootstrapped and idle in under 100 ms (with the Small map under 250 ms)", () => {
     const { bare, withMap } = measureBootstrap();

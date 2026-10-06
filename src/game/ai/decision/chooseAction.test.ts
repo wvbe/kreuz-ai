@@ -26,6 +26,7 @@ const favourB: DecisionFactor = {
   score: (_context, item) => (item.id === "b" ? 100 : 0),
 };
 
+// @covers 013:FR-014 013:FR-017 013:FR-022 013:SC-013
 describe("scoreCandidates", () => {
   it("scores base plus the sum of all factors", () => {
     const scored = scoreCandidates(

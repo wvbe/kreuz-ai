@@ -10,6 +10,7 @@ function moodOf(entity: Entity): MoodView {
   return entity.components["Mood"] as MoodView;
 }
 
+// @covers 013:FR-004 013:SC-001
 describe("addMoodInfluenceTo", () => {
   it("adds an influence to an entity with Mood", () => {
     const world = createAiWorld();

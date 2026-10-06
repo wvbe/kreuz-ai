@@ -22,6 +22,7 @@ const candidates: BehaviorCandidate[] = [
   { treeId: "sleep", base: 5 },
 ];
 
+// @covers 013:FR-014 013:FR-017 013:FR-022
 describe("pickBestCandidate", () => {
   it("returns null without candidates", () => {
     expect(pickBestCandidate([], [], context())).toBeNull();

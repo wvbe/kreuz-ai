@@ -31,6 +31,7 @@ function context(needs: DecisionNeed[], wealth = WealthClass.Modest): DecisionCo
   };
 }
 
+// @covers 013:FR-010 013:FR-011 013:FR-014 013:SC-003 013:SC-011
 describe("needBaseScore", () => {
   it("falls by one step per rank", () => {
     const subject = context([need("hunger", 10_000, 0), need("rest", 10_000, 1)]);

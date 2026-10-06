@@ -4,6 +4,7 @@ import { adjustNeed } from "../needs/needAccess";
 import { createAiWorld } from "../testAiWorld";
 import { isDueForDecision, runAiDecisions } from "./runAiDecisions";
 
+// @covers 013:FR-011 013:FR-012 013:FR-014 013:FR-022
 describe("isDueForDecision", () => {
   it("is true for an entity with a tree and an empty queue", () => {
     const world = createAiWorld();

@@ -7,6 +7,7 @@ function mood(influences: MoodData["influences"] = []): MoodData {
   return { valueMilli: 50_000, influences };
 }
 
+// @covers 013:FR-004
 describe("activeInfluences", () => {
   it("keeps influences whose untilTick has not passed", () => {
     const data = mood([

@@ -5,6 +5,7 @@ import type { BehaviorNode } from "./behaviorTypes";
 
 const leaf: BehaviorNode = { type: BehaviorNodeType.Action, id: "work" };
 
+// @covers 013:FR-013 013:FR-015
 describe("measureTreeDepth", () => {
   it("counts the nodes on the longest root-to-leaf chain", () => {
     expect(measureTreeDepth(leaf)).toBe(1);
