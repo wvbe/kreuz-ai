@@ -67,6 +67,7 @@ function moment(momentId: number, kind: string, prominence: string, entityId: nu
 }
 
 describe("NotificationCenter", () => {
+  // @covers 024:FR-036
   it("toasts tier and milestone events and opens the progress panel or the subject", () => {
     const { toasts, send, click, calls } = harness();
     send("settlement.tier.reached", { tier: "market_town", previousTier: "village", tick: 100 });
@@ -91,6 +92,7 @@ describe("NotificationCenter", () => {
     expect(calls).toEqual(["progress", "entity:12", "progress"]);
   });
 
+  // @covers 024:FR-040
   it("notifies Major moments only, with the rendered text, and links to the citizen", () => {
     const { toasts, send, click, calls } = harness();
     send("chronicle.moment.recorded", moment(1, "arrived", "minor", 3));
@@ -103,6 +105,7 @@ describe("NotificationCenter", () => {
     expect(calls).toEqual(["journal:3"]);
   });
 
+  // @covers 024:FR-040
   it("folds tidings beyond the burst limit within a game hour into 'N more tidings'", () => {
     const { toasts, send, click, calls } = harness({ toastBurstLimit: 2 });
     for (let index = 0; index < 5; index += 1) {
@@ -123,6 +126,7 @@ describe("NotificationCenter", () => {
     expect(texts(toasts)).toHaveLength(4);
   });
 
+  // @covers 024:FR-044 024:FR-032
   it("covers housing and steward events with kinds and subjects", () => {
     const { toasts, send, click, calls } = harness({ toastBurstLimit: 10 });
     send("housing.dwelling.at-risk", { dwellingId: 5, level: "hovel", unmetRequirements: [] });
@@ -146,6 +150,7 @@ describe("NotificationCenter", () => {
     ]);
   });
 
+  // @covers 024:FR-028
   it("groups status.blocked per reason kind, counts up, limits groups and honours mutes", () => {
     const blocked = (kind: string, id: number, state = "Blocked") => ({
       subject: { kind: "Workstation", id },

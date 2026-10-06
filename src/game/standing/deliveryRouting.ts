@@ -135,6 +135,34 @@ export function activeBellTowers(engine: GameEngine): BellTower[] {
 }
 
 /**
+ * The Bell Tower whose ring reaches a board (spec 026 FR-022): the first active tower on the
+ * board's map with the board within `bellRadius` hops of its bell (the order of
+ * {@link activeBellTowers}), which is the tower {@link ringBells} would apply its updates with.
+ *
+ * @param engine - The engine.
+ * @param boardId - The board entity.
+ * @returns The tower, or null when no ring reaches the board.
+ */
+export function servingBell(engine: GameEngine, boardId: EntityId): BellTower | null {
+  const board = engine.store.get(boardId);
+  const place = board === undefined ? undefined : getComponent(board, positionComponent);
+  if (place === undefined) {
+    return null;
+  }
+  const radius = engine.content.constants.bellRadius;
+  for (const tower of activeBellTowers(engine)) {
+    if (
+      tower.mapId === place.mapId &&
+      hopDistance(engine.maps.require(tower.mapId), tower.cellIndex, place.cellIndex, radius) !==
+        null
+    ) {
+      return tower;
+    }
+  }
+  return null;
+}
+
+/**
  * Rings the bells (spec 026 FR-022/023): when `tickOfDay` is one of `bellRingTicksOfDay`, every
  * Bell Tower queues `bell-tower.rang` and every pending board update (waiting or on a crier's
  * load) whose board is within `bellRadius` hops of the bell is applied at once with

@@ -3,6 +3,7 @@ import { squareScene, voronoiScene } from "../testing/testScenes";
 import { createCellPicker } from "./cellPicker";
 
 describe("createCellPicker", () => {
+  // @covers 024:FR-005 024:FR-002
   it("picks square tiles by position, including the edges of the map", () => {
     const picker = createCellPicker(squareScene(8, 6));
     expect(picker.pick({ x: 0.5, z: 0.5 })).toBe(0);
@@ -22,6 +23,7 @@ describe("createCellPicker", () => {
     expect([0, 1]).toContain(picker.pick({ x: 1, z: 0.5 }));
   });
 
+  // @covers 024:FR-005 024:FR-002
   it("picks the voronoi cell whose polygon holds the point, equal to the nearest site", () => {
     const { scene } = voronoiScene(42);
     const picker = createCellPicker(scene);

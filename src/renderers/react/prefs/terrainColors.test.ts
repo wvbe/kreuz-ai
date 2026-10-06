@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { terrainColor, terrainColors, unknownTerrainColor, zoneColor } from "./terrainColors";
 
 describe("terrain colours", () => {
+  // @covers 024:FR-003
   it("covers every terrain of the bundled content", () => {
     for (const id of [
       "grassland",

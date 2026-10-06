@@ -21,6 +21,7 @@ describe("SettlementProgressPanel", () => {
     expect(tierTitle("first-market")).toBe("First market");
   });
 
+  // @covers 024:FR-034
   it("shows the tier, the next tier's checklist, its unlocks and the milestones", () => {
     render(
       <EngineProvider host={startedHost()}>

@@ -4,6 +4,28 @@ import type { CropCell } from "./instanceLayout";
 import type { MapScene } from "./mapScene";
 
 /**
+ * What stands on a zone besides its tint (see `StructureLayer`).
+ */
+export type ZoneStructure = {
+  /**
+   * Dwelling level id of a dwelling zone, null for any other zone.
+   */
+  dwellingLevel: string | null;
+  /**
+   * The dwelling's downgrade streak is running (`housing.dwelling.at-risk`).
+   */
+  atRisk: boolean;
+  /**
+   * The zone is a Bell Tower.
+   */
+  bellTower: boolean;
+  /**
+   * The bell rang a moment ago.
+   */
+  ringing: boolean;
+};
+
+/**
  * A zone to tint on the map.
  */
 export type ZoneOverlay = {
@@ -14,6 +36,10 @@ export type ZoneOverlay = {
    * Whether the zone is active; inactive zones are drawn fainter.
    */
   active: boolean;
+  /**
+   * The model that stands on the zone, when it has one.
+   */
+  structure?: ZoneStructure;
 };
 
 /**

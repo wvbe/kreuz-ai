@@ -21,6 +21,10 @@ export type VisualInstance = {
    */
   rotation: number;
   color: number;
+  /**
+   * Doors only: whether a mobile entity stands in the doorway (the leaf swings open, FR-016).
+   */
+  open: boolean;
 };
 
 /**
@@ -57,6 +61,7 @@ function wallLike(kind: VisualKind): boolean {
     kind === VisualKind.Wall ||
     kind === VisualKind.Door ||
     kind === VisualKind.Furniture ||
+    kind === VisualKind.NoticePost ||
     kind === VisualKind.BuildSite ||
     kind === VisualKind.Marker
   );
@@ -79,6 +84,12 @@ export function layoutEntities(
 ): Map<VisualKind, VisualInstance[]> {
   const byKind = new Map<VisualKind, VisualInstance[]>();
   const mobileOnCell = new Map<number, number>();
+  const occupied = new Set<number>();
+  for (const entity of entities) {
+    if (!wallLike(classifyEntity(entity))) {
+      occupied.add(entity.cell);
+    }
+  }
   for (const entity of entities) {
     const center: GroundPoint | undefined = scene.centers[entity.cell];
     if (center === undefined) {
@@ -110,6 +121,7 @@ export function layoutEntities(
       z: point.z,
       rotation: ((entity.id * 37) % 8) * (Math.PI / 4),
       color: entityColor(kind, entity.prototype),
+      open: kind === VisualKind.Door && occupied.has(entity.cell),
     });
     byKind.set(kind, list);
   }

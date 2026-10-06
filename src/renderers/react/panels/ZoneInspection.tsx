@@ -5,6 +5,7 @@ import type { ZoneView } from "../../../game/zones/zoneTypes";
 import { useQuery } from "../engine/useGameState";
 import { Checklist } from "../ui/Checklist";
 import { KeyValueList } from "../ui/KeyValueList";
+import { KeepInStockButton } from "../ui/KeepInStockButton";
 import { StackList } from "../ui/StackList";
 import type { StackRow } from "../ui/StackList";
 import { useMaterialInfo } from "./entityViews";
@@ -48,6 +49,7 @@ export function ZoneInventory(props: { zone: ZoneView }) {
     <StackList
       stacks={stacks}
       emptyText={inside.length === 0 ? "No storage in this zone." : "Nothing stored."}
+      rowAction={(materialId) => <KeepInStockButton materialId={materialId} />}
     />
   );
 }

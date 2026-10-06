@@ -6,6 +6,7 @@ import { renderApp } from "../testing/renderApp";
 afterEach(cleanup);
 
 describe("ToastSettings", () => {
+  // @covers 024:FR-028
   it("toggles the toast of a reason kind in the settings", () => {
     const app = renderApp();
     app.start();

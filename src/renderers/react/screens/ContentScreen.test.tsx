@@ -16,6 +16,7 @@ function openContent() {
 }
 
 describe("ContentScreen", () => {
+  // @covers 024:FR-017 024:FR-018
   it("lists the registries and filters them live as the player types", () => {
     openContent();
     const screenRoot = screen.getByRole("region", { name: "Content browser" });
@@ -28,6 +29,7 @@ describe("ContentScreen", () => {
     expect(within(screenRoot).queryByRole("heading", { name: /^Skills/ })).toBeNull();
   });
 
+  // @covers 024:FR-019
   it("links a recipe to its inputs and a material back to the recipes that use it", () => {
     openContent();
     fireEvent.change(screen.getByRole("searchbox", { name: "Search content" }), {
@@ -47,6 +49,7 @@ describe("ContentScreen", () => {
     ).toBeTruthy();
   });
 
+  // @covers 024:FR-035
   it("marks furniture that a later tier unlocks", () => {
     openContent();
     fireEvent.change(screen.getByRole("searchbox", { name: "Search content" }), {
@@ -56,5 +59,43 @@ describe("ContentScreen", () => {
     fireEvent.click(screen.getByRole("button", { name: "Forge" }));
     const article = screen.getByRole("article", { name: "Forge" });
     expect(within(article).getByText(/Unlocks at Village/)).toBeTruthy();
+  });
+
+  // @covers 024:FR-030
+  it("offers Keep in stock on a material and a recipe card and opens the form prefilled", () => {
+    const app = openContent();
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search content" }), {
+      target: { value: "bake_bread" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Bake bread" }));
+    const recipe = screen.getByRole("article", { name: "Bake bread" });
+    fireEvent.click(within(recipe).getByRole("button", { name: "Keep bread in stock" }));
+    expect(app.host.navigation.getSnapshot().screen).toBe(Screen.StandingOrders);
+    const form = screen.getByRole("form", { name: "Keep in stock" });
+    expect((within(form).getByLabelText("Material") as HTMLInputElement).value).toBe("bread");
+  });
+
+  // @covers 024:FR-017 024:FR-018 024:SC-005
+  it("searches the 13 registries at once within 200 ms", () => {
+    openContent();
+    const root = screen.getByRole("region", { name: "Content browser" });
+    for (const label of [/^Materials/, /^Skills/, /^Needs/, /^Terrain/, /^Traits/, /^Furniture/]) {
+      expect(within(root).getByRole("heading", { name: label })).toBeTruthy();
+    }
+    for (const label of [/^Zone types/, /^Factions/, /^Jobs/, /^Recipes/, /^Behaviors/]) {
+      expect(within(root).getByRole("heading", { name: label })).toBeTruthy();
+    }
+    expect(within(root).getByRole("heading", { name: /^Humanoids/ })).toBeTruthy();
+    expect(within(root).getByRole("heading", { name: /^Animals/ })).toBeTruthy();
+    expect(within(root).getByRole("heading", { name: /^Name lists/ })).toBeTruthy();
+    const started = performance.now();
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search content" }), {
+      target: { value: "bak" },
+    });
+    expect(performance.now() - started).toBeLessThan(200);
+    // one query, hits in several registries: the baker humanoid, the baking skill, the guild
+    expect(within(root).getByRole("heading", { name: /^Humanoids/ })).toBeTruthy();
+    expect(within(root).getByRole("heading", { name: /^Skills/ })).toBeTruthy();
+    expect(within(root).getByRole("heading", { name: /^Factions/ })).toBeTruthy();
   });
 });

@@ -13,6 +13,7 @@ function citizen(id: number, cell: number) {
 }
 
 describe("EntityLayer", () => {
+  // @covers 024:FR-004 024:FR-016
   it("instances one mesh per visual kind present, with the right counts", async () => {
     const entities = [
       citizen(1, 100),
@@ -39,6 +40,7 @@ describe("EntityLayer", () => {
     await renderer.unmount();
   });
 
+  // @covers 024:FR-003
   it("culls entities outside the visible ground", async () => {
     const zoomed = { ...camera, zoom: 160, centerX: 2, centerZ: 2 };
     const renderer = await ReactThreeTestRenderer.create(
@@ -59,6 +61,7 @@ describe("EntityLayer", () => {
     await renderer.unmount();
   });
 
+  // @covers 024:SC-001
   it("handles 4096 entities on a 64x64 map", async () => {
     const entities = Array.from({ length: 4096 }, (_unused, index) => citizen(index + 1, index));
     const renderer = await ReactThreeTestRenderer.create(

@@ -2,7 +2,7 @@
 import { act, cleanup, fireEvent, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { worldToScreen } from "../map/cameraMath";
-import { classifyEntity, VisualKind } from "../map/entityVisuals";
+import { classifyEntity, VisualKind, wildAnimalMarker } from "../map/entityVisuals";
 import { renderApp } from "../testing/renderApp";
 import type { RenderedApp } from "../testing/renderApp";
 
@@ -40,6 +40,7 @@ function citizenCell(app: RenderedApp): { id: number; cell: number } {
 }
 
 describe("MapScreen", () => {
+  // @covers 024:FR-002 024:FR-004
   it("hands the active map, its entities and the zones to the canvas", () => {
     const app = startGame();
     const props = app.canvas.last;
@@ -50,6 +51,24 @@ describe("MapScreen", () => {
     expect(screen.queryByRole("navigation", { name: "Maps" })).toBeNull();
   });
 
+  // @covers 024:FR-004
+  it("draws wild animals differently from livestock", () => {
+    const app = startGame();
+    const kinds = new Set(
+      (app.canvas.last?.entities ?? []).map((entity) => classifyEntity(entity)),
+    );
+    expect(kinds.has(VisualKind.Citizen)).toBe(true);
+    const wild = (app.canvas.last?.entities ?? []).filter((entity) =>
+      entity.components.includes(wildAnimalMarker),
+    );
+    const animals = app.host.session.query.run("animals", { kind: "wild" });
+    const expected = animals.ok ? (animals.data as { animals: object[] }).animals.length : 0;
+    expect(wild.length).toBe(expected);
+    expect(expected).toBeGreaterThan(0);
+    expect(wild.every((entity) => classifyEntity(entity) === VisualKind.WildAnimal)).toBe(true);
+  });
+
+  // @covers 024:FR-005 024:FR-038
   it("hovers an entity, labels it with its styled name and selects it on click", () => {
     const app = startGame();
     const citizen = citizenCell(app);
@@ -112,6 +131,7 @@ describe("MapScreen", () => {
     fireEvent.click(screen.getByRole("button", { name: "Zoom out" }));
   });
 
+  // @covers 024:FR-014
   it("shows the placement ghost in placement mode: red on rock, green on open ground, and places on click", () => {
     const app = startGame();
     const props = app.canvas.last;
@@ -151,6 +171,7 @@ describe("MapScreen", () => {
     ).toHaveLength(1);
   });
 
+  // @covers 024:FR-025
   it("shows badges for settled idle citizens and hides them in the settings", () => {
     const app = startGame();
     act(() => {

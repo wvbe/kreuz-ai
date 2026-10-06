@@ -196,9 +196,10 @@ function OrderRow(props: { order: StandingOrderView }) {
  * The standing-orders tab: the orders with counted stock, state, runs in flight and edit, pause,
  * resume and delete, and the "Keep in stock..." form.
  *
+ * @param props - Optional material the form starts with (a "Keep in stock..." request).
  * @returns The tab.
  */
-export function StandingOrdersTab() {
+export function StandingOrdersTab(props: { initialMaterialId?: string }) {
   const orders = useView<readonly StandingOrderView[]>("standing-orders", {}) ?? [];
   return (
     <div className="kv-standing">
@@ -208,7 +209,11 @@ export function StandingOrdersTab() {
           <OrderRow key={order.orderId} order={order} />
         ))}
       </ul>
-      <StandingOrderForm />
+      <StandingOrderForm
+        {...(props.initialMaterialId === undefined
+          ? {}
+          : { initialMaterialId: props.initialMaterialId })}
+      />
     </div>
   );
 }

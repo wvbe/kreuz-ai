@@ -4,8 +4,9 @@ import type { BufferGeometry, InstancedMesh } from "three";
 import type { MapEntityView } from "../../../game/api/Views";
 import { visibleGroundBounds } from "./cameraMath";
 import type { CameraState, Viewport } from "./cameraMath";
+import { DoorLayer } from "./DoorLayer";
 import { createCropGeometry, createVisualGeometry } from "./entityGeometry";
-import { visualKinds } from "./entityVisuals";
+import { VisualKind, visualKinds } from "./entityVisuals";
 import { layoutCrops, layoutEntities } from "./instanceLayout";
 import type { CropCell } from "./instanceLayout";
 import type { MapScene } from "./mapScene";
@@ -81,6 +82,7 @@ export function EntityLayer(props: {
     [],
   );
   const cropGeometry = useMemo(() => createCropGeometry(), []);
+  const doorGeometry = geometries.get(VisualKind.Door);
   useEffect(
     () => () => {
       for (const geometry of geometries.values()) {
@@ -97,17 +99,19 @@ export function EntityLayer(props: {
   );
   const kindItems = useMemo(
     () =>
-      visualKinds.map((kind) => ({
-        kind,
-        items: (layout.get(kind) ?? []).map((instance) => ({
-          x: instance.x,
-          y: instance.y,
-          z: instance.z,
-          rotation: instance.rotation,
-          scale: 1,
-          color: instance.color,
+      visualKinds
+        .filter((kind) => kind !== VisualKind.Door)
+        .map((kind) => ({
+          kind,
+          items: (layout.get(kind) ?? []).map((instance) => ({
+            x: instance.x,
+            y: instance.y,
+            z: instance.z,
+            rotation: instance.rotation,
+            scale: 1,
+            color: instance.color,
+          })),
         })),
-      })),
     [layout],
   );
   const plants = useMemo(
@@ -134,6 +138,9 @@ export function EntityLayer(props: {
           <InstancedGroup key={kind} name={kind} geometry={geometry} items={items} />
         );
       })}
+      {doorGeometry === undefined ? null : (
+        <DoorLayer doors={layout.get(VisualKind.Door) ?? []} geometry={doorGeometry} />
+      )}
       {plantItems.length === 0 ? null : (
         <InstancedGroup name="crops" geometry={cropGeometry} items={plantItems} />
       )}

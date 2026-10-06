@@ -27,6 +27,7 @@ describe("TileInspection", () => {
     expect(screen.getByText(/blocked \(impassable cliff\)/)).toBeTruthy();
   });
 
+  // @covers 024:FR-007
   it("shows the zone a tile belongs to", () => {
     const host = startedHost("village");
     const designated = host.session.dispatch({

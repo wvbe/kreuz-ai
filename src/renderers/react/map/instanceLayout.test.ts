@@ -20,6 +20,22 @@ describe("layoutEntities", () => {
     expect(layout.get(VisualKind.Wall)?.[0]).toMatchObject({ entityId: 4, x: 3.5, z: 1.5 });
   });
 
+  // @covers 024:FR-016
+  it("marks a door open while a mobile entity stands in it", () => {
+    const doorRow = (id: number, cell: number) => ({
+      id,
+      prototype: "door",
+      cell,
+      components: ["Position"],
+    });
+    const layout = layoutEntities([doorRow(1, 4), doorRow(2, 5), citizen(3, 5)], scene, null);
+    expect((layout.get(VisualKind.Door) ?? []).map((instance) => instance.open)).toEqual([
+      false,
+      true,
+    ]);
+    expect(layout.get(VisualKind.Citizen)?.[0]?.open).toBe(false);
+  });
+
   it("fans citizens that share a cell but never walls", () => {
     const layout = layoutEntities([citizen(1, 5), citizen(2, 5), citizen(3, 5)], scene, null);
     const people = layout.get(VisualKind.Citizen) ?? [];

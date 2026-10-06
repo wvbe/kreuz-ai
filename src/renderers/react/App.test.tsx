@@ -6,6 +6,7 @@ import { renderApp } from "./testing/renderApp";
 afterEach(cleanup);
 
 describe("App", () => {
+  // @covers 024:FR-037
   it("starts on the new-game screen with the three difficulties and Steady selected", () => {
     renderApp();
     expect(screen.getByText("Kreuzvibe")).toBeTruthy();
@@ -52,5 +53,18 @@ describe("App", () => {
     const value = (screen.getByLabelText("Seed") as HTMLInputElement).value;
     expect(Number(value)).toBeGreaterThanOrEqual(0);
     expect(/^\d+$/.test(value)).toBe(true);
+  });
+
+  // @covers 024:FR-023 024:SC-006 024:FR-022
+  it("starts a playable game within 5 seconds, in the one page, without a reload", () => {
+    const started = performance.now();
+    const app = renderApp();
+    app.start();
+    act(() => {
+      app.host.step(1);
+    });
+    expect(performance.now() - started).toBeLessThan(5000);
+    expect(app.canvas.last?.entities.length).toBeGreaterThan(3);
+    expect(screen.getByTestId("map-canvas")).toBeTruthy();
   });
 });

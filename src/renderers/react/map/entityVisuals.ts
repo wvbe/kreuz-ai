@@ -7,12 +7,20 @@ export enum VisualKind {
   Citizen = "citizen",
   Trader = "trader",
   Livestock = "livestock",
+  WildAnimal = "wild-animal",
+  NoticePost = "notice-post",
   Wall = "wall",
   Door = "door",
   BuildSite = "build-site",
   Furniture = "furniture",
   Marker = "marker",
 }
+
+/**
+ * Component name the map screen adds to the `components` of a wild animal's row: the
+ * `map-entities` view does not say livestock from wild, the `animals` query does (spec 024 FR-004).
+ */
+export const wildAnimalMarker = "renderer.wild";
 
 /**
  * Every kind, in draw order.
@@ -42,7 +50,12 @@ export function classifyEntity(entity: MapEntityView): VisualKind {
     return VisualKind.Citizen;
   }
   if (entity.components.includes("Animal") || entity.components.includes("Livestock")) {
-    return VisualKind.Livestock;
+    return entity.components.includes(wildAnimalMarker)
+      ? VisualKind.WildAnimal
+      : VisualKind.Livestock;
+  }
+  if (entity.prototype === "notice_post") {
+    return VisualKind.NoticePost;
   }
   if (entity.components.includes("Furniture")) {
     return VisualKind.Furniture;
@@ -64,6 +77,10 @@ export function visualColor(kind: VisualKind): number {
       return 0xd9a441;
     case VisualKind.Livestock:
       return 0xe8e4d8;
+    case VisualKind.WildAnimal:
+      return 0x8a6f4d;
+    case VisualKind.NoticePost:
+      return 0xd8c28a;
     case VisualKind.Wall:
       return 0xb8b2a6;
     case VisualKind.Door:
@@ -113,7 +130,10 @@ export function visualHeight(kind: VisualKind): number {
     case VisualKind.Door:
       return 0.9;
     case VisualKind.Livestock:
+    case VisualKind.WildAnimal:
       return 0.5;
+    case VisualKind.NoticePost:
+      return 1.1;
     case VisualKind.Furniture:
       return 0.5;
     case VisualKind.BuildSite:

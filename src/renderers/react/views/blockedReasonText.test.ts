@@ -12,6 +12,7 @@ describe("blockedReasonText", () => {
     expect([...blockedReasonKinds]).toEqual(Object.values(BlockedReasonKind));
   });
 
+  // @covers 024:FR-025
   it("writes a sentence for every kind", () => {
     for (const kind of blockedReasonKinds) {
       const text = describeBlockedReason({ kind, params: {}, causeRef: null });

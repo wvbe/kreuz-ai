@@ -1,4 +1,5 @@
 import type { EntityDetailView } from "../../../game/api/Views";
+import { KeepInStockButton } from "../ui/KeepInStockButton";
 import { StackList } from "../ui/StackList";
 import { componentOf, useMaterialInfo } from "./entityViews";
 import type { InventoryData } from "./entityViews";
@@ -31,6 +32,7 @@ export function InventoryTab(props: { detail: EntityDetailView }) {
       slotCount={inventory.slotCount}
       weightLimitMilli={inventory.weightLimitMilli}
       emptyText="Carrying nothing."
+      rowAction={(materialId) => <KeepInStockButton materialId={materialId} />}
     />
   );
 }

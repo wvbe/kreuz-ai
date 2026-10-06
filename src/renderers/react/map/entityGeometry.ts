@@ -49,10 +49,22 @@ export function createVisualGeometry(kind: VisualKind): BufferGeometry {
         ];
       case VisualKind.Livestock:
         return [box(0.5, 0.28, 0.26, 0, 0.28, 0), box(0.16, 0.16, 0.16, 0.32, 0.38, 0)];
+      case VisualKind.WildAnimal:
+        // lean body with ears and a tail so it reads differently from a grazing livestock box
+        return [
+          box(0.46, 0.22, 0.2, 0, 0.26, 0),
+          box(0.14, 0.14, 0.14, 0.3, 0.34, 0),
+          cone(0.04, 0.12, 0.32, 0.46, 0.05),
+          cone(0.04, 0.12, 0.32, 0.46, -0.05),
+          box(0.2, 0.05, 0.05, -0.32, 0.3, 0),
+        ];
+      case VisualKind.NoticePost:
+        return [box(0.08, 1.1, 0.08, 0, 0.55, 0), box(0.5, 0.36, 0.05, 0, 0.82, 0.06)];
       case VisualKind.Wall:
         return [box(0.96, 1, 0.96, 0, 0.5, 0)];
       case VisualKind.Door:
-        return [box(0.12, 0.9, 0.7, 0, 0.45, 0), box(0.2, 0.08, 0.84, 0, 0.94, 0)];
+        // the leaf hangs from a hinge on the cell edge (x = 0) so it can swing open (FR-016)
+        return [box(0.7, 0.9, 0.08, 0.35, 0.45, 0)];
       case VisualKind.BuildSite:
         return [
           box(0.8, 0.12, 0.8, 0, 0.06, 0),

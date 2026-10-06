@@ -29,7 +29,12 @@ import {
 } from "./standingOrders";
 import { standingProvider } from "./standingProvider";
 import { standingSystemId } from "./standingTypes";
-import { buildOrderDetail, buildOrderViews, buildStewardView } from "./standingViews";
+import {
+  buildOrderDetail,
+  buildOrderViews,
+  buildPendingRoutes,
+  buildStewardView,
+} from "./standingViews";
 import {
   appointSteward,
   checkStewardOffice,
@@ -217,6 +222,10 @@ export function registerStanding(engine: GameEngine): StandingService {
       steward: defineQuery({
         schema: noArgs,
         run: (_args, target) => buildStewardView(target),
+      }),
+      "pending-routes": defineQuery({
+        schema: noArgs,
+        run: (_args, target) => buildPendingRoutes(target),
       }),
     },
   });

@@ -7,6 +7,7 @@ import { DwellingInspection } from "./DwellingInspection";
 afterEach(cleanup);
 
 describe("DwellingInspection", () => {
+  // @covers 024:FR-043
   it("shows the level, streaks and the checklists of a dwelling", () => {
     const host = startedHost("village");
     const { zone } = buildDwellingRoom(host, true);

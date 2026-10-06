@@ -124,6 +124,7 @@ describe("EngineHost", () => {
     expect(host.toasts.getSnapshot().toasts).toHaveLength(1);
   });
 
+  // @covers 024:FR-024
   it("autosaves every configured number of ticks into the storage and loads it back", () => {
     const storage = memoryStorage();
     const { host, fake } = startedHost(storage);

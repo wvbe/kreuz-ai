@@ -35,6 +35,36 @@ describe("content queries", () => {
     expect(locked.length).toBeGreaterThan(0);
   });
 
+  // @covers 024:FR-017
+  it("covers the 13 registries of spec 022: humanoid prototypes and name lists included", () => {
+    const view = buildContentRegistriesView(loadContent());
+    const kinds = view.categories.map((category) => category.kind);
+    for (const kind of [
+      ContentKind.Material,
+      ContentKind.Skill,
+      ContentKind.Need,
+      ContentKind.Terrain,
+      ContentKind.Trait,
+      ContentKind.Furniture,
+      ContentKind.Zone,
+      ContentKind.Faction,
+      ContentKind.Job,
+      ContentKind.Recipe,
+      ContentKind.Behavior,
+      ContentKind.Animal,
+      ContentKind.Humanoid,
+      ContentKind.NameList,
+    ]) {
+      expect(kinds).toContain(kind);
+    }
+    const content = loadContent();
+    const baker = buildContentEntryView(content, ContentKind.Humanoid, "baker");
+    expect(baker?.links.some((link) => link.kind === ContentKind.Skill)).toBe(true);
+    expect(baker?.links.some((link) => link.kind === ContentKind.NameList)).toBe(true);
+    const names = buildContentEntryView(content, ContentKind.NameList, "common_13c");
+    expect(names?.usedBy.some((link) => link.id === "baker")).toBe(true);
+  });
+
   it("links a recipe to its materials and its workstation, and back", () => {
     const started = session();
     const bread = entry(started, ContentKind.Recipe, "bake_bread");

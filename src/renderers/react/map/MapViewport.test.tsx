@@ -48,6 +48,7 @@ function setup(clicks: [number | null, number | null][]) {
 }
 
 describe("MapViewport", () => {
+  // @covers 024:FR-005
   it("picks the citizen on a shared cell, hovers and clicks", () => {
     const clicks: [number | null, number | null][] = [];
     const { host, seen } = setup(clicks);

@@ -1,6 +1,7 @@
 import type { StockpileView } from "../../../game/storage/storageViews";
 import { useQuery } from "../engine/useGameState";
 import { KeyValueList } from "../ui/KeyValueList";
+import { KeepInStockButton } from "../ui/KeepInStockButton";
 import { StackList } from "../ui/StackList";
 import { useMaterialInfo } from "./entityViews";
 import { PrimaryStatus } from "./PrimaryStatus";
@@ -48,6 +49,7 @@ export function StockpileInspection(props: { entityId: number }) {
         }))}
         slotCount={pile.slots}
         weightLimitMilli={pile.weightLimitMilli}
+        rowAction={(materialId) => <KeepInStockButton materialId={materialId} />}
       />
     </div>
   );

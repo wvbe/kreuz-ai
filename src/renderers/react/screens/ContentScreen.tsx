@@ -9,6 +9,7 @@ import type { JsonValue } from "../../../game/engine/EventBus";
 import { useQuery } from "../engine/useGameState";
 import { useStaticQuery } from "../engine/useStaticQuery";
 import { Link } from "../ui/EntityLink";
+import { KeepInStockButton } from "../ui/KeepInStockButton";
 import { KeyValueList } from "../ui/KeyValueList";
 import "../panels/panels.css";
 
@@ -52,6 +53,30 @@ function formatField(value: JsonValue): string {
       .join(", ");
   }
   return typeof value === "string" ? value.replaceAll("_", " ") : String(value);
+}
+
+/**
+ * The materials a record offers "Keep in stock..." for (spec 024 FR-030): a material itself, the
+ * outputs of a recipe card.
+ *
+ * @param entry - The entry shown.
+ * @returns The material ids, empty for other records.
+ */
+function keepInStockMaterials(entry: ContentEntryView): string[] {
+  if (entry.kind === ContentKind.Material) {
+    return [entry.id];
+  }
+  if (entry.kind !== ContentKind.Recipe) {
+    return [];
+  }
+  const outputs = entry.fields["outputs"];
+  if (!Array.isArray(outputs)) {
+    return [];
+  }
+  return outputs.flatMap((output) => {
+    const materialId = isRecord(output) ? output["materialId"] : undefined;
+    return typeof materialId === "string" ? [materialId] : [];
+  });
 }
 
 function LinkList(props: {
@@ -98,6 +123,7 @@ function Detail(props: {
     return <p>No such entry.</p>;
   }
   const lock = props.locks.get(`${unlockKindOf[entry.kind] ?? ""}:${entry.id}`);
+  const keepable = keepInStockMaterials(entry);
   return (
     <article aria-label={entry.name}>
       <h3>{entry.name}</h3>
@@ -115,6 +141,9 @@ function Detail(props: {
           .filter(([name]) => name !== "id" && name !== "name")
           .map(([name, value]) => ({ label: name, value: formatField(value) }))}
       />
+      {keepable.map((materialId) => (
+        <KeepInStockButton key={materialId} materialId={materialId} />
+      ))}
       <LinkList title="Refers to" links={entry.links} onChoose={props.onChoose} />
       <LinkList title="Used by" links={entry.usedBy} onChoose={props.onChoose} />
     </article>

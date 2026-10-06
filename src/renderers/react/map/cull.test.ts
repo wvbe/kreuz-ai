@@ -3,6 +3,7 @@ import { isInBounds, visibleIndices } from "./cull";
 
 const bounds = { minX: 0, maxX: 10, minZ: 0, maxZ: 10 };
 
+// @covers 024:FR-003
 describe("culling", () => {
   it("keeps points inside the box and within the margin", () => {
     expect(isInBounds({ x: 5, z: 5 }, bounds, 0)).toBe(true);

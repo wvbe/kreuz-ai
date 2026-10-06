@@ -61,6 +61,7 @@ describe("useRecipesMaking", () => {
 });
 
 describe("StandingOrdersTab", () => {
+  // @covers 024:FR-029
   it("creates a standing order with the Keep in stock form, then edits, pauses and deletes it", () => {
     const app = renderApp();
     app.start();
@@ -129,6 +130,7 @@ describe("StandingOrdersTab", () => {
     ]);
   });
 
+  // @covers 024:FR-030
   it("prefills the material of a Keep in stock action elsewhere", () => {
     const host = new EngineHost();
     host.newGame({ seed: 42, difficulty: "steady", mapSize: 0, startingTier: "hamlet" });

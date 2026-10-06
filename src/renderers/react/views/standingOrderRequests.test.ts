@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { openStandingOrderForm, setStandingOrderFormOpener } from "./standingOrderRequests";
+import {
+  openStandingOrderForm,
+  rememberStandingOrderMaterial,
+  setStandingOrderFormOpener,
+  takeStandingOrderMaterial,
+} from "./standingOrderRequests";
 
 afterEach(() => setStandingOrderFormOpener(null));
 
@@ -15,5 +20,12 @@ describe("standingOrderRequests", () => {
     setStandingOrderFormOpener(null);
     openStandingOrderForm("flour");
     expect(seen).toEqual(["bread"]);
+  });
+
+  it("remembers the material of a request until the standing-orders tab takes it, once", () => {
+    expect(takeStandingOrderMaterial()).toBeNull();
+    rememberStandingOrderMaterial("bread");
+    expect(takeStandingOrderMaterial()).toBe("bread");
+    expect(takeStandingOrderMaterial()).toBeNull();
   });
 });

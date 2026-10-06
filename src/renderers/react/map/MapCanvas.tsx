@@ -3,6 +3,7 @@ import { CameraRig } from "./CameraRig";
 import { EntityLayer } from "./EntityLayer";
 import type { MapCanvasProps } from "./MapCanvasProps";
 import { OverlayLayer } from "./OverlayLayer";
+import { StructureLayer } from "./StructureLayer";
 import { TerrainLayer } from "./TerrainLayer";
 
 /**
@@ -36,6 +37,7 @@ export function MapCanvas(props: MapCanvasProps) {
         selectedCell={props.selectedCell}
         ghost={props.ghost}
       />
+      <StructureLayer scene={props.scene} zones={props.zones} />
       <EntityLayer
         scene={props.scene}
         camera={props.camera}

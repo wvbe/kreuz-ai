@@ -40,6 +40,7 @@ describe("DiplomacyTab", () => {
     expect(within(panel).getByText("No proposals waiting.")).toBeTruthy();
   });
 
+  // @covers 024:FR-010
   it("sends a gift envoy and cancels the directive", () => {
     const app = renderApp();
     app.start();

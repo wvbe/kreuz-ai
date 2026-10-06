@@ -5,7 +5,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { BoardChange } from "../../../game/crier/crierTypes";
 import type { PendingUpdateView } from "../../../game/crier/crierViews";
 import { renderApp } from "../testing/renderApp";
-import { describeChange, describeTiming } from "./PendingPanel";
+import type { PendingRouteView } from "../../../game/standing/standingViews";
+import { describeChange, describeRoute, describeTiming } from "./PendingPanel";
 
 afterEach(cleanup);
 
@@ -23,6 +24,7 @@ describe("describeChange", () => {
 });
 
 describe("describeTiming", () => {
+  // @covers 024:FR-011
   it("shows the crier's ETA and progress, or what the update waits for", () => {
     const carried = { crierId: 7, etaTicks: 12, progressPermille: 450 } as PendingUpdateView;
     expect(describeTiming(carried)).toBe("crier #7, ETA 12 ticks, 45% of the way");
@@ -35,7 +37,26 @@ describe("describeTiming", () => {
   });
 });
 
+describe("describeRoute", () => {
+  // @covers 024:FR-032
+  it("names the Notice Post and the next bell ring, or nothing for a plain board", () => {
+    const both = {
+      updateId: 1,
+      boardId: 2,
+      noticePostId: 9,
+      bellTowerZoneId: 4,
+      nextBellRingTick: 3600,
+    } as PendingRouteView;
+    expect(describeRoute(both)).toBe("also by: Notice Post #9 or next bell ring at tick 3600");
+    expect(
+      describeRoute({ ...both, noticePostId: null, bellTowerZoneId: null, nextBellRingTick: null }),
+    ).toBe("");
+    expect(describeRoute(undefined)).toBe("");
+  });
+});
+
 describe("PendingPanel as a side panel", () => {
+  // @covers 024:FR-011 024:FR-012
   it("lists a queued posting beside the map and cancels it", () => {
     const app = renderApp();
     app.start();

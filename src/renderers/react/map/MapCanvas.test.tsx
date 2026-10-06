@@ -21,6 +21,7 @@ vi.mock("@react-three/fiber", () => ({
 afterEach(cleanup);
 
 describe("MapCanvas", () => {
+  // @covers 024:FR-001
   it("is an on-demand orthographic canvas", () => {
     const scene = squareScene(4, 4);
     const viewport = { width: 800, height: 600 };

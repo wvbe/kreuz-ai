@@ -34,6 +34,7 @@ describe("splitIds", () => {
 });
 
 describe("ZonePanel", () => {
+  // @covers 024:FR-035
   it("greys locked zone types with their tier and refuses to paint them", () => {
     const app = renderApp();
     app.start();
@@ -44,6 +45,7 @@ describe("ZonePanel", () => {
     expect(app.host.tools.getSnapshot().mode).toBe(ToolMode.Inspect);
   });
 
+  // @covers 024:FR-015
   it("designates a zone by painting cells with a zone type chosen in the picker", () => {
     const app = renderApp();
     app.start();

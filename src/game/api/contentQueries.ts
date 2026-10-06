@@ -20,6 +20,8 @@ export enum ContentKind {
   Trait = "trait",
   Job = "job",
   Animal = "animal",
+  Humanoid = "humanoid",
+  NameList = "name_list",
   Terrain = "terrain",
   Faction = "faction",
   Need = "need",
@@ -122,6 +124,20 @@ function buildCatalogues(content: ContentRegistries): readonly Catalogue[] {
     { kind: ContentKind.Trait, label: "Traits", entries: describe(content.traits.all()) },
     { kind: ContentKind.Job, label: "Jobs", entries: describe(content.jobs.all()) },
     { kind: ContentKind.Animal, label: "Animals", entries: describe(content.animals.all()) },
+    {
+      kind: ContentKind.Humanoid,
+      label: "Humanoids",
+      entries: describe(content.humanoids.all()),
+    },
+    {
+      kind: ContentKind.NameList,
+      label: "Name lists",
+      entries: content.nameLists.all().map((list) => ({
+        id: list.id,
+        name: list.id,
+        record: plain(list),
+      })),
+    },
     {
       kind: ContentKind.Terrain,
       label: "Terrain",
@@ -275,6 +291,29 @@ function outgoing(content: ContentRegistries, kind: ContentKind, id: string): Re
         ...(animal.zoneId === undefined
           ? []
           : [{ kind: ContentKind.Zone, id: animal.zoneId, role: "kept in" }]),
+      ];
+    }
+    case ContentKind.Humanoid: {
+      const humanoid = content.humanoids.require(id);
+      return [
+        ...Object.keys(humanoid.startingSkills).map((skill) => ({
+          kind: ContentKind.Skill,
+          id: skill,
+          role: "starts with",
+        })),
+        ...amountRefs(humanoid.equipment, "equipment"),
+        ...humanoid.defaultFactionIds.map((faction) => ({
+          kind: ContentKind.Faction,
+          id: faction,
+          role: "member of",
+        })),
+        ...humanoid.defaultTraitIds.map((trait) => ({
+          kind: ContentKind.Trait,
+          id: trait,
+          role: "trait",
+        })),
+        { kind: ContentKind.Behavior, id: humanoid.behaviorTreeId, role: "behaves by" },
+        { kind: ContentKind.NameList, id: humanoid.nameListId, role: "names from" },
       ];
     }
     case ContentKind.Terrain: {

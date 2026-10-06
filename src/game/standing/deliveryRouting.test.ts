@@ -8,6 +8,7 @@ import {
   listNoticePosts,
   noticePostRoute,
   ringBells,
+  servingBell,
   servingPost,
 } from "./deliveryRouting";
 import { createStandingWorld } from "./testStandingWorld";
@@ -132,6 +133,16 @@ describe("activeBellTowers and ringBells", () => {
     world.engine.store.requestDelete((bell as NonNullable<typeof bell>).id);
     world.run(2);
     expect(activeBellTowers(world.engine)).toEqual([]);
+  });
+
+  it("finds the tower whose ring reaches a board (FR-022)", () => {
+    const world = towerWorld();
+    const radius = world.engine.content.constants.bellRadius;
+    const near = boardAt(world, radius - 5);
+    const far = boardAt(world, radius + 5);
+    expect(servingBell(world.engine, near)?.cellIndex).toBe(0);
+    expect(servingBell(world.engine, far)).toBeNull();
+    expect(servingBell(world.engine, 9999)).toBeNull();
   });
 
   it("does not ring outside the ring ticks", () => {

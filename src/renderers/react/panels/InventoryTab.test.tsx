@@ -17,6 +17,7 @@ function detailOf(host: EngineHost, prototype: string): EntityDetailView {
 }
 
 describe("InventoryTab", () => {
+  // @covers 024:FR-020
   it("lists the stacks of a citizen with slots used", () => {
     const host = startedHost();
     renderPanel(<InventoryTab detail={detailOf(host, "peasant")} />, host);

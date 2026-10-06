@@ -17,6 +17,7 @@ function memoryStorage() {
 }
 
 describe("SaveLoadMenu", () => {
+  // @covers 024:FR-024
   it("offers the save as a JSON file download named after the day and tick", () => {
     const app = renderApp();
     app.start();
@@ -30,6 +31,7 @@ describe("SaveLoadMenu", () => {
     expect(() => JSON.parse(app.downloads[0]?.text ?? "")).not.toThrow();
   });
 
+  // @covers 024:FR-024
   it("loads a game back from a picked file, restoring the saved tick", async () => {
     const app = renderApp();
     app.start();

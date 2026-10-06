@@ -5,6 +5,7 @@ import { renderApp } from "../testing/renderApp";
 import { focusEntity, focusLocation, focusSubject, locateSubject } from "./focusSubject";
 
 describe("focusSubject", () => {
+  // @covers 024:FR-026
   it("selects a citizen and asks the camera to move; unknown things do nothing", () => {
     const app = renderApp();
     app.start();

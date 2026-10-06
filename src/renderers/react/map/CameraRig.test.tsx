@@ -6,6 +6,7 @@ import { cameraPose } from "./cameraMath";
 import { CameraRig } from "./CameraRig";
 
 describe("CameraRig", () => {
+  // @covers 024:FR-001
   it("places the orthographic camera from the camera state", async () => {
     const state = { centerX: 10, centerZ: 12, zoom: 33, rotation: 0.5 };
     const captured: { camera: Camera | null } = { camera: null };

@@ -19,6 +19,7 @@ function startedHost(): EngineHost {
 }
 
 describe("ChronicleScreen", () => {
+  // @covers 024:FR-041
   it("shows the count line and offers every kind as a filter", () => {
     render(
       <EngineProvider host={startedHost()}>
@@ -31,6 +32,7 @@ describe("ChronicleScreen", () => {
     );
   });
 
+  // @covers 024:FR-041
   it("switches to a citizen's journal when asked", () => {
     chronicleRequests.set({ entityId: 3, kind: null, journal: true });
     render(

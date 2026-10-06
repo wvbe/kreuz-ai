@@ -7,6 +7,7 @@ const farmer = { id: 9, prototype: "farmer", cell: 5, components: ["Citizen", "N
 const baker = { id: 4, prototype: "baker", cell: 5, components: ["Citizen", "Needs"] };
 
 describe("entity picking", () => {
+  // @covers 024:FR-005
   it("prefers citizens over furniture over walls, lowest id among equals", () => {
     const index = buildCellEntityIndex([wall, chest, farmer, baker]);
     expect(pickEntity(index, 5)?.id).toBe(4);

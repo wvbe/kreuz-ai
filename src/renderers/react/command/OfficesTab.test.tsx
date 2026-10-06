@@ -60,6 +60,7 @@ describe("useSettlers", () => {
 });
 
 describe("OfficesTab", () => {
+  // @covers 024:FR-010 024:FR-031
   it("appoints and dismisses the Steward and asks for a review", () => {
     const app = renderApp();
     app.start();
@@ -88,6 +89,7 @@ describe("OfficesTab", () => {
     expect(steward(app).stewardEntityId).toBeNull();
   });
 
+  // @covers 024:FR-031
   it("sets the board of the Steward", () => {
     const app = renderApp();
     app.start();

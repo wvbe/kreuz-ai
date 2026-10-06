@@ -23,6 +23,7 @@ describe("ZoneInspection", () => {
     expect(screen.getByText(/Oak plank|Nothing stored|No storage/)).toBeTruthy();
   });
 
+  // @covers 024:FR-020
   it("sums the stockpiles inside a zone", () => {
     const host = startedHost();
     const chest = firstEntityOf(host, "chest");

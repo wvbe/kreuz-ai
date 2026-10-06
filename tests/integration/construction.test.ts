@@ -152,6 +152,7 @@ describe("016 furniture completion feeds the zones", () => {
 });
 
 describe("016 walls block pathfinding", () => {
+  // @covers 024:FR-016
   it("makes a finished wall impassable and routes around it", () => {
     const { world } = stocked([{ materialId: "stone_block", quantity: 2 }]);
     const pathfinding = getAiService(world.engine).pathfinding;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { takeStandingOrderMaterial } from "../views/standingOrderRequests";
 import type { ReactElement } from "react";
 import { DiplomacyTab } from "./DiplomacyTab";
 import { JobBoardsTab } from "./JobBoardsTab";
@@ -21,11 +22,21 @@ export enum GovernmentTab {
   Trade = "Trade",
 }
 
-const tabs: readonly { tab: GovernmentTab; render: () => ReactElement }[] = [
+const tabs: readonly {
+  tab: GovernmentTab;
+  render: (requestedMaterial: string | null) => ReactElement;
+}[] = [
   { tab: GovernmentTab.Boards, render: () => <JobBoardsTab /> },
   { tab: GovernmentTab.Pending, render: () => <PendingPanel /> },
   { tab: GovernmentTab.Production, render: () => <ProductionTab /> },
-  { tab: GovernmentTab.Standing, render: () => <StandingOrdersTab /> },
+  {
+    tab: GovernmentTab.Standing,
+    render: (requestedMaterial) => (
+      <StandingOrdersTab
+        {...(requestedMaterial === null ? {} : { initialMaterialId: requestedMaterial })}
+      />
+    ),
+  },
   { tab: GovernmentTab.Offices, render: () => <OfficesTab /> },
   { tab: GovernmentTab.Diplomacy, render: () => <DiplomacyTab /> },
   { tab: GovernmentTab.Trade, render: () => <TradeTab /> },
@@ -40,7 +51,12 @@ const tabs: readonly { tab: GovernmentTab; render: () => ReactElement }[] = [
  * @returns The screen.
  */
 export function GovernmentScreen(props: { initialTab?: GovernmentTab }) {
-  const [active, setActive] = useState(props.initialTab ?? GovernmentTab.Boards);
+  // A "Keep in stock..." request (spec 024 FR-030) opens the standing orders with its material.
+  const [requestedMaterial] = useState(takeStandingOrderMaterial);
+  const [active, setActive] = useState(
+    props.initialTab ??
+      (requestedMaterial === null ? GovernmentTab.Boards : GovernmentTab.Standing),
+  );
   const current = tabs.find((entry) => entry.tab === active) ?? tabs[0];
   return (
     <section className="kv-screen kv-government">
@@ -59,7 +75,7 @@ export function GovernmentScreen(props: { initialTab?: GovernmentTab }) {
         ))}
       </div>
       <div role="tabpanel" className="kv-tabpanel">
-        {current?.render()}
+        {current?.render(requestedMaterial)}
       </div>
     </section>
   );

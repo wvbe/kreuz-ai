@@ -6,6 +6,7 @@ import {
   visualHeight,
   VisualKind,
   visualKinds,
+  wildAnimalMarker,
 } from "./entityVisuals";
 
 function entity(prototype: string, components: string[]) {
@@ -13,6 +14,7 @@ function entity(prototype: string, components: string[]) {
 }
 
 describe("entityVisuals", () => {
+  // @covers 024:FR-004
   it("classifies by prototype and components", () => {
     expect(classifyEntity(entity("wall", ["Position"]))).toBe(VisualKind.Wall);
     expect(classifyEntity(entity("door", ["Position"]))).toBe(VisualKind.Door);
@@ -26,6 +28,17 @@ describe("entityVisuals", () => {
     expect(classifyEntity(entity("sheep", ["Animal", "Position"]))).toBe(VisualKind.Livestock);
     expect(classifyEntity(entity("chest", ["Furniture", "Position"]))).toBe(VisualKind.Furniture);
     expect(classifyEntity(entity("job_board", ["JobBoard", "Position"]))).toBe(VisualKind.Marker);
+  });
+
+  // @covers 024:FR-004 024:FR-033
+  it("tells wild animals from livestock and finds the notice post", () => {
+    expect(classifyEntity(entity("wolf", ["Animal", "Position", wildAnimalMarker]))).toBe(
+      VisualKind.WildAnimal,
+    );
+    expect(classifyEntity(entity("wolf", ["Animal", "Position"]))).toBe(VisualKind.Livestock);
+    expect(classifyEntity(entity("notice_post", ["Furniture", "Position"]))).toBe(
+      VisualKind.NoticePost,
+    );
   });
 
   it("gives every kind a colour and a height", () => {

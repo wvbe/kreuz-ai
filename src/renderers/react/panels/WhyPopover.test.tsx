@@ -25,6 +25,7 @@ function show(explanation: StatusExplanation): void {
 }
 
 describe("WhyPopover", () => {
+  // @covers 024:FR-025 024:FR-008
   it("opens on click and explains the subject from the engine", () => {
     const host = startedHost("village");
     const { oven } = buildBlockedBakery(host);

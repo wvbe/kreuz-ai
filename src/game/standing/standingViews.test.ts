@@ -3,6 +3,7 @@ import {
   buildOrderDetail,
   buildOrderView,
   buildOrderViews,
+  buildPendingRoutes,
   buildStewardView,
 } from "./standingViews";
 import { RunStatus, StandingOrderScope, StandingOrderState } from "./standingTypes";
@@ -132,6 +133,49 @@ describe("buildStewardView", () => {
       stewardEntityId: null,
       seatZoneId: null,
       orders: 0,
+    });
+  });
+});
+
+describe("buildPendingRoutes", () => {
+  // @covers 026:FR-021 026:FR-022 024:FR-032
+  it("names the Notice Post and the Bell Tower that can deliver a pending update", () => {
+    const world = createStandingWorld({ width: 60, height: 4, boardCell: 0 });
+    const board = world.userBoard();
+    world.furniture(10, "notice_post");
+    world.furniture(20, "church_bell");
+    const zone = world.zone("bell_tower", [20]);
+    world.run(1);
+    world.command("PostJob", {
+      boardId: board,
+      jobTypeId: "fell.trees",
+      mapId: world.mapId,
+      cellIndex: 100,
+    });
+    const rows = buildPendingRoutes(world.engine);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.boardId).toBe(board);
+    expect(rows[0]?.noticePostId).not.toBeNull();
+    expect(rows[0]?.bellTowerZoneId).toBe(zone);
+    const ringTicks = world.engine.content.constants.bellRingTicksOfDay;
+    expect(ringTicks.map((slot) => slot % 288)).toContain((rows[0]?.nextBellRingTick ?? 0) % 288);
+    expect(rows[0]?.nextBellRingTick).toBeGreaterThan(world.engine.time.tickCount);
+  });
+
+  it("is empty without pending updates and has no route for a board no post or bell reaches", () => {
+    const world = createStandingWorld({ width: 60, height: 4, boardCell: 0 });
+    expect(buildPendingRoutes(world.engine)).toEqual([]);
+    const board = world.userBoard();
+    world.command("PostJob", {
+      boardId: board,
+      jobTypeId: "fell.trees",
+      mapId: world.mapId,
+      cellIndex: 100,
+    });
+    expect(buildPendingRoutes(world.engine)[0]).toMatchObject({
+      noticePostId: null,
+      bellTowerZoneId: null,
+      nextBellRingTick: null,
     });
   });
 });

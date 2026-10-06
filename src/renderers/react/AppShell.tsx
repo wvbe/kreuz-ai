@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { useEngineHost } from "./engine/useEngineHost";
 import { useGameState } from "./engine/useGameState";
 import { useStore } from "./engine/useStore";
 import { Screen } from "./navigation/Screen";
 import { screenRegistry } from "./screens/screenRegistry";
 import { TimeControls } from "./ui/TimeControls";
+import {
+  rememberStandingOrderMaterial,
+  setStandingOrderFormOpener,
+} from "./views/standingOrderRequests";
 import { ToastHost } from "./ui/ToastHost";
 import type { StateView } from "../../game/api/Views";
 
@@ -20,6 +25,15 @@ function hasGame(state: StateView): boolean {
  */
 export function AppShell() {
   const host = useEngineHost();
+  useEffect(() => {
+    // "Keep in stock..." anywhere opens the Standing orders tab of the Government screen with the
+    // form prefilled (spec 024 FR-030).
+    setStandingOrderFormOpener((materialId) => {
+      rememberStandingOrderMaterial(materialId);
+      host.navigation.navigate(Screen.StandingOrders);
+    });
+    return () => setStandingOrderFormOpener(null);
+  }, [host]);
   const navigation = useStore(host.navigation);
   const gameExists = useGameState(hasGame);
   const wanted =

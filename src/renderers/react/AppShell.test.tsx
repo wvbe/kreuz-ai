@@ -18,6 +18,7 @@ describe("AppShell", () => {
     );
   });
 
+  // @covers 024:FR-022
   it("routes between every screen of spec 024 without a reload", () => {
     const app = renderApp();
     app.start();

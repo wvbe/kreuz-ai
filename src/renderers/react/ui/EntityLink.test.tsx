@@ -21,6 +21,7 @@ describe("EntityLink", () => {
     expect(clicks).toBe(1);
   });
 
+  // @covers 024:FR-008
   it("selects the entity and centres the map on its cell", () => {
     const host = startedHost();
     const chest = firstEntityOf(host, "chest");

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { blockedLabel } from "./blockedLabel";
 
 describe("blockedLabel", () => {
+  // @covers 024:FR-025
   it("splits PascalCase into words", () => {
     expect(blockedLabel("MissingInput")).toBe("Missing input");
     expect(blockedLabel("NoJobsAvailable")).toBe("No jobs available");

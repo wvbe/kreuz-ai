@@ -34,6 +34,7 @@ function pending(app: RenderedApp): readonly PendingUpdateView[] {
 }
 
 describe("JobBoardsTab", () => {
+  // @covers 024:FR-010
   it("pauses and resumes a board", () => {
     const app = renderApp();
     app.start();
@@ -46,6 +47,7 @@ describe("JobBoardsTab", () => {
     expect(boards(app)[0]?.paused).toBe(false);
   });
 
+  // @covers 024:FR-010 024:FR-011 024:FR-012
   it("posts a custom job that a Town Crier carries, then cancels it from the pending list", () => {
     const app = renderApp();
     app.start();

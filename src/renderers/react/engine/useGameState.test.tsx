@@ -42,6 +42,7 @@ function setup() {
 }
 
 describe("game state hooks", () => {
+  // @covers 024:FR-009 024:FR-021 024:SC-003
   it("re-render with the game: tick, version, queries and events", () => {
     const { host, fake } = setup();
     expect(screen.getByTestId("tick").textContent).toBe("0");

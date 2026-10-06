@@ -20,6 +20,7 @@ function queue(app: ReturnType<typeof renderApp>): Queue {
 }
 
 describe("BuildMenuPanel", () => {
+  // @covers 024:FR-013 024:FR-035
   it("groups the menu by category and greys locked entries with their tier", () => {
     const app = renderApp();
     app.start();
@@ -48,6 +49,7 @@ describe("BuildMenuPanel", () => {
     expect(within(panel).getByText("Nothing matches.")).toBeTruthy();
   });
 
+  // @covers 024:FR-013 024:FR-014
   it("places an oven with a click on a valid cell and the construction queue gets a site", () => {
     const app = renderApp();
     app.start();
@@ -69,6 +71,7 @@ describe("BuildMenuPanel", () => {
     ]);
   });
 
+  // @covers 024:FR-014
   it("lists the reasons a cell is refused and places nothing there", () => {
     const app = renderApp();
     app.start();
@@ -97,6 +100,7 @@ describe("BuildMenuPanel", () => {
     expect(queue(app).jobs).toHaveLength(0);
   });
 
+  // @covers 024:FR-015
   it("queues walls on the buildable cells of a dragged rectangle with the wall tool", () => {
     const app = renderApp();
     app.start();

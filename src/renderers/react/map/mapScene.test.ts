@@ -3,6 +3,7 @@ import { squareViews, voronoiScene } from "../testing/testScenes";
 import { buildMapScene } from "./mapScene";
 
 describe("buildMapScene", () => {
+  // @covers 024:FR-002
   it("makes a square tile one world unit", () => {
     const { map, geometry } = squareViews(5, 3);
     const scene = buildMapScene(map, geometry);
@@ -12,6 +13,7 @@ describe("buildMapScene", () => {
     expect(scene.terrain).toHaveLength(15);
   });
 
+  // @covers 024:FR-002
   it("sizes a voronoi map by its cell count", () => {
     const { scene } = voronoiScene(42);
     expect(scene.worldSize.x).toBeCloseTo(Math.sqrt(scene.cellCount));

@@ -5,6 +5,7 @@ import { squareScene } from "../testing/testScenes";
 import { TerrainLayer } from "./TerrainLayer";
 
 describe("TerrainLayer", () => {
+  // @covers 024:FR-003
   it("draws the whole map as one mesh plus an outline", async () => {
     const renderer = await ReactThreeTestRenderer.create(
       <TerrainLayer scene={squareScene(64, 64)} />,

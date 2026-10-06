@@ -1,16 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import type { MapEntityView } from "../../../game/api/Views";
+import type { AnimalsView } from "../../../game/fauna/animalViews";
 import type { CropView } from "../../../game/gathering/gatheringTypes";
+import type { DwellingSummary } from "../../../game/housing/housingTypes";
 import type { ZoneView } from "../../../game/zones/zoneTypes";
 import { useEngineHost } from "../engine/useEngineHost";
-import { useGameVersion, useQuery } from "../engine/useGameState";
+import { useEvents, useGameState, useGameVersion, useQuery } from "../engine/useGameState";
 import type { QueryState } from "../engine/useGameState";
 import { useStaticQuery } from "../engine/useStaticQuery";
 import { useStore } from "../engine/useStore";
 import { blockedLabel } from "../map/blockedLabel";
+import { buildZoneOverlays } from "../map/buildZoneOverlays";
+import { wildAnimalMarker } from "../map/entityVisuals";
 import { Breadcrumb } from "../map/Breadcrumb";
 import type { CropCell } from "../map/instanceLayout";
-import type { PlacementGhost, ZoneOverlay } from "../map/MapCanvasProps";
+import type { PlacementGhost } from "../map/MapCanvasProps";
 import { buildMapScene } from "../map/mapScene";
 import { MapViewport } from "../map/MapViewport";
 import type { MapBadge, MapStrokeTool } from "../map/MapViewport";
@@ -28,6 +32,12 @@ type BlockedRow = {
 };
 
 type PlacementCheck = { valid: boolean };
+
+/**
+ * How many ticks the ring around a Bell Tower stays after `bell-tower.rang` (spec 024 FR-033).
+ */
+const bellIndicatorTicks = 12;
+
 type IdentityView = { styledName: string };
 
 function dataOf<View>(state: QueryState<View>): View | null {
@@ -65,6 +75,10 @@ export function MapScreen() {
   const zoneRows = dataOf(useQuery<readonly ZoneView[]>("zones", mapArgs)) ?? [];
   const cropRows = dataOf(useQuery<readonly CropView[]>("crops", {})) ?? [];
   const blockedRows = dataOf(useQuery<readonly BlockedRow[]>("idle-blocked", {})) ?? [];
+  const dwellingRows = dataOf(useQuery<readonly DwellingSummary[]>("dwellings", {})) ?? [];
+  const animalRows = dataOf(useQuery<AnimalsView>("animals", {}))?.animals ?? [];
+  const bellRings = useEvents("bell-tower.rang");
+  const tick = useGameState((state) => state.time.tick);
 
   const [preview, setPreview] = useState<readonly number[]>([]);
   const stroke = useMemo((): MapStrokeTool | null => {
@@ -95,7 +109,15 @@ export function MapScreen() {
     // Terrain rarely changes: rebuild the scene only when the terrain text does.
     [map?.id, geometry, terrainKey],
   );
-  const entities: readonly MapEntityView[] = entityView?.entities ?? [];
+  // The `map-entities` view does not tell wild animals from livestock; the `animals` query does.
+  const wildIds = new Set(
+    animalRows.filter((animal) => animal.kind === "wild").map((animal) => animal.entityId),
+  );
+  const entities: readonly MapEntityView[] = (entityView?.entities ?? []).map((entity) =>
+    wildIds.has(entity.id)
+      ? { ...entity, components: [...entity.components, wildAnimalMarker] }
+      : entity,
+  );
   const crops: CropCell[] = cropRows
     .filter((crop) => crop.mapId === activeMapId)
     .map((crop) => ({
@@ -103,12 +125,12 @@ export function MapScreen() {
       stage: crop.stage,
       growthPermille: crop.growthPermille,
     }));
-  const zones: ZoneOverlay[] = zoneRows.map((zone) => ({
-    zoneId: zone.id,
-    zoneTypeId: zone.zoneTypeId,
-    cells: zone.tiles,
-    active: zone.active,
-  }));
+  const ringing = new Set(
+    bellRings
+      .filter((record) => record.tick > tick - bellIndicatorTicks)
+      .map((record) => (record.payload as { zoneId?: number }).zoneId),
+  );
+  const zones = buildZoneOverlays(zoneRows, dwellingRows, ringing);
   if (preview.length > 0) {
     // The stroke in progress is drawn like a zone of the type being designated.
     zones.push({

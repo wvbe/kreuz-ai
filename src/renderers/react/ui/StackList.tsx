@@ -35,6 +35,10 @@ export function StackList(props: {
   slotCount?: number;
   weightLimitMilli?: number | null;
   emptyText?: string;
+  /**
+   * An action after every row (for example "Keep in stock..."), given the material id.
+   */
+  rowAction?: (materialId: string) => ReactNode;
 }) {
   const totalWeight = props.stacks.reduce(
     (sum, stack) => sum + (stack.unitWeightMilli ?? 0) * stack.quantity,
@@ -61,6 +65,7 @@ export function StackList(props: {
                   {formatMilli(stack.unitWeightMilli * stack.quantity)}
                 </span>
               )}
+              {props.rowAction === undefined ? null : props.rowAction(stack.materialId)}
             </li>
           ))}
         </ul>

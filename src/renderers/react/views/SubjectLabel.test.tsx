@@ -15,6 +15,7 @@ function startedHost(): EngineHost {
 }
 
 describe("SubjectLabel", () => {
+  // @covers 024:FR-038
   it("names a citizen by its styled name and others by kind and id", () => {
     render(
       <EngineProvider host={startedHost()}>

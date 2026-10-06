@@ -23,6 +23,7 @@ function select(app: RenderedApp, entityId: number): void {
 }
 
 describe("InspectionPanel in the dock", () => {
+  // @covers 024:FR-007 024:FR-038
   it("says nothing is selected, then shows the selected citizen under its styled name", () => {
     const app = renderApp();
     app.start();
@@ -49,6 +50,7 @@ describe("InspectionPanel in the dock", () => {
 });
 
 describe("why popover in the dock", () => {
+  // @covers 024:FR-007 024:FR-008 024:FR-025
   it("shows the primary reason first and follows the cause chain by clicking its subjects", () => {
     const app = village();
     const { oven, mill } = buildBlockedBakery(app.host);

@@ -12,6 +12,7 @@ const maps = [
 ];
 
 describe("mapChain", () => {
+  // @covers 024:FR-006
   it("lists the maps from the outermost down", () => {
     expect(mapChain(maps, 3).map((entry) => entry.id)).toEqual([1, 2, 3]);
     expect(mapChain(maps, 1).map((entry) => entry.id)).toEqual([1]);
@@ -28,6 +29,7 @@ describe("mapChain", () => {
 });
 
 describe("Breadcrumb", () => {
+  // @covers 024:FR-006
   it("shows the chain with a way back to the parent", () => {
     const picked: number[] = [];
     render(<Breadcrumb maps={maps} activeId={2} onSelect={(id) => picked.push(id)} />);

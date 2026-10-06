@@ -2,7 +2,8 @@ import { ticksPerDay } from "../time/GameTime";
 import type { EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import type { JsonValue } from "../engine/EventBus";
-import { listNoticePosts } from "./deliveryRouting";
+import { getCrierService } from "../crier/crierServiceRegistry";
+import { listNoticePosts, servingBell, servingPost } from "./deliveryRouting";
 import { countStock } from "./countStock";
 import { findSeat } from "./findSeat";
 import { runStatus } from "./ownedRuns";
@@ -63,6 +64,28 @@ export type StandingOrderDetail = StandingOrderView & {
   readonly reasons: readonly ReasonView[];
   readonly resolvedBoardId: EntityId | null;
   readonly runs: readonly RunView[];
+};
+
+/**
+ * How a pending board update can reach its board besides a Town Crier walking to it (query
+ * `pending-routes`, spec 024 FR-032): the Notice Post that serves the board, and the Bell Tower
+ * whose next ring applies the update at once.
+ */
+export type PendingRouteView = {
+  readonly updateId: number;
+  readonly boardId: EntityId;
+  /**
+   * The Notice Post a crier carries it to instead of the board, or null.
+   */
+  readonly noticePostId: EntityId | null;
+  /**
+   * The Bell Tower zone whose ring reaches the board, or null.
+   */
+  readonly bellTowerZoneId: EntityId | null;
+  /**
+   * The tick of that tower's next ring, or null without a tower.
+   */
+  readonly nextBellRingTick: number | null;
 };
 
 /**
@@ -182,4 +205,38 @@ export function buildStewardView(engine: GameEngine): StewardView {
     orders: state.orders.filter((order) => !order.deleted).length,
     noticePosts: listNoticePosts(engine).map((post) => post.id),
   };
+}
+
+/**
+ * Builds the `pending-routes` view: for every pending board update the Notice Post that serves
+ * its board and the Bell Tower that reaches it, with the tick of the next ring.
+ *
+ * @param engine - The engine.
+ * @returns One row per pending update, in the order of the crier's list.
+ */
+export function buildPendingRoutes(engine: GameEngine): PendingRouteView[] {
+  const tick = engine.time.tickCount;
+  const dayStart = tick - (tick % ticksPerDay);
+  const rings = [...engine.content.constants.bellRingTicksOfDay].sort(
+    (first, second) => first - second,
+  );
+  const firstToday = rings.find((slot) => dayStart + slot > tick);
+  const nextRing =
+    firstToday !== undefined
+      ? dayStart + firstToday
+      : rings[0] === undefined
+        ? null
+        : dayStart + ticksPerDay + rings[0];
+  return getCrierService(engine)
+    .updates()
+    .map((update) => {
+      const tower = servingBell(engine, update.boardId);
+      return {
+        updateId: update.updateId,
+        boardId: update.boardId,
+        noticePostId: servingPost(engine, update.boardId),
+        bellTowerZoneId: tower === null ? null : tower.zoneId,
+        nextBellRingTick: tower === null ? null : nextRing,
+      };
+    });
 }

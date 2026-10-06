@@ -10,6 +10,7 @@ import {
 } from "./newGameOptions";
 
 describe("newGameOptions", () => {
+  // @covers 024:FR-037
   it("offers the three difficulties with descriptions and Steady by default", () => {
     expect(difficultyChoices.map((choice) => choice.value)).toEqual([
       "peaceful",

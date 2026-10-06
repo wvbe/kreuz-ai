@@ -1,5 +1,6 @@
 import type { BoardChange } from "../../../game/crier/crierTypes";
 import type { PendingUpdateView } from "../../../game/crier/crierViews";
+import type { PendingRouteView } from "../../../game/standing/standingViews";
 import { useSender } from "./useSender";
 import { useView } from "./useView";
 
@@ -38,6 +39,27 @@ export function describeTiming(update: PendingUpdateView): string {
 }
 
 /**
+ * The other ways a pending update can arrive (spec 024 FR-032): a crier carries it to the Notice
+ * Post that serves its board, and a Bell Tower applies it at its next ring.
+ *
+ * @param route - A row of `pending-routes`, or undefined.
+ * @returns The text, empty when only a crier walking to the board can deliver it.
+ */
+export function describeRoute(route: PendingRouteView | undefined): string {
+  if (route === undefined) {
+    return "";
+  }
+  const parts: string[] = [];
+  if (route.noticePostId !== null) {
+    parts.push(`Notice Post #${route.noticePostId}`);
+  }
+  if (route.nextBellRingTick !== null) {
+    parts.push(`next bell ring at tick ${route.nextBellRingTick}`);
+  }
+  return parts.length === 0 ? "" : `also by: ${parts.join(" or ")}`;
+}
+
+/**
  * The pending board updates (commands a Town Crier has not delivered yet) with ETA, progress and
  * a cancel button, from the `pending-updates` query and `CancelPendingBoardUpdate`.
  *
@@ -46,6 +68,8 @@ export function describeTiming(update: PendingUpdateView): string {
 export function PendingPanel() {
   const sender = useSender();
   const updates = useView<readonly PendingUpdateView[]>("pending-updates", {}) ?? [];
+  const routes = useView<readonly PendingRouteView[]>("pending-routes", {}) ?? [];
+  const routeText = new Map(routes.map((route) => [route.updateId, describeRoute(route)] as const));
   if (updates.length === 0) {
     return <p>No commands are waiting for a Town Crier.</p>;
   }
@@ -60,6 +84,7 @@ export function PendingPanel() {
             : {update.changes.map(describeChange).join("; ")}
             <br />
             <span>{describeTiming(update)}</span>
+            <span className="kv-dim"> {routeText.get(update.updateId)}</span>
             <progress max={1000} value={update.progressPermille} aria-label="Progress" />
             <button
               type="button"

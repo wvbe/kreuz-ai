@@ -19,6 +19,28 @@ export function setStandingOrderFormOpener(next: StandingOrderFormOpener | null)
   opener = next ?? noOpener;
 }
 
+let requestedMaterial: string | null = null;
+
+/**
+ * Remembers the material of a "Keep in stock..." request until the standing-orders tab reads it.
+ *
+ * @param materialId - The material the order should keep in stock.
+ */
+export function rememberStandingOrderMaterial(materialId: string): void {
+  requestedMaterial = materialId;
+}
+
+/**
+ * Hands over the material of the last "Keep in stock..." request, once.
+ *
+ * @returns The material, or null when nobody asked since the last call.
+ */
+export function takeStandingOrderMaterial(): string | null {
+  const material = requestedMaterial;
+  requestedMaterial = null;
+  return material;
+}
+
 /**
  * Asks for the "Keep in stock..." form of a material. Does nothing while no panel registered an
  * opener.
