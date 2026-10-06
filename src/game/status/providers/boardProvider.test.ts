@@ -10,6 +10,7 @@ import { BlockedReasonKind, StatusState, StatusSubjectKind } from "../statusType
 import { createStatusWorld } from "../testStatusWorld";
 import { boardProvider } from "./boardProvider";
 
+// @covers 017:FR-019
 describe("boardProvider", () => {
   it("lists the boards and is Active while nothing paused them", () => {
     const world = createStatusWorld();

@@ -55,6 +55,7 @@ const instant: JobExecutor = {
   complete: () => [{ materialId: "wheat", quantity: 2 }],
 };
 
+// @covers 017:FR-004 017:FR-006 017:FR-015
 describe("jobTaskData", () => {
   it("carries the posting and claim ids", () => {
     const { posting } = setup(instant);

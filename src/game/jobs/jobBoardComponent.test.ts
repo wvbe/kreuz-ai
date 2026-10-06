@@ -30,6 +30,7 @@ function posting(id: number, overrides: Partial<JobPosting> = {}): JobPosting {
   };
 }
 
+// @covers 017:FR-001 017:FR-003 017:FR-016 017:SC-006
 describe("jobBoardComponent", () => {
   it("defaults to a running, system-managed, empty board", () => {
     expect(jobBoardComponent.name).toBe("JobBoard");

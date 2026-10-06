@@ -25,6 +25,7 @@ function behaviorContext(world: JobTestWorld, entity: Entity): BehaviorContext {
   };
 }
 
+// @covers 017:FR-002
 describe("handler ids", () => {
   it("are the ids the basic_needs tree names", () => {
     expect(jobsAvailableId).toBe("jobs_available");

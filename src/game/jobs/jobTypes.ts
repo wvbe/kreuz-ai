@@ -134,6 +134,11 @@ export type JobPosting = {
    * Why the posting failed or was cancelled, or null.
    */
   reason: string | null;
+  /**
+   * Present (true) on a recurring posting: when it completes the board posts it again with a
+   * fresh slot (spec 017 FR-005). Absent on one-time postings, so their saved form is unchanged.
+   */
+  recurring?: boolean;
 };
 
 /**

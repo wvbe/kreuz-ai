@@ -14,6 +14,7 @@ function visit(world: ReturnType<typeof createJobWorld>, workerId: number, board
   });
 }
 
+// @covers 017:FR-002 017:SC-001
 describe("visitTaskData", () => {
   it("is the board id", () => {
     expect(visitTaskData(7)).toEqual({ boardId: 7 });

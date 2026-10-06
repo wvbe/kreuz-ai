@@ -50,6 +50,7 @@ function collect(engine: GameEngine, name: string): JsonValue[] {
   return seen;
 }
 
+// @covers 017:FR-016 017:SC-002 017:SC-006
 describe("first jobs (seed 42, Small)", () => {
   it("fells trees for a day: logs and wages appear, trees become grassland, nobody starves", () => {
     const engine = newGame();

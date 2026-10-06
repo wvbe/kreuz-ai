@@ -3,6 +3,7 @@ import type { JsonValue } from "../engine/EventBus";
 import { SettlementTier } from "../content/contentTypes";
 import { getTotal } from "../inventory/inventoryQueries";
 import { getBalance } from "../inventory/inventoryMoney";
+import { pauseBoard } from "./boardPause";
 import { requireBoard } from "./jobBoards";
 import { JobError, JobErrorKind } from "./JobError";
 import {
@@ -16,7 +17,13 @@ import {
   validatePostable,
 } from "./jobPostings";
 import { getJobService } from "./jobServiceRegistry";
-import { EligibilityKind, PostingStatus, claimBackoffTicks, maxPostingHistory } from "./jobTypes";
+import {
+  EligibilityKind,
+  PauseSource,
+  PostingStatus,
+  claimBackoffTicks,
+  maxPostingHistory,
+} from "./jobTypes";
 import { createJobWorld, noAiOverride } from "./testJobWorld";
 import type { JobTestWorld } from "./testJobWorld";
 
@@ -35,6 +42,7 @@ function kindOf(action: () => object): JobErrorKind | null {
   return null;
 }
 
+// @covers 017:FR-003 017:FR-004 017:FR-006 017:FR-015 017:SC-002
 describe("postJob", () => {
   it("creates an open posting with defaults, a counter id and a posted event", () => {
     const world = createJobWorld();
@@ -350,5 +358,45 @@ describe("validatePostable", () => {
     expect(
       kindOf(() => ({ done: validatePostable(world.engine, "fell.trees", target(world, 5000)) })),
     ).toBe(JobErrorKind.InvalidTarget);
+  });
+});
+
+// @covers 017:FR-005 017:FR-006 017:SC-003
+describe("recurring postings", () => {
+  it("re-posts a recurring job with a fresh open slot when it completes", () => {
+    const world = createJobWorld();
+    const worker = world.spawn("peasant", 5, noAiOverride);
+    const posting = world.postFell(15, { recurring: true, priority: 70 });
+    claimPosting(world.engine, posting.id, worker.id, 1);
+    completePosting(world.engine, posting.id, worker.id, [], 4);
+    const open = requireBoard(world.engine, world.boardId).data.postings;
+    expect(open).toHaveLength(1);
+    expect(open[0]).toMatchObject({
+      status: PostingStatus.Open,
+      claimId: null,
+      claimantId: null,
+      createdTick: 4,
+      priority: 70,
+      recurring: true,
+      target: posting.target,
+    });
+    expect(open[0]?.id).toBeGreaterThan(posting.id);
+  });
+
+  it("never re-posts a one-time job, a cancelled or failed one, or on a paused board", () => {
+    const world = createJobWorld();
+    const worker = world.spawn("peasant", 5, noAiOverride);
+    const once = world.postFell(15);
+    claimPosting(world.engine, once.id, worker.id, 1);
+    completePosting(world.engine, once.id, worker.id, [], 2);
+    expect(requireBoard(world.engine, world.boardId).data.postings).toEqual([]);
+    const cancelled = world.postFell(16, { recurring: true });
+    cancelPosting(world.engine, cancelled.id, "player", 3);
+    expect(requireBoard(world.engine, world.boardId).data.postings).toEqual([]);
+    const paused = world.postFell(17, { recurring: true });
+    claimPosting(world.engine, paused.id, worker.id, 4);
+    pauseBoard(world.engine, world.boardId, PauseSource.Player);
+    completePosting(world.engine, paused.id, worker.id, [], 5);
+    expect(requireBoard(world.engine, world.boardId).data.postings).toEqual([]);
   });
 });

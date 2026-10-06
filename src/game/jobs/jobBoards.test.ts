@@ -13,6 +13,7 @@ import { claimPosting } from "./jobPostings";
 import { PostingStatus } from "./jobTypes";
 import { createJobWorld, noAiOverride } from "./testJobWorld";
 
+// @covers 017:FR-001 017:FR-014
 describe("job board queries", () => {
   it("lists boards ascending and finds one by id", () => {
     const world = createJobWorld();

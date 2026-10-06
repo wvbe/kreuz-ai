@@ -31,6 +31,7 @@ function names(world: ZoneTestWorld): string[] {
 
 // @covers 015:FR-003 015:FR-004 015:FR-006 015:FR-008 015:FR-012 015:FR-014 015:FR-015
 // @covers 015:SC-001 015:SC-002 015:SC-003 015:SC-007
+// @covers 017:SC-007
 describe("ZoneService.designate", () => {
   it("paints a 5x5 area into one zone with ascending tiles", () => {
     const world = createZoneWorld({ content: loadVillageBakeryContent() });

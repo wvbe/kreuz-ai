@@ -14,6 +14,7 @@ function postPayload(world: CrierTestWorld, cellIndex = 15) {
   return { boardId: world.boardId, jobTypeId: "fell.trees", mapId: world.mapId, cellIndex };
 }
 
+// @covers 017:FR-008 017:FR-009 017:FR-010 017:FR-011 017:FR-016 017:SC-006
 describe("registerCrier", () => {
   it("is idempotent and returns the engine's service", () => {
     const world = createCrierWorld();

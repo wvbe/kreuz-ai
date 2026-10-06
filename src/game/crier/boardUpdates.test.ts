@@ -51,6 +51,7 @@ function kindOf(action: () => object): JobErrorKind | null {
   return null;
 }
 
+// @covers 017:FR-008 017:FR-009 017:FR-010 017:FR-013 017:FR-015
 describe("queueBoardUpdate", () => {
   it("queues a change, leaves the board alone and announces it", () => {
     const world = createCrierWorld();

@@ -6,6 +6,7 @@ import { getJobService } from "./jobServiceRegistry";
 import { EligibilityKind, PostingStatus } from "./jobTypes";
 import { createJobWorld, noAiOverride } from "./testJobWorld";
 
+// @covers 017:FR-002 017:FR-007 017:SC-004
 describe("reachCostsOf", () => {
   it("maps every reachable cell to its path cost, 0 for the own cell", () => {
     const world = createJobWorld();

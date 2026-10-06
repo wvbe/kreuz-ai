@@ -15,6 +15,7 @@ import { citizenProvider } from "./citizenProvider";
 
 const citizen = (id: number) => ({ kind: StatusSubjectKind.Citizen, id });
 
+// @covers 017:FR-019
 describe("citizenProvider", () => {
   it("lists citizens only, in entity order", () => {
     const world = createStatusWorld();

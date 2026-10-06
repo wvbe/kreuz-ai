@@ -18,6 +18,7 @@ function post(world: CrierTestWorld): void {
   });
 }
 
+// @covers 017:FR-019
 describe("buildPendingUpdateViews", () => {
   it("reports a queued update with the reason nobody is on the way", () => {
     const world = createCrierWorld();

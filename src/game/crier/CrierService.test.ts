@@ -5,6 +5,7 @@ import type { BoardChange } from "./crierTypes";
 
 const remove: BoardChange = { kind: BoardChangeKind.Remove, postingId: 4 };
 
+// @covers 017:FR-016 017:SC-006
 describe("CrierService", () => {
   it("adds updates with counter ids, finds them and lists them ascending", () => {
     const service = new CrierService();

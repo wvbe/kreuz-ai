@@ -63,6 +63,7 @@ function listen(world: CrierTestWorld, name: string): JsonValue[] {
   return seen;
 }
 
+// @covers 017:FR-011 017:FR-012
 describe("dispatchCriers", () => {
   it("sends the nearest free crier with every waiting update of the board", () => {
     const world = createCrierWorld();

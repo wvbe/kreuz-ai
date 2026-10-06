@@ -57,6 +57,7 @@ export const jobPostingSchema = z
     claimedTick: tickSchema.nullable(),
     finishedTick: tickSchema.nullable(),
     reason: z.string().nullable(),
+    recurring: z.literal(true).optional(),
   })
   .strict();
 

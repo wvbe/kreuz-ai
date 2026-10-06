@@ -36,6 +36,7 @@ const postPayloadSchema = z
     priority: z.number().int().min(0).max(100).optional(),
     urgent: z.boolean().optional(),
     wage: z.number().int().min(0).optional(),
+    recurring: z.boolean().optional(),
   })
   .strict();
 
@@ -56,6 +57,7 @@ function postFromCommand(engine: GameEngine, payload: PostPayload): { postingId:
       ...(payload.priority === undefined ? {} : { priority: payload.priority }),
       ...(payload.urgent === undefined ? {} : { urgent: payload.urgent }),
       ...(payload.wage === undefined ? {} : { wage: payload.wage }),
+      ...(payload.recurring === undefined ? {} : { recurring: payload.recurring }),
     },
     engine.time.tickCount,
   );

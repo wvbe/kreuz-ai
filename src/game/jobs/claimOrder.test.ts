@@ -18,6 +18,7 @@ function order(candidates: ClaimCandidate[]): number[] {
   return sortClaimCandidates(candidates).map((entry) => entry.postingId);
 }
 
+// @covers 017:FR-007 017:SC-004
 describe("compareClaimCandidates", () => {
   it("orders by priority first, even against urgency, familiarity and distance", () => {
     expect(

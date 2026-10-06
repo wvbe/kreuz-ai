@@ -29,6 +29,7 @@ function target(world: JobTestWorld, cellIndex: number): JsonValue {
   return { boardId: world.boardId, jobTypeId: "fell.trees", mapId: world.mapId, cellIndex };
 }
 
+// @covers 017:FR-001 017:FR-008 017:FR-014
 describe("registerJobs", () => {
   it("is idempotent and returns the engine's service", () => {
     const world = createJobWorld();

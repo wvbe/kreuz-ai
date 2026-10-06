@@ -6,6 +6,7 @@ import { pauseBoard, resumeBoard } from "./boardPause";
 import { PauseSource } from "./jobTypes";
 import { createJobWorld } from "./testJobWorld";
 
+// @covers 017:FR-014 017:FR-015
 describe("pauseBoard and resumeBoard", () => {
   it("pause one source at a time; resuming one never lifts the other", () => {
     const world = createJobWorld();

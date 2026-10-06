@@ -26,6 +26,7 @@ const hall = {
 };
 
 // @covers 015:FR-005 015:FR-007 015:FR-017 015:SC-002 015:SC-003
+// @covers 017:FR-018
 describe("isBorderCell", () => {
   it("is true on the edge of a square map and false inside", () => {
     const world = createZoneWorld();

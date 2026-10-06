@@ -17,6 +17,7 @@ function post(world: ReturnType<typeof createCrierWorld>): void {
   });
 }
 
+// @covers 017:FR-012
 describe("appointCrier", () => {
   it("makes a citizen a crier once", () => {
     const world = createCrierWorld();

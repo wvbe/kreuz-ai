@@ -12,6 +12,7 @@ import { postingProvider } from "./postingProvider";
 
 const posting = (id: number) => ({ kind: StatusSubjectKind.JobPosting, id });
 
+// @covers 017:FR-019
 describe("postingProvider", () => {
   it("lists the active postings and returns null for a missing one", () => {
     const world = createStatusWorld();

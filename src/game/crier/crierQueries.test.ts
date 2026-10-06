@@ -5,6 +5,7 @@ import { CrierStatus, deliverTaskType } from "./crierTypes";
 import { createCrierWorld } from "./testCrierWorld";
 import { townCrierComponent } from "./townCrierComponent";
 
+// @covers 017:SC-005
 describe("listCriers and availableCriers", () => {
   it("list the fleet ascending and only the free ones", () => {
     const world = createCrierWorld();

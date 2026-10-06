@@ -27,6 +27,7 @@ function postFrom(world: CrierTestWorld, cell: number): number {
   return result.updateId;
 }
 
+// @covers 017:FR-010 017:FR-011 017:FR-013 017:SC-005
 describe("createDeliverTask", () => {
   it("is the handler of towncrier.deliver and needs a position", () => {
     const world = createCrierWorld();

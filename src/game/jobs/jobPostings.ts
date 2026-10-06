@@ -60,6 +60,11 @@ export type PostRequest = {
    * Default {@link defaultEligibility}.
    */
   eligibility?: Eligibility[];
+  /**
+   * Recurring posting (spec 017 FR-005): re-posted when it completes while its board runs.
+   * Default false.
+   */
+  recurring?: boolean;
 };
 
 function archive(
@@ -179,6 +184,7 @@ export function postJob(
     claimedTick: null,
     finishedTick: null,
     reason: null,
+    ...(request.recurring === true ? { recurring: true } : {}),
   };
   data.postings.push(posting);
   const payload: JobPosted = { boardId, postingId: posting.id, jobTypeId: posting.jobTypeId };
@@ -312,6 +318,23 @@ export function completePosting(
     outputs,
   };
   engine.bus.emit(jobCompletedEvent, payload);
+  if (found.posting.recurring === true && !isBoardPaused(found.data)) {
+    postJob(
+      engine,
+      found.posting.boardId,
+      {
+        jobTypeId: found.posting.jobTypeId,
+        target: found.posting.target,
+        priority: found.posting.priority,
+        urgent: found.posting.urgent,
+        wage: found.posting.wage,
+        posterFactionId: found.posting.posterFactionId,
+        eligibility: found.posting.eligibility,
+        recurring: true,
+      },
+      tick,
+    );
+  }
   return cloneJson(found.posting);
 }
 
