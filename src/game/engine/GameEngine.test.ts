@@ -381,6 +381,7 @@ describe("GameEngine registerSystem", () => {
     expect(engine.queryNames()).toEqual([
       "agreements",
       "build-menu",
+      "chronicle",
       "construction-queue",
       "crops",
       "demo.total",
@@ -403,8 +404,10 @@ describe("GameEngine registerSystem", () => {
       "job",
       "job-boards",
       "jobs-on",
+      "journal",
       "members-of",
       "milestones",
+      "moments-since",
       "needs-of",
       "order",
       "pending-updates",

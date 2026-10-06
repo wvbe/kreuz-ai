@@ -64,6 +64,8 @@ import { getStorageService } from "../storage/storageServiceRegistry";
 import { storageSystemId } from "../storage/storageTypes";
 import { factionsSystemId } from "../factions/factionTypes";
 import { registerIdentity } from "../identity/registerIdentity";
+import { registerChronicle } from "../chronicle/registerChronicle";
+import { registerDeathHook } from "../chronicle/registerDeathHook";
 import { identitySystemId } from "../identity/identityTypes";
 import { registerSkills, skillsSystemId } from "../skills/registerSkills";
 import { parseGameInitOptions } from "./options";
@@ -661,8 +663,9 @@ export class GameEngine {
       },
     });
     // Identity first: its before-delete hook must read the offices of a deleted leader before the
-    // factions hook empties `leaderId`.
+    // factions hook empties `leaderId`; the death hook (`Died`) needs them the same way.
     registerIdentity(this);
+    registerDeathHook(this);
     registerFactions(this);
     registerSkills(this);
     registerAi(this);
@@ -679,6 +682,7 @@ export class GameEngine {
     registerStatus(this);
     registerHousing(this);
     registerStanding(this);
+    registerChronicle(this);
     this.registerSystem({
       id: "world.starting-map",
       dependencies: [
