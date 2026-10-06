@@ -34,6 +34,9 @@ function allMaterials(world: ConstructionTestWorld): number {
   return ["stone_block", "oak_plank", "nails"].reduce((sum, id) => sum + world.count(id), 0);
 }
 
+// @covers 016:FR-003 016:FR-004 016:FR-007 016:FR-008 016:FR-009 016:FR-011 016:FR-012
+// @covers 016:FR-013 016:FR-014 016:FR-015 016:SC-001 016:SC-002 016:SC-003 016:SC-004
+// @covers 016:SC-005 016:SC-007 016:SC-008
 describe("016 build a wall from stocked stone", () => {
   it("supplies, builds, places the wall and conserves the stone", () => {
     const { world, chest } = stocked([{ materialId: "stone_block", quantity: 5 }]);
@@ -423,6 +426,24 @@ describe("016 material conservation over 1000 ticks with cancels", () => {
     }
     expect(allMaterials(world) + consumed.value).toBe(initial);
     expect(consumed.value).toBeGreaterThan(0);
+  });
+});
+
+describe("016 ten concurrent jobs (SC-003)", () => {
+  it("builds ten walls with ten builders without a deadlock, double claim or lost stone", () => {
+    const world = createConstructionWorld();
+    const chest = world.chest(55);
+    world.stockFor(chest, "wall", 10);
+    const settlers = Array.from({ length: 10 }, (_, index) => world.settler(60 + index));
+    world.feed(settlers);
+    const ids = Array.from({ length: 10 }, (_, index) => world.place("wall", 30 + index));
+    world.runUntil(() => ids.every((id) => !world.hasSite(id)), 2500);
+    expect(ids.every((id) => !world.hasSite(id))).toBe(true);
+    const cells = entitiesOf(world, "wall")
+      .map((wall) => getComponent(wall, positionComponent)?.cellIndex ?? -1)
+      .sort((a, b) => a - b);
+    expect(cells).toEqual(Array.from({ length: 10 }, (_, index) => 30 + index));
+    expect(names(world, "construction.job.completed")).toHaveLength(10);
   });
 });
 

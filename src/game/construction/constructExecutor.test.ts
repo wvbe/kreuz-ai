@@ -20,6 +20,7 @@ function building(world: ReturnType<typeof createConstructionWorld>, job: number
   return world.hasSite(job) && requireSite(world.engine, job).data.startedTick !== null;
 }
 
+// @covers 016:FR-007 016:FR-010 016:FR-011 016:FR-012
 describe("build.construct", () => {
   it("is registered as a job type executor (registering twice is refused)", () => {
     const { world } = setup();

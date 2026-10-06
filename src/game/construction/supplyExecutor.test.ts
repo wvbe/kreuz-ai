@@ -23,6 +23,7 @@ function supplyTask(world: ReturnType<typeof createConstructionWorld>, entityId:
   return world.engine.tasks.getQueue(entityId)?.tasks.find((task) => task.type === "build.supply");
 }
 
+// @covers 016:FR-004 016:FR-005 016:SC-005
 describe("build.supply", () => {
   it("is registered as a job type executor (registering twice is refused)", () => {
     const { world } = setup();

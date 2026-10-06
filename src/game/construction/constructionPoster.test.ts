@@ -14,6 +14,7 @@ function setup() {
   return { world, chest };
 }
 
+// @covers 016:FR-001 016:FR-001b 016:FR-004 016:FR-010 016:FR-012 016:FR-013 016:FR-014
 describe("refreshSiteStatus", () => {
   it("derives planned, supplying and building from the delivered materials", () => {
     const { world } = setup();

@@ -6,6 +6,7 @@ import { siteBlockers } from "./siteBlockers";
 import { createConstructionWorld } from "./testConstructionWorld";
 import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
+// @covers 016:FR-002 016:SC-007
 describe("siteBlockers", () => {
   it("reports a missing material nobody can supply", () => {
     const world = createConstructionWorld({ content: loadVillageBakeryContent() });

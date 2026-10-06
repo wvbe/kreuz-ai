@@ -30,6 +30,7 @@ function kindOf(action: () => object): ConstructionErrorKind | null {
   }
 }
 
+// @covers 016:FR-002 016:FR-003 016:FR-010 016:FR-013 016:FR-014 016:FR-016 016:FR-017
 describe("queueConstruction", () => {
   it("places a blueprint with the materials of the definition", () => {
     const world = createConstructionWorld();

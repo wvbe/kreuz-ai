@@ -17,6 +17,7 @@ function query(world: ReturnType<typeof createConstructionWorld>, name: string, 
   return registration.run(args as never, world.engine);
 }
 
+// @covers 016:FR-014 016:FR-015
 describe("registerConstruction", () => {
   it("returns the engine's service and is idempotent", () => {
     const world = createConstructionWorld({ content: loadVillageBakeryContent() });

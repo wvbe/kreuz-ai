@@ -15,6 +15,7 @@ function job(jobId: number, finishedTick: number): RecentJob {
   };
 }
 
+// @covers 016:FR-015 016:SC-004
 describe("ConstructionService", () => {
   it("remembers finished jobs oldest first and forgets them after a day", () => {
     const service = new ConstructionService();

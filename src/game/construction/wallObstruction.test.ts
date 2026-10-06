@@ -7,6 +7,7 @@ import {
   rebuildWallObstructions,
 } from "./wallObstruction";
 
+// @covers 016:FR-009
 describe("applyWallObstruction", () => {
   // @covers 004:FR-014
   it("obstructs the cell of a wall and ignores doors and other entities", () => {

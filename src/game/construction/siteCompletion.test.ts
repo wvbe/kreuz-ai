@@ -16,6 +16,7 @@ function ready(prototypeId: string, cell: number) {
   return { world, job, site };
 }
 
+// @covers 016:FR-003 016:FR-008 016:FR-009 016:SC-008
 describe("completeSite", () => {
   it("places the building, consumes the materials and queues the completion", () => {
     const { world, job } = ready("wall", 44);

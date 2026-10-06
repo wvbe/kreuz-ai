@@ -24,6 +24,7 @@ function setup() {
   return { world, definition };
 }
 
+// @covers 016:FR-017 016:FR-003
 describe("findBuildDefinition", () => {
   it("finds furniture, walls and doors and nothing else", () => {
     const { world } = setup();

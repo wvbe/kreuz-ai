@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildSiteComponent, buildSiteDataSchema, siteMaterialSchema } from "./buildSiteComponent";
 import { SiteStatus } from "./constructionTypes";
 
+// @covers 016:FR-002 016:FR-015
 describe("buildSiteComponent", () => {
   it("is named BuildSite and defaults to a planned construction", () => {
     expect(buildSiteComponent.name).toBe("BuildSite");

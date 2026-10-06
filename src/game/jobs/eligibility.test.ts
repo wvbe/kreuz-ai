@@ -19,6 +19,7 @@ function setup() {
   return { world, worker, posting, government, rival };
 }
 
+// @covers 016:FR-001b
 describe("defaultEligibility", () => {
   it("is a citizen who is not hostile to the poster", () => {
     expect(defaultEligibility()).toEqual([

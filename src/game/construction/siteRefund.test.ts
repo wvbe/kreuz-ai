@@ -10,6 +10,7 @@ function piles(world: ReturnType<typeof createConstructionWorld>) {
   return world.engine.store.entities().filter((entity) => entity.prototype === "loose_pile");
 }
 
+// @covers 016:FR-005 016:FR-014 016:SC-008
 describe("spawnLoosePile and dropLoosePile", () => {
   it("spawns an empty pile on a cell and fills a pile with dropped goods", () => {
     const world = createConstructionWorld();

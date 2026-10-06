@@ -12,6 +12,7 @@ function kinds(world: ReturnType<typeof createConstructionWorld>, id: string, ce
   );
 }
 
+// @covers 016:FR-016 016:FR-017
 describe("validatePlacement", () => {
   it("accepts a free buildable cell", () => {
     const world = createConstructionWorld({ content: loadVillageBakeryContent() });

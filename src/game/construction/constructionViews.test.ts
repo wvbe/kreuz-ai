@@ -6,6 +6,7 @@ import { buildMenuView, buildQueueView, buildSiteDetail } from "./constructionVi
 import { createConstructionWorld } from "./testConstructionWorld";
 import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
+// @covers 016:FR-013 016:SC-004
 describe("buildSiteDetail", () => {
   it("describes a job and is plain JSON", () => {
     const world = createConstructionWorld({ content: loadVillageBakeryContent() });

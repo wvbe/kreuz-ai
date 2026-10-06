@@ -21,6 +21,7 @@ function setup() {
   return { world, wallJob, doorJob };
 }
 
+// @covers 016:FR-005
 describe("listSites, findSite and requireSite", () => {
   it("lists live sites ascending and leaves out sites flagged for deletion", () => {
     const { world, wallJob, doorJob } = setup();
