@@ -75,7 +75,7 @@ One JSON object per input line, one JSON line per response, in order; blank line
 | Input line | Meaning |
 | --- | --- |
 | `{"kind":"step","ticks":10}` | A command: any registered `kind` with its payload (kernel kinds: `new-game`, `load-game`, `save-game`, `pause`, `resume`, `set-speed`, `set-tick-interval`, `step`; later phases add more). |
-| `{"query":"time","args":{}}` | A query by name (`args` optional). Kernel queries: `state`, `time`, `entities`, `entity`, `maps`, `map`, `cell`, `settlement`, `event-log`, `pending-commands`. |
+| `{"query":"time","args":{}}` | A query by name (`args` optional). Kernel queries: `state`, `time`, `entities`, `entity`, `maps`, `map`, `cell`, `settlement`, `event-log`, `pending-commands`, `content-registries`, `content-entry {kind, id}`. |
 | `{"hash":true}` | The state hash: `{"hash":"...16 hex...","tick":N}` as result. |
 
 Responses: `{"ok":true,"result":<data>,"events":[{seq,tick,name,payload}...]}` or `{"ok":false,"error":{"kind":"no-game","message":"...","issues":[...]},"events":[]}`. `error.kind` values are the `ApiErrorKind` strings of D-39; a line that is not a JSON object answers `invalid-command`. The session has no entropy source, so a `new-game` needs an explicit `options.seed` (otherwise `missing-entropy`): runs are reproducible by construction. A `save-game` result is the save text; feed it back as `{"kind":"load-game","save":"..."}`.

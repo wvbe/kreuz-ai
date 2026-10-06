@@ -21,6 +21,8 @@ describe("SessionQuery", () => {
       "cell",
       "chronicle",
       "construction-queue",
+      "content-entry",
+      "content-registries",
       "crops",
       "directives",
       "dwelling",

@@ -17,6 +17,7 @@ import {
 import type { LoggedCommand } from "./CommandLog";
 import { createCommandQueueSection } from "./CommandQueue";
 import type { CommandQueue } from "./CommandQueue";
+import { ContentKind, buildContentEntryView, buildContentRegistriesView } from "./contentQueries";
 import { defineCommand } from "./defineCommand";
 import { defineQuery } from "./defineQuery";
 import type { EventLog } from "./EventLog";
@@ -227,6 +228,14 @@ export function createKernelSystem(host: KernelHost): EngineSystemDefinition {
       "pending-commands": defineQuery({
         schema: emptyArgsSchema,
         run: () => buildPendingCommandsView(host.queue),
+      }),
+      "content-registries": defineQuery({
+        schema: emptyArgsSchema,
+        run: () => buildContentRegistriesView(engine.content),
+      }),
+      "content-entry": defineQuery({
+        schema: z.object({ kind: z.nativeEnum(ContentKind), id: z.string().min(1) }).strict(),
+        run: (args) => buildContentEntryView(engine.content, args.kind, args.id),
       }),
     },
   };

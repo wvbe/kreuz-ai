@@ -12,6 +12,7 @@ The ONE facade renderers, the CLI and tests use (spec 024, DECISIONS D-23/D-39, 
 - `scenario/` - the scenario runner and its steps, including the scenario-only `debugSpawn` (see its README).
 - `createSessionRunner.ts` - wraps a session in the engine `AutoRunner` (real time for a host such as the React `EngineHost`; each tick is a logged `Step`).
 - `Views.ts`, `viewBuilders.ts`, `SessionQuery.ts` - the view model (includes `map-geometry` cell polygons and `map-entities` positioned entities for renderers) (plain readonly JSON built from copies) and the typed query methods; `query.run(name, args)` serves any registered query.
+- `contentQueries.ts` - the read-only queries `content-registries` and `content-entry {kind, id}` (every content category with its entries; one entry with its definition, what it refers to and the reverse index of what refers to it) for the content browser.
 - `EventLog.ts` - bounded recent-event buffer (session convenience, not game state).
 
 ## Adding a command and a query (no file in this folder changes)
