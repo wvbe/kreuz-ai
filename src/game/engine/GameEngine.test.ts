@@ -476,6 +476,7 @@ describe("GameEngine registerSystem", () => {
       "QueueWalls",
       "RemovePosting",
       "RemoveZoneTiles",
+      "RenameCitizen",
       "RequestStewardReview",
       "RespondToProposal",
       "ResumeStandingOrder",

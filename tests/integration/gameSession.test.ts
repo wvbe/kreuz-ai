@@ -354,44 +354,50 @@ describe("GameSession end to end", () => {
                 : name === "skills-of" ||
                     name === "traits-of" ||
                     name === "identity-of" ||
+                    name === "journal" ||
                     name === "faction-of" ||
                     name === "needs-of"
                   ? { entityId: 3 }
-                  : name === "jobs-on"
-                    ? { boardId: 2 }
-                    : name === "job"
-                      ? { postingId: 1 }
-                      : name === "find-path"
-                        ? { mapId: 1, from: 0, target: 1 }
-                        : name === "find-route"
-                          ? { from: { mapId: 1, cellIndex: 0 }, target: { mapId: 1, cellIndex: 1 } }
-                          : name === "reachable"
-                            ? { mapId: 1, from: 0 }
-                            : name === "members-of"
-                              ? { factionId: 1 }
-                              : name === "order" || name === "standing-order"
-                                ? { orderId: 1 }
-                                : name === "recipes-for"
-                                  ? { workstationId: 1 }
-                                  : name === "site"
-                                    ? { jobId: 1 }
-                                    : name === "validate-placement"
-                                      ? { prototypeId: "chest", mapId: 1, cellIndex: 0 }
-                                      : name === "zone"
-                                        ? { zoneId: 1 }
-                                        : name === "zone-at"
-                                          ? { mapId: 1, cellIndex: 0 }
-                                          : name === "explain"
-                                            ? { id: 3 }
-                                            : name === "flow-of"
-                                              ? { materialId: "bread" }
-                                              : name === "trade-quote"
-                                                ? {
-                                                    traderId: 3,
-                                                    direction: "Buy",
-                                                    materialId: "nails",
-                                                  }
-                                                : {},
+                  : name === "moments-since"
+                    ? { tick: 0 }
+                    : name === "jobs-on"
+                      ? { boardId: 2 }
+                      : name === "job"
+                        ? { postingId: 1 }
+                        : name === "find-path"
+                          ? { mapId: 1, from: 0, target: 1 }
+                          : name === "find-route"
+                            ? {
+                                from: { mapId: 1, cellIndex: 0 },
+                                target: { mapId: 1, cellIndex: 1 },
+                              }
+                            : name === "reachable"
+                              ? { mapId: 1, from: 0 }
+                              : name === "members-of"
+                                ? { factionId: 1 }
+                                : name === "order" || name === "standing-order"
+                                  ? { orderId: 1 }
+                                  : name === "recipes-for"
+                                    ? { workstationId: 1 }
+                                    : name === "site"
+                                      ? { jobId: 1 }
+                                      : name === "validate-placement"
+                                        ? { prototypeId: "chest", mapId: 1, cellIndex: 0 }
+                                        : name === "zone"
+                                          ? { zoneId: 1 }
+                                          : name === "zone-at"
+                                            ? { mapId: 1, cellIndex: 0 }
+                                            : name === "explain"
+                                              ? { id: 3 }
+                                              : name === "flow-of"
+                                                ? { materialId: "bread" }
+                                                : name === "trade-quote"
+                                                  ? {
+                                                      traderId: 3,
+                                                      direction: "Buy",
+                                                      materialId: "nails",
+                                                    }
+                                                  : {},
       );
       expect(result.ok).toBe(true);
       expect(JSON.parse(JSON.stringify(result))).toEqual(result);
