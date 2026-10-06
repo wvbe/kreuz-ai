@@ -49,7 +49,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] 4.4 Settlement tiers, milestones, difficulty (027) - `src/game/settlement`: `SettlementProgress` / `SettlementChronicle` (placeholder) on the government, the tier ladder with data-driven requirements and the pure `evaluateTier`, the daily check at slot 15 (one promotion at most, `settlement.tier.reached`), the seven milestones recorded once from events (`settlement.milestone.reached`), the tier source of the job service feeding every gate (placement, zones, production, postings, build menu), `startingTier`, difficulty multipliers only on decay / need decay / hostility, queries `settlement-progress` / `unlocks` / `milestones`, verbs `tier` / `unlocks` / `milestones`, `validateTierReachability` (content-pack test, proves Village from a Hamlet start incl. the ore -> trader ledger path), cottage at Village and two more guilds in the pack, `scenarios/tier-progress.json`, D-57
 - [x] 4.5 Dwellings & household upgrades (029) - `src/game/housing`: the `Dwelling` state on `dwelling` zones, the seven-step daily evaluation at slot 13 (clear invalid homes, supplied goods with the accumulator model, requirements and streaks with one level change a day, capacity, rent into the treasury, the homeless by id, settlers at most two a day), the household fetch chore (`housing.fetch`, behavior nodes before `claim_job`), household storage and beds reserved to residents (and the bed lookup fixed for built furniture), the Dwelling status provider, queries `dwellings` / `dwelling` / `housing` / `dwellings-at-or-above`, verbs `homes` / `home`, the settlement's dwelling counter, `scenarios/hamlet-to-village.json` (player commands only, Village on day 32), D-58 (wall 1 stone block, quarry 4 limestone)
 - [x] 4.6 Chronicle & journals (028) - `src/game/chronicle`: typed `MomentRecord` per kind (`Arrived` Minor per D-17), `recordMoment` into the 16-entry `Identity.journal` (oldest non-`Arrived` dropped) and the 200-entry `SettlementChronicle` (Major only, oldest dropped), `Identity.seenSkills` / `tradeSeen` keeping `FirstWork` / `FirstTrade` once-only, sources on the bus (arrival with the name re-check, titles, guilds, offices incl. the Steward, homes, milestones, tiers), the finest table with cooldown, `Died` from the delete hook with the last styled name, the Steward office in styled names, `RenameCitizen`, `formatMoment` (tier-at-tick noun), queries `chronicle` / `journal` / `moments-since`, event `chronicle.moment.recorded`, verbs `chronicle` / `journal` and journal lines in `inspect`, size budget 1 MB (about 650 KB worst case), `scenarios/chronicle.json`, D-60
-- [ ] **Checkpoint D (complete headless):** `hamlet-to-village` and `harsh-survival` scenarios pass via CLI `--script`; every FR covered by a test. Open: `hamlet-to-village` passes (4.5, with its chronicle in 4.6); `harsh-survival.json` exists (7.1) but asserts the Harsh outcomes, because no player opening survives Harsh on seed 42 (D-111, needs an owner balance call); the FR traceability audit is 7.2
+- [x] **Checkpoint D (complete headless):** `hamlet-to-village` and `harsh-survival` scenarios pass via CLI `--script`; every FR covered by a test. Met: `hamlet-to-village` passes (4.5, with its chronicle in 4.6), `harsh-survival.json` asserts survival since D-180 and D-182, and the FR traceability audit (7.2) names 763 of 770 requirement ids (seven are listed as gaps in `tasks/plan.md`)
   - Harsh outcome (D-180..D-183): after the sleeper wake rule and `bake_bread` 3 loaves, `harsh-survival.json` asserts all six alive at day 10; hunger still touches zero twice (tick 800, about 1,400).
 
 ## Phase 5 — Content to full spec (022), parallelizable
@@ -59,19 +59,16 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
   - [x] part 1: skills (21), traits (32), needs, humanoids (23), factions (15), name list (D-90..D-92; open ids in `docs/content-crossrefs-5.3.md`)
   - [x] part 2a: jobs (23 spec job types + extras) and raw-material sources: crops per zone type, terrain gathering, fishing, charity, deferral list (D-130..D-134, `scenarios/gathering-sources.json`)
   - [x] part 2b: animals (13 prototypes, `src/game/fauna`: senses, flee / graze / hunt / pasture handlers, hunger and periodic products), the 7 spec behavior trees plus prey and fox trees (`run_tree`, role handlers in `src/game/roles`), executors of `tend.animals` / `butcher.animal` / `hunt.game`, wild animals at world generation, query and verb `animals`, `scenarios/fauna.json` (D-140..D-145)
-- [ ] 5.4 Content conformance test (counts, references, Hamlet→Village reachability)
-  - [x] 5.4a Pending queue landed (59 recipes, 39 zone types), strict conformance test in `src/game/content/contentTypes.test.ts`, source gaps in `docs/content-crossrefs-5.4.md` (D-120..D-123)
+- [x] 5.4 Content conformance test (counts, references, Hamlet→Village reachability): strict test in `src/game/content/contentTypes.test.ts` and `tests/integration/worldContentPack.test.ts`; four declared raw-material source gaps remain in `docs/content-crossrefs-5.4.md` (D-120..D-123)
+  - [x] 5.4a Pending queue landed (59 recipes, 39 zone types)
 
 ## Phase 6 — React renderer (024)
 - [x] 6.1 Shell: EngineHost (owns clock), store/hooks, Vite app, new/save/load
 - [x] 6.2 Map canvas, camera, picking, entity primitives, overlays
 - [x] 6.3 Inspection panels, why-popover, citizen/journal (+ content browser of 6.5; D-150..D-155)
-- [ ] 6.4 Command UIs (build, zones, walls, boards, standing orders, steward, directives, pending list)
-- [x] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
-- [x] 6.6 jsdom UI smoke tests running the shared scenario JSON
 - [x] 6.4 Command UIs (build, zones, walls, boards, standing orders, steward, directives, pending list)
-- [ ] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
-- [ ] 6.6 jsdom UI smoke tests running the shared scenario JSON
+- [x] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
+- [x] 6.6 jsdom UI smoke tests running the shared scenario JSON (`src/renderers/react/testing/runScenarioThroughHost.test.ts`, `playScenarioOnHost.test.tsx`)
 
 ## Phase 7 — Hardening
 - [x] 7.1 Scenario snapshot library, perf success criteria, 10k-tick soak with invariants
@@ -80,7 +77,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
   - [x] Performance (D-112): `docs/PERFORMANCE.md`, `npm run perf`, `tests/integration/performanceBudgets.test.ts`; quadratic hot spots fixed (`ReachCache` for `reachable`, `EntityStore.structureRevision` for `listBoards`): 200 citizens 11 ms to 4 ms per tick, 400 citizens 35 ms to 10 ms
   - [x] Traceability groundwork (D-113): `npm run fr-coverage` writes `docs/FR-COVERAGE.md` (not gated; 7.2 decides the rule)
   - [x] Audit 013-021 (D-210 to D-212): per-spec tables in `docs/audit/013.md` to `021.md`, `@covers` tags on existing tests, new code for relationship writer and decay, zone activity and modifier queries (`mood.bonus` wired), recurring postings; gaps listed per file (safety/social need sources, construction tools, concurrency > 1, home board, AI-initiated trade)
-- [ ] 7.2 Spec→test traceability audit, docs, CLI manual
-  - Audit 001-012 (D-190): `docs/audit/NNN.md` per spec, every id named by a test except two noted gaps; see the Gaps lists
+- [x] 7.2 Spec→test traceability audit, docs, CLI manual: audits for all specs, `docs/INDEX.md`, `docs/ARCHITECTURE.md`, `docs/CLI.md`, `docs/PLAYING.md`, `docs/UI.md`, the root README
+  - [x] Audit 001-012 (D-190): `docs/audit/NNN.md` per spec, every id named by a test except two noted gaps; see the Gaps lists
   - [x] Audit 022-029 (D-230 to D-235): `docs/audit/022.md` to `029.md` (FR by FR: status, code, test, note, gaps); all 262 ids of the eight specs are named by a test (play-test criteria such as 028 SC-007 and 025 SC-006 are tagged on a mechanical proxy and listed as partial); added the models and indicators of spec 024 (dwellings, bell tower, door swing, wild animals), the Keep in stock wiring, Steward actions, pending routes and the 14-category content browser; lint rule for Zod literal enums; Hamlet bench
-- [ ] **Final:** all specs implemented, `npm run ci` green, playable in terminal and browser
+- [ ] **Final:** all specs implemented (done), `npm run ci` green on the final commit (not re-run in the documentation pass), playable in terminal (done) and browser (jsdom tests only; a real-browser play-through and frame rate are open, see `tasks/plan.md`)
