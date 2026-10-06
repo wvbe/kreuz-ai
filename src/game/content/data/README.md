@@ -9,12 +9,12 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | File | v0 content | Phase 5 |
 | --- | --- | --- |
 | `categories.json` | 14 item categories | extend with the 022 categories |
-| `terrain.json` | 11 terrain types | 15+ |
-| `materials.json` | 14 materials incl. `silver_penny` | 70+ |
+| `terrain.json` | 23 terrain types: the 21 of spec 022 plus `iron_ore_deposit` and `cave_floor` (task 5.1, D-70, `road_stone` is Fast: D-75) | final |
+| `materials.json` | 88 materials with spec stack limits, categories, weights, values and perishability (task 5.1, D-71) | final |
 | `needs.json` | the 6 needs; only hunger (bread) and rest (wooden_bed) have satisfaction methods | all methods |
 | `skills.json` | 21 skills (task 5.3; effect kinds `faith_bonus`, `trade_margin` since D-90) | done |
 | `traits.json` | 32 traits; 24 are `extended` (drawn only for prototypes with `drawExtendedTraits`, D-91) | done |
-| `furniture.json` | 11 records: 9 pieces plus `wall` and `door` (the `notice_post` of the Village tier and the `church_bell` of the Market Town came with task 4.3); each has the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); bed, workbench, chest, table, sawmill, wall and door unlock at `hamlet`, the oven at `village` | 50+ |
+| `furniture.json` | 66 records: the 64 of spec 022 plus `wall` and `door`, each with the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); tags equal the id plus the spec categories, tiers per D-73 (task 5.1) | final |
 | `zones.json` | 19 zone types (task 5.2: the 8 v0 ones plus carpentry, dormitory, warehouse, guard_post, market, orchard, herb_garden, vineyard, quarry, fishing_dock, cemetery; the other 20 of spec 022 wait in `docs/content-pending-5.2.json`); `activityUnlocks` are the spec's `activity.unlock` effects; a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
 | `jobs.json` | 11 jobs (a `priority` field per job type since D-54) | 20+ |

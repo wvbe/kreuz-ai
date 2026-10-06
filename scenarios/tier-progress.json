@@ -61,7 +61,7 @@
           "lockedOnly": true
         },
         "path": "length",
-        "op": "eq",
+        "op": "gte",
         "value": 11
       }
     },

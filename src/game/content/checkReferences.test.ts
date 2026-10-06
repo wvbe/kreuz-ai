@@ -30,7 +30,7 @@ describe("checkReferences", () => {
     const content = parsed();
     const recipe = content.recipes.find((entry) => entry.id === "bake_bread");
     if (!recipe) throw new Error("fixture");
-    recipe.inputs = [{ materialId: "rye", quantity: 1 }];
+    recipe.inputs = [{ materialId: "moon_rye", quantity: 1 }];
     recipe.skillId = "milling";
     const fields = checkReferences(content).map((issue) => issue.field);
     expect(fields).toEqual(["inputs.0.materialId", "skillId"]);

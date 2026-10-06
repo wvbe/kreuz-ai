@@ -250,5 +250,1568 @@
       }
     ],
     "unlockTier": "market_town"
+  },
+  {
+    "id": "forge",
+    "name": "Forge",
+    "tags": ["forge", "workstation", "metal"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 8
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 4
+      }
+    ],
+    "constructionTicks": 36,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 4
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "anvil",
+    "name": "Anvil",
+    "tags": ["anvil", "workstation", "metal"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 4
+      }
+    ],
+    "constructionTicks": 20,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "smelter",
+    "name": "Smelter",
+    "tags": ["smelter", "workstation", "metal"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 10
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 36,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 5
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "spinning_wheel",
+    "name": "Spinning wheel",
+    "tags": ["spinning_wheel", "workstation", "textile"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "loom",
+    "name": "Loom",
+    "tags": ["loom", "workstation", "textile"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 36,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "tanning_rack",
+    "name": "Tanning rack",
+    "tags": ["tanning_rack", "workstation", "leather"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "parchment_frame",
+    "name": "Parchment frame",
+    "tags": ["parchment_frame", "workstation", "leather"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      }
+    ],
+    "constructionTicks": 20,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "tailoring_bench",
+    "name": "Tailoring bench",
+    "tags": ["tailoring_bench", "workstation", "textile"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "malting_floor",
+    "name": "Malting floor",
+    "tags": ["malting_floor", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "brick",
+        "quantity": 6
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "brick",
+        "quantity": 3
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "brewing_vat",
+    "name": "Brewing vat",
+    "tags": ["brewing_vat", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "constructionTicks": 30,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "wine_press",
+    "name": "Wine press",
+    "tags": ["wine_press", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 28,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "cheese_press",
+    "name": "Cheese press",
+    "tags": ["cheese_press", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "churn",
+    "name": "Churn",
+    "tags": ["churn", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 20,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "cooking_pot",
+    "name": "Cooking pot",
+    "tags": ["cooking_pot", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "constructionTicks": 18,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "drying_rack",
+    "name": "Drying rack",
+    "tags": ["drying_rack", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "salting_table",
+    "name": "Salting table",
+    "tags": ["salting_table", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "masons_bench",
+    "name": "Mason's bench",
+    "tags": ["masons_bench", "workstation", "stone"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "iron_chisel",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "iron_chisel",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "kiln",
+    "name": "Kiln",
+    "tags": ["kiln", "workstation", "ceramic"],
+    "constructionMaterials": [
+      {
+        "materialId": "brick",
+        "quantity": 8
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "brick",
+        "quantity": 4
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "charcoal_kiln",
+    "name": "Charcoal kiln",
+    "tags": ["charcoal_kiln", "workstation", "fuel"],
+    "constructionMaterials": [
+      {
+        "materialId": "clay",
+        "quantity": 6
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 4
+      }
+    ],
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "clay",
+        "quantity": 3
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "candle_mold",
+    "name": "Candle mold",
+    "tags": ["candle_mold", "workstation", "utility"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 16,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "rope_walk",
+    "name": "Rope walk",
+    "tags": ["rope_walk", "workstation", "fiber"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      }
+    ],
+    "constructionTicks": 20,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "butchers_block",
+    "name": "Butcher's block",
+    "tags": ["butchers_block", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "constructionTicks": 18,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "apiary",
+    "name": "Apiary",
+    "tags": ["apiary", "workstation", "food"],
+    "constructionMaterials": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "constructionTicks": 22,
+    "deconstructionYield": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "barrel",
+    "name": "Barrel",
+    "tags": ["barrel", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "storage": {
+      "slotCount": 8,
+      "weightLimit": 150,
+      "categoryFilter": ["drink", "grain", "preserved"]
+    },
+    "constructionTicks": 26,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "crate",
+    "name": "Crate",
+    "tags": ["crate", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "storage": {
+      "slotCount": 10,
+      "weightLimit": 180,
+      "categoryFilter": []
+    },
+    "constructionTicks": 28,
+    "deconstructionYield": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "sack",
+    "name": "Sack",
+    "tags": ["sack", "storage", "textile"],
+    "constructionMaterials": [
+      {
+        "materialId": "linen_cloth",
+        "quantity": 1
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "storage": {
+      "slotCount": 4,
+      "weightLimit": 80,
+      "categoryFilter": ["grain", "flour", "fiber"]
+    },
+    "constructionTicks": 16,
+    "deconstructionYield": [
+      {
+        "materialId": "linen_cloth",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "bookcase",
+    "name": "Bookcase",
+    "tags": ["bookcase", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "nails",
+        "quantity": 6
+      }
+    ],
+    "storage": {
+      "slotCount": 6,
+      "weightLimit": 60,
+      "categoryFilter": ["writing", "parchment"]
+    },
+    "constructionTicks": 36,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 3
+      }
+    ],
+    "unlockTier": "chartered_town"
+  },
+  {
+    "id": "coffer",
+    "name": "Coffer",
+    "tags": ["coffer", "storage", "wood", "secure"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "storage": {
+      "slotCount": 8,
+      "weightLimit": 100,
+      "categoryFilter": ["currency", "valuable"]
+    },
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "weapon_rack",
+    "name": "Weapon rack",
+    "tags": ["weapon_rack", "storage", "wood", "military"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "storage": {
+      "slotCount": 6,
+      "weightLimit": 120,
+      "categoryFilter": ["weapon"]
+    },
+    "constructionTicks": 28,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "armor_stand",
+    "name": "Armor stand",
+    "tags": ["armor_stand", "storage", "wood", "military"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "storage": {
+      "slotCount": 4,
+      "weightLimit": 100,
+      "categoryFilter": ["armor"]
+    },
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "wine_rack",
+    "name": "Wine rack",
+    "tags": ["wine_rack", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "storage": {
+      "slotCount": 6,
+      "weightLimit": 80,
+      "categoryFilter": ["drink"]
+    },
+    "constructionTicks": 28,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "tool_rack",
+    "name": "Tool rack",
+    "tags": ["tool_rack", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "storage": {
+      "slotCount": 8,
+      "weightLimit": 100,
+      "categoryFilter": ["tool"]
+    },
+    "constructionTicks": 28,
+    "deconstructionYield": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "pantry_shelf",
+    "name": "Pantry shelf",
+    "tags": ["pantry_shelf", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 6
+      }
+    ],
+    "storage": {
+      "slotCount": 10,
+      "weightLimit": 150,
+      "categoryFilter": ["food"]
+    },
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 3
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "grain_bin",
+    "name": "Grain bin",
+    "tags": ["grain_bin", "storage", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "storage": {
+      "slotCount": 6,
+      "weightLimit": 200,
+      "categoryFilter": ["grain"]
+    },
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "straw_pallet",
+    "name": "Straw pallet",
+    "tags": ["straw_pallet", "bed", "comfort", "basic"],
+    "constructionMaterials": [
+      {
+        "materialId": "flax",
+        "quantity": 4
+      },
+      {
+        "materialId": "pine_plank",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "flax",
+        "quantity": 2
+      },
+      {
+        "materialId": "pine_plank",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "noble_bed",
+    "name": "Noble bed",
+    "tags": ["noble_bed", "bed", "comfort", "luxury"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 8
+      },
+      {
+        "materialId": "nails",
+        "quantity": 6
+      },
+      {
+        "materialId": "wool_cloth",
+        "quantity": 2
+      },
+      {
+        "materialId": "linen_cloth",
+        "quantity": 2
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "mood.bonus",
+        "value": 3
+      }
+    ],
+    "constructionTicks": 48,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 3
+      },
+      {
+        "materialId": "wool_cloth",
+        "quantity": 1
+      },
+      {
+        "materialId": "linen_cloth",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "bench",
+    "name": "Bench",
+    "tags": ["bench", "seating", "comfort"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "comfort.bonus",
+        "value": 1
+      }
+    ],
+    "constructionTicks": 22,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "chair",
+    "name": "Chair",
+    "tags": ["chair", "seating", "comfort"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "comfort.bonus",
+        "value": 2
+      }
+    ],
+    "constructionTicks": 26,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "long_table",
+    "name": "Long table",
+    "tags": ["long_table", "surface", "social", "large"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 8
+      },
+      {
+        "materialId": "nails",
+        "quantity": 8
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "social.bonus",
+        "value": 3
+      }
+    ],
+    "constructionTicks": 44,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 4
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "hearth",
+    "name": "Hearth",
+    "tags": ["hearth", "warmth", "comfort"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 6
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "comfort.bonus",
+        "value": 5
+      }
+    ],
+    "constructionTicks": 28,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 3
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "throne",
+    "name": "Throne",
+    "tags": ["throne", "seating", "governance"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 6
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 4
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 36,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      },
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "altar",
+    "name": "Altar",
+    "tags": ["altar", "religious", "worship"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 4
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 5
+      }
+    ],
+    "constructionTicks": 20,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "candelabra",
+    "name": "Candelabra",
+    "tags": ["candelabra", "religious", "light"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "candle",
+        "quantity": 4
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 3
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      },
+      {
+        "materialId": "candle",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "lectern",
+    "name": "Lectern",
+    "tags": ["lectern", "religious", "worship"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "reliquary",
+    "name": "Reliquary",
+    "tags": ["reliquary", "religious", "worship", "luxury"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "glass_pane",
+        "quantity": 1
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 10
+      }
+    ],
+    "constructionTicks": 18,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "prayer_bench",
+    "name": "Prayer bench",
+    "tags": ["prayer_bench", "religious", "seating"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 2
+      },
+      {
+        "modifierId": "comfort.bonus",
+        "value": 1
+      }
+    ],
+    "constructionTicks": 22,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "well",
+    "name": "Well",
+    "tags": ["well", "utility", "water"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 8
+      },
+      {
+        "materialId": "rope",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 4
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "trough",
+    "name": "Trough",
+    "tags": ["trough", "utility", "animal"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 24,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "hitching_post",
+    "name": "Hitching post",
+    "tags": ["hitching_post", "utility", "animal"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "rope",
+        "quantity": 1
+      }
+    ],
+    "constructionTicks": 18,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "torch_sconce",
+    "name": "Torch sconce",
+    "tags": ["torch_sconce", "light", "utility"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "safety.bonus",
+        "value": 1
+      }
+    ],
+    "constructionTicks": 14,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "chandelier",
+    "name": "Chandelier",
+    "tags": ["chandelier", "light", "luxury"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 4
+      },
+      {
+        "materialId": "candle",
+        "quantity": 6
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "mood.bonus",
+        "value": 3
+      }
+    ],
+    "constructionTicks": 32,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      },
+      {
+        "materialId": "candle",
+        "quantity": 3
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "tapestry",
+    "name": "Tapestry",
+    "tags": ["tapestry", "decorative", "textile", "luxury"],
+    "constructionMaterials": [
+      {
+        "materialId": "wool_cloth",
+        "quantity": 3
+      },
+      {
+        "materialId": "linen_thread",
+        "quantity": 2
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "mood.bonus",
+        "value": 2
+      }
+    ],
+    "constructionTicks": 22,
+    "deconstructionYield": [
+      {
+        "materialId": "wool_cloth",
+        "quantity": 1
+      },
+      {
+        "materialId": "linen_thread",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "banner",
+    "name": "Banner",
+    "tags": ["banner", "decorative", "textile"],
+    "constructionMaterials": [
+      {
+        "materialId": "linen_cloth",
+        "quantity": 1
+      },
+      {
+        "materialId": "pine_plank",
+        "quantity": 1
+      }
+    ],
+    "effects": [
+      {
+        "modifierId": "mood.bonus",
+        "value": 1
+      }
+    ],
+    "constructionTicks": 16,
+    "deconstructionYield": [
+      {
+        "materialId": "linen_cloth",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "gravestone",
+    "name": "Gravestone",
+    "tags": ["gravestone", "decorative", "stone"],
+    "constructionMaterials": [
+      {
+        "materialId": "stone_block",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 16,
+    "deconstructionYield": [
+      {
+        "materialId": "stone_block",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "signpost",
+    "name": "Signpost",
+    "tags": ["signpost", "utility", "wood"],
+    "constructionMaterials": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 2
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 20,
+    "deconstructionYield": [
+      {
+        "materialId": "pine_plank",
+        "quantity": 1
+      },
+      {
+        "materialId": "nails",
+        "quantity": 1
+      }
+    ]
   }
 ]

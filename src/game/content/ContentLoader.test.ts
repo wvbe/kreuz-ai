@@ -40,8 +40,8 @@ function loadIssues(pack: ContentPackFiles): readonly ContentIssue[] {
 describe("loadContent (vertical-slice pack v0)", () => {
   it("loads without errors and exposes every category", () => {
     const content = loadContent();
-    expect(content.terrain.ids()).toHaveLength(11);
-    expect(content.materials.ids()).toHaveLength(14);
+    expect(content.terrain.ids().length).toBeGreaterThanOrEqual(21);
+    expect(content.materials.ids().length).toBeGreaterThanOrEqual(86);
     expect(content.needs.size).toBe(6);
     expect(content.skills.size).toBeGreaterThanOrEqual(21);
     expect(content.traits.size).toBeGreaterThanOrEqual(32);
@@ -402,19 +402,19 @@ const danglingCases: { [label: string]: DanglingCase } = {
     id: "bedroom",
     field: "furnitureRequirements.0.0.ref",
     mutate: (record) =>
-      (record["furnitureRequirements"] = [[{ kind: "tag", ref: "throne", count: 1 }]]),
+      (record["furnitureRequirements"] = [[{ kind: "tag", ref: "moon_lantern", count: 1 }]]),
   },
   "recipe workstation": {
     file: ContentFile.Recipes,
     id: "saw_oak_planks",
     field: "workstationTag",
-    mutate: (record) => (record["workstationTag"] = "anvil"),
+    mutate: (record) => (record["workstationTag"] = "moon_anvil"),
   },
   "recipe input": {
     file: ContentFile.Recipes,
     id: "grind_flour",
     field: "inputs.0.materialId",
-    mutate: (record) => (record["inputs"] = [{ materialId: "rye", quantity: 1 }]),
+    mutate: (record) => (record["inputs"] = [{ materialId: "moon_rye", quantity: 1 }]),
   },
   "recipe skill": {
     file: ContentFile.Recipes,

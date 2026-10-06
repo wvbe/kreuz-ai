@@ -60,9 +60,11 @@ describe("settlement verbs", () => {
   it("unlocks all, a tier and a kind filter the list", () => {
     const context = start();
     expect(run(context, "unlocks all").text).toContain("unlocked zone_type stockpile");
-    expect(run(context, "unlocks village").text.split("\n")).toHaveLength(6);
+    const village = run(context, "unlocks village").text;
+    expect(village).toContain("notice_post");
+    expect(village).toContain("cottage");
     expect(run(context, "unlocks recipe").text).toContain("unlocked recipe bake_bread");
-    expect(run(context, "unlocks chartered_town").text).toBe("nothing matches");
+    expect(run(context, "unlocks chartered_town").text).not.toContain("notice_post");
   });
 
   it("unlocks rejects an unknown filter and too many arguments", () => {

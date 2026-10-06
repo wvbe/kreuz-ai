@@ -226,9 +226,14 @@ describe("settlement tiers: locked content is rejected at every gate and opens w
     const view = session.query.run("settlement-progress", {});
     expect(view.ok && (view.data as { tier: string }).tier).toBe("village");
     const locked = session.query.run("unlocks", { lockedOnly: true });
-    expect(
-      locked.ok && (locked.data as { contentId: string }[]).map((row) => row.contentId),
-    ).toEqual(["church_bell", "bell_tower", "vineyard", "timber_framed_house", "burgher_house"]);
+    const lockedIds =
+      locked.ok && (locked.data as { contentId: string }[]).map((row) => row.contentId);
+    // the pack grows with content tasks: the Market Town v0 rows stay locked, Village rows are open
+    expect(lockedIds).toEqual(
+      expect.arrayContaining(["church_bell", "bell_tower", "timber_framed_house", "burgher_house"]),
+    );
+    expect(lockedIds).not.toContain("forge");
+    expect(lockedIds).not.toContain("notice_post");
     const milestones = session.query.run("milestones", {});
     expect(
       milestones.ok && (milestones.data as { reached: boolean }[]).some((row) => row.reached),

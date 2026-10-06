@@ -214,5 +214,489 @@
         "queryable": false
       }
     }
+  },
+  {
+    "id": "forge",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "forge"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "anvil",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "anvil"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "smelter",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "smelter"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "spinning_wheel",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "spinning_wheel"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "loom",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "loom"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "tanning_rack",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "tanning_rack"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "parchment_frame",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "parchment_frame"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "tailoring_bench",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "tailoring_bench"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "malting_floor",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "malting_floor"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "brewing_vat",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "brewing_vat"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "wine_press",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "wine_press"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "cheese_press",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "cheese_press"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "churn",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "churn"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "cooking_pot",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "cooking_pot"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "drying_rack",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "drying_rack"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "salting_table",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "salting_table"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "masons_bench",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "masons_bench"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "kiln",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "kiln"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "charcoal_kiln",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "charcoal_kiln"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "candle_mold",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "candle_mold"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "rope_walk",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "rope_walk"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "butchers_block",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 12,
+        "weightLimitMilli": 200000,
+        "queryable": false
+      },
+      "Furniture": {
+        "furnitureId": "butchers_block"
+      },
+      "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "barrel",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 8,
+        "weightLimitMilli": 150000
+      },
+      "Furniture": {
+        "furnitureId": "barrel"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "crate",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 10,
+        "weightLimitMilli": 180000
+      },
+      "Furniture": {
+        "furnitureId": "crate"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "sack",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 4,
+        "weightLimitMilli": 80000
+      },
+      "Furniture": {
+        "furnitureId": "sack"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "bookcase",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 6,
+        "weightLimitMilli": 60000
+      },
+      "Furniture": {
+        "furnitureId": "bookcase"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "coffer",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 8,
+        "weightLimitMilli": 100000
+      },
+      "Furniture": {
+        "furnitureId": "coffer"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "weapon_rack",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 6,
+        "weightLimitMilli": 120000
+      },
+      "Furniture": {
+        "furnitureId": "weapon_rack"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "armor_stand",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 4,
+        "weightLimitMilli": 100000
+      },
+      "Furniture": {
+        "furnitureId": "armor_stand"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "wine_rack",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 6,
+        "weightLimitMilli": 80000
+      },
+      "Furniture": {
+        "furnitureId": "wine_rack"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "tool_rack",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 8,
+        "weightLimitMilli": 100000
+      },
+      "Furniture": {
+        "furnitureId": "tool_rack"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "pantry_shelf",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 10,
+        "weightLimitMilli": 150000
+      },
+      "Furniture": {
+        "furnitureId": "pantry_shelf"
+      },
+      "Stockpile": {}
+    }
+  },
+  {
+    "id": "grain_bin",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 6,
+        "weightLimitMilli": 200000
+      },
+      "Furniture": {
+        "furnitureId": "grain_bin"
+      },
+      "Stockpile": {}
+    }
   }
 ]

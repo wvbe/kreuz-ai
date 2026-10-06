@@ -101,6 +101,7 @@ describe("ContentRegistries", () => {
       ]),
     );
     expect(first.ids()).toEqual(second.ids());
+    expect(first.ids()).toEqual([...first.ids()].sort());
     expect(first.has(governmentFactionPrototypeId)).toBe(true);
   });
 
