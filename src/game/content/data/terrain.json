@@ -13,7 +13,25 @@
     "moveCost": 10,
     "passable": true,
     "blockReason": null,
-    "buildable": true
+    "buildable": true,
+    "harvestable": [
+      {
+        "materialId": "wheat",
+        "quantity": 4
+      },
+      {
+        "materialId": "barley",
+        "quantity": 4
+      },
+      {
+        "materialId": "rye",
+        "quantity": 4
+      },
+      {
+        "materialId": "vegetables",
+        "quantity": 3
+      }
+    ]
   },
   {
     "id": "forest_oak",
@@ -26,6 +44,10 @@
       {
         "materialId": "oak_log",
         "quantity": 3
+      },
+      {
+        "materialId": "oak_bark",
+        "quantity": 1
       }
     ],
     "clearsTo": "grassland"
@@ -36,7 +58,13 @@
     "moveCost": 25,
     "passable": false,
     "blockReason": "water",
-    "buildable": false
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "raw_fish",
+        "quantity": 1
+      }
+    ]
   },
   {
     "id": "stone_deposit",
@@ -49,6 +77,10 @@
       {
         "materialId": "limestone",
         "quantity": 2
+      },
+      {
+        "materialId": "granite",
+        "quantity": 1
       }
     ],
     "clearsTo": "cave_floor"
@@ -103,6 +135,166 @@
   {
     "id": "road_dirt",
     "name": "Dirt road",
+    "moveCost": 7,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true
+  },
+  {
+    "id": "forest_pine",
+    "name": "Pine forest",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "pine_log",
+        "quantity": 3
+      }
+    ],
+    "clearsTo": "grassland"
+  },
+  {
+    "id": "forest_birch",
+    "name": "Birch forest",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "birch_log",
+        "quantity": 3
+      }
+    ],
+    "clearsTo": "grassland"
+  },
+  {
+    "id": "rocky",
+    "name": "Rocky ground",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true
+  },
+  {
+    "id": "ore_vein",
+    "name": "Ore vein",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "iron_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "copper_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "tin_ore",
+        "quantity": 2
+      },
+      {
+        "materialId": "coal",
+        "quantity": 2
+      }
+    ],
+    "clearsTo": "cave_floor"
+  },
+  {
+    "id": "water_deep",
+    "name": "Deep water",
+    "moveCost": 25,
+    "passable": false,
+    "blockReason": "water",
+    "buildable": false
+  },
+  {
+    "id": "marsh",
+    "name": "Marshland",
+    "moveCost": 25,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "herbs",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "road_stone",
+    "name": "Stone road",
+    "moveCost": 7,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false
+  },
+  {
+    "id": "sand",
+    "name": "Sandy ground",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true,
+    "harvestable": [
+      {
+        "materialId": "sand",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "id": "vineyard_soil",
+    "name": "Vineyard soil",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true,
+    "harvestable": [
+      {
+        "materialId": "grapes",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "orchard_soil",
+    "name": "Orchard soil",
+    "moveCost": 10,
+    "passable": true,
+    "blockReason": null,
+    "buildable": true,
+    "harvestable": [
+      {
+        "materialId": "fruit",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "clay_deposit",
+    "name": "Clay deposit",
+    "moveCost": 15,
+    "passable": true,
+    "blockReason": null,
+    "buildable": false,
+    "harvestable": [
+      {
+        "materialId": "clay",
+        "quantity": 3
+      }
+    ],
+    "clearsTo": "grassland"
+  },
+  {
+    "id": "floor_stone",
+    "name": "Stone floor",
     "moveCost": 7,
     "passable": true,
     "blockReason": null,

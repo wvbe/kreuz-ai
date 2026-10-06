@@ -21,6 +21,18 @@ export const terrainGlyphs: ReadonlyMap<string, string> = new Map([
   ["cave_floor", ":"],
   ["floor_wood", "_"],
   ["road_dirt", "="],
+  ["forest_pine", "t"],
+  ["forest_birch", "b"],
+  ["rocky", ";"],
+  ["ore_vein", "&"],
+  ["water_deep", "W"],
+  ["marsh", "m"],
+  ["road_stone", "+"],
+  ["sand", "s"],
+  ["vineyard_soil", "v"],
+  ["orchard_soil", "a"],
+  ["clay_deposit", "c"],
+  ["floor_stone", "-"],
 ]);
 
 /**
