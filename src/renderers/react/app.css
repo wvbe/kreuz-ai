@@ -112,6 +112,14 @@ button:disabled {
   inset: 0;
 }
 
+.kv-canvas-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #8fa0b8;
+}
+
 .kv-badges {
   position: absolute;
   inset: 0;

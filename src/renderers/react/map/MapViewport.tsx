@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { MapEntityView } from "../../../game/api/Views";
 import { useAppServices } from "../AppServices";
@@ -302,20 +302,28 @@ export function MapViewport(props: MapViewportProps) {
       onKeyDown={onKeyDown}
       onContextMenu={(event) => event.preventDefault()}
     >
-      <MapCanvas
-        scene={props.scene}
-        camera={camera}
-        viewport={viewport}
-        entities={props.entities}
-        crops={props.crops}
-        zones={props.zones}
-        showZones={props.showZones}
-        hoverCell={selection.hoverCell}
-        selectedCell={selection.cell}
-        selectedEntityId={selection.entityId}
-        ghost={props.ghost}
-        motion={props.motion}
-      />
+      <Suspense
+        fallback={
+          <div className="kv-canvas-loading" role="status">
+            Loading the map...
+          </div>
+        }
+      >
+        <MapCanvas
+          scene={props.scene}
+          camera={camera}
+          viewport={viewport}
+          entities={props.entities}
+          crops={props.crops}
+          zones={props.zones}
+          showZones={props.showZones}
+          hoverCell={selection.hoverCell}
+          selectedCell={selection.cell}
+          selectedEntityId={selection.entityId}
+          ghost={props.ghost}
+          motion={props.motion}
+        />
+      </Suspense>
       <div className="kv-badges" aria-hidden={badges.length === 0}>
         {badges.map((badge) => (
           <span

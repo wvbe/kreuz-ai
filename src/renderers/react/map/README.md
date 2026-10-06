@@ -14,6 +14,7 @@ three.js, tested with `@react-three/test-renderer` (no WebGL):
 - `cellGeometry.ts`, `entityGeometry.ts` - geometries (merged boxes, cylinders and spheres; no external models).
 - `entityMotion.ts` - cosmetic movement interpolation (pure): tick delay, tick progress, lerp between cell centres, snap for long jumps; `EntityLayer` slides entities from the previous to the current cell over the real tick interval (`TickMotion`), paused or a map change snaps.
 - `TerrainLayer.tsx`, `OverlayLayer.tsx` (zones, hover, selection, placement ghost), `EntityLayer.tsx` (instanced), `CameraRig.tsx`.
+- `LazyMapCanvas.tsx` - `React.lazy` over a dynamic `import()` of `MapCanvas`: three.js is a separate chunk loaded when the map first shows; `MapViewport` wraps the canvas in `Suspense`.
 - `MapCanvas.tsx` - the `Canvas`; the only part that needs WebGL, replaced in jsdom tests through `AppServices.mapCanvas`. `MapCanvasProps.ts` is its prop contract.
 
 DOM:
