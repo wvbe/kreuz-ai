@@ -170,7 +170,7 @@
     "constructionMaterials": [
       {
         "materialId": "stone_block",
-        "quantity": 2
+        "quantity": 1
       }
     ],
     "constructionTicks": 16,

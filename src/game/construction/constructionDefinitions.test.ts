@@ -38,10 +38,10 @@ describe("requiredMaterials", () => {
   it("returns copies of the material list", () => {
     const { definition } = setup();
     const first = requiredMaterials(definition("wall"));
-    expect(first).toEqual([{ materialId: "stone_block", quantity: 2 }]);
+    expect(first).toEqual([{ materialId: "stone_block", quantity: 1 }]);
     first[0] = { materialId: "x", quantity: 9 };
     expect(requiredMaterials(definition("wall"))).toEqual([
-      { materialId: "stone_block", quantity: 2 },
+      { materialId: "stone_block", quantity: 1 },
     ]);
   });
 });

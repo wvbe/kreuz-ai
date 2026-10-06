@@ -39,14 +39,14 @@ describe("016 build a wall from stocked stone", () => {
     const { world, chest } = stocked([{ materialId: "stone_block", quantity: 5 }]);
     const id = world.place("wall", 44);
     expect(world.site(id).data.status).toBe(SiteStatus.Planned);
-    expect(world.site(id).data.required).toEqual([{ materialId: "stone_block", quantity: 2 }]);
+    expect(world.site(id).data.required).toEqual([{ materialId: "stone_block", quantity: 1 }]);
     world.runUntil(() => !world.hasSite(id), 600);
     expect(world.hasSite(id)).toBe(false);
     const walls = entitiesOf(world, "wall");
     expect(walls).toHaveLength(1);
     expect(getComponent(walls[0] as Entity, positionComponent)?.cellIndex).toBe(44);
     expect(world.engine.maps.require(world.mapId).isTraversable(44)).toBe(false);
-    expect(world.count("stone_block")).toBe(3);
+    expect(world.count("stone_block")).toBe(4);
     expect(world.count("stone_block")).toBe(
       (chest.components["Inventory"] as { slots: { quantity: number }[] }).slots.reduce(
         (sum, slot) => sum + slot.quantity,
@@ -63,7 +63,7 @@ describe("016 build a wall from stocked stone", () => {
       kind: SiteKind.Construct,
       prototypeId: "wall",
       cellIndex: 44,
-      consumed: [{ materialId: "stone_block", quantity: 2 }],
+      consumed: [{ materialId: "stone_block", quantity: 1 }],
       yield: [],
     });
     // The work phase takes exactly the base duration of an unskilled builder.

@@ -1,0 +1,600 @@
+{
+  "name": "hamlet-to-village",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tier",
+        "op": "eq",
+        "value": "hamlet"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.0.label",
+        "op": "eq",
+        "value": "population 6/8"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "requirements.1.label",
+        "op": "eq",
+        "value": "dwellings of level hovel or better 0/4"
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "dwellings",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "sawmill",
+        "mapId": 1,
+        "cell": 308
+      }
+    },
+    {
+      "step": 100
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 4
+      }
+    },
+    {
+      "step": 700
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "grind_flour",
+        "quantity": 200,
+        "priority": 60
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 400,
+        "priority": 60
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "saw_oak_planks",
+        "quantity": 24,
+        "priority": 38
+      }
+    },
+    {
+      "step": 200
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.entityId",
+        "op": "eq",
+        "value": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeBuy",
+        "traderId": 50,
+        "materialId": "nails",
+        "quantity": 40
+      }
+    },
+    {
+      "step": 440
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 60,
+        "priority": 36
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [215, 216, 234, 235, 240, 263, 267, 286, 289, 312],
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 314,
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "table",
+        "mapId": 1,
+        "cell": 265,
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "throne_room",
+        "mapId": 1,
+        "cells": [236, 237, 238, 239, 264, 265, 266, 287, 288]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [170, 195, 199, 241, 242],
+        "priority": 46
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 197,
+        "priority": 46
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 196,
+        "priority": 46
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 217,
+        "priority": 46
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "dwelling",
+        "mapId": 1,
+        "cells": [196, 217, 218, 219]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [146, 167, 168, 190, 213],
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 192,
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 169,
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 193,
+        "priority": 45
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "dwelling",
+        "mapId": 1,
+        "cells": [169, 193, 194, 214]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [188, 189, 231, 232, 233],
+        "priority": 44
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 164,
+        "priority": 44
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 209,
+        "priority": 44
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 210,
+        "priority": 44
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "dwelling",
+        "mapId": 1,
+        "cells": [209, 210, 211, 212]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [94, 96, 120, 122, 143],
+        "priority": 43
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 69,
+        "priority": 43
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 95,
+        "priority": 43
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "wooden_bed",
+        "mapId": 1,
+        "cell": 121,
+        "priority": 43
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "dwelling",
+        "mapId": 1,
+        "cells": [95, 121, 144, 145]
+      }
+    },
+    {
+      "step": 300
+    },
+    {
+      "assertHash": {
+        "label": "day-6"
+      }
+    },
+    {
+      "step": 2592
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tier",
+        "op": "eq",
+        "value": "hamlet"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 5172
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 9504
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tier",
+        "op": "eq",
+        "value": "village"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tierReachedAtTick.village",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tierReachedAtTick.village",
+        "op": "lte",
+        "value": 9504
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "settlementNoun",
+        "op": "eq",
+        "value": "village"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "nextTier",
+        "op": "eq",
+        "value": "market_town"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 8
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "dwellings",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "activeDwellings",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "housed",
+        "op": "eq",
+        "value": 8
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "homeless",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "freeSlots",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "housing",
+        "path": "perLevel.hovel",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "assert": {
+        "query": "dwellings-at-or-above",
+        "path": "",
+        "op": "eq",
+        "value": 4,
+        "args": {
+          "level": "hovel"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "dwellings",
+        "path": "length",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "assert": {
+        "query": "dwellings",
+        "path": "0.residents.length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "assert": {
+        "query": "dwellings",
+        "path": "3.residents.length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "assert": {
+        "query": "milestones",
+        "path": "0.reached",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "length",
+        "op": "eq",
+        "value": 9
+      }
+    },
+    {
+      "assert": {
+        "query": "treasury",
+        "path": "balance",
+        "op": "gt",
+        "value": 800
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "assertHash": {
+        "label": "day-33"
+      }
+    }
+  ]
+}

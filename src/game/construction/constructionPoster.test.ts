@@ -17,11 +17,12 @@ function setup() {
 describe("refreshSiteStatus", () => {
   it("derives planned, supplying and building from the delivered materials", () => {
     const { world } = setup();
-    const site = requireSite(world.engine, world.place("wall", 44));
+    // An oven needs six stone blocks: nothing, some, all.
+    const site = requireSite(world.engine, world.place("oven", 44));
     expect(refreshSiteStatus(site)).toBe(SiteStatus.Planned);
     world.give(site.entity, "stone_block", 1);
     expect(refreshSiteStatus(site)).toBe(SiteStatus.Supplying);
-    world.give(site.entity, "stone_block", 1);
+    world.give(site.entity, "stone_block", 5);
     expect(refreshSiteStatus(site)).toBe(SiteStatus.Building);
     const down = world.command("QueueDeconstruction", {
       targetEntityId: world.chest(30).id,

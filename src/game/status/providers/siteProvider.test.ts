@@ -30,7 +30,7 @@ describe("siteProvider", () => {
       kind: BlockedReasonKind.MissingInput,
       params: {
         materialId: "stone_block",
-        required: 2,
+        required: 1,
         delivered: 0,
         available: 0,
         noProducer: true,

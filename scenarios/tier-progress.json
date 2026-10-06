@@ -1,9 +1,19 @@
 {
   "name": "tier-progress",
   "seed": 42,
-  "options": { "difficulty": "steady", "mapSize": 0 },
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
   "steps": [
-    { "assert": { "query": "settlement-progress", "path": "tier", "op": "eq", "value": "hamlet" } },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tier",
+        "op": "eq",
+        "value": "hamlet"
+      }
+    },
     {
       "assert": {
         "query": "settlement-progress",
@@ -36,11 +46,20 @@
         "value": false
       }
     },
-    { "assert": { "query": "milestones", "path": "length", "op": "eq", "value": 7 } },
+    {
+      "assert": {
+        "query": "milestones",
+        "path": "length",
+        "op": "eq",
+        "value": 7
+      }
+    },
     {
       "assert": {
         "query": "unlocks",
-        "args": { "lockedOnly": true },
+        "args": {
+          "lockedOnly": true
+        },
         "path": "length",
         "op": "eq",
         "value": 3
@@ -49,14 +68,21 @@
     {
       "assert": {
         "query": "unlocks",
-        "args": { "tier": "village" },
+        "args": {
+          "tier": "village"
+        },
         "path": "0.lockText",
         "op": "eq",
         "value": "Unlocks at Village"
       }
     },
     {
-      "command": { "kind": "DesignateZone", "zoneTypeId": "stockpile", "mapId": 1, "cells": [257] }
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
     },
     {
       "command": {
@@ -74,9 +100,21 @@
         "cells": [370, 421, 397, 440]
       }
     },
-    { "command": { "kind": "PlaceFurniture", "furnitureId": "chest", "mapId": 1, "cell": 335 } },
     {
-      "command": { "kind": "PlaceFurniture", "furnitureId": "workbench", "mapId": 1, "cell": 283 }
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
     },
     {
       "command": {
@@ -86,9 +124,28 @@
         "cell": 306
       }
     },
-    { "command": { "kind": "PlaceWall", "mapId": 1, "cells": [297, 298, 329, 353, 355, 385] } },
-    { "command": { "kind": "PlaceDoor", "mapId": 1, "cell": 325 } },
-    { "command": { "kind": "PlaceFurniture", "furnitureId": "oven", "mapId": 1, "cell": 326 } },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
     {
       "command": {
         "kind": "DesignateZone",
@@ -97,16 +154,52 @@
         "cells": [326, 327, 328, 354]
       }
     },
-    { "step": 100 },
     {
-      "command": { "kind": "CreateProductionOrder", "recipeId": "cut_stone_block", "quantity": 4 }
+      "step": 100
     },
-    { "step": 700 },
-    { "command": { "kind": "CreateProductionOrder", "recipeId": "grind_flour", "quantity": 60 } },
-    { "command": { "kind": "CreateProductionOrder", "recipeId": "bake_bread", "quantity": 120 } },
-    { "step": 640 },
-    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 1440 } },
-    { "assert": { "query": "settlement-progress", "path": "evaluations", "op": "eq", "value": 5 } },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 4
+      }
+    },
+    {
+      "step": 700
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "grind_flour",
+        "quantity": 60
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 120
+      }
+    },
+    {
+      "step": 640
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 1440
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "evaluations",
+        "op": "eq",
+        "value": 5
+      }
+    },
     {
       "assert": {
         "query": "settlement-progress",
@@ -115,8 +208,22 @@
         "value": 1440
       }
     },
-    { "assert": { "query": "settlement-progress", "path": "tier", "op": "eq", "value": "hamlet" } },
-    { "assert": { "query": "milestones", "path": "0.reached", "op": "eq", "value": false } },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tier",
+        "op": "eq",
+        "value": "hamlet"
+      }
+    },
+    {
+      "assert": {
+        "query": "milestones",
+        "path": "0.reached",
+        "op": "eq",
+        "value": false
+      }
+    },
     {
       "command": {
         "kind": "PlaceWall",
@@ -124,8 +231,21 @@
         "cells": [215, 216, 234, 235, 240, 263, 267, 286, 289, 312]
       }
     },
-    { "command": { "kind": "PlaceDoor", "mapId": 1, "cell": 314 } },
-    { "command": { "kind": "PlaceFurniture", "furnitureId": "table", "mapId": 1, "cell": 265 } },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 314
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "table",
+        "mapId": 1,
+        "cell": 265
+      }
+    },
     {
       "command": {
         "kind": "DesignateZone",
@@ -135,15 +255,50 @@
       }
     },
     {
-      "command": { "kind": "CreateProductionOrder", "recipeId": "cut_stone_block", "quantity": 24 }
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 24
+      }
     },
-    { "step": 864 },
-    { "assertHash": { "label": "day-8" } },
-    { "saveLoad": true },
-    { "step": 1152 },
-    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 3456 } },
-    { "assert": { "query": "zones", "path": "4.zoneTypeId", "op": "eq", "value": "throne_room" } },
-    { "assert": { "query": "zones", "path": "4.status", "op": "eq", "value": "active" } },
+    {
+      "step": 864
+    },
+    {
+      "assertHash": {
+        "label": "day-8"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 1152
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 3456
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "4.zoneTypeId",
+        "op": "eq",
+        "value": "throne_room"
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "4.status",
+        "op": "eq",
+        "value": "active"
+      }
+    },
     {
       "assert": {
         "query": "milestones",
@@ -152,22 +307,20 @@
         "value": "throne-room-established"
       }
     },
-    { "assert": { "query": "milestones", "path": "0.reached", "op": "eq", "value": true } },
     {
       "assert": {
         "query": "milestones",
-        "path": "4.milestone",
+        "path": "0.reached",
         "op": "eq",
-        "value": "first-master-craftsman"
+        "value": true
       }
     },
-    { "assert": { "query": "milestones", "path": "4.reached", "op": "eq", "value": true } },
     {
       "assert": {
         "query": "settlement-progress",
         "path": "milestones.length",
         "op": "eq",
-        "value": 2
+        "value": 1
       }
     },
     {
@@ -202,22 +355,56 @@
         "value": false
       }
     },
-    { "step": 576 },
-    { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 4032 } },
-    { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
-    { "assert": { "query": "settlement-progress", "path": "tier", "op": "eq", "value": "hamlet" } },
     {
-      "assert": { "query": "settlement-progress", "path": "evaluations", "op": "eq", "value": 14 }
+      "step": 576
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 4032
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "tier",
+        "op": "eq",
+        "value": "hamlet"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement-progress",
+        "path": "evaluations",
+        "op": "eq",
+        "value": 14
+      }
     },
     {
       "assert": {
         "query": "settlement-progress",
         "path": "milestones.length",
         "op": "eq",
-        "value": 2
+        "value": 1
       }
     },
-    { "assertHash": { "label": "day-14" } },
-    { "replay": true }
+    {
+      "assertHash": {
+        "label": "day-14"
+      }
+    },
+    {
+      "replay": true
+    }
   ]
 }

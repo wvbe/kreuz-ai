@@ -39,11 +39,11 @@ describe("build.supply", () => {
     expect(reservations.ofHolder(settler.id)[0]).toMatchObject({
       kind: ReservationKind.Supply,
       inventoryOwnerId: chest.id,
-      quantity: 2,
+      quantity: 1,
     });
     expect(requireSiteSupplier(world, job)).toBe(settler.id);
-    world.runUntil(() => getTotal(requireSite(world.engine, job).entity, "stone_block") === 2, 200);
-    expect(getTotal(chest, "stone_block")).toBe(0);
+    world.runUntil(() => getTotal(requireSite(world.engine, job).entity, "stone_block") === 1, 200);
+    expect(getTotal(chest, "stone_block")).toBe(1);
     expect(getTotal(settler, "stone_block")).toBe(0);
     expect(requireSiteSupplier(world, job)).toBeNull();
     expect(reservations.ofHolder(settler.id)).toEqual([]);
@@ -75,9 +75,9 @@ describe("build.supply", () => {
   it("never delivers more than the site needs and keeps the surplus", () => {
     const { world, settler, job } = setup();
     world.runUntil(() => supplyTask(world, settler.id) !== undefined, 100);
-    world.give(requireSite(world.engine, job).entity, "stone_block", 2);
+    world.give(requireSite(world.engine, job).entity, "stone_block", 1);
     world.run(300);
-    // The site was completed from the 2 given units; the 2 the supplier fetched went back.
+    // The site was completed from the 1 given unit; what the supplier fetched went back.
     expect(world.engine.store.entities().some((entity) => entity.prototype === "wall")).toBe(true);
     expect(world.count("stone_block")).toBe(2);
   });

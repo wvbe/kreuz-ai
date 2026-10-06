@@ -66,7 +66,7 @@ describe("build.construct", () => {
     expect(site.data.progress).toBeLessThan(3);
     // The materials stay and the next claim builds the wall.
     expect(site.data.status).toBe(SiteStatus.Building);
-    expect(getTotal(site.entity, "stone_block")).toBe(2);
+    expect(getTotal(site.entity, "stone_block")).toBe(1);
     world.runUntil(() => !world.hasSite(job), 600);
     expect(world.engine.store.entities().some((entity) => entity.prototype === "wall")).toBe(true);
   });

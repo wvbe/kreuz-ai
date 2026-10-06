@@ -33,7 +33,7 @@ describe("completeSite", () => {
       jobId: job,
       kind: SiteKind.Construct,
       entityId: wall?.id,
-      consumed: [{ materialId: "stone_block", quantity: 2 }],
+      consumed: [{ materialId: "stone_block", quantity: 1 }],
     });
   });
 
