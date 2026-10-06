@@ -14,6 +14,8 @@ import {
   zoomAt,
 } from "./cameraMath";
 import type { CameraState, Viewport } from "./cameraMath";
+import { extendStroke } from "../command/strokeMath";
+import type { StrokeMode } from "../command/strokeMath";
 import { createCellPicker } from "./cellPicker";
 import { buildCellEntityIndex, pickEntity } from "./entityPicking";
 import { classifyEntity, visualHeight } from "./entityVisuals";
@@ -27,6 +29,22 @@ import type { MapScene } from "./mapScene";
 export type MapBadge = {
   entityId: number;
   label: string;
+};
+
+/**
+ * A drag tool of the map (zone painting, the wall rectangle): while it is set, a left drag collects
+ * cells instead of panning; right and middle drags still pan.
+ */
+export type MapStrokeTool = {
+  mode: StrokeMode;
+  /**
+   * Called with the cells of the stroke so far on every change (an empty list when it ends).
+   */
+  onPreview: (cells: readonly number[]) => void;
+  /**
+   * Called with the cells when the button is released.
+   */
+  onCommit: (cells: readonly number[]) => void;
 };
 
 /**
@@ -51,6 +69,10 @@ export type MapViewportProps = {
    * Called for a click (not a drag) with the picked cell and entity.
    */
   onPrimaryClick: (cell: number | null, entityId: number | null) => void;
+  /**
+   * The active drag tool, or null/undefined for select and pan.
+   */
+  stroke?: MapStrokeTool | null;
 };
 
 const dragThreshold = 4;
@@ -77,6 +99,7 @@ export function MapViewport(props: MapViewportProps) {
   );
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
   const drag = useRef<{ x: number; y: number; moved: boolean; button: number } | null>(null);
+  const strokeState = useRef<{ start: number; cells: readonly number[] } | null>(null);
   const picker = useMemo(() => createCellPicker(props.scene), [props.scene]);
   const entityIndex = useMemo(() => buildCellEntityIndex(props.entities), [props.entities]);
   const sceneKey = `${props.scene.mapId}:${host.store.epoch()}`;
@@ -143,13 +166,49 @@ export function MapViewport(props: MapViewportProps) {
     return { cell, entityId: entity?.id ?? null };
   };
 
+  const endStroke = (commit: boolean) => {
+    const current = strokeState.current;
+    strokeState.current = null;
+    if (current === null || props.stroke == null) {
+      return;
+    }
+    props.stroke.onPreview([]);
+    if (commit) {
+      props.stroke.onCommit(current.cells);
+    }
+  };
   const onPointerDown = (event: ReactPointerEvent) => {
     const point = local(event);
+    if (props.stroke != null && event.button === 0) {
+      const cell = pickAt(point).cell;
+      if (cell !== null) {
+        strokeState.current = { start: cell, cells: [cell] };
+        props.stroke.onPreview([cell]);
+      }
+      return;
+    }
     drag.current = { x: point.x, y: point.y, moved: false, button: event.button };
   };
   const onPointerMove = (event: ReactPointerEvent) => {
     const point = local(event);
     setPointer(point);
+    const active = strokeState.current;
+    if (active !== null && props.stroke != null) {
+      const hit = pickAt(point);
+      host.selection.setHover(hit.cell, hit.entityId);
+      const next = extendStroke(
+        props.stroke.mode,
+        active.start,
+        active.cells,
+        props.scene.centers,
+        hit.cell,
+      );
+      if (next !== active.cells) {
+        active.cells = next;
+        props.stroke.onPreview(next);
+      }
+      return;
+    }
     const current = drag.current;
     if (current !== null) {
       const deltaX = point.x - current.x;
@@ -166,6 +225,10 @@ export function MapViewport(props: MapViewportProps) {
     host.selection.setHover(hit.cell, hit.entityId);
   };
   const onPointerUp = (event: ReactPointerEvent) => {
+    if (strokeState.current !== null) {
+      endStroke(event.button === 0);
+      return;
+    }
     const current = drag.current;
     drag.current = null;
     if (current === null || current.moved || current.button !== 0) {
@@ -175,6 +238,7 @@ export function MapViewport(props: MapViewportProps) {
     props.onPrimaryClick(hit.cell, hit.entityId);
   };
   const onPointerLeave = () => {
+    endStroke(false);
     drag.current = null;
     setPointer(null);
     host.selection.setHover(null, null);
@@ -185,6 +249,7 @@ export function MapViewport(props: MapViewportProps) {
     } else if (event.key === "e" || event.key === "E") {
       setCamera((now) => rotateBy(now, Math.PI / 4));
     } else if (event.key === "Escape") {
+      endStroke(false);
       host.tools.cancel();
       host.selection.clear();
     }

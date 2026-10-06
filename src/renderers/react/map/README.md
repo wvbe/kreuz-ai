@@ -16,5 +16,5 @@ three.js, tested with `@react-three/test-renderer` (no WebGL):
 - `MapCanvas.tsx` - the `Canvas`; the only part that needs WebGL, replaced in jsdom tests through `AppServices.mapCanvas`. `MapCanvasProps.ts` is its prop contract.
 
 DOM:
-- `MapViewport.tsx` - owns the camera, turns pointer and keyboard input into hover, selection and camera moves, draws badges and the hover label.
+- `MapViewport.tsx` - owns the camera, turns pointer and keyboard input into hover, selection and camera moves, draws badges and the hover label. With a `stroke` tool (`MapStrokeTool`) a left drag collects cells (paint or rectangle) instead of panning.
 - `Breadcrumb.tsx` - sub-map breadcrumb.
