@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ComponentRegistry } from "../ecs/ComponentRegistry";
 import { merchantComponent, merchantDataSchema } from "./merchantComponent";
 
+// @covers 019:FR-008 019:FR-008b 019:SC-004
 describe("merchantComponent", () => {
   it("defaults to a seller that is closed, at the plain price and the content margin", () => {
     expect(merchantComponent.defaults()).toEqual({

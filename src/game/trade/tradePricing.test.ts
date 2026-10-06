@@ -11,6 +11,7 @@ import {
   wholeCoins,
 } from "./tradePricing";
 
+// @covers 019:FR-006 019:FR-007 019:SC-004
 describe("valueOfItemsMilli", () => {
   const materials = loadContent().materials;
 

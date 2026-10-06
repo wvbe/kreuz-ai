@@ -52,6 +52,7 @@ function drain(world: TradeTestWorld, keep: number): void {
   }
 }
 
+// @covers 019:SC-003
 describe("trade.buy job", () => {
   // @covers 003:FR-011
   it("a settler buys goods with coins from the treasury and the goods are hauled into storage", () => {

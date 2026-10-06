@@ -9,6 +9,7 @@ import { OfferStatus, tradeCompletedEvent, traderPrototypeId } from "./tradeType
 import type { TradeOffer } from "./tradeTypes";
 import { refinedCreditMilli } from "./refinedLedger";
 
+// @covers 019:FR-010
 describe("isSettlementSide", () => {
   it("is true for the treasury and the settlers, false for traders and strangers", () => {
     const world = createTradeWorld();

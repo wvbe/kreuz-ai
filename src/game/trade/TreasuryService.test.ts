@@ -8,6 +8,7 @@ const wage = (paymentId: number, amount = 2) => ({
   createdTick: 10,
 });
 
+// @covers 019:FR-014 019:SC-006
 describe("TreasuryService", () => {
   it("queues wages in payment order and ignores a repeated payment id", () => {
     const service = new TreasuryService();

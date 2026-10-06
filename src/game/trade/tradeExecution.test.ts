@@ -46,6 +46,7 @@ function snapshot(world: TradeTestWorld, ...entities: Entity[]): number[] {
   );
 }
 
+// @covers 019:FR-009 019:SC-002
 describe("legsOf", () => {
   it("moves goods to the buyer and barter goods and coins to the seller", () => {
     const { world, trader, settler } = setup();

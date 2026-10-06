@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { getComponent, hasComponent } from "../ecs/Entity";
 import { governmentFactionId } from "../factions/factionRegistry";
 import { inventoryComponent } from "../inventory/inventoryComponent";
-import { debit } from "../inventory/inventoryMoney";
+import { debit, getBalance } from "../inventory/inventoryMoney";
+import { transfer } from "../inventory/inventoryOperations";
 import { payWage } from "../jobs/payWage";
 import { createTradeWorld, fullInventory } from "./testTradeWorld";
 import type { TradeTestWorld } from "./testTradeWorld";
@@ -36,6 +37,7 @@ function drain(world: TradeTestWorld, keep: number): void {
   }
 }
 
+// @covers 019:FR-003 019:FR-012 019:FR-013 019:FR-015 019:SC-003 019:SC-005
 describe("installTreasury and treasuryEntity", () => {
   it("funds the treasury of a new game with startingTreasury coins", () => {
     const world = createTradeWorld();
@@ -186,5 +188,23 @@ describe("payWageFromTreasury (spec 019 US6)", () => {
     world.engine.bus.processQueue();
     expect(seen).toHaveLength(1);
     expect(getTreasuryService(world.engine).payments()).toHaveLength(2);
+  });
+});
+
+// @covers 019:FR-001 019:FR-002 019:SC-001
+describe("currency is an ordinary stackable material", () => {
+  it("has a stack limit of 1000 and moves between any two inventories with the standard API", () => {
+    const world = createTradeWorld();
+    const coin = world.engine.materials.require(world.engine.materials.currencyId);
+    expect(coin.stackLimit).toBe(1000);
+    const treasury = treasuryEntity(world.engine);
+    const settler = world.settler(11);
+    const context = { materials: world.engine.materials, actor: null };
+    const before = getBalance(context, settler);
+    transfer(context, treasury as NonNullable<typeof treasury>, settler, coin.id, 40);
+    expect(getBalance(context, settler)).toBe(before + 40);
+    expect(treasuryBalance(world.engine)).toBe(
+      world.engine.content.constants.startingTreasury - 40,
+    );
   });
 });

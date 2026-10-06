@@ -38,6 +38,7 @@ function order(world: TradeTestWorld, traderId: number, quantity: number) {
   );
 }
 
+// @covers 019:SC-003
 describe("trade.sell job", () => {
   it("a settler fetches ore from the stock, sells it and the treasury and ledger grow", () => {
     const { world, traderId, chestId } = setup(10);

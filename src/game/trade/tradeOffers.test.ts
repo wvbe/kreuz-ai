@@ -44,6 +44,7 @@ function setup(): { world: TradeTestWorld; trader: Entity; settler: Entity } {
 
 const nails = (quantity: number) => [{ materialId: "nails", quantity }];
 
+// @covers 019:FR-004 019:FR-005 019:FR-010
 describe("proposeOffer", () => {
   it("stores the offer and queues trade.offer.proposed", () => {
     const { world, trader, settler } = setup();

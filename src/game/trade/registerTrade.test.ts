@@ -25,6 +25,7 @@ const propose = (traderId: number, settlerId: number, coins: number) => ({
   offeredCoins: coins,
 });
 
+// @covers 019:FR-005 019:FR-008 019:FR-008b 019:FR-010
 describe("registerTrade", () => {
   it("is idempotent, returns the engine's service and installs the wage payer", () => {
     const world = createTradeWorld();

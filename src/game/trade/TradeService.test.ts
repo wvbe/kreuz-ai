@@ -28,6 +28,7 @@ const fields = {
   tick: 5,
 };
 
+// @covers 019:FR-014 019:SC-006
 describe("TradeService offers", () => {
   it("hands out ascending ids and keeps the offers sorted, as copies", () => {
     const service = new TradeService();

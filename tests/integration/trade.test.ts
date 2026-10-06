@@ -67,6 +67,7 @@ function creditMilli(world: TradeTestWorld): number {
   return entries[0]?.creditMilli ?? 0;
 }
 
+// @covers 019:FR-009 019:FR-014 019:SC-002 019:SC-006
 describe("trader refined-credit ledger (D-13, owner rule)", () => {
   it("sell 10 ore, buy exactly 5 ingots and not a sixth", () => {
     const h = hamlet();
