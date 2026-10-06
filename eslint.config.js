@@ -249,6 +249,31 @@ export default defineConfig(
     },
   },
   {
+    // The React renderer drives the game through src/game/api only (value imports); other
+    // src/game modules may be imported for their types (spec 023, spec 024).
+    files: ["src/renderers/react/**/*.ts", "src/renderers/react/**/*.tsx"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "/game/(?!api/)",
+              allowTypeImports: true,
+              message:
+                "The React renderer drives the game through src/game/api only (type imports excepted).",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Tests of the React renderer may build sessions and engines directly.
+    files: ["src/renderers/react/**/*.test.ts", "src/renderers/react/**/*.test.tsx"],
+    rules: { "@typescript-eslint/no-restricted-imports": "off" },
+  },
+  {
     // Tests of the CLI may build sessions and engines directly.
     files: ["src/renderers/cli/**/*.test.ts"],
     rules: { "@typescript-eslint/no-restricted-imports": "off" },
