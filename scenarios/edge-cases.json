@@ -378,7 +378,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "bread",
         "targetQuantity": 10,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "bake_bread"
       }
     },
     {
@@ -386,15 +387,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "flour",
         "targetQuantity": 11,
-        "priority": 50
-      }
-    },
-    {
-      "command": {
-        "kind": "CreateStandingOrder",
-        "materialId": "wheat",
-        "targetQuantity": 12,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "grind_flour"
       }
     },
     {
@@ -402,7 +396,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "stone_block",
         "targetQuantity": 13,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "cut_stone_block"
       }
     },
     {
@@ -410,15 +405,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "oak_plank",
         "targetQuantity": 14,
-        "priority": 50
-      }
-    },
-    {
-      "command": {
-        "kind": "CreateStandingOrder",
-        "materialId": "nails",
-        "targetQuantity": 15,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "saw_oak_planks"
       }
     },
     {
@@ -472,7 +460,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "bread",
         "targetQuantity": 10,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "bake_bread"
       }
     },
     {
@@ -480,15 +469,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "flour",
         "targetQuantity": 11,
-        "priority": 50
-      }
-    },
-    {
-      "command": {
-        "kind": "CreateStandingOrder",
-        "materialId": "wheat",
-        "targetQuantity": 12,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "grind_flour"
       }
     },
     {
@@ -496,7 +478,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "stone_block",
         "targetQuantity": 13,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "cut_stone_block"
       }
     },
     {
@@ -504,15 +487,8 @@
         "kind": "CreateStandingOrder",
         "materialId": "oak_plank",
         "targetQuantity": 14,
-        "priority": 50
-      }
-    },
-    {
-      "command": {
-        "kind": "CreateStandingOrder",
-        "materialId": "nails",
-        "targetQuantity": 15,
-        "priority": 50
+        "priority": 50,
+        "recipeId": "saw_oak_planks"
       }
     },
     {

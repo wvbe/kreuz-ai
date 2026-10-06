@@ -134,6 +134,7 @@
       "command": {
         "kind": "CreateStandingOrder",
         "materialId": "flour",
+        "recipeId": "grind_flour",
         "targetQuantity": 12,
         "priority": 70
       }
