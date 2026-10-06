@@ -24,6 +24,7 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [production](production/README.md) - production and crafting: workstations with `ProductionOrders`, order commands, the `craft.produce` job (fetch, lock, craft, consume), output hauling, cancel semantics and blocked-reason reporting for 025.
 - [gathering](gathering/README.md) - farming and gathering (014/022): crop plots on fertile cells of active farm fields, `farm.sow` / `farm.harvest`, `mine.ore` / `quarry.stone` with finite deposits, their auto-posters.
 - [construction](construction/README.md) - construction (016): blueprints as `build_site` entities, placement validation, supply and build jobs, walls and doors that obstruct cells, cancel and deconstruction.
+- [trade](trade/README.md) - trade and currency (019): the settlement treasury and wages, travelling traders, negotiated atomic trades, the trader refined-credit ledger (D-13) and the player's trade orders.
 - [status](status/README.md) - status explanations and production flow (025): derived statuses with structured reasons from per-system providers, `explain` with cause chains, the settle tracker and `status.*` events, the Idle & Blocked list and the per-day flow ledger.
 
 Design decisions and the command/event catalogues live in [docs/DECISIONS.md](../../docs/DECISIONS.md).

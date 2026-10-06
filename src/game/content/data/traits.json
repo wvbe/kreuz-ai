@@ -78,5 +78,17 @@
         "startingValueBonus": 10
       }
     ]
+  },
+  {
+    "id": "greedy",
+    "name": "Greedy",
+    "modifiers": [
+      {
+        "kind": "performance",
+        "skill": "trading",
+        "stat": "margin_add",
+        "value": 0.05
+      }
+    ]
   }
 ]

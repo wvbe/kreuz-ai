@@ -44,14 +44,14 @@ zone designate bakery 1 326 327 328 354
 step 100
 order create cut_stone_block 4
 
-# 6. once the mill and the oven stand (about tick 600) start the food chain
-step 500
+# 6. once the mill and the oven stand (about tick 800) start the food chain
+step 700
 sites
 order create grind_flour 60
 order create bake_bread 120
 
 # 7. let it run, and watch
-step 2280
+step 2080
 flow bread
 stock bread
 idle
@@ -62,7 +62,23 @@ Things to know:
 - Construction is queued at once, but sites wait until their materials exist (`sites` shows `MissingInput`). Production orders need their workstation to exist (a `bake_bread` order before the oven stands is refused), so orders come in two rounds.
 - `fields` shows the crop cells of your fields, `zones` whether the bakery is `active` (enclosed, oven inside), `orders` how the orders progress and what blocks them.
 - On another seed the cell numbers differ: use `find fertile_soil`, `map` and `cell <mapId> <cell>` (its `neighbors:` line is the ring your walls and door must cover) to plan the fields and the bakery room.
-- Background gathering (felling, ore, stone) is automatic and lower priority than food work. Iron ore is for trading later.
+- Background gathering (felling, ore, stone) is automatic and lower priority than food work. Iron ore is for trading: see "Trading" below.
+
+## Trading
+
+A travelling trader arrives about day 3, stays two days, and comes back every six. It walks to the village board, buys raw goods (iron ore, limestone, logs, wheat) and sells nails, coal and hammers. It also pays for ore in **credit for iron ingots** (one ingot per two ore): the settlement can later buy exactly that many ingots, no more, and the credit never expires.
+
+```
+traders                              # is a trader here? what does it sell and buy?
+trade quote sell 39 iron_ore 8       # what it pays for 8 ore
+trade sell 39 iron_ore 8             # settlers fetch the ore from the chests (mining is automatic) and sell it
+trade orders                         # progress: order #1 sell iron_ore 8/8 ... Done
+ledger                               # trader_caravan: 4 iron_ingot may still be bought, credit 4 (iron_ore x 0.5)
+trade buy 39 iron_ingot 4            # five would be refused (trade.order.refused: RefinedCreditExhausted)
+treasury                             # coins: wages are paid from here, sales fill it, purchases empty it
+```
+
+The ids are those of your game (`traders` shows the trader's). A settler carries the goods or the coins, so trips take time and each costs the 1 coin wage. Bought goods are hauled into the chests. If the trader leaves before an order is done, the order waits for the next visit; unspent credit and the stock the trader keeps for you wait too. `scenarios/trade-ore-for-iron.json` plays this with the commands above (seed 42: ids 39 and 40).
 
 ## When something is wrong
 

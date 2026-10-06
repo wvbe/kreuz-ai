@@ -7,6 +7,10 @@
         "factionType": "political",
         "leaderTitle": "Reeve",
         "disposition": "none"
+      },
+      "Inventory": {
+        "slotCount": 8,
+        "queryable": false
       }
     }
   },
@@ -141,6 +145,48 @@
         "furnitureId": "workbench"
       },
       "ProductionOrders": {}
+    }
+  },
+  {
+    "id": "trader_caravan",
+    "components": {
+      "Position": {},
+      "Inventory": {
+        "slotCount": 32,
+        "queryable": false
+      },
+      "TaskQueue": {},
+      "Merchant": {
+        "sellsItems": true
+      },
+      "Trader": {
+        "factionContentId": "merchant_caravans",
+        "purseCoins": 400,
+        "buyOfferPermille": 1150,
+        "buyCeilingPermille": 1250,
+        "sells": [
+          {
+            "materialId": "nails",
+            "quantity": 60
+          },
+          {
+            "materialId": "coal",
+            "quantity": 20
+          },
+          {
+            "materialId": "iron_hammer",
+            "quantity": 2
+          }
+        ],
+        "buys": ["iron_ore", "limestone", "oak_log", "wheat"],
+        "refines": [
+          {
+            "rawMaterialId": "iron_ore",
+            "refinedMaterialId": "iron_ingot",
+            "ratioMilli": 500
+          }
+        ]
+      }
     }
   }
 ]

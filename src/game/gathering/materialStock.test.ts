@@ -14,4 +14,11 @@ describe("materialStock", () => {
     expect(materialStock(world.engine, "iron_ore")).toBe(9);
     expect(materialStock(world.engine, "limestone")).toBe(9);
   });
+
+  it("does not count what a travelling trader holds (it left the economy)", () => {
+    const world = createGatheringWorld();
+    world.give(world.spawn("trader_caravan", 4), "iron_ore", 5);
+    world.give(world.chest(6), "iron_ore", 1);
+    expect(materialStock(world.engine, "iron_ore")).toBe(1);
+  });
 });

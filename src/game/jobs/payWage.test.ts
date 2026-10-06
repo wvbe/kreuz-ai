@@ -46,6 +46,7 @@ describe("payWage", () => {
 
   it("warns and pays nothing when the worker is gone or cannot hold the coins", () => {
     const world = createJobWorld();
+    getJobService(world.engine).setWagePayer(null);
     const posting = world.postFell(15, { wage: 4 });
     expect(payWage(world.engine, 99, posting)).toBe(false);
     const worker = world.spawn("peasant", 5, noAiOverride);

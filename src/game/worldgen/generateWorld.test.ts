@@ -84,6 +84,7 @@ describe("generateWorld through newGame", () => {
     expect(Object.keys(engine.prng.serialize().streams)).toEqual([
       traitStreamName,
       identityStreamName,
+      "trade.visit",
       worldGenStreamName,
     ]);
   });

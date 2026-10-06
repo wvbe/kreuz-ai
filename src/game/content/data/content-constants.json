@@ -38,5 +38,18 @@
   "oreDepositCharges": 6,
   "stoneDepositCharges": 8,
   "oreLowStock": 4,
-  "stoneLowStock": 12
+  "stoneLowStock": 12,
+  "startingTreasury": 1000,
+  "traderVisitStartDay": 3,
+  "traderVisitIntervalDays": 6,
+  "traderVisitJitterTicks": 72,
+  "traderStayDays": 2,
+  "maxNegotiationRounds": 3,
+  "offerTimeoutTicks": 24,
+  "defaultMinimumMarginRate": 0.1,
+  "agreementDiscount": 0.9,
+  "scarcityMaxPremium": 0.2,
+  "tradeStandingPerTrade": 1,
+  "tradeStandingDailyCap": 5,
+  "hostileStanding": -30
 }

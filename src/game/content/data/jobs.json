@@ -127,5 +127,27 @@
     },
     "recurrence": "one-time",
     "toolMaterialId": "iron_hammer"
+  },
+  {
+    "id": "trade.sell",
+    "name": "Sell goods to a trader",
+    "skillId": "trading",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time",
+    "wage": 1,
+    "priority": 55
+  },
+  {
+    "id": "trade.buy",
+    "name": "Buy goods from a trader",
+    "skillId": "trading",
+    "zoneContext": {
+      "kind": "any"
+    },
+    "recurrence": "one-time",
+    "wage": 1,
+    "priority": 55
   }
 ]

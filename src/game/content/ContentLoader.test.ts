@@ -43,8 +43,8 @@ describe("loadContent (vertical-slice pack v0)", () => {
     expect(content.terrain.ids()).toHaveLength(11);
     expect(content.materials.ids()).toHaveLength(14);
     expect(content.needs.size).toBe(6);
-    expect(content.skills.size).toBe(9);
-    expect(content.traits.size).toBe(7);
+    expect(content.skills.size).toBe(10);
+    expect(content.traits.size).toBe(8);
     expect(content.humanoids.ids()).toEqual(["baker", "carpenter", "farmer", "peasant"]);
     expect(content.behaviorTrees.ids()).toEqual(["basic_needs", "idle_wander"]);
     expect(content.enginePrototypes.has("government_faction")).toBe(true);

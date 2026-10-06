@@ -5,6 +5,7 @@ import { store } from "../inventory/inventoryOperations";
 import { getTotal } from "../inventory/inventoryQueries";
 import type { PermissionRule } from "../inventory/inventoryTypes";
 import { createJobWorld } from "../jobs/testJobWorld";
+import { traderPrototypeId } from "../trade/tradeTypes";
 import type { JobTestWorld, JobTestWorldOptions } from "../jobs/testJobWorld";
 import type { SpawnOverrides } from "../ai/testAiWorld";
 
@@ -27,7 +28,8 @@ export type StorageTestWorld = JobTestWorld & {
   give: (entity: Entity, materialId: string, quantity: number) => void;
   /**
    * Total of a material over every inventory of the world (storage, citizens, everything): the
-   * number the conservation tests keep constant.
+   * number the conservation tests keep constant. Travelling traders are the boundary of the
+   * colony (they bring and take goods away) and are not counted.
    */
   count: (materialId: string) => number;
 };
@@ -49,6 +51,7 @@ export function createStorageWorld(options: JobTestWorldOptions = {}): StorageTe
     count: (materialId) =>
       world.engine.store
         .entities()
+        .filter((entity) => entity.prototype !== traderPrototypeId)
         .reduce(
           (sum, entity) =>
             sum + (hasComponent(entity, inventoryComponent) ? getTotal(entity, materialId) : 0),

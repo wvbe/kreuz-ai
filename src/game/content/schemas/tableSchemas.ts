@@ -66,6 +66,19 @@ export const contentConstantsSchema = z
     idleStandChance: fractionSchema,
     idleStandMinTicks: positiveSchema,
     idleStandMaxTicks: positiveSchema,
+    startingTreasury: countSchema,
+    traderVisitStartDay: countSchema,
+    traderVisitIntervalDays: positiveSchema,
+    traderVisitJitterTicks: countSchema,
+    traderStayDays: positiveSchema,
+    maxNegotiationRounds: positiveSchema,
+    offerTimeoutTicks: positiveSchema,
+    defaultMinimumMarginRate: fractionSchema,
+    agreementDiscount: fractionSchema,
+    scarcityMaxPremium: fractionSchema,
+    tradeStandingPerTrade: countSchema,
+    tradeStandingDailyCap: countSchema,
+    hostileStanding: z.number().int().min(-100).max(0),
   })
   .strict()
   .refine((constants) => constants.downgradeGraceDays > constants.upgradeGraceDays, {

@@ -383,7 +383,13 @@ describe("GameSession end to end", () => {
                                           ? { id: 3 }
                                           : name === "flow-of"
                                             ? { materialId: "bread" }
-                                            : {},
+                                            : name === "trade-quote"
+                                              ? {
+                                                  traderId: 3,
+                                                  direction: "Buy",
+                                                  materialId: "nails",
+                                                }
+                                              : {},
       );
       expect(result.ok).toBe(true);
       expect(JSON.parse(JSON.stringify(result))).toEqual(result);

@@ -22,6 +22,8 @@ import { buildSiteComponent } from "../construction/buildSiteComponent";
 import { stockpileComponent } from "../storage/stockpileComponent";
 import { productionOrdersComponent } from "../production/productionOrdersComponent";
 import { zoneComponent } from "../zones/zoneComponent";
+import { merchantComponent } from "../trade/merchantComponent";
+import { traderComponent } from "../trade/traderComponent";
 import { loadContent } from "./ContentLoader";
 
 function components(): ComponentRegistry {
@@ -46,6 +48,8 @@ function components(): ComponentRegistry {
     zoneComponent,
     productionOrdersComponent,
     buildSiteComponent,
+    merchantComponent,
+    traderComponent,
   ]) {
     registry.register(definition);
   }
@@ -81,6 +85,7 @@ describe("ContentRegistries", () => {
       "oven",
       "peasant",
       "sawmill",
+      "trader_caravan",
       "wall",
       "workbench",
       "zone",

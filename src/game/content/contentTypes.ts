@@ -177,6 +177,7 @@ export enum AnimalKind {
 export enum FactionType {
   Occupational = "occupational",
   Religious = "religious",
+  Mercantile = "mercantile",
 }
 
 /**

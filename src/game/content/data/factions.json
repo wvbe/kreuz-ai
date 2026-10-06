@@ -10,5 +10,12 @@
       "minLevel": 15
     },
     "masterSkillThreshold": 60
+  },
+  {
+    "id": "merchant_caravans",
+    "name": "Travelling merchants",
+    "factionType": "mercantile",
+    "leaderTitle": "Caravan master",
+    "disposition": "mercantile"
   }
 ]

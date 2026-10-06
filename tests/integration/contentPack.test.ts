@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { aiStateComponent } from "../../src/game/behavior/aiStateComponent";
 import { BehaviorHandlerRegistry } from "../../src/game/behavior/BehaviorHandlerRegistry";
 import { NodeStatus } from "../../src/game/behavior/behaviorTypes";
+import { merchantComponent } from "../../src/game/trade/merchantComponent";
+import { traderComponent } from "../../src/game/trade/traderComponent";
 import { loadContent } from "../../src/game/content/ContentLoader";
 import { ComponentRegistry } from "../../src/game/ecs/ComponentRegistry";
 import { requireComponent } from "../../src/game/ecs/Entity";
@@ -63,6 +65,8 @@ describe("content pack v0 with the kernel", () => {
       zoneComponent,
       productionOrdersComponent,
       buildSiteComponent,
+      merchantComponent,
+      traderComponent,
     ]) {
       components.register(definition);
     }
@@ -80,7 +84,10 @@ describe("content pack v0 with the kernel", () => {
     if (!baker) throw new Error("baker missing");
     expect(getTotal(baker, "silver_penny")).toBe(20);
     expect(requireComponent(baker, aiStateComponent).treeId).toBe("basic_needs");
-    expect(Object.keys(store.spawn("government_faction").components)).toEqual(["Faction"]);
+    expect(Object.keys(store.spawn("government_faction").components)).toEqual([
+      "Faction",
+      "Inventory",
+    ]);
     expect(store.size).toBe(5);
   });
 
@@ -115,6 +122,8 @@ describe("content pack v0 with the kernel", () => {
     components.register(zoneComponent);
     components.register(productionOrdersComponent);
     components.register(buildSiteComponent);
+    components.register(merchantComponent);
+    components.register(traderComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

@@ -43,7 +43,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [x] **Checkpoint C (playable in terminal):** `scenarios/checkpoint-c.json` (player commands only: zones, construction, orders; ten days, bread baked and eaten, six alive), `tests/integration/checkpointC.test.ts`, CLI child-process e2e, `docs/PLAYING.md`; D-54 (bakery chain is Hamlet content, founders' kit, balance, job priorities), verbs `find` / `cell`
 
 ## Phase 4 — Society and progression
-- [ ] 4.1 Trade & currency (019)
+- [x] 4.1 Trade & currency (019) - `src/game/trade`: treasury (government faction inventory, starting 1000 coins) and wages paid from it (deferred when empty), rent hook, price functions (scarcity, agreement discount, Greedy margin), travelling traders on the stream `trade.visit`, negotiated atomic trades with `Payment` reservations and rollback, **the refined-credit ledger of D-13** (persisted, no expiry), player trade orders carried out by `trade.sell` / `trade.buy` jobs, queries `traders` / `trade-offers` / `trade-orders` / `trade-ledger` / `treasury` / `trade-quote`, verbs `traders` / `trade` / `treasury` / `ledger`, `scenarios/trade-ore-for-iron.json` (Hamlet: ore sold, exact ingots bought, player commands only), D-55
 - [ ] 4.2 Diplomacy & factions rest (021)
 - [ ] 4.3 Standing orders & Steward (026)
 - [ ] 4.4 Settlement tiers, milestones, difficulty (027)

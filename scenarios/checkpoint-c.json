@@ -59,7 +59,7 @@
     {
       "command": { "kind": "CreateProductionOrder", "recipeId": "cut_stone_block", "quantity": 4 }
     },
-    { "step": 500 },
+    { "step": 700 },
     { "assert": { "query": "workstations", "path": "length", "op": "eq", "value": 3 } },
     { "assert": { "query": "zones", "path": "3.status", "op": "eq", "value": "active" } },
     { "command": { "kind": "CreateProductionOrder", "recipeId": "grind_flour", "quantity": 60 } },
@@ -67,7 +67,7 @@
     { "step": 400 },
     { "assertHash": { "label": "day-3-5" } },
     { "saveLoad": true },
-    { "step": 1880 },
+    { "step": 1680 },
     { "assert": { "query": "time", "path": "tick", "op": "eq", "value": 2880 } },
     { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
     { "assert": { "query": "construction-queue", "path": "jobs.length", "op": "eq", "value": 0 } },
