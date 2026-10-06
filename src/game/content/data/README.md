@@ -14,8 +14,8 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `needs.json` | the 6 needs; only hunger (bread) and rest (wooden_bed) have satisfaction methods | all methods |
 | `skills.json` | 8 skills | 20+ |
 | `traits.json` | 7 traits | 24+ |
-| `furniture.json` | 9 records: 7 pieces plus `wall` and `door`; each has the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); bed, workbench, chest, table, sawmill, wall and door unlock at `hamlet`, the oven at `village` | 50+ |
-| `zones.json` | 7 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
+| `furniture.json` | 11 records: 9 pieces plus `wall` and `door` (the `notice_post` of the Village tier and the `church_bell` of the Market Town came with task 4.3); each has the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); bed, workbench, chest, table, sawmill, wall and door unlock at `hamlet`, the oven at `village` | 50+ |
+| `zones.json` | 8 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room, bell_tower); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
 | `jobs.json` | 11 jobs (a `priority` field per job type since D-54) | 20+ |
 | `factions.json` | 3 guilds (`guild_bakers`, `guild_masons`, `guild_carpenters`) and three NPC factions with an `npc` block (`merchant_caravans`, `ashford_barony`, `wulfric_abbey`) | 9 guilds + 3 religious |

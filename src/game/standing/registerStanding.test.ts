@@ -136,4 +136,25 @@ describe("registerStanding", () => {
     expect(getStandingService(world.engine).state.orders).toEqual([]);
     expect(getStandingService(world.engine).state.stewardEntityId).toBeNull();
   });
+
+  it("saves and loads the orders, the runs on the way and the Steward (spec 026 FR-026)", () => {
+    const world = createStandingWorld({ width: 20, height: 20 });
+    world.userBoard();
+    world.throneRoom(5, 5);
+    const steward = world.steward(2);
+    world.crier(1);
+    world.spawn("sawmill", 30);
+    world.standing();
+    world.runToReview();
+    world.command("SetStewardBoard", { boardId: world.boardId });
+    const before = JSON.parse(JSON.stringify(getStandingService(world.engine).state)) as object;
+    expect(getStandingService(world.engine).state.runs.length).toBeGreaterThan(0);
+    const text = world.engine.saveGame();
+    world.engine.newGame({ seed: 3 });
+    expect(getStandingService(world.engine).state.orders).toEqual([]);
+    world.engine.loadGame(text);
+    expect(getStandingService(world.engine).state).toEqual(before);
+    expect(getStandingService(world.engine).state.stewardEntityId).toBe(steward.id);
+    expect(JSON.parse(world.engine.saveGame()).stewardship).toEqual(before);
+  });
 });

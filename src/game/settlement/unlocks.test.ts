@@ -49,7 +49,7 @@ describe("unlocks", () => {
   it("lists what a tier unlocks", () => {
     const world = createSettlementWorld({ content: loadVillageBakeryContent() });
     expect(getUnlockedAt(world.engine, SettlementTier.Village).map((row) => row.contentId)).toEqual(
-      ["oven", "bakery", "bake_bread", "cottage"],
+      ["oven", "notice_post", "bakery", "bake_bread", "cottage"],
     );
     expect(getUnlockedAt(world.engine, SettlementTier.CharteredTown)).toEqual([]);
   });

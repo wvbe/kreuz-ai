@@ -99,6 +99,7 @@ describe("registerSettlement", () => {
       world.query("unlocks", { contentKind: "dwelling_level", lockedOnly: true }),
     ).toHaveLength(3);
     expect(world.query("unlocks", { tier: "village" })).toEqual([
+      expect.objectContaining({ contentId: "notice_post", lockText: "Unlocks at Village" }),
       expect.objectContaining({ contentId: "cottage", lockText: "Unlocks at Village" }),
     ]);
     expect(world.query("milestones")).toHaveLength(7);

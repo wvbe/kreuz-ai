@@ -52,6 +52,7 @@ export class StorageService {
   private reportedList: ReportedGoods[] = [];
   private readonly decaySources: DecayModifierSource[] = [];
   private zoneRoutes: ZoneRouteProvider | null = null;
+  private zonePreference: (materialId: string) => EntityId | null = () => null;
 
   /**
    * Creates the service for one engine.
@@ -131,6 +132,26 @@ export class StorageService {
    */
   setZoneRouteProvider(provider: ZoneRouteProvider | null): void {
     this.zoneRoutes = provider;
+  }
+
+  /**
+   * Sets the zone that goods of a material are steered into (spec 026 FR-020: a zone-scoped
+   * standing order that restocks); routes into it rank first, others stay as fallback.
+   *
+   * @param preference - Material id to zone id, or null for no preference.
+   */
+  setZonePreference(preference: (materialId: string) => EntityId | null): void {
+    this.zonePreference = preference;
+  }
+
+  /**
+   * The zone a material is steered into, if any (see {@link StorageService.setZonePreference}).
+   *
+   * @param materialId - The material.
+   * @returns The zone id, or null.
+   */
+  preferredZone(materialId: string): EntityId | null {
+    return this.zonePreference(materialId);
   }
 
   /**

@@ -62,7 +62,8 @@ export type RouteRequest = {
    */
   excludeIds?: readonly EntityId[];
   /**
-   * The zone a run must deliver to (`deliverToZoneId`, tier 0), or absent.
+   * The zone a run must deliver to (`deliverToZoneId`, tier 0); absent means the zone the storage
+   * service prefers for the material (`StorageService.setZonePreference`, spec 026 FR-020), if any.
    */
   zoneId?: EntityId;
 };
@@ -135,6 +136,7 @@ export function routeCandidates(engine: GameEngine, request: RouteRequest): Stor
   }
   const isCurrency = request.materialId === engine.materials.currencyId;
   const service = getStorageService(engine);
+  const targetZone = request.zoneId ?? service.preferredZone(request.materialId);
   const actor = request.actorId === null ? undefined : engine.store.get(request.actorId);
   const routes: StorageRoute[] = [];
   for (const entity of listStorage(engine)) {
@@ -158,7 +160,7 @@ export function routeCandidates(engine: GameEngine, request: RouteRequest): Stor
     const filter = effectiveFilter(engine, entity);
     const isStockpile = stockpile !== undefined || zone?.stockpile === true;
     const tier =
-      request.zoneId !== undefined && zone?.zoneId === request.zoneId
+      targetZone !== null && zone?.zoneId === targetZone
         ? RouteTier.Zone
         : zone?.skillId !== null &&
             zone?.skillId !== undefined &&

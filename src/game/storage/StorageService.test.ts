@@ -136,3 +136,13 @@ describe("StorageService.setZoneRouteProvider and zoneRouteAt", () => {
     expect(service.zoneRouteAt(world.mapId, 4)).toBeNull();
   });
 });
+
+describe("StorageService zone preference", () => {
+  it("steers a material into the zone the installed rule names", () => {
+    const service = getStorageService(createStorageWorld().engine);
+    expect(service.preferredZone("bread")).toBeNull();
+    service.setZonePreference((materialId) => (materialId === "bread" ? 12 : null));
+    expect(service.preferredZone("bread")).toBe(12);
+    expect(service.preferredZone("flour")).toBeNull();
+  });
+});

@@ -10,6 +10,7 @@ import { metaVerbs } from "./metaVerbs";
 import { productionVerbs } from "./productionVerbs";
 import { housingVerbs } from "./housingVerbs";
 import { settlementVerbs } from "./settlementVerbs";
+import { standingVerbs } from "./standingVerbs";
 import { statusVerbs } from "./statusVerbs";
 import { storageVerbs } from "./storageVerbs";
 import { tradeVerbs } from "./tradeVerbs";
@@ -35,6 +36,7 @@ export const verbGroups: readonly (readonly Verb[])[] = [
   diplomacyVerbs,
   settlementVerbs,
   housingVerbs,
+  standingVerbs,
   statusVerbs,
   metaVerbs,
 ];

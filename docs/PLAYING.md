@@ -133,6 +133,21 @@ Households also keep goods (bread for a Cottage) in a chest inside the dwelling 
 
 Two rules of thumb that the script follows: food orders come before everything else (a hungry settler does nothing useful), and a job that feeds another must not have the lower priority (stone and planks are cut at 36-38, the rooms that need them at 43-46; quarrying is 40 and felling 30 by default). Walls cost one stone block and a quarry trip brings four limestone (D-58); the layout of the rooms is the cheapest one the map allows (see `docs/DECISIONS.md` D-58).
 
+## Standing orders and the Steward
+
+Instead of `order create bake_bread 400 ...` you can say what you want in the pantry and let the Steward keep it there. A **standing order** is "keep N of this material in stock": the Steward, a citizen you appoint, counts the stock once a day at 06:00 (in the throne room's name, so one must stand: ten walls, a door and a table) and, once the stock has fallen to the restock threshold (75 % of the target by default), asks for as many single crafts as the gap needs (at most five per order and day). The Town Crier carries each ask to the village board like any posting, a baker takes it, and the order stays *Restocking* until the stock reaches the target.
+
+```
+steward appoint 3                    # a citizen of yours who is no Town Crier
+standing create bread 20 priority=80 # keep 20 bread (restock at 15); the recipe is found from the material
+standing create flour 12 priority=70 # bread needs flour: `why`/`standing 1` points at this order
+standing                             # state, counted stock, runs on the way / open / claimed, why blocked
+steward review                       # do not wait for 06:00
+standing pause 1                     # runs nobody has taken are withdrawn at the next review
+```
+
+A Notice Post (Village tier) makes the crier walk to the post instead of to every board near it, and a Bell Tower (Market Town) delivers at the five bell hours without a crier at all. `scenarios/standing-orders.json` is the whole thing with player commands only: the Checkpoint C opening with the throne room first, the two standing orders and the Steward; from day 2 every loaf is ordered by the Steward and the bread stock stays above 8 for ten days. Play it on `peaceful`: on `steady` the starting bread is eaten before a throne room can stand.
+
 ## When something is wrong
 
 - `why <entityId>` explains a settler, `why order <id>` a production order, `why posting <id>` a posting; every idle citizen has a reason (`NoJobsAvailable`, `AwaitingDecision`, ...).

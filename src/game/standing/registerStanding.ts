@@ -12,9 +12,11 @@ import { productionSystemId } from "../production/productionTypes";
 import { getStatusService } from "../status/statusServiceRegistry";
 import { storageSystemId } from "../storage/storageTypes";
 import { zonesSystemId } from "../zones/zoneTypes";
+import { getStorageService } from "../storage/storageServiceRegistry";
 import { createAudienceTask } from "./createAudienceTask";
 import { noticePostRoute, ringBells } from "./deliveryRouting";
 import { applyRun, pruneRuns } from "./ownedRuns";
+import { preferredZone } from "./preferredZone";
 import { runStewardReview } from "./runStewardReview";
 import { StandingService } from "./StandingService";
 import { bindStandingService, getStandingService } from "./standingServiceRegistry";
@@ -80,6 +82,8 @@ function defined<T extends object>(value: T): T {
  *   `RequestStewardReview`) and rings the Bell Towers at `bellRingTicksOfDay`;
  * - the hooks into the Town Crier fleet: the delivery route to Notice Posts, what a delivered run
  *   does (a production order of one craft), and the rule that the Steward is no crier;
+ * - the zone preference of storage routing (a restocking zone-scoped order steers its material
+ *   into its zone, spec 026 FR-020);
  * - the task `govern.steward_audience` and the StandingOrder status provider;
  * - the commands `CreateStandingOrder`, `UpdateStandingOrder`, `PauseStandingOrder`,
  *   `ResumeStandingOrder`, `DeleteStandingOrder`, `AppointSteward`, `DismissSteward`,
@@ -101,6 +105,7 @@ export function registerStanding(engine: GameEngine): StandingService {
   crier.setRouter((boardId) => noticePostRoute(engine, boardId));
   crier.setRunApplier((runId) => applyRun(engine, runId));
   crier.setExclusion((entityId) => service.state.stewardEntityId === entityId);
+  getStorageService(engine).setZonePreference((materialId) => preferredZone(engine, materialId));
   getStatusService(engine).registerProvider(standingProvider);
   engine.taskHandlers.register(createAudienceTask(engine));
   engine.registerSystem({
@@ -116,9 +121,6 @@ export function registerStanding(engine: GameEngine): StandingService {
     ],
     slot: TickSlot.StewardDay,
     saveSection: service.createSection(),
-    init: () => {
-      service.reset();
-    },
     run: (context) => {
       const state = service.state;
       pruneRuns(engine);
