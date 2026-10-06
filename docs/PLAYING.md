@@ -98,7 +98,7 @@ A refused act shows `command.rejected` on the next step, and `diplomacy.act.refu
 
 ## Growing (settlement tiers)
 
-The settlement starts as a Hamlet. Once a day (at the start of the day) the game checks what the next tier needs and promotes at most one tier; nothing is ever lost again. Village needs 8 settlers, 4 dwellings and an active throne room (a walled zone of at least 9 cells with a table, designated as `throne_room`); settlers and dwellings come with the housing task (4.5), so for now a Hamlet can show the throne room done and the rest open.
+The settlement starts as a Hamlet. Once a day (at the start of the day) the game checks what the next tier needs and promotes at most one tier; nothing is ever lost again. Village needs 8 settlers, 4 dwellings and an active throne room (a walled zone of at least 9 cells with a table, designated as `throne_room`).
 
 ```
 tier                                 # the tier, when each was reached, the next tier's checklist ([x] met)
@@ -107,7 +107,31 @@ unlocks village                      # what Village will open
 milestones                           # seven firsts: throne room, worship space, market, guild, master craftsman, trade agreement, dwelling upgrade
 ```
 
-Locked buildings, zones, recipes and jobs are listed and can be looked at, but placing, designating, ordering or posting them is refused until the tier is reached. `scenarios/tier-progress.json` builds the throne room from the Checkpoint C opening (about 12 game days).
+Locked buildings, zones, recipes and jobs are listed and can be looked at, but placing, designating, ordering or posting them is refused until the tier is reached.
+
+## Homes and settlers (the way to Village)
+
+A **dwelling** is a `dwelling` zone: a walled room of at least four cells with a door and a bed. Once it is active it is a Hovel with room for as many residents as it has beds (at most two). Every morning (06:00) the homeless settlers move into the best dwelling with a free bed, and then, if the settlement has a throne room and beds are still free, up to two new settlers walk in from the edge of the map. Beds are the limit: six founders and two beds too many make two newcomers, and eight settlers in four Hovels make a Village.
+
+```
+homes                                # housed, homeless, free slots, one line per dwelling
+home 63                              # one dwelling: residents, streaks, what its level and the next level need
+zone designate dwelling 1 196 217 218 219     # a 2x2 room (walls on the cells around it, a door, beds on its cells)
+build wooden_bed 1 196               # a bed on a cell of the room: capacity is the number of beds, at most two for a Hovel
+build wooden_bed 1 217
+```
+
+Households also keep goods (bread for a Cottage) in a chest inside the dwelling and the residents fetch them from the settlement's storage; that chest and the beds belong to the residents. A Cottage needs the Village tier, six cells, two beds, two kinds of food eaten lately and bread in its chest; it pays rent into the treasury.
+
+`scenarios/hamlet-to-village.json` plays the whole way with player commands only (seed 42, small map), and the settlement is a Village on **day 32**:
+
+1. **Day 0** - the opening above (stockpile, fields, chest, workbench, mill, bakery) and a sawmill.
+2. **Day 3** - the food comes first: `order create grind_flour 200 <mill> 60`, `order create bake_bread 400 <oven> 60` (priority 60), 24 `saw_oak_planks` at priority 38, and from the trader (`traders`) `trade buy <traderId> nails 40`.
+3. **Day 5** - the throne room (ten walls, a door and a table, designated `throne_room`), 60 `cut_stone_block` at priority 36 and four 2x2 dwellings, each with a door, two beds and its own walls (most walls are shared). The rooms are queued with priorities 46 down to 43 so that they finish one after the other.
+4. **Days 5-30** - settlers quarry, saw, cut and build; a room is active when its walls, door and a bed stand (the first on day 25, the throne room on day 26, the second room that day and the third on day 29, the fourth on day 30). `homes` shows the founders moving in at 06:00 of the next day.
+5. **Day 31** - 06:00: the fourth room has two free beds and two settlers arrive; **day 32** - the tier check at the start of the day: `tier` says Village.
+
+Two rules of thumb that the script follows: food orders come before everything else (a hungry settler does nothing useful), and a job that feeds another must not have the lower priority (stone and planks are cut at 36-38, the rooms that need them at 43-46; quarrying is 40 and felling 30 by default). Walls cost one stone block and a quarry trip brings four limestone (D-58); the layout of the rooms is the cheapest one the map allows (see `docs/DECISIONS.md` D-58).
 
 ## When something is wrong
 

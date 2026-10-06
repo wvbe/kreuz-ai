@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { DwellingLevel } from "../content/contentTypes";
 import { LevelChange } from "./advanceStreaks";
 import { HousingService } from "./HousingService";
+import { ImmigrationBlockedReason } from "./housingTypes";
 
 const evaluation = {
-  current: { level: "hovel" as const, met: true, requirements: [] },
+  current: { level: DwellingLevel.Hovel, met: true, requirements: [] },
   next: null,
   change: LevelChange.Up,
 };
@@ -20,7 +22,7 @@ describe("HousingService", () => {
 
   it("keeps the level of a retired dwelling until it is handled", () => {
     const service = new HousingService();
-    service.retire(7, "cottage" as never);
+    service.retire(7, DwellingLevel.Cottage);
     expect(service.retiredLevel(7)).toBe("cottage");
     service.unretire(7);
     expect(service.retiredLevel(7)).toBeNull();
@@ -29,7 +31,7 @@ describe("HousingService", () => {
   it("tracks why settlers cannot come and resets with everything else", () => {
     const service = new HousingService();
     expect(service.immigrationBlocked()).toBeNull();
-    service.setBlocked("NoArrivalCell" as never);
+    service.setBlocked(ImmigrationBlockedReason.NoArrivalCell);
     service.remember(1, 1, evaluation);
     expect(service.immigrationBlocked()).toBe("NoArrivalCell");
     service.reset();

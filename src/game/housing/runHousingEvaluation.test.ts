@@ -3,7 +3,7 @@ import { ticksPerDay } from "../time/GameTime";
 import { DwellingLevel } from "../content/contentTypes";
 import { governmentFactionId } from "../factions/factionRegistry";
 import { getHousingService } from "./housingServiceRegistry";
-import { createHousingWorld, contentWithLevels } from "./testHousingWorld";
+import { asRecords, createHousingWorld, contentWithLevels } from "./testHousingWorld";
 import type { HousingTestWorld } from "./testHousingWorld";
 
 const options = { width: 16, height: 12 };
@@ -96,6 +96,11 @@ describe("runHousingEvaluation", () => {
     expect(world.dwellingData(zone).level).toBe("cottage");
     expect(world.dwellingData(zone).upgradeStreak).toBe(0);
     expect(upgrades).toEqual([{ dwellingId: zone, fromLevel: "hovel", toLevel: "cottage" }]);
+    // The settlement records its milestone from the same event (spec 027).
+    const milestone = asRecords(world.query("milestones")).find(
+      (row) => row["milestone"] === "first-dwelling-upgrade",
+    );
+    expect(milestone).toMatchObject({ reached: true, subjectIds: [zone] });
   });
 
   it("resets the streak when a requirement is lost before the grace is over (US2.2)", () => {

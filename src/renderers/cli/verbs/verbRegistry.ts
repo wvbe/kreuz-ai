@@ -8,6 +8,7 @@ import { jobVerbs } from "./jobVerbs";
 import { kernelVerbs } from "./kernelVerbs";
 import { metaVerbs } from "./metaVerbs";
 import { productionVerbs } from "./productionVerbs";
+import { housingVerbs } from "./housingVerbs";
 import { settlementVerbs } from "./settlementVerbs";
 import { statusVerbs } from "./statusVerbs";
 import { storageVerbs } from "./storageVerbs";
@@ -33,6 +34,7 @@ export const verbGroups: readonly (readonly Verb[])[] = [
   tradeVerbs,
   diplomacyVerbs,
   settlementVerbs,
+  housingVerbs,
   statusVerbs,
   metaVerbs,
 ];

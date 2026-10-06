@@ -26,6 +26,7 @@ timers or `fetch`. All state is JSON-serializable with integer numbers.
 - [construction](construction/README.md) - construction (016): blueprints as `build_site` entities, placement validation, supply and build jobs, walls and doors that obstruct cells, cancel and deconstruction.
 - [trade](trade/README.md) - trade and currency (019): the settlement treasury and wages, travelling traders, negotiated atomic trades, the trader refined-credit ledger (D-13) and the player's trade orders.
 - [diplomacy](diplomacy/README.md) - diplomacy (021): NPC factions with seats, standing deltas and decay, envoys that carry gifts, trade agreements, declarations and overtures, proposals, incidents, leader succession, the NPC faction AI.
+- [housing](housing/README.md) - dwellings and household upgrades (029): the `Dwelling` state, the daily evaluation, requirements and streaks, supplied goods, the fetch chore, rent, arriving settlers, household storage and beds.
 - [settlement](settlement/README.md) - settlement tiers (027): `SettlementProgress`, the daily tier check, the unlock table, milestones, the tier source of every gate, the reachability validator.
 - [status](status/README.md) - status explanations and production flow (025): derived statuses with structured reasons from per-system providers, `explain` with cause chains, the settle tracker and `status.*` events, the Idle & Blocked list and the per-day flow ledger.
 
