@@ -94,8 +94,16 @@ describe("engine determinism (spec 007, Constitution I)", () => {
     const engine = run(31, totalTicks);
     // 1 government + job board + 6 generated settlers (task 2.1) + the stockpile chest (task 3.2)
     // + 6 demo peasants.
-    expect(engine.getEntities()).toHaveLength(15);
-    const first = engine.getEntity(10);
+    // The NPC factions of diplomacy (their members and envoys) are not counted here.
+    const own = engine
+      .getEntities()
+      .filter(
+        (entity) => !["faction", "npc_leader", "diplomatic_envoy"].includes(entity.prototype),
+      );
+    expect(own).toHaveLength(15);
+    const first = engine.getEntity(
+      own.filter((entity) => entity.prototype === "peasant")[2]?.id ?? 0,
+    );
     expect(first?.components["Position"]?.["cellIndex"]).toBeDefined();
     const bread = (first?.components["Inventory"]?.["slots"] as { remainingMilli: number }[])[0];
     expect(bread?.remainingMilli).toBeLessThan(864_000);

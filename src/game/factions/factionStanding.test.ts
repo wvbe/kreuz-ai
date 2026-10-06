@@ -5,7 +5,7 @@ import { GameEngine } from "../engine/GameEngine";
 import { FactionError, FactionErrorKind } from "./FactionError";
 import { spawnContentFaction } from "./factionRegistry";
 import { clampStanding, getStanding, setStanding } from "./factionStanding";
-import { standingChangedEvent } from "./factionTypes";
+import { attitudeChangedEvent, standingChangedEvent } from "./factionTypes";
 
 function setup(): { engine: GameEngine; government: number; guild: number } {
   const engine = new GameEngine(loadContent(), { entropy: () => 1 });
@@ -74,5 +74,30 @@ describe("setStanding", () => {
     expect(
       (engine.store.require(government).components["Faction"] as { standing: object[] }).standing,
     ).toHaveLength(1);
+  });
+
+  it("queues diplomacy.attitude.changed only when the value moves into another band", () => {
+    const { engine, government, guild } = setup();
+    const events: JsonValue[] = [];
+    engine.bus.subscribe(attitudeChangedEvent, (payload) => events.push(payload));
+    setStanding(engine, government, guild, 5);
+    setStanding(engine, government, guild, 19);
+    setStanding(engine, government, guild, 20);
+    setStanding(engine, government, guild, -31);
+    engine.bus.processQueue();
+    expect(events).toEqual([
+      {
+        factionId: government,
+        otherFactionId: guild,
+        oldAttitude: "neutral",
+        newAttitude: "friendly",
+      },
+      {
+        factionId: government,
+        otherFactionId: guild,
+        oldAttitude: "friendly",
+        newAttitude: "hostile",
+      },
+    ]);
   });
 });

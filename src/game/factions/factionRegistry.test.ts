@@ -45,6 +45,7 @@ describe("spawnContentFaction", () => {
       disposition: "mercantile",
       leaderId: null,
       standing: [],
+      seat: null,
     });
   });
 

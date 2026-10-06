@@ -36,7 +36,11 @@ describe("registerFactions", () => {
 
   it("makes every starting settler a member of the government, led by one of them", () => {
     const engine = startEngine(42);
-    const settlers = engine.store.entities().filter((entity) => entity.components["Citizen"]);
+    const settlers = engine.store
+      .entities()
+      .filter(
+        (entity) => entity.components["Citizen"] && engine.content.humanoids.has(entity.prototype),
+      );
     expect(settlers).toHaveLength(6);
     for (const settler of settlers) {
       expect(query(engine, "faction-of", { entityId: settler.id })).toEqual({
@@ -49,7 +53,7 @@ describe("registerFactions", () => {
       memberIds: settlers.map((settler) => settler.id),
     });
     const views = query(engine, "factions", {}) as { id: number; leaderId: number | null }[];
-    expect(views.map((view) => view.id)).toEqual([1]);
+    expect(views.map((view) => view.id).slice(0, 1)).toEqual([1]);
     expect(settlers.map((settler) => settler.id)).toContain(views[0]?.leaderId);
   });
 
@@ -67,8 +71,10 @@ describe("registerFactions", () => {
     engine.bus.subscribe(factionLeaderChangedEvent, () => names.push("leader"));
     engine.newGame({ seed: 3, mapSize: MapSize.Small });
     engine.bus.processQueue();
-    expect(names.filter((name) => name === "membership")).toHaveLength(6);
-    expect(names.filter((name) => name === "leader")).toHaveLength(1);
+    // six settlers and the two members of each of the three NPC factions
+    expect(names.filter((name) => name === "membership")).toHaveLength(12);
+    // the government and the three NPC factions get a leader
+    expect(names.filter((name) => name === "leader")).toHaveLength(4);
   });
 
   it("cleans dangling references when a leader or a faction is deleted", () => {
@@ -85,6 +91,9 @@ describe("registerFactions", () => {
     engine.store.requestDelete(1);
     engine.tick();
     for (const entity of engine.store.entities()) {
+      if (!engine.content.humanoids.has(entity.prototype)) {
+        continue;
+      }
       expect(
         (entity.components["Citizen"] as { factions: number[] } | undefined)?.factions ?? [],
       ).toEqual([]);

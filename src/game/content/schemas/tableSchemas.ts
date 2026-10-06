@@ -19,6 +19,8 @@ import {
   positiveSchema,
 } from "./fieldSchemas";
 
+const standingSchema = z.number().int().min(-100).max(100);
+
 /**
  * Authored content constants (spec 022 FR-023, DECISIONS D-15/D-30): a single object, every
  * field range-checked. Ratios are authored as decimals and stored as permille; days and ticks
@@ -79,6 +81,31 @@ export const contentConstantsSchema = z
     tradeStandingPerTrade: countSchema,
     tradeStandingDailyCap: countSchema,
     hostileStanding: z.number().int().min(-100).max(0),
+    friendlyStanding: standingSchema,
+    alliedStanding: standingSchema,
+    agreementMinStanding: standingSchema,
+    warThreshold: standingSchema,
+    warStanding: standingSchema,
+    peaceStanding: standingSchema,
+    giftBaseDelta: countSchema,
+    giftCoinsPerPoint: positiveSchema,
+    giftMaxDelta: countSchema,
+    agreementAcceptedDelta: countSchema,
+    overtureAcceptedDelta: countSchema,
+    overtureMinStanding: standingSchema,
+    rejectionPenalty: countSchema,
+    standingDecayIntervalDays: positiveSchema,
+    envoyUnitsPerTick: positiveSchema,
+    envoyJitterTicks: countSchema,
+    envoyStuckTimeoutTicks: positiveSchema,
+    maxEnvoysPerFaction: positiveSchema,
+    proposalExpiryTicks: positiveSchema,
+    npcEvalIntervalTicks: positiveSchema,
+    npcActCooldownTicks: positiveSchema,
+    warChance: fractionSchema,
+    incidentChance: fractionSchema,
+    incidentStandingDelta: standingSchema,
+    incidentReciprocalDelta: standingSchema,
   })
   .strict()
   .refine((constants) => constants.downgradeGraceDays > constants.upgradeGraceDays, {

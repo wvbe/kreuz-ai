@@ -188,5 +188,29 @@
         ]
       }
     }
+  },
+  {
+    "id": "npc_leader",
+    "components": {
+      "Citizen": {},
+      "Identity": {
+        "nameListId": "common_13c"
+      },
+      "Skills": {},
+      "Inventory": {
+        "slotCount": 12,
+        "queryable": false
+      }
+    }
+  },
+  {
+    "id": "diplomatic_envoy",
+    "components": {
+      "Envoy": {},
+      "Inventory": {
+        "slotCount": 8,
+        "queryable": false
+      }
+    }
   }
 ]

@@ -3,7 +3,7 @@ import type { Entity, EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { factionComponent } from "./factionComponent";
 import { factionsOf, membersOf } from "./factionMembership";
-import type { StandingEntry } from "./factionTypes";
+import type { FactionSeat, StandingEntry } from "./factionTypes";
 
 /**
  * Plain view of one faction (query `factions`).
@@ -18,6 +18,7 @@ export type FactionView = {
   readonly leaderId: EntityId | null;
   readonly memberIds: readonly EntityId[];
   readonly standing: readonly StandingEntry[];
+  readonly seat: FactionSeat | null;
 };
 
 /**
@@ -50,6 +51,7 @@ export function buildFactionView(engine: GameEngine, entity: Entity): FactionVie
     leaderId: faction.leaderId,
     memberIds: membersOf(engine, entity.id).map((member) => member.id),
     standing: faction.standing.map((entry) => ({ ...entry })),
+    seat: faction.seat === null ? null : { ...faction.seat },
   };
 }
 

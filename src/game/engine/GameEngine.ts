@@ -52,6 +52,7 @@ import { registerStorage } from "../storage/registerStorage";
 import { registerProduction } from "../production/registerProduction";
 import { registerConstruction } from "../construction/registerConstruction";
 import { registerGathering } from "../gathering/registerGathering";
+import { registerDiplomacy } from "../diplomacy/registerDiplomacy";
 import { registerTrade } from "../trade/registerTrade";
 import { registerStatus } from "../status/registerStatus";
 import { registerZones } from "../zones/registerZones";
@@ -670,6 +671,7 @@ export class GameEngine {
     registerConstruction(this);
     registerGathering(this);
     registerTrade(this);
+    registerDiplomacy(this);
     registerStatus(this);
     this.registerSystem({
       id: "world.starting-map",

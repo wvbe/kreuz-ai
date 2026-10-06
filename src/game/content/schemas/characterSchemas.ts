@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   AnimalKind,
   FactionType,
+  SeatSide,
   NeedSatisfactionKind,
   PerformanceStat,
   SkillEffectKind,
@@ -181,6 +182,23 @@ export const animalPrototypeSchema = z
 export type AnimalPrototypeContent = z.infer<typeof animalPrototypeSchema>;
 
 /**
+ * How a faction that lives off the map takes part in the world (spec 021, DECISIONS D-56): the map
+ * edge of its seat, how each side sees the other at the start and the weights of the acts its AI
+ * may choose (0 = never).
+ */
+export const npcFactionSchema = z
+  .object({
+    side: z.enum(SeatSide),
+    standingTowardSettlement: z.number().int().min(-100).max(100).default(0),
+    settlementStandingToward: z.number().int().min(-100).max(100).default(0),
+    overtureWeight: countSchema.default(0),
+    agreementWeight: countSchema.default(0),
+    incidentWeight: countSchema.default(0),
+    warLike: z.boolean().default(false),
+  })
+  .strict();
+
+/**
  * Authored faction (spec 022 faction record, spec 021). `masterSkillThreshold` must exceed the
  * membership minimum.
  */
@@ -194,6 +212,7 @@ export const factionSchema = z
     membership: z.object({ skillId: contentIdSchema, minLevel: levelSchema }).strict().optional(),
     masterSkillThreshold: levelSchema.default(60),
     associatedZoneIds: z.array(contentIdSchema).default([]),
+    npc: npcFactionSchema.optional(),
   })
   .strict()
   .refine(

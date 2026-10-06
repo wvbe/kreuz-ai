@@ -23,6 +23,7 @@ import { stockpileComponent } from "../storage/stockpileComponent";
 import { productionOrdersComponent } from "../production/productionOrdersComponent";
 import { zoneComponent } from "../zones/zoneComponent";
 import { merchantComponent } from "../trade/merchantComponent";
+import { envoyComponent } from "../diplomacy/envoyComponent";
 import { traderComponent } from "../trade/traderComponent";
 import { loadContent } from "./ContentLoader";
 
@@ -50,6 +51,7 @@ function components(): ComponentRegistry {
     buildSiteComponent,
     merchantComponent,
     traderComponent,
+    envoyComponent,
   ]) {
     registry.register(definition);
   }
@@ -74,6 +76,7 @@ describe("ContentRegistries", () => {
       "build_site",
       "carpenter",
       "chest",
+      "diplomatic_envoy",
       "door",
       "faction",
       "farmer",
@@ -82,6 +85,7 @@ describe("ContentRegistries", () => {
       "grinding_mill",
       "job_board",
       "loose_pile",
+      "npc_leader",
       "oven",
       "peasant",
       "sawmill",

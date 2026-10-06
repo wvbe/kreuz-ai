@@ -1,12 +1,13 @@
 import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
+import { Attitude, attitudeOfValue } from "../factions/attitudeBands";
 import { citizenComponent } from "../factions/citizenComponent";
 import { getStanding } from "../factions/factionStanding";
 import { skillLevel } from "../skills/skillLevels";
 import { getJobService } from "./jobServiceRegistry";
 import { tierOrder } from "./JobService";
-import { EligibilityKind, hostileStandingThreshold } from "./jobTypes";
+import { EligibilityKind } from "./jobTypes";
 import type { Eligibility, JobPosting } from "./jobTypes";
 
 /**
@@ -63,7 +64,10 @@ export function satisfiesEligibility(
       }
       return (
         citizen.factions.includes(posting.posterFactionId) ||
-        meanStandingToward(engine, worker, posting.posterFactionId) >= hostileStandingThreshold
+        attitudeOfValue(
+          engine.content.constants,
+          meanStandingToward(engine, worker, posting.posterFactionId),
+        ) !== Attitude.Hostile
       );
     case EligibilityKind.MinSkill:
       return skillLevel(worker, predicate.skillId) >= predicate.level;

@@ -3,8 +3,14 @@ import type { EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { factionComponent } from "./factionComponent";
 import { FactionError, FactionErrorKind } from "./FactionError";
-import { maxStanding, minStanding, standingChangedEvent } from "./factionTypes";
-import type { StandingChanged, StandingEntry } from "./factionTypes";
+import { attitudeOfValue } from "./attitudeBands";
+import {
+  attitudeChangedEvent,
+  maxStanding,
+  minStanding,
+  standingChangedEvent,
+} from "./factionTypes";
+import type { AttitudeChanged, StandingChanged, StandingEntry } from "./factionTypes";
 
 /**
  * Clamps a standing value to `-100..100` (spec 021 FR-007).
@@ -52,8 +58,9 @@ export function getStanding(
 
 /**
  * Sets one faction's standing toward another, clamped, keeping the list ascending and dropping an
- * entry that returns to the default. Queues `diplomacy.standing.changed` when the value changes.
- * Per-act deltas and the agreement rules belong to the diplomacy task (4.2).
+ * entry that returns to the default. Queues `diplomacy.standing.changed` when the value changes
+ * and `diplomacy.attitude.changed` when it moves into another band (`Attitude`). The deltas of
+ * acts, incidents and decay live in `src/game/diplomacy` and call this.
  *
  * @param engine - The engine that owns the entities.
  * @param factionId - The faction whose view changes.
@@ -89,6 +96,12 @@ export function setStanding(
       newValue: next.value,
     };
     engine.bus.emit(standingChangedEvent, payload);
+    const oldAttitude = attitudeOfValue(engine.content.constants, before.value);
+    const newAttitude = attitudeOfValue(engine.content.constants, next.value);
+    if (oldAttitude !== newAttitude) {
+      const changed: AttitudeChanged = { factionId, otherFactionId, oldAttitude, newAttitude };
+      engine.bus.emit(attitudeChangedEvent, changed);
+    }
   }
   return next;
 }

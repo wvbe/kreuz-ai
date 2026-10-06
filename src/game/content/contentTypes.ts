@@ -178,6 +178,17 @@ export enum FactionType {
   Occupational = "occupational",
   Religious = "religious",
   Mercantile = "mercantile",
+  Political = "political",
+}
+
+/**
+ * Edge of the starting map where an NPC faction has its seat (spec 021, DECISIONS D-14, D-56).
+ */
+export enum SeatSide {
+  North = "north",
+  East = "east",
+  South = "south",
+  West = "west",
 }
 
 /**

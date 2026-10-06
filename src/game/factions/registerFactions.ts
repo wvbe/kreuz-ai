@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { defineCommand } from "../api/defineCommand";
 import { defineQuery } from "../api/defineQuery";
 import { getComponent } from "../ecs/Entity";
 import { RelationshipDirection } from "../ecs/RelationshipRegistry";
@@ -8,6 +9,7 @@ import { cleanUpFactionReferences } from "./cleanUpFactionReferences";
 import { citizenComponent } from "./citizenComponent";
 import { factionComponent } from "./factionComponent";
 import { FactionError, FactionErrorKind } from "./FactionError";
+import { setFactionLeader } from "./factionLeader";
 import { membersOf } from "./factionMembership";
 import { listFactions } from "./factionRegistry";
 import { factionsSystemId } from "./factionTypes";
@@ -15,6 +17,7 @@ import { buildFactionView, buildMembershipView } from "./factionViews";
 
 const registered = new WeakSet<GameEngine>();
 
+const idSchema = z.number().int().min(1);
 const entityArgsSchema = z.object({ entityId: z.number().int().min(1) }).strict();
 const factionArgsSchema = z.object({ factionId: z.number().int().min(1) }).strict();
 
@@ -63,7 +66,7 @@ function validateReferences(engine: GameEngine): void {
  * relationships `members`/`factions` and `leader`, adds a before-delete hook that cleans dangling
  * references (deleted faction leaves every member list and standing list, deleted leader empties
  * `leaderId`), validates references on load (a dangling one is a `FactionError`, so `loadGame`
- * fails and keeps the current game) and adds the queries `factions` (`{}`), `faction-of`
+ * fails and keeps the current game) and adds the command `SetFactionLeader` (`{factionId, entityId|null}`; the leader must be a member, null makes the faction leaderless and the diplomacy succession pass picks the next one) and the queries `factions` (`{}`), `faction-of`
  * (`{entityId}`) and `members-of` (`{factionId}`; `null` for an unknown faction).
  *
  * @param engine - The engine to extend; call before the first `newGame` / `loadGame`.
@@ -98,6 +101,27 @@ export function registerFactions(engine: GameEngine): void {
       if (mode === InitMode.LoadGame) {
         validateReferences(target);
       }
+    },
+    commandHandlers: {
+      SetFactionLeader: defineCommand({
+        schema: z.object({ factionId: idSchema, entityId: idSchema.nullable() }).strict(),
+        handler: (payload, target) => {
+          try {
+            return { changed: setFactionLeader(target, payload.factionId, payload.entityId) };
+          } catch (failure) {
+            if (failure instanceof FactionError && failure.kind === FactionErrorKind.NotMember) {
+              throw new Error(`NotMember: ${failure.message}`);
+            }
+            if (
+              failure instanceof FactionError &&
+              failure.kind === FactionErrorKind.UnknownFaction
+            ) {
+              throw new Error(`UnknownFaction: ${failure.message}`);
+            }
+            throw failure;
+          }
+        },
+      }),
     },
     queries: {
       factions: defineQuery({

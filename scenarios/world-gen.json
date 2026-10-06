@@ -103,12 +103,12 @@
         "value": 1
       }
     },
-    { "assert": { "query": "entities", "path": "total", "op": "eq", "value": 9 } },
+    { "assert": { "query": "entities", "path": "total", "op": "eq", "value": 18 } },
     { "assert": { "query": "settlement", "path": "population", "op": "eq", "value": 6 } },
     { "assertHash": { "label": "generated" } },
     { "step": 100 },
     { "saveLoad": true },
-    { "assert": { "query": "entities", "path": "total", "op": "eq", "value": 9 } },
+    { "assert": { "query": "entities", "path": "total", "op": "eq", "value": 20 } },
     {
       "assert": {
         "query": "map",

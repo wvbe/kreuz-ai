@@ -5,6 +5,7 @@ import { citizenComponent } from "../factions/citizenComponent";
 import { reachCostsOf } from "../jobs/claimJob";
 import type { GameMap } from "../map/GameMap";
 import { positionComponent } from "../map/positionComponent";
+import { taskQueueComponent } from "../task/taskQueueComponent";
 
 /**
  * Per-pass helpers for providers. A context lives for one pass (one tick or one query) and is
@@ -17,7 +18,7 @@ export type StatusContext = {
    */
   reachCosts: (citizen: Entity) => Map<number, number> | null;
   /**
-   * Every live entity with a `Citizen` component in entity order, listed once per pass.
+   * Every live entity with `Citizen` and `TaskQueue` components (so not the off-map NPC leaders) in entity order, listed once per pass.
    */
   citizens: () => Entity[];
 };
@@ -55,7 +56,9 @@ export function createStatusContext(engine: GameEngine): StatusContext {
         .entities()
         .filter(
           (entity) =>
-            hasComponent(entity, citizenComponent) && !engine.store.isPendingDelete(entity.id),
+            hasComponent(entity, citizenComponent) &&
+            hasComponent(entity, taskQueueComponent) &&
+            !engine.store.isPendingDelete(entity.id),
         );
       return citizens;
     },

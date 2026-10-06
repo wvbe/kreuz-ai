@@ -312,7 +312,8 @@ describe("GameEngine query facade", () => {
     engine.newGame({ seed: 1, mapSize: MapSize.Small });
     engine.runTicks(300);
     const state = engine.getState();
-    expect(state.entityCount).toBe(9);
+    // settlement kit (9) plus three NPC factions, their six members and two envoys under way
+    expect(state.entityCount).toBe(20);
     expect(state.mapCount).toBe(1);
     expect(state.time).toEqual({
       tick: 300,
@@ -378,13 +379,17 @@ describe("GameEngine registerSystem", () => {
     expect(engine.getQuery("demo.total")?.run(null, engine)).toBe(0);
     expect(engine.getQuery("demo.none")).toBeUndefined();
     expect(engine.queryNames()).toEqual([
+      "agreements",
       "build-menu",
       "construction-queue",
       "crops",
       "demo.total",
+      "directives",
+      "envoys",
       "explain",
       "faction-of",
       "factions",
+      "factions-diplomacy",
       "find-path",
       "find-route",
       "flow",
@@ -399,6 +404,7 @@ describe("GameEngine registerSystem", () => {
       "order",
       "pending-updates",
       "production-orders",
+      "proposals",
       "reachable",
       "recipes-for",
       "reservations",
@@ -429,6 +435,7 @@ describe("GameEngine registerSystem", () => {
       "CancelConstruction",
       "CancelConstructionJob",
       "CancelCraft",
+      "CancelDiplomaticDirective",
       "CancelPendingBoardUpdate",
       "CancelProductionOrder",
       "CancelTradeOrder",
@@ -437,6 +444,7 @@ describe("GameEngine registerSystem", () => {
       "DeleteZone",
       "DesignateZone",
       "DismissTownCrier",
+      "IssueDiplomaticAct",
       "ModifyPosting",
       "MoveConstructionJobToFront",
       "PlaceDoor",
@@ -450,8 +458,10 @@ describe("GameEngine registerSystem", () => {
       "QueueWalls",
       "RemovePosting",
       "RemoveZoneTiles",
+      "RespondToProposal",
       "SetConstructionJobPaused",
       "SetConstructionPriority",
+      "SetFactionLeader",
       "SetJobBoardPaused",
       "SetPriceMultiplier",
       "SetProductionOrderPaused",

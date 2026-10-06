@@ -29,7 +29,11 @@ describe("cleanUpFactionReferences", () => {
   it("empties leaderId of a deleted leader and emits the change", () => {
     const { engine, guild, baker } = setup();
     const events: JsonValue[] = [];
-    engine.bus.subscribe(factionLeaderChangedEvent, (payload) => events.push(payload));
+    engine.bus.subscribe(factionLeaderChangedEvent, (payload) => {
+      if ((payload as { factionId: number }).factionId === guild) {
+        events.push(payload);
+      }
+    });
     engine.store.requestDelete(baker);
     engine.tick();
     expect(engine.store.get(baker)).toBeUndefined();

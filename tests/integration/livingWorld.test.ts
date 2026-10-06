@@ -98,7 +98,12 @@ describe("Checkpoint B: settlers live autonomously (seed 42, Small)", () => {
         expect(record.cause).toBe("Starvation");
         deaths.push([engine.time.tickCount, record.entityId]);
       });
-      engine.bus.subscribe("entity.deleted", (payload) => deleted.push(payload));
+      engine.bus.subscribe("entity.deleted", (payload) => {
+        // the envoys of diplomacy come and go as well; only citizens count here
+        if ((payload as { prototypeId: string }).prototypeId !== "diplomatic_envoy") {
+          deleted.push(payload);
+        }
+      });
       engine.runTicks(1300);
       return { deaths, deleted };
     };

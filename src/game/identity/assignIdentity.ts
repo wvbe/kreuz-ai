@@ -41,9 +41,11 @@ export function takenNames(engine: GameEngine, exceptId: EntityId): TakenName[] 
  * Names a freshly spawned citizen (spec 028 FR-002, FR-004, FR-005, DECISIONS D-17): call once,
  * after `initializeCharacter` and after the citizen joined its factions. A prototype that fixes
  * `givenName` (and optionally `byname`) draws nothing from the stream and only gets the ordinal
- * rule; otherwise the name is drawn from the prototype's name list on `identity.names`. Sets the
+ * rule; otherwise the name is drawn from the prototype's name list (or, for an entity that is no
+ * humanoid but carries `Identity`, such as the leaders of NPC factions, the list of its `Identity`
+ * component) on `identity.names`. Sets the
  * title snapshot silently (no `identity.title.changed` at creation) and queues `identity.named`.
- * Entities without `Identity` or that are not humanoids are left untouched.
+ * Entities without `Identity` are left untouched.
  *
  * @param engine - The engine that owns the entity.
  * @param entityId - The new citizen.
@@ -52,12 +54,12 @@ export function assignIdentity(engine: GameEngine, entityId: EntityId): void {
   const entity = engine.store.require(entityId);
   const identity = getComponent(entity, identityComponent);
   const humanoid = engine.content.humanoids.find(entity.prototype);
-  if (identity === undefined || humanoid === undefined) {
+  if (identity === undefined) {
     return;
   }
   const taken = takenNames(engine, entityId);
   let name: DrawnName;
-  if (humanoid.givenName !== undefined) {
+  if (humanoid?.givenName !== undefined) {
     const byname = humanoid.byname ?? null;
     name = {
       givenName: humanoid.givenName,
@@ -66,7 +68,7 @@ export function assignIdentity(engine: GameEngine, entityId: EntityId): void {
     };
   } else {
     name = drawName({
-      list: engine.content.nameLists.require(humanoid.nameListId),
+      list: engine.content.nameLists.require(humanoid?.nameListId ?? identity.nameListId),
       stream: engine.prng.stream(identityStreamName),
       bynameChancePermille: engine.content.constants.bynameChance,
       redrawLimit: engine.content.constants.nameRedrawLimit,
@@ -76,7 +78,7 @@ export function assignIdentity(engine: GameEngine, entityId: EntityId): void {
   identity.givenName = name.givenName;
   identity.byname = name.byname;
   identity.nameOrdinal = name.nameOrdinal;
-  identity.nameListId = humanoid.nameListId;
+  identity.nameListId = humanoid?.nameListId ?? identity.nameListId;
   identity.titleSnapshot = deriveTitle(engine.content, entity, null);
   const payload: IdentityNamed = { entityId, ...name };
   engine.bus.emit(identityNamedEvent, payload);

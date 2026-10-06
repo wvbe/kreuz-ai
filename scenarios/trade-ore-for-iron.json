@@ -178,7 +178,7 @@
         "query": "traders",
         "path": "traders.0.entityId",
         "op": "eq",
-        "value": 39
+        "value": 50
       }
     },
     {
@@ -192,7 +192,7 @@
     {
       "command": {
         "kind": "TradeSell",
-        "traderId": 39,
+        "traderId": 50,
         "materialId": "iron_ore",
         "quantity": 8
       }
@@ -227,7 +227,7 @@
     {
       "command": {
         "kind": "TradeBuy",
-        "traderId": 39,
+        "traderId": 50,
         "materialId": "iron_ingot",
         "quantity": 5
       }
@@ -246,7 +246,7 @@
     {
       "command": {
         "kind": "TradeBuy",
-        "traderId": 39,
+        "traderId": 50,
         "materialId": "iron_ingot",
         "quantity": 3
       }
@@ -319,7 +319,7 @@
         "query": "traders",
         "path": "traders.0.entityId",
         "op": "eq",
-        "value": 40
+        "value": 59
       }
     },
     {
@@ -341,7 +341,7 @@
     {
       "command": {
         "kind": "TradeBuy",
-        "traderId": 40,
+        "traderId": 59,
         "materialId": "iron_ingot",
         "quantity": 1
       }

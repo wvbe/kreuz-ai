@@ -2,8 +2,9 @@ import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { ceilDiv, floorDiv } from "../engine/fixedPoint";
-import { getStanding } from "../factions/factionStanding";
 import { governmentFactionId } from "../factions/factionRegistry";
+import { getStanding } from "../factions/factionStanding";
+import { isHostilePair } from "../factions/standingAttitude";
 import { getTotal } from "../inventory/inventoryQueries";
 import { marginAddPermille } from "../skills/traitModifiers";
 import { getStorageService } from "../storage/storageServiceRegistry";
@@ -80,11 +81,7 @@ export function isFactionHostile(engine: GameEngine, factionId: number): boolean
   if (factionId === 0 || government === null) {
     return false;
   }
-  const limit = engine.content.constants.hostileStanding;
-  return (
-    getStanding(engine, factionId, government).value < limit ||
-    getStanding(engine, government, factionId).value < limit
-  );
+  return isHostilePair(engine, factionId, government);
 }
 
 /**

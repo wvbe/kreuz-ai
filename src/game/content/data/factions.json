@@ -16,6 +16,42 @@
     "name": "Travelling merchants",
     "factionType": "mercantile",
     "leaderTitle": "Caravan master",
-    "disposition": "mercantile"
+    "disposition": "mercantile",
+    "npc": {
+      "side": "east",
+      "standingTowardSettlement": 0,
+      "settlementStandingToward": 0,
+      "overtureWeight": 2,
+      "agreementWeight": 3
+    }
+  },
+  {
+    "id": "ashford_barony",
+    "name": "Barony of Ashford",
+    "factionType": "political",
+    "leaderTitle": "Baron",
+    "disposition": "aggressive",
+    "npc": {
+      "side": "north",
+      "standingTowardSettlement": -5,
+      "settlementStandingToward": -5,
+      "overtureWeight": 1,
+      "incidentWeight": 3,
+      "warLike": true
+    }
+  },
+  {
+    "id": "wulfric_abbey",
+    "name": "Abbey of St Wulfric",
+    "factionType": "religious",
+    "leaderTitle": "Abbot",
+    "disposition": "pious",
+    "npc": {
+      "side": "west",
+      "standingTowardSettlement": 25,
+      "settlementStandingToward": 20,
+      "overtureWeight": 2,
+      "agreementWeight": 2
+    }
   }
 ]

@@ -15,7 +15,13 @@ function startEngine(seed: number): GameEngine {
 }
 
 function citizens(engine: GameEngine) {
-  return engine.store.entities().filter((entity) => entity.components["Identity"] !== undefined);
+  return engine.store
+    .entities()
+    .filter(
+      (entity) =>
+        entity.components["Identity"] !== undefined &&
+        engine.content.humanoids.has(entity.prototype),
+    );
 }
 
 function identityOf(engine: GameEngine, entityId: number): { styledName: string } {

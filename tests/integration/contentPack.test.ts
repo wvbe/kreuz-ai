@@ -3,6 +3,7 @@ import { aiStateComponent } from "../../src/game/behavior/aiStateComponent";
 import { BehaviorHandlerRegistry } from "../../src/game/behavior/BehaviorHandlerRegistry";
 import { NodeStatus } from "../../src/game/behavior/behaviorTypes";
 import { merchantComponent } from "../../src/game/trade/merchantComponent";
+import { envoyComponent } from "../../src/game/diplomacy/envoyComponent";
 import { traderComponent } from "../../src/game/trade/traderComponent";
 import { loadContent } from "../../src/game/content/ContentLoader";
 import { ComponentRegistry } from "../../src/game/ecs/ComponentRegistry";
@@ -67,6 +68,7 @@ describe("content pack v0 with the kernel", () => {
       buildSiteComponent,
       merchantComponent,
       traderComponent,
+      envoyComponent,
     ]) {
       components.register(definition);
     }
@@ -124,6 +126,7 @@ describe("content pack v0 with the kernel", () => {
     components.register(buildSiteComponent);
     components.register(merchantComponent);
     components.register(traderComponent);
+    components.register(envoyComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

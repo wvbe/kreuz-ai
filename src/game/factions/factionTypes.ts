@@ -46,6 +46,20 @@ export type FactionData = {
    */
   leaderId: EntityId | null;
   standing: StandingEntry[];
+  /**
+   * Where the faction has its seat (DECISIONS D-14, D-56): a map-edge cell for an NPC faction,
+   * null for the player government (its seat is the market cell, there is no Throne Room yet) and
+   * for guilds.
+   */
+  seat: FactionSeat | null;
+};
+
+/**
+ * A cell of a map where a faction has its seat.
+ */
+export type FactionSeat = {
+  mapId: number;
+  cellIndex: number;
 };
 
 /**
@@ -102,6 +116,11 @@ export const factionLeaderChangedEvent = "faction.leader.changed";
 export const standingChangedEvent = "diplomacy.standing.changed";
 
 /**
+ * Event emitted when the attitude band of one faction toward another changes (D-56).
+ */
+export const attitudeChangedEvent = "diplomacy.attitude.changed";
+
+/**
  * Payload of `faction.membership.changed`.
  */
 export type FactionMembershipChanged = {
@@ -127,4 +146,15 @@ export type StandingChanged = {
   otherFactionId: EntityId;
   oldValue: number;
   newValue: number;
+};
+
+/**
+ * Payload of `diplomacy.attitude.changed`: the band of the holder's standing toward the other
+ * faction changed (`Attitude` of `standingAttitude.ts`, as its string value).
+ */
+export type AttitudeChanged = {
+  factionId: EntityId;
+  otherFactionId: EntityId;
+  oldAttitude: string;
+  newAttitude: string;
 };

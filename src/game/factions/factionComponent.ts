@@ -26,6 +26,10 @@ export const factionDataSchema = z
         })
         .strict(),
     ),
+    seat: z
+      .object({ mapId: entityIdSchema, cellIndex: z.number().int().min(0) })
+      .strict()
+      .nullable(),
   })
   .strict()
   .refine(
@@ -52,5 +56,6 @@ export const factionComponent = defineComponent<"Faction", FactionData>(
     disposition: "none",
     leaderId: null,
     standing: [],
+    seat: null,
   }),
 );

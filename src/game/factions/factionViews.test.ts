@@ -32,6 +32,7 @@ describe("buildFactionView", () => {
       leaderId: baker,
       memberIds: [baker],
       standing: [{ factionId: 1, value: -35, tradeAgreement: false }],
+      seat: null,
     });
   });
 

@@ -12,7 +12,20 @@ describe("factionComponent", () => {
       disposition: "none",
       leaderId: null,
       standing: [],
+      seat: null,
     });
+  });
+
+  it("round trips a seat and rejects a malformed one", () => {
+    const base = factionComponent.defaults();
+    const seated = { ...base, seat: { mapId: 1, cellIndex: 77 } };
+    expect(factionDataSchema.parse(JSON.parse(JSON.stringify(seated)))).toEqual(seated);
+    expect(factionDataSchema.safeParse({ ...base, seat: { mapId: 0, cellIndex: 1 } }).success).toBe(
+      false,
+    );
+    expect(
+      factionDataSchema.safeParse({ ...base, seat: { mapId: 1, cellIndex: -1 } }).success,
+    ).toBe(false);
   });
 
   it("round trips JSON with a standing list", () => {

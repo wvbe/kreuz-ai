@@ -15,16 +15,20 @@ function startedSession(): GameSession {
 describe("SessionQuery", () => {
   it("lists the kernel queries", () => {
     expect(startedSession().query.names()).toEqual([
+      "agreements",
       "build-menu",
       "cell",
       "construction-queue",
       "crops",
+      "directives",
       "entities",
       "entity",
+      "envoys",
       "event-log",
       "explain",
       "faction-of",
       "factions",
+      "factions-diplomacy",
       "find-path",
       "find-route",
       "flow",
@@ -42,6 +46,7 @@ describe("SessionQuery", () => {
       "pending-commands",
       "pending-updates",
       "production-orders",
+      "proposals",
       "reachable",
       "recipes-for",
       "reservations",
