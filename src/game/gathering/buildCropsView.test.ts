@@ -12,7 +12,7 @@ describe("buildCropsView", () => {
     sowCell(world.engine, world.mapId, 23);
     const plot = getGatheringService(world.engine).plotAt(world.mapId, 23);
     if (plot !== undefined) {
-      plot.growthMilli = 432_000;
+      plot.growthMilli = 288_000;
     }
     const view = buildCropsView(world.engine);
     expect(view.map((cell) => [cell.cellIndex, cell.stage])).toEqual([
@@ -25,7 +25,7 @@ describe("buildCropsView", () => {
       zoneId,
       materialId: "wheat",
       growthPermille: 500,
-      ticksToRipe: 432,
+      ticksToRipe: 288,
     });
     expect(view[0]).toMatchObject({ growthPermille: 0, ticksToRipe: null, materialId: "wheat" });
   });

@@ -20,7 +20,7 @@ describe("postMineJobs", () => {
     const cells = activePostingsOfType(world.engine, mineOreJobId).map(
       (posting) => posting.target.cellIndex,
     );
-    expect(cells).toEqual([31, 32]);
+    expect(cells).toEqual([31, 32, 33, 34]);
     expect(postMineJobs(world.engine, 24)).toEqual([]);
   });
 

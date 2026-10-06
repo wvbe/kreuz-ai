@@ -17,7 +17,7 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `furniture.json` | 9 records: 7 pieces plus `wall` and `door`; each has the build definition of task 3.5 (`constructionMaterials`, `constructionTicks`, `unlockTier`, `deconstructionYield`, optional `removable`); bed, workbench, chest, table, sawmill, wall and door unlock at `hamlet`, the oven at `village` | 50+ |
 | `zones.json` | 7 zone types (stockpile, pantry, farm_field, bakery, bedroom, dwelling, throne_room); a furniture alternative may carry `perTiles` (density), a zone type `requiresJobBoard` | 25+ |
 | `recipes.json` | 4 recipes (optional `minSkillLevel`, default 0: the least level of the recipe skill a crafter needs) | 55+ |
-| `jobs.json` | 7 jobs (task 3.5 added `build.supply`) | 20+ |
+| `jobs.json` | 11 jobs (a `priority` field per job type since D-54) | 20+ |
 | `factions.json` | 1 guild (`guild_bakers`) | 9 guilds + 3 religious |
 | `behavior-trees.json` | `idle_wander`, `basic_needs` (uses `run_tree`) | 7+ trees |
 | `name-lists.json` | `common_13c`: 62 given names, 41 bynames (meets the 60/40 minimum) | keep, extend |
@@ -31,4 +31,4 @@ This is a **minimal placeholder pack**, just enough for the kernel, the e2e test
 | `moment-templates.json` | one short English template per moment kind | final text |
 | `name-formats.json` | the 028 templates | final |
 
-Known v0 simplifications: unlock tiers are set only on `oven`, `bakery`, `bake_bread` and the two upper dwelling levels; `throne_room` needs a `table` instead of a throne; tier requirements reference only `throne_room`.
+Known v0 simplifications: unlock tiers are set only on the two upper dwelling levels (the oven, the bakery zone and `bake_bread` are Hamlet content since D-54, so a Hamlet can feed itself); `throne_room` needs a `table` instead of a throne; tier requirements reference only `throne_room`.

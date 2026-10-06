@@ -3,7 +3,19 @@ import { loadContent } from "../content/ContentLoader";
 import { GameEngine } from "../engine/GameEngine";
 import { GridType } from "../map/mapTypes";
 import type { VillageLayout } from "./layoutVillage";
-import { jobBoardPrototypeId, spawnSettlers, startingSettlerPrototypes } from "./spawnSettlers";
+import { getTotal } from "../inventory/inventoryQueries";
+import { getComponent } from "../ecs/Entity";
+import { jobBoardComponent } from "../jobs/jobBoardComponent";
+import { JobBoardMode } from "../jobs/jobTypes";
+import { townCrierComponent } from "../crier/townCrierComponent";
+import {
+  jobBoardPrototypeId,
+  spawnSettlers,
+  startingCrierPrototype,
+  startingSettlerPrototypes,
+  startingStockpileKit,
+  startingStockpileWeightMilli,
+} from "./spawnSettlers";
 
 const layout: VillageLayout = {
   center: 10,
@@ -67,5 +79,34 @@ describe("spawnSettlers", () => {
     const { engine, mapId } = setup();
     const tiny: VillageLayout = { center: 10, clearing: [10, 11, 12], roads: [10], plots: [] };
     expect(spawnSettlers(engine, mapId, tiny).settlerIds).toHaveLength(6);
+  });
+
+  it("makes the board user-managed and appoints the first peasant Town Crier", () => {
+    const { engine, mapId } = setup();
+    const spawned = spawnSettlers(engine, mapId, layout);
+    const board = engine.store.require(spawned.jobBoardId ?? 0);
+    expect(getComponent(board, jobBoardComponent)?.mode).toBe(JobBoardMode.UserManaged);
+    const crier = engine.store.require(spawned.crierId ?? 0);
+    expect(crier.prototype).toBe(startingCrierPrototype);
+    expect(getComponent(crier, townCrierComponent)).toBeDefined();
+    expect(
+      spawned.settlerIds.filter(
+        (id) =>
+          id !== spawned.crierId &&
+          getComponent(engine.store.require(id), townCrierComponent) !== undefined,
+      ),
+    ).toEqual([]);
+  });
+
+  it("stocks the storehouse chest with the founders' kit and a roomier weight limit", () => {
+    const { engine, mapId } = setup();
+    const spawned = spawnSettlers(engine, mapId, layout);
+    const chest = engine.store.require(spawned.stockpileId ?? 0);
+    for (const item of startingStockpileKit) {
+      expect(getTotal(chest, item.materialId)).toBe(item.quantity);
+    }
+    expect((chest.components["Inventory"] as { weightLimitMilli: number }).weightLimitMilli).toBe(
+      startingStockpileWeightMilli,
+    );
   });
 });

@@ -13,10 +13,11 @@ import {
   stationTags,
 } from "./productionQueries";
 import { createProductionWorld } from "./testProductionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 describe("workstation lookups", () => {
   it("lists the entities with a ProductionOrders component, ascending", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.chest(50);
     const oven = world.station("oven", 22);
     const mill = world.station("grinding_mill", 33);
@@ -24,7 +25,7 @@ describe("workstation lookups", () => {
   });
 
   it("finds or requires a workstation by id", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const chest = world.chest(50);
     const oven = world.station("oven", 22);
     expect(findWorkstation(world.engine, oven.id)?.station.id).toBe(oven.id);
@@ -40,7 +41,7 @@ describe("workstation lookups", () => {
 
 describe("recipe compatibility", () => {
   it("matches the furniture tag against the recipe workstation tag", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const oven = world.station("oven", 22);
     expect(stationTags(world.engine, oven)).toContain("oven");
     expect(stationTags(world.engine, world.chest(50))).toEqual(["storage"]);
@@ -54,7 +55,7 @@ describe("recipe compatibility", () => {
   });
 
   it("lists the capable workstations of a recipe, none for an unknown recipe", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const first = world.station("sawmill", 22);
     world.station("oven", 23);
     const second = world.station("sawmill", 24);
@@ -65,7 +66,7 @@ describe("recipe compatibility", () => {
   });
 
   it("locks a recipe until the settlement reaches its tier", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const bake = world.engine.content.recipes.require("bake_bread");
     const saw = world.engine.content.recipes.require("saw_oak_planks");
     world.setTier("hamlet");
@@ -78,7 +79,7 @@ describe("recipe compatibility", () => {
 
 describe("order lookups", () => {
   it("finds an order over all workstations", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const mill = world.station("grinding_mill", 22);
     const sawmill = world.station("sawmill", 23);
     world.order({ workstationId: mill.id, recipeId: "grind_flour", quantity: 1 });

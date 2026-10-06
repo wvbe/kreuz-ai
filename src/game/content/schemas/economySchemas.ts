@@ -210,8 +210,9 @@ const zoneContextSchema = z
   });
 
 /**
- * Authored job type (spec 022 job record). Gathering jobs list `outputs` (FR-024);
- * `onBoard: false` marks jobs that are never posted on a job board.
+ * Authored job type (spec 022 job record). Gathering jobs list `outputs` (FR-024); `priority`
+ * (default 50, DECISIONS D-54) is the posting priority when the poster names none, so essential
+ * work (food) outranks background gathering; `onBoard: false` marks jobs that are never posted on a job board.
  */
 export const jobTypeSchema = z
   .object({
@@ -223,6 +224,7 @@ export const jobTypeSchema = z
     recurrence: z.enum(JobRecurrence),
     outputs: z.array(materialAmountSchema).default([]),
     wage: countSchema.default(0),
+    priority: z.number().int().min(0).max(100).default(50),
     onBoard: z.boolean().default(true),
     unlockTier: unlockTierSchema,
   })

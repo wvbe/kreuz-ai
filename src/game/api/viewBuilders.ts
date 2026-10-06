@@ -209,6 +209,7 @@ export function buildCellView(engine: GameEngine, mapId: number, cellIndex: numb
     moveCost: info.moveCost,
     blockReason: info.blockReason,
     occupants: [...info.occupants],
+    neighbors: [...map.neighbors(cellIndex)],
     link: linkView(info.link),
   };
 }

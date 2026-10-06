@@ -46,7 +46,7 @@ describe("postJob", () => {
     expect(first).toMatchObject({
       boardId: world.boardId,
       jobTypeId: "fell.trees",
-      priority: 50,
+      priority: 30,
       urgent: false,
       wage: 2,
       status: PostingStatus.Open,

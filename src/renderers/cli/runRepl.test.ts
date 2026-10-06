@@ -120,11 +120,11 @@ describe("executeReplLine", () => {
     expect(run(context, "stock")).toContain("stock: 0 storages");
     run(context, "new 42 steady small");
     const overview = run(context, "stock").split("\n");
-    expect(overview[0]).toBe("stock: 1 storages, 16 slots (16 free)");
-    expect(overview).toContain("  nothing stored");
+    expect(overview[0]).toBe("stock: 1 storages, 16 slots (12 free)");
+    expect(overview.some((line) => line.includes("bread: total 12"))).toBe(true);
     expect(overview).toContain("stockpiles:");
     expect(overview.at(-1)).toMatch(
-      /^ {2}#9 chest at cell \d+ prio 50 accepts all, 16\/16 slots free: empty$/,
+      /^ {2}#9 chest at cell \d+ prio 50 accepts all, 12\/16 slots free: .*12 bread/,
     );
     expect(run(context, "stock oak_log").split("\n")[0]).toBe("stock of oak_log:");
     expect(run(context, "stock gem")).toMatch(/^error: .*gem/);

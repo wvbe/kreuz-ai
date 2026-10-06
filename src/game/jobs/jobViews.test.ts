@@ -46,7 +46,7 @@ describe("job views", () => {
     expect(view?.history.map((posting) => posting.status)).toEqual([PostingStatus.Done]);
     const mutable = view?.postings[0] as { priority: number };
     mutable.priority = 1;
-    expect(buildBoardView(world.engine, world.boardId)?.postings[0]?.priority).toBe(50);
+    expect(buildBoardView(world.engine, world.boardId)?.postings[0]?.priority).toBe(30);
     expect(buildBoardView(world.engine, 1)).toBeNull();
     expect(JSON.parse(JSON.stringify(view))).toEqual(view);
   });

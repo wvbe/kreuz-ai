@@ -36,7 +36,7 @@ export const fellPosterIntervalTicks = 12;
  * The auto-poster posts only while the settlement holds fewer oak logs than this (the total over
  * all inventories; stockpiles of task 3.2 will count too).
  */
-export const fellLowWoodStock = 40;
+export const fellLowWoodStock = 10;
 
 /**
  * Most active `fell.trees` postings the auto-poster keeps, over all boards.

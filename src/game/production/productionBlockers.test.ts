@@ -12,13 +12,14 @@ import {
 } from "./productionBlockers";
 import { CauseSubjectKind, OrderStatus, ProductionBlockedKind } from "./productionTypes";
 import { contentWithRecipes, createProductionWorld } from "./testProductionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 const kinds = (reasons: { kind: ProductionBlockedKind }[]): ProductionBlockedKind[] =>
   reasons.map((reason) => reason.kind);
 
 describe("availableForCraft", () => {
   it("adds the unreserved work inventory to the unreserved storage stock", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const chest = world.chest(50);
     const sawmill = world.station("sawmill", 22);
     world.give(chest, "oak_log", 5);
@@ -60,7 +61,7 @@ describe("hasQualifiedWorker", () => {
 
 describe("inputProducer", () => {
   it("reports noProducer, a stalled producer, or no cause when a producer is served", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const mill = world.station("grinding_mill", 22);
     const oven = world.station("oven", 33);
     const bake = world.order({ workstationId: oven.id, recipeId: "bake_bread", quantity: 1 });
@@ -84,7 +85,7 @@ describe("inputProducer", () => {
   });
 
   it("counts an open gathering posting as a producer", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const oven = world.station("oven", 33);
     const order = world.order({ workstationId: oven.id, recipeId: "bake_bread", quantity: 1 });
     expect(inputProducer(world.engine, "oak_log", order).noProducer).toBe(true);
@@ -98,7 +99,7 @@ describe("inputProducer", () => {
 
 describe("orderBlockers and explainOrder", () => {
   it("reports MissingInput per recipe input with the available count", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const mill = world.station("grinding_mill", 22);
     const chest = world.chest(50);
@@ -118,7 +119,7 @@ describe("orderBlockers and explainOrder", () => {
   });
 
   it("reports MissingWorkstation when the workstation cannot make the recipe", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const sawmill = world.station("sawmill", 22);
     const order = world.order({
@@ -139,7 +140,7 @@ describe("orderBlockers and explainOrder", () => {
   });
 
   it("reports MissingRoom until the workstation stands in an active zone of the type", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const cells = world.rect(2, 2, 2, 2);
     const oven = world.station("oven", cells[0] ?? 0);
@@ -210,7 +211,7 @@ describe("orderBlockers and explainOrder", () => {
   });
 
   it("reports LockedByTier for an order whose recipe is locked, Paused for a paused order", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const oven = world.station("oven", 22);
     const order = world.order({ workstationId: oven.id, recipeId: "bake_bread", quantity: 1 });
@@ -239,7 +240,7 @@ describe("orderBlockers and explainOrder", () => {
   });
 
   it("falls back to MissingWorkstation for an order whose recipe vanished", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const oven = world.station("oven", 22);
     const order = world.order({ workstationId: oven.id, recipeId: "bake_bread", quantity: 1 });
     const stored = world.data(oven).orders[0];
@@ -252,14 +253,14 @@ describe("orderBlockers and explainOrder", () => {
   });
 
   it("throws for an unknown order", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     expect(() => explainOrder(world.engine, 77)).toThrow(ProductionError);
   });
 });
 
 describe("explainWorkstation", () => {
   it("is Idle (NoOrders) without active orders, then explains the first order, then is quiet", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const mill = world.station("grinding_mill", 22);
     expect(kinds(explainWorkstation(world.engine, mill.id))).toEqual([

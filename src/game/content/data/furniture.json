@@ -32,7 +32,6 @@
         "quantity": 6
       }
     ],
-    "unlockTier": "village",
     "constructionTicks": 48,
     "deconstructionYield": [
       {

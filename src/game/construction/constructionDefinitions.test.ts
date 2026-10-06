@@ -10,9 +10,10 @@ import {
 } from "./constructionDefinitions";
 import { createConstructionWorld } from "./testConstructionWorld";
 import { getJobService } from "../jobs/jobServiceRegistry";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 function setup() {
-  const world = createConstructionWorld();
+  const world = createConstructionWorld({ content: loadVillageBakeryContent() });
   const definition = (id: string) => {
     const found = findBuildDefinition(world.engine, id);
     if (found === undefined) {

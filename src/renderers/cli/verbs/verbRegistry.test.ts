@@ -18,6 +18,8 @@ describe("createVerbRegistry", () => {
         "entities",
         "inspect",
         "events",
+        "find",
+        "cell",
         "jobs",
         "post",
         "pending",
@@ -43,6 +45,6 @@ describe("createVerbRegistry", () => {
   });
 
   it("registers the kernel, inspect, job, crier, storage, zone, production, construction, gathering, status and meta groups", () => {
-    expect(verbGroups).toHaveLength(11);
+    expect(verbGroups).toHaveLength(12);
   });
 });

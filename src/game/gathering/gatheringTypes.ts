@@ -87,7 +87,7 @@ export const gatheringMaxActivePostings = 4;
  * Most active `mine.ore` (and, separately, `quarry.stone`) postings: fewer than the farm jobs so
  * a few miners at a time leave the others to haul, craft and build.
  */
-export const depositMaxActivePostings = 2;
+export const depositMaxActivePostings = 4;
 
 /**
  * Cells further than this path cost from a board are not posted (about 40 normal cells).

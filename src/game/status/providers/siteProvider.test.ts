@@ -6,12 +6,13 @@ import { evaluateSubject, explain } from "../explain";
 import { BlockedReasonKind, StatusState, StatusSubjectKind } from "../statusTypes";
 import { createStatusWorld } from "../testStatusWorld";
 import { siteProvider } from "./siteProvider";
+import { loadVillageBakeryContent } from "../../content/loadVillageBakeryContent";
 
 const site = (id: number) => ({ kind: StatusSubjectKind.ConstructionSite, id });
 
 describe("siteProvider", () => {
   it("lists the live build sites", () => {
-    const world = createStatusWorld();
+    const world = createStatusWorld({ content: loadVillageBakeryContent() });
     const first = world.place("wall", 44);
     const second = world.place("wall", 45);
     expect(siteProvider.subjects(world.engine)).toEqual([site(first), site(second)]);
@@ -21,7 +22,7 @@ describe("siteProvider", () => {
   });
 
   it("is Blocked with MissingInput when no storage can supply a material and no producer exists", () => {
-    const world = createStatusWorld();
+    const world = createStatusWorld({ content: loadVillageBakeryContent() });
     const id = world.place("wall", 44);
     const status = evaluateSubject(world.engine, site(id));
     expect(status?.state).toBe(StatusState.Blocked);
@@ -39,7 +40,7 @@ describe("siteProvider", () => {
   });
 
   it("points a missing material at the stalled producer of it", () => {
-    const world = createStatusWorld();
+    const world = createStatusWorld({ content: loadVillageBakeryContent() });
     const mill = world.station("sawmill", 22);
     world.order({ workstationId: mill.id, recipeId: "saw_oak_planks", quantity: 1 });
     const id = world.place("door", 44);
@@ -52,7 +53,7 @@ describe("siteProvider", () => {
   });
 
   it("is Active when storage can supply it, and Blocked with Paused or LockedByTier otherwise", () => {
-    const world = createStatusWorld();
+    const world = createStatusWorld({ content: loadVillageBakeryContent() });
     const chest = world.chest(55);
     world.stockFor(chest, "oven");
     const id = world.place("oven", 44);
@@ -66,7 +67,7 @@ describe("siteProvider", () => {
   });
 
   it("reports AwaitingWorker while its supply or build job waits on the board", () => {
-    const world = createStatusWorld();
+    const world = createStatusWorld({ content: loadVillageBakeryContent() });
     world.spawn("peasant", 77, noAiOverride);
     const chest = world.chest(55);
     world.stockFor(chest, "wall");

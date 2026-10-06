@@ -7,10 +7,11 @@ import {
 } from "./productionViews";
 import { OrderStatus, ProductionBlockedKind } from "./productionTypes";
 import { createProductionWorld } from "./testProductionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 describe("buildOrderViews", () => {
   it("lists the orders of all or one workstation, ascending", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const mill = world.station("grinding_mill", 22);
     const sawmill = world.station("sawmill", 23);
     const first = world.order({
@@ -38,7 +39,7 @@ describe("buildOrderViews", () => {
   });
 
   it("shows the craft in progress with integer progress", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.give(world.chest(55), "oak_log", 2);
     const sawmill = world.station("sawmill", 44);
     world.feed([world.settler(11)]);
@@ -57,7 +58,7 @@ describe("buildOrderViews", () => {
 
 describe("buildOrderDetail", () => {
   it("adds the blocked reasons, null for an unknown order", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const mill = world.station("grinding_mill", 22);
     const id = world.order({ workstationId: mill.id, recipeId: "grind_flour", quantity: 1 });
@@ -71,7 +72,7 @@ describe("buildOrderDetail", () => {
 
 describe("buildRecipeViews", () => {
   it("lists the recipes a workstation can make with their lock state", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const oven = world.station("oven", 22);
     world.setTier("hamlet");
     expect(buildRecipeViews(world.engine, oven.id)).toEqual([
@@ -97,7 +98,7 @@ describe("buildRecipeViews", () => {
 
 describe("buildWorkstationViews", () => {
   it("lists workstations with tags, position, unfinished orders and why they idle", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 23);
     expect(buildWorkstationViews(world.engine)).toEqual([
       {

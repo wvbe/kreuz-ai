@@ -4,6 +4,7 @@ import { ConstructionError, ConstructionErrorKind } from "./ConstructionError";
 import { PlacementReasonKind } from "./constructionTypes";
 import { assertPlacementValid, validatePlacement } from "./placement";
 import { createConstructionWorld } from "./testConstructionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 function kinds(world: ReturnType<typeof createConstructionWorld>, id: string, cell: number) {
   return validatePlacement(world.engine, id, world.mapId, cell).reasons.map(
@@ -13,7 +14,7 @@ function kinds(world: ReturnType<typeof createConstructionWorld>, id: string, ce
 
 describe("validatePlacement", () => {
   it("accepts a free buildable cell", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const result = validatePlacement(world.engine, "chest", world.mapId, 44);
     expect(result).toMatchObject({
       valid: true,
@@ -26,7 +27,7 @@ describe("validatePlacement", () => {
   });
 
   it("refuses a missing map and cells outside the map", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     expect(validatePlacement(world.engine, "chest", 99, 0).reasons[0]?.kind).toBe(
       PlacementReasonKind.UnknownMap,
     );
@@ -35,7 +36,7 @@ describe("validatePlacement", () => {
   });
 
   it("refuses an unknown definition", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const result = validatePlacement(world.engine, "castle", world.mapId, 44);
     expect(result.valid).toBe(false);
     expect(result.unlockTier).toBeNull();
@@ -45,7 +46,7 @@ describe("validatePlacement", () => {
   });
 
   it("refuses a tier-locked definition with the unlock text", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     getJobService(world.engine).setTierSource(() => "hamlet");
     const result = validatePlacement(world.engine, "oven", world.mapId, 44);
     expect(result.valid).toBe(false);
@@ -60,7 +61,7 @@ describe("validatePlacement", () => {
   });
 
   it("refuses terrain that is not buildable", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     world.engine.maps.require(world.mapId).setTerrain(44, "water_shallow");
     world.forest(45);
     expect(kinds(world, "chest", 44)).toEqual([PlacementReasonKind.TerrainNotBuildable]);
@@ -68,7 +69,7 @@ describe("validatePlacement", () => {
   });
 
   it("refuses cells held by buildings, boards and blueprints but not by citizens", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     world.chest(20);
     world.wall(21);
     world.door(22);
@@ -86,7 +87,7 @@ describe("validatePlacement", () => {
   });
 
   it("reports several reasons at once and the zone of the cell without refusing for it", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     getJobService(world.engine).setTierSource(() => "hamlet");
     world.chest(20);
     expect(kinds(world, "oven", 20)).toEqual([
@@ -100,7 +101,7 @@ describe("validatePlacement", () => {
   });
 
   it("ignores entities that are flagged for deletion", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const wall = world.wall(21);
     world.engine.store.requestDelete(wall.id);
     expect(kinds(world, "table", 21)).toEqual([]);
@@ -109,7 +110,7 @@ describe("validatePlacement", () => {
 
 describe("assertPlacementValid", () => {
   it("does nothing for a valid placement and throws the command error kind otherwise", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     getJobService(world.engine).setTierSource(() => "hamlet");
     world.chest(20);
     world.engine.maps.require(world.mapId).setTerrain(44, "water_shallow");

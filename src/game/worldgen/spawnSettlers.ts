@@ -8,6 +8,7 @@ import { governmentFactionId } from "../factions/factionRegistry";
 import { appointCrier } from "../crier/crierFleet";
 import { getComponent } from "../ecs/Entity";
 import { assignIdentity } from "../identity/assignIdentity";
+import { storeUpTo } from "../inventory/inventoryOperations";
 import { jobBoardComponent } from "../jobs/jobBoardComponent";
 import { JobBoardMode } from "../jobs/jobTypes";
 import { initializeCharacter } from "../skills/traitAssignment";
@@ -35,6 +36,25 @@ export const startingSettlerPrototypes: readonly string[] = [
   "peasant",
   "peasant",
 ];
+
+/**
+ * What the starting stockpile chest holds (DECISIONS D-54): the planks and nails that the first
+ * workstations need before a sawmill or a smithy can exist (the sawmill itself costs planks and
+ * nails), and a first batch of bread so the settlers live until the first harvest has been baked.
+ * Materials the pack lacks are skipped.
+ */
+export const startingStockpileKit: readonly { materialId: string; quantity: number }[] = [
+  { materialId: "oak_plank", quantity: 24 },
+  { materialId: "nails", quantity: 30 },
+  { materialId: "stone_block", quantity: 16 },
+  { materialId: "bread", quantity: 12 },
+];
+
+/**
+ * Weight limit of the starting storehouse chest in milli-kilograms: 320 kg, more than a built
+ * chest (200 kg) so that the founders' kit fits with room to spare (D-54).
+ */
+export const startingStockpileWeightMilli = 320000;
 
 /**
  * Prototype of the starting settler who becomes the Town Crier (DECISIONS D-12, D-53): the first
@@ -85,8 +105,15 @@ export function spawnSettlers(
   mapId: number,
   village: VillageLayout,
 ): SpawnedSettlement {
-  const place = (prototypeId: string, cell: number): EntityId => {
-    const entity = engine.store.spawn(prototypeId, { Position: { mapId, cellIndex: cell } });
+  const place = (
+    prototypeId: string,
+    cell: number,
+    overrides: { [component: string]: { [field: string]: number } } = {},
+  ): EntityId => {
+    const entity = engine.store.spawn(prototypeId, {
+      ...overrides,
+      Position: { mapId, cellIndex: cell },
+    });
     engine.maps.placeEntity(entity.id, mapId, cell);
     initializeCharacter(engine, entity.id);
     const government = governmentFactionId(engine);
@@ -109,8 +136,23 @@ export function spawnSettlers(
     }
   }
   const stockpileId = engine.prototypes.has(stockpilePrototypeId)
-    ? place(stockpilePrototypeId, cells[settlerIds.length % cells.length] as number)
+    ? place(stockpilePrototypeId, cells[settlerIds.length % cells.length] as number, {
+        Inventory: { weightLimitMilli: startingStockpileWeightMilli },
+      })
     : null;
+  const chest = stockpileId === null ? undefined : engine.store.get(stockpileId);
+  if (chest !== undefined) {
+    for (const item of startingStockpileKit) {
+      if (engine.materials.has(item.materialId)) {
+        storeUpTo(
+          { materials: engine.materials, actor: null },
+          chest,
+          item.materialId,
+          item.quantity,
+        );
+      }
+    }
+  }
   const government = governmentFactionId(engine);
   if (government !== null) {
     setFactionLeader(engine, government, pickLeaderCandidate(engine, government));

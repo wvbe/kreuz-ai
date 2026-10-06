@@ -47,7 +47,7 @@
         "args": { "materialId": "bread" },
         "path": "total",
         "op": "eq",
-        "value": 0
+        "value": 12
       }
     },
     { "step": 573 },

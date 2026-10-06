@@ -22,7 +22,7 @@
   "nameRedrawLimit": 8,
   "journalCapacity": 20,
   "chronicleCapacity": 100,
-  "cropGrowthTicks": 864,
+  "cropGrowthTicks": 576,
   "needStartValue": 80,
   "starvationHealthPerTick": 0.25,
   "healthRegenPerTick": 0.02,
@@ -37,6 +37,6 @@
   "idleStandMaxTicks": 24,
   "oreDepositCharges": 6,
   "stoneDepositCharges": 8,
-  "oreLowStock": 8,
+  "oreLowStock": 4,
   "stoneLowStock": 12
 }

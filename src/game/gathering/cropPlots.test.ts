@@ -16,7 +16,7 @@ import { CropStage, cropRipenedEvent } from "./gatheringTypes";
 import { createGatheringWorld } from "./testGatheringWorld";
 
 function ripen(world: ReturnType<typeof createGatheringWorld>): void {
-  for (let tick = 0; tick < 864; tick += 1) {
+  for (let tick = 0; tick < 576; tick += 1) {
     growCrops(world.engine);
   }
 }
@@ -35,7 +35,7 @@ describe("cropOfZoneType", () => {
 
 describe("cropGrowthMilli", () => {
   it("is cropGrowthTicks in milli-ticks", () => {
-    expect(cropGrowthMilli(createGatheringWorld().engine)).toBe(864_000);
+    expect(cropGrowthMilli(createGatheringWorld().engine)).toBe(576_000);
   });
 });
 
@@ -103,7 +103,7 @@ describe("sowCell and harvestCell", () => {
     const plot = sowCell(world.engine, world.mapId, 22);
     expect(plot).toMatchObject({ materialId: "wheat", stage: CropStage.Sown, growthMilli: 0 });
     expect(sowCell(world.engine, world.mapId, 22)).toBeNull();
-    for (let tick = 0; tick < 863; tick += 1) {
+    for (let tick = 0; tick < 575; tick += 1) {
       growCrops(world.engine);
     }
     expect(cropStageAt(world.engine, world.mapId, 22)).toBe(CropStage.Sown);

@@ -55,8 +55,7 @@
     "durationTicks": 20,
     "workstationTag": "oven",
     "skillId": "baking",
-    "roomZoneId": "bakery",
-    "unlockTier": "village"
+    "roomZoneId": "bakery"
   },
   {
     "id": "cut_stone_block",

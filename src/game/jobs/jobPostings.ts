@@ -12,7 +12,6 @@ import { getJobService } from "./jobServiceRegistry";
 import { tierOrder } from "./JobService";
 import {
   claimBackoffTicks,
-  defaultPostingPriority,
   jobAbandonedEvent,
   jobCancelledEvent,
   jobClaimedEvent,
@@ -167,7 +166,7 @@ export function postJob(
     boardId,
     jobTypeId: jobType.id,
     target: { ...request.target },
-    priority: Math.max(0, Math.min(maxPostingPriority, request.priority ?? defaultPostingPriority)),
+    priority: Math.max(0, Math.min(maxPostingPriority, request.priority ?? jobType.priority)),
     urgent: request.urgent ?? false,
     wage: request.wage ?? jobType.wage,
     posterFactionId:

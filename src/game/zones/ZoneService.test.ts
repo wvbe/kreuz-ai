@@ -14,6 +14,7 @@ import type { ZoneTestWorld } from "./testZoneWorld";
 import { isInActiveZoneOfType } from "./zoneQueries";
 import { getZoneService } from "./zoneServiceRegistry";
 import { ZoneGapKind, ZoneStatus } from "./zoneTypes";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 function kindOf(action: () => void): ZoneErrorKind | null {
   try {
@@ -30,7 +31,7 @@ function names(world: ZoneTestWorld): string[] {
 
 describe("ZoneService.designate", () => {
   it("paints a 5x5 area into one zone with ascending tiles", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const ids = world.designate("stockpile", world.rect(2, 2, 5, 5));
     expect(ids).toHaveLength(1);
     const data = world.zoneData(ids[0] ?? 0);
@@ -41,7 +42,7 @@ describe("ZoneService.designate", () => {
   });
 
   it("creates one zone per connected component, ids ascending by lowest cell", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const ids = world.designate("stockpile", [55, 56, 11, 12, 13, 98]);
     expect(ids).toHaveLength(3);
     expect(ids[0]).toBeLessThan(ids[1] ?? 0);
@@ -51,7 +52,7 @@ describe("ZoneService.designate", () => {
   });
 
   it("rejects a tile that is already zoned, or moves it with reassign", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [first] = world.designate("stockpile", world.rect(2, 2, 3, 1));
     const service = getZoneService(world.engine);
     expect(kindOf(() => service.designate("stockpile", world.mapId, [24, 25], false))).toBe(
@@ -65,7 +66,7 @@ describe("ZoneService.designate", () => {
   });
 
   it("rejects unknown types, unknown maps, bad cells and locked types", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const service = getZoneService(world.engine);
     expect(kindOf(() => service.designate("nope", world.mapId, [1], false))).toBe(
       ZoneErrorKind.UnknownZoneType,
@@ -87,7 +88,7 @@ describe("ZoneService.designate", () => {
 
 describe("ZoneService tiles", () => {
   it("adds adjacent tiles and makes disconnected new cells zones of their own", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [zoneId] = world.designate("stockpile", world.rect(2, 2, 2, 1));
     const service = getZoneService(world.engine);
     const grown = service.addTiles(zoneId ?? 0, [24, 23, 77], false);
@@ -100,7 +101,7 @@ describe("ZoneService tiles", () => {
   });
 
   it("shrinks, splits with the largest part keeping the id, and deletes an emptied zone", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [zoneId] = world.designate("stockpile", world.rect(1, 1, 6, 1));
     const service = getZoneService(world.engine);
     const change = service.removeTiles(zoneId ?? 0, [12]);
@@ -120,7 +121,7 @@ describe("ZoneService tiles", () => {
   });
 
   it("lets the part with the lowest cell keep the id on a tie", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [zoneId] = world.designate("stockpile", world.rect(1, 1, 5, 1));
     const service = getZoneService(world.engine);
     const change = service.removeTiles(zoneId ?? 0, [13]);
@@ -129,7 +130,7 @@ describe("ZoneService tiles", () => {
   });
 
   it("deletes a zone: tiles are free at once and the entity goes at slot 17", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [zoneId] = world.designate("stockpile", world.rect(2, 2, 2, 2));
     const service = getZoneService(world.engine);
     service.deleteZone(zoneId ?? 0);
@@ -145,7 +146,7 @@ describe("ZoneService tiles", () => {
 
 describe("ZoneService timing and status", () => {
   it("derives status and queues zone.requirements.* in slot 9 of the changing tick", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     world.walls(3, 3, 2, 2, [23]);
     world.door(23);
     const [zoneId] = world.designate("bakery", world.rect(3, 3, 2, 2));
@@ -186,7 +187,7 @@ describe("ZoneService timing and status", () => {
   });
 
   it("applies effects from the tick after the status change", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     world.walls(3, 3, 2, 2);
     const [zoneId] = world.designate("pantry", world.rect(3, 3, 2, 2));
     const chest = world.chest(33);
@@ -202,7 +203,7 @@ describe("ZoneService timing and status", () => {
   });
 
   it("re-detects a room when a wall is added or removed and keeps doors as walls", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const walls = world.walls(3, 3, 2, 2, [23]);
     const [zoneId] = world.designate("bedroom", world.rect(3, 3, 2, 2));
     world.run(1);
@@ -218,7 +219,7 @@ describe("ZoneService timing and status", () => {
   });
 
   it("goes inactive when tiles are removed below the minimum size", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [zoneId] = world.designate("farm_field", world.rect(2, 2, 2, 2));
     world.run(1);
     expect(world.zoneData(zoneId ?? 0).active).toBe(true);
@@ -233,7 +234,7 @@ describe("ZoneService timing and status", () => {
   });
 
   it("evaluates adjacent zones of one type independently", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const [left] = world.designate("farm_field", world.rect(1, 1, 2, 2));
     const [right] = world.designate("farm_field", world.rect(3, 1, 2, 1));
     world.run(1);
@@ -253,7 +254,7 @@ describe("ZoneService merge offers", () => {
   }
 
   it("offers a merge when a wall between same-type zones disappears and merges on accept", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const { dividers, zoneA, zoneB } = setup(world);
     expect(names(world)).not.toContain("zone.merge.offered");
     for (const wall of dividers) {
@@ -279,7 +280,7 @@ describe("ZoneService merge offers", () => {
   });
 
   it("declining keeps both zones and drops the offer; unknown offers are rejected", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const { dividers, zoneA, zoneB } = setup(world);
     for (const wall of dividers) {
       world.engine.store.requestDelete(wall.id);
@@ -297,7 +298,7 @@ describe("ZoneService merge offers", () => {
   });
 
   it("makes no offer between zones of different types", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const { dividers } = setup(world, "farm_field");
     for (const wall of dividers) {
       world.engine.store.requestDelete(wall.id);
@@ -307,7 +308,7 @@ describe("ZoneService merge offers", () => {
   });
 
   it("lapses an offer when one of the zones changes", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const { dividers, zoneB } = setup(world);
     for (const wall of dividers) {
       world.engine.store.requestDelete(wall.id);
@@ -321,7 +322,7 @@ describe("ZoneService merge offers", () => {
   });
 
   it("keeps the offers in the save", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const { dividers } = setup(world);
     for (const wall of dividers) {
       world.engine.store.requestDelete(wall.id);
@@ -396,7 +397,7 @@ describe("ZoneService save and load", () => {
   });
 
   it("re-derives the status from the world after a load, not from the save (FR-013)", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     world.walls(3, 3, 2, 2);
     const [zoneId] = world.designate("bedroom", world.rect(3, 3, 2, 2));
     world.furniture(33, "wooden_bed");
@@ -418,7 +419,7 @@ describe("ZoneService save and load", () => {
 
 describe("ZoneService on a Voronoi map", () => {
   it("designates, encloses with walls on the ring and splits by adjacency", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const engine: GameEngine = world.engine;
     const map = engine.maps.createMap({
       gridType: GridType.Voronoi,
@@ -468,7 +469,7 @@ describe("ZoneService on a Voronoi map", () => {
   });
 
   it("never treats a zone on the map border as a room", () => {
-    const world = createZoneWorld();
+    const world = createZoneWorld({ content: loadVillageBakeryContent() });
     const map = world.engine.maps.createMap({
       gridType: GridType.Voronoi,
       terrainId: "grassland",

@@ -108,7 +108,12 @@ describe("jobTypeSchema", () => {
   };
 
   it("requires a ref exactly for zone and terrain contexts", () => {
-    expect(jobTypeSchema.parse(job)).toMatchObject({ onBoard: true, wage: 0, outputs: [] });
+    expect(jobTypeSchema.parse(job)).toMatchObject({
+      onBoard: true,
+      wage: 0,
+      priority: 50,
+      outputs: [],
+    });
     expect(jobTypeSchema.safeParse({ ...job, zoneContext: { kind: "zone" } }).success).toBe(false);
     expect(
       jobTypeSchema.safeParse({ ...job, zoneContext: { kind: "any", ref: "x" } }).success,

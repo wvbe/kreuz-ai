@@ -20,6 +20,8 @@ Exit codes: 0 ok, 1 a scenario step failed, 2 bad arguments / unreadable or inva
 | `run-until <path> <op> <value> [maxTicks]` | Step until a path of the `state` view satisfies the comparison, e.g. `run-until time.tick gte 500`. Default limit 10000. |
 | `pause`, `resume`, `speed [name\|value]` | Clock control. Speeds: `quarter 250`, `half 500`, `normal 1000`, `double 2000`, `quadruple 4000`. |
 | `status` | Tick, day, hour, pause/speed, seed, difficulty, counts. |
+| `find <terrainId> [limit]` | The cells of a terrain nearest to the village board with their distance: `find fertile_soil 8` shows where fields can go, `find stone_deposit` where to quarry. |
+| `cell <mapId> <cell>` | One cell: terrain, walk cost, occupants and its neighbor cells. A zone that needs a room is enclosed by walls and a door on every neighbor of its cells that is not part of the zone. |
 | `map [mapId]` | ASCII map (default: first map): one glyph per terrain (`.` grassland, `,` fertile soil, `T` forest, `~` water, `^` mountain, `#` rock wall, `_` wood floor, `=` road, `o` stone deposit; unknown terrains show their first letter), `@` for entities, zones drawn over the terrain (uppercase glyph while active, lowercase while not: `S` stockpile, `P` pantry, `F` farm field, `B` bakery, `R` bedroom, `D` dwelling, `H` throne room) with a `zones:` legend line, and a legend. Square maps draw one character per tile; Voronoi maps are rasterized onto 72x36 characters, each taking the terrain of the nearest cell site (deterministic). |
 | `entities [prototype] [limit]` | List entities. |
 | `inspect <id>` | One entity and its components; characters also get a `skills:` and a `traits:` line. |

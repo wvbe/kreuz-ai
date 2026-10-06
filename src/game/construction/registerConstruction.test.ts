@@ -7,6 +7,7 @@ import { ConstructionService } from "./ConstructionService";
 import { getConstructionService } from "./constructionServiceRegistry";
 import { registerConstruction } from "./registerConstruction";
 import { createConstructionWorld } from "./testConstructionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 function query(world: ReturnType<typeof createConstructionWorld>, name: string, args: object) {
   const registration = world.engine.getQuery(name);
@@ -18,7 +19,7 @@ function query(world: ReturnType<typeof createConstructionWorld>, name: string, 
 
 describe("registerConstruction", () => {
   it("returns the engine's service and is idempotent", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const service = getConstructionService(world.engine);
     expect(service).toBeInstanceOf(ConstructionService);
     expect(registerConstruction(world.engine)).toBe(service);
@@ -27,7 +28,7 @@ describe("registerConstruction", () => {
   });
 
   it("registers the component, the prototype and the job types", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     expect(world.engine.components.has("BuildSite")).toBe(true);
     expect(world.engine.prototypes.has("build_site")).toBe(true);
     expect(world.engine.taskHandlers.has("build.supply")).toBe(true);
@@ -35,7 +36,7 @@ describe("registerConstruction", () => {
   });
 
   it("answers the blueprint commands", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const furniture = world.command("PlaceFurniture", {
       furnitureId: "table",
       mapId: world.mapId,
@@ -64,7 +65,7 @@ describe("registerConstruction", () => {
   });
 
   it("answers the queue controls", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const job = world.place("wall", 30);
     world.command("SetConstructionJobPaused", { jobId: job, paused: true });
     expect(world.site(job).data.paused).toBe(true);
@@ -81,7 +82,7 @@ describe("registerConstruction", () => {
   });
 
   it("rejects bad payloads", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     expect(() => world.command("PlaceFurniture", { furnitureId: "table", mapId: 1 })).toThrow();
     expect(() =>
       world.command("QueueConstruction", {
@@ -95,7 +96,7 @@ describe("registerConstruction", () => {
   });
 
   it("answers the queries", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const job = world.place("wall", 30);
     expect(query(world, "site", { jobId: job })).toMatchObject({ jobId: job });
     expect(query(world, "site", { jobId: 9999 })).toBeNull();
@@ -116,7 +117,7 @@ describe("registerConstruction", () => {
   });
 
   it("obstructs the cell of every wall that is spawned or loaded and frees it on delete", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const wall = world.wall(30);
     world.run(1);
     const map = world.engine.maps.require(world.mapId);
@@ -129,7 +130,7 @@ describe("registerConstruction", () => {
   });
 
   it("deleting a build site gives its goods back", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const job = world.place("wall", 30);
     world.give(world.site(job).entity, "stone_block", 2);
     world.engine.store.requestDelete(job);

@@ -42,7 +42,7 @@ describe("rankPostings", () => {
       nearTie.id,
       far.id,
     ]);
-    expect(ranked[2]).toMatchObject({ priority: 50, urgent: false, pathCost: 15 });
+    expect(ranked[2]).toMatchObject({ priority: 30, urgent: false, pathCost: 15 });
   });
 
   it("carries the familiarity bucket of the job type skill", () => {

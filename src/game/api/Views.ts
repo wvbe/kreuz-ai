@@ -159,6 +159,10 @@ export type CellView = {
    * Ids of the entities standing on the cell.
    */
   readonly occupants: readonly number[];
+  /**
+   * Indices of the adjacent cells (what a wall ring has to cover to enclose a zone).
+   */
+  readonly neighbors: readonly number[];
   readonly link: MapLinkView | null;
 };
 

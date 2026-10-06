@@ -29,11 +29,13 @@ function cellOf(engine: GameEngine, id: number): number {
 }
 
 function removeAllBread(engine: GameEngine): void {
-  for (const id of settlerIds(engine)) {
-    const inventory = engine.store.require(id).components["Inventory"] as {
-      slots: { materialId: string }[];
-    };
-    inventory.slots = inventory.slots.filter((slot) => slot.materialId !== "bread");
+  // The settlers' own bread and the founders' bread in the storehouse chest (D-54).
+  for (const entity of engine.store.entities()) {
+    const inventory = entity.components["Inventory"] as
+      { slots: { materialId: string }[] } | undefined;
+    if (inventory !== undefined) {
+      inventory.slots = inventory.slots.filter((slot) => slot.materialId !== "bread");
+    }
   }
 }
 

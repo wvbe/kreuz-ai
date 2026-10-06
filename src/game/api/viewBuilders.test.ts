@@ -94,6 +94,8 @@ describe("view builders", () => {
   it("buildCellView describes a cell and rejects unknown ones", () => {
     const view = buildCellView(engine, 1, 0);
     expect(view).toMatchObject({ mapId: 1, cellIndex: 0, link: null, occupants: [] });
+    expect(view.neighbors.length).toBeGreaterThan(0);
+    expect(buildCellView(engine, 1, view.neighbors[0] ?? 0).neighbors).toContain(0);
     expect(view.moveCost).toBeGreaterThan(0);
     expect(() => buildCellView(engine, 9, 0)).toThrow(ApiError);
     try {

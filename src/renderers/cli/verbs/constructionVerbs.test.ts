@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { createScenarioSession } from "../../../game/api/scenario/createScenarioSession";
+import { loadVillageBakeryContent } from "../../../game/content/loadVillageBakeryContent";
 import { executeReplLine } from "../runRepl";
 import { createVerbRegistry } from "./verbRegistry";
 import type { VerbContext } from "./Verb";
 
 function createContext(): VerbContext {
   return {
-    session: createScenarioSession(),
+    session: createScenarioSession(loadVillageBakeryContent()),
     files: {
       readText: () => "",
       writeText: () => undefined,

@@ -102,6 +102,14 @@ describe("cli --script", () => {
     expect(ran.stdout).toContain("PASS kernel-smoke");
   });
 
+  it("plays Checkpoint C through the real CLI process: farm, bakery, bread, nobody starves", () => {
+    const ran = runCli(["--script", "scenarios/checkpoint-c.json"]);
+    expect(ran.status).toBe(0);
+    expect(ran.stdout).toMatch(/^PASS checkpoint-c: \d+ steps, tick 2880, hash [0-9a-f]{16}/);
+    const again = runCli(["--script", "scenarios/checkpoint-c.json"]);
+    expect(again.stdout).toBe(ran.stdout);
+  }, 90_000);
+
   it("exits 1 with a readable message for a failing scenario", () => {
     const ran = runCli(["--script", "tests/e2e/fixtures/failing.json"]);
     expect(ran.status).toBe(1);

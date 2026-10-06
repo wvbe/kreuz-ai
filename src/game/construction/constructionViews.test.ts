@@ -4,10 +4,11 @@ import { setSitePriority } from "./constructionSites";
 import { SiteKind, SiteStatus } from "./constructionTypes";
 import { buildMenuView, buildQueueView, buildSiteDetail } from "./constructionViews";
 import { createConstructionWorld } from "./testConstructionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 describe("buildSiteDetail", () => {
   it("describes a job and is plain JSON", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const job = world.place("door", 44);
     world.give(world.site(job).entity, "oak_plank", 1);
     const view = buildSiteDetail(world.engine, job);
@@ -34,14 +35,14 @@ describe("buildSiteDetail", () => {
   });
 
   it("is null for a job that does not exist", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     expect(buildSiteDetail(world.engine, 4242)).toBeNull();
   });
 });
 
 describe("buildQueueView", () => {
   it("orders live jobs by priority, urgency and id and filters by map", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const first = world.place("wall", 30);
     const second = world.place("wall", 31, { priority: 80 });
     const third = world.place("wall", 32);
@@ -53,7 +54,7 @@ describe("buildQueueView", () => {
   });
 
   it("remembers finished jobs for the recent list", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     const job = world.place("wall", 30);
     world.command("CancelConstructionJob", { jobId: job });
     const queue = buildQueueView(world.engine);
@@ -67,7 +68,7 @@ describe("buildQueueView", () => {
 
 describe("buildMenuView", () => {
   it("lists every definition and marks locked ones with the unlock text", () => {
-    const world = createConstructionWorld();
+    const world = createConstructionWorld({ content: loadVillageBakeryContent() });
     getJobService(world.engine).setTierSource(() => "hamlet");
     const menu = buildMenuView(world.engine);
     expect(menu.map((entry) => entry.id)).toEqual(

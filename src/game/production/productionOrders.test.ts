@@ -15,6 +15,7 @@ import {
 import { maxFinishedOrders, OrderStatus } from "./productionTypes";
 import type { ProductionOrder } from "./productionTypes";
 import { createProductionWorld } from "./testProductionWorld";
+import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
 function failsWith(
   action: () => object | string | number | boolean | null | undefined,
@@ -25,7 +26,7 @@ function failsWith(
 
 describe("createProductionOrder", () => {
   it("stores an active order on the workstation and queues production.order.created", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     const order = createProductionOrder(world.engine, {
       workstationId: sawmill.id,
@@ -55,7 +56,7 @@ describe("createProductionOrder", () => {
   });
 
   it("defaults the priority to 50 and allocates ascending ids", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     const first = createProductionOrder(world.engine, {
       workstationId: sawmill.id,
@@ -71,7 +72,7 @@ describe("createProductionOrder", () => {
   });
 
   it("rejects bad quantity or priority, unknown recipe, locked tier, unknown or wrong workstation", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     const chest = world.chest(50);
     const base = { workstationId: sawmill.id, recipeId: "saw_oak_planks", quantity: 1 };
@@ -114,7 +115,7 @@ describe("createProductionOrder", () => {
   });
 
   it("without a workstation picks the capable one with the fewest unfinished orders", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const first = world.station("sawmill", 22);
     const second = world.station("sawmill", 23);
     const request = { recipeId: "saw_oak_planks", quantity: 1 };
@@ -166,7 +167,7 @@ describe("pruneFinishedOrders", () => {
 
 describe("cancelProductionOrder", () => {
   it("cancels an order that has not started, queues production.order.cancelled, is idempotent", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     const id = world.order({ workstationId: sawmill.id, recipeId: "saw_oak_planks", quantity: 2 });
     expect(cancelProductionOrder(world.engine, id).status).toBe(OrderStatus.Cancelled);
@@ -182,7 +183,7 @@ describe("cancelProductionOrder", () => {
   });
 
   it("withdraws the open posting of the order", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const sawmill = world.station("sawmill", 22);
     world.give(world.chest(50), "oak_log", 4);
@@ -206,7 +207,7 @@ describe("cancelProductionOrder", () => {
 
 describe("cancelOrderAt", () => {
   it("cancels an order that is already located, once", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     world.order({ workstationId: sawmill.id, recipeId: "saw_oak_planks", quantity: 2 });
     const data = world.data(sawmill);
@@ -230,7 +231,7 @@ describe("cancelOrderAt", () => {
 
 describe("setProductionOrderPaused", () => {
   it("pauses and resumes an order and withdraws its posting while paused", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const sawmill = world.station("sawmill", 22);
     world.give(world.chest(50), "oak_log", 4);
@@ -255,7 +256,7 @@ describe("setProductionOrderPaused", () => {
 
 describe("setProductionOrderPriority", () => {
   it("changes the order and its open posting", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     world.settler(11);
     const sawmill = world.station("sawmill", 22);
     world.give(world.chest(50), "oak_log", 4);
@@ -275,7 +276,7 @@ describe("setProductionOrderPriority", () => {
   });
 
   it("changes an order that has no posting yet", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     const id = world.order({ workstationId: sawmill.id, recipeId: "saw_oak_planks", quantity: 1 });
     expect(setProductionOrderPriority(world.engine, id, 0).priority).toBe(0);
@@ -284,14 +285,14 @@ describe("setProductionOrderPriority", () => {
 
 describe("cancelCraft", () => {
   it("is false when the workstation is idle and throws for a non-workstation", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     expect(cancelCraft(world.engine, sawmill.id)).toBe(false);
     expect(() => cancelCraft(world.engine, 9999)).toThrow(ProductionError);
   });
 
   it("frees the workstation at once when the crafter has no craft task any more", () => {
-    const world = createProductionWorld();
+    const world = createProductionWorld({ content: loadVillageBakeryContent() });
     const sawmill = world.station("sawmill", 22);
     world.data(sawmill).craft = {
       orderId: 1,
