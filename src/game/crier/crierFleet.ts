@@ -14,8 +14,8 @@ import { townCrierComponent } from "./townCrierComponent";
  * Makes a citizen a Town Crier (command `AppointTownCrier`, DECISIONS D-12): the entity gets the
  * `TownCrier` component, available with nothing to carry. A crier keeps living like any other
  * settler (it works jobs while it has no delivery). Throws `JobError` `IneligibleCrier` when the
- * entity does not exist, is not a citizen or is not on a map. The Steward cannot be a crier
- * (026); that check arrives with the Steward in task 4.3.
+ * entity does not exist, is not a citizen, is not on a map or is the Steward (spec 026 FR-013,
+ * the exclusion rule of `CrierService.setExclusion`).
  *
  * @param engine - The engine.
  * @param entityId - The citizen to appoint.
@@ -26,7 +26,8 @@ export function appointCrier(engine: GameEngine, entityId: EntityId): boolean {
   if (
     entity === undefined ||
     getComponent(entity, citizenComponent) === undefined ||
-    getComponent(entity, positionComponent) === undefined
+    getComponent(entity, positionComponent) === undefined ||
+    getCrierService(engine).isExcluded(entityId)
   ) {
     throw new JobError(
       JobErrorKind.IneligibleCrier,

@@ -16,7 +16,7 @@ describe("contentConstantsSchema", () => {
   it("converts ratios and percentages and rejects out-of-range values", () => {
     const parsed = contentConstantsSchema.parse(constants);
     expect(parsed.bynameChance).toBe(850);
-    expect(parsed.defaultRestockFraction).toBe(500);
+    expect(parsed.defaultRestockFraction).toBe(750);
     expect(
       contentConstantsSchema.safeParse({ ...(constants as object), upgradeGraceDays: 0 }).success,
     ).toBe(false);

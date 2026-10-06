@@ -26,11 +26,19 @@ enum DeliverPhase {
   Approach = "approach",
 }
 
-function loadOf(engine: GameEngine, crierId: EntityId, boardId: EntityId): number[] {
+// What the crier carries (a trip has one destination, so the whole load is for it).
+function loadOf(engine: GameEngine, crierId: EntityId): number[] {
   const crier = engine.store.get(crierId);
   const data = crier === undefined ? undefined : getComponent(crier, townCrierComponent);
   const service = getCrierService(engine);
-  return (data?.carrying ?? []).filter((updateId) => service.find(updateId)?.boardId === boardId);
+  return (data?.carrying ?? []).filter((updateId) => service.find(updateId)?.crierId === crierId);
+}
+
+// A destination that is a board delivers by hand, any other one is a Notice Post.
+function viaOf(engine: GameEngine, destinationId: EntityId): DeliveryMethod {
+  return getBoard(engine, destinationId) === null
+    ? DeliveryMethod.NoticePost
+    : DeliveryMethod.TownCrier;
 }
 
 function finishTrip(engine: GameEngine, crierId: EntityId, boardId: EntityId): void {
@@ -47,8 +55,9 @@ function finishTrip(engine: GameEngine, crierId: EntityId, boardId: EntityId): v
 }
 
 function deliverOnArrival(engine: GameEngine, context: TaskContext, boardId: EntityId): StepResult {
-  for (const updateId of loadOf(engine, context.entityId, boardId)) {
-    applyBoardUpdate(engine, updateId, DeliveryMethod.TownCrier);
+  const via = viaOf(engine, boardId);
+  for (const updateId of loadOf(engine, context.entityId)) {
+    applyBoardUpdate(engine, updateId, via);
   }
   finishTrip(engine, context.entityId, boardId);
   return doneStep();
@@ -60,18 +69,38 @@ function giveUp(
   boardId: EntityId,
   reason: string,
 ): StepResult {
-  for (const updateId of loadOf(engine, context.entityId, boardId)) {
-    abandonUpdate(engine, updateId, reason);
+  const service = getCrierService(engine);
+  for (const updateId of loadOf(engine, context.entityId)) {
+    const target = service.find(updateId)?.boardId;
+    if (reason === boardGoneReason && target !== undefined && getBoard(engine, target) !== null) {
+      // The Notice Post vanished but the board is there: the updates wait for the next crier
+      // (the board is served by hand again), they are not lost.
+      service.unassign([updateId]);
+    } else {
+      abandonUpdate(engine, updateId, reason);
+    }
   }
   finishTrip(engine, context.entityId, boardId);
   return failStep(reason);
 }
 
+// Whether the place the crier walks to is still there: a board, or the Notice Post.
+function destinationExists(engine: GameEngine, destinationId: EntityId): boolean {
+  const entity = engine.store.get(destinationId);
+  return (
+    entity !== undefined &&
+    !engine.store.isPendingDelete(destinationId) &&
+    getComponent(entity, positionComponent) !== undefined
+  );
+}
+
 /**
  * Builds the handler of the `towncrier.deliver` task (spec 017 FR-011, DECISIONS D-12): a crier
- * with updates on board walks to the board's cell with a `move` child (phase `approach`) and
- * applies every update it carries for that board on arrival (`jobboard.update.applied` with
- * `via: TownCrier`), then is available again. Travel time is the path cost of the walk. When
+ * with updates on board walks to the destination's cell (`boardId` of the task data: the board, or
+ * the Notice Post that serves it, spec 026 FR-021) with a `move` child (phase `approach`) and
+ * applies every update it carries on arrival (`jobboard.update.applied` with `via: TownCrier` or
+ * `NoticePost`), then is available again. A Notice Post that vanished hands the updates back to
+ * the queue. Travel time is the path cost of the walk. When
  * the board is gone (on the way or on arrival) the updates are abandoned (`board_gone`); when the
  * walk fails they are abandoned too (`board_unreachable`). A crier that is interrupted keeps its
  * load; `recoverCriers` gives it a new task. Failure reasons: `board_gone`, `board_unreachable`.
@@ -85,13 +114,15 @@ export function createDeliverTask(engine: GameEngine): TaskHandler {
     requires: ["Position"],
     start: (context, data) => {
       const { boardId } = deliverDataSchema.parse(data);
-      const board = getBoard(engine, boardId);
+      const destination = destinationExists(engine, boardId)
+        ? engine.store.get(boardId)
+        : undefined;
       const boardPosition =
-        board === null ? undefined : getComponent(board.board, positionComponent);
+        destination === undefined ? undefined : getComponent(destination, positionComponent);
       if (boardPosition === undefined) {
         return giveUp(engine, context, boardId, boardGoneReason);
       }
-      if (loadOf(engine, context.entityId, boardId).length === 0) {
+      if (loadOf(engine, context.entityId).length === 0) {
         return doneStep();
       }
       const position = getComponent(context.entity, positionComponent);
@@ -110,10 +141,10 @@ export function createDeliverTask(engine: GameEngine): TaskHandler {
     },
     step: (context, record: TaskRecord) => {
       const { boardId } = deliverDataSchema.parse(record.data);
-      if (getBoard(engine, boardId) === null) {
+      if (!destinationExists(engine, boardId)) {
         return giveUp(engine, context, boardId, boardGoneReason);
       }
-      if (loadOf(engine, context.entityId, boardId).length === 0) {
+      if (loadOf(engine, context.entityId).length === 0) {
         return doneStep();
       }
       if (!childCompleted(record)) {

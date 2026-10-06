@@ -30,6 +30,21 @@ describe("StatusService", () => {
     );
   });
 
+  it("replaces a provider in place and registers one for a new kind", () => {
+    const service = new StatusService();
+    service.registerProvider(provider(StatusSubjectKind.Zone));
+    service.registerProvider(provider(StatusSubjectKind.Citizen));
+    const swapped = provider(StatusSubjectKind.Zone);
+    service.replaceProvider(swapped);
+    service.replaceProvider(provider(StatusSubjectKind.Dwelling));
+    expect(service.providers().map((entry) => entry.kind)).toEqual([
+      StatusSubjectKind.Zone,
+      StatusSubjectKind.Citizen,
+      StatusSubjectKind.Dwelling,
+    ]);
+    expect(service.providerOf(StatusSubjectKind.Zone)).toBe(swapped);
+  });
+
   it("owns an empty tracker and ledger", () => {
     const service = new StatusService();
     expect(service.tracker.records()).toEqual([]);

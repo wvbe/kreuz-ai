@@ -39,6 +39,16 @@ describe("appointCrier", () => {
   });
 });
 
+describe("appointCrier and the Steward", () => {
+  it("refuses an entity the exclusion rule names (the Steward is no Town Crier)", () => {
+    const world = createCrierWorld();
+    const settler = world.spawn("peasant", 55);
+    getCrierService(world.engine).setExclusion((entityId) => entityId === settler.id);
+    expect(() => appointCrier(world.engine, settler.id)).toThrow(JobError);
+    expect(listCriers(world.engine)).toEqual([]);
+  });
+});
+
 describe("dismissCrier", () => {
   it("removes the role, returns the load to the queue and cancels the walk", () => {
     const world = createCrierWorld();

@@ -4,11 +4,20 @@ import type { JsonValue } from "../engine/EventBus";
 import { queueBoardUpdate } from "./boardUpdates";
 import { deliverTaskOf } from "./crierQueries";
 import { getCrierService } from "./crierServiceRegistry";
-import { BoardChangeKind, CrierStatus, UpdateOrigin, deliverTaskType } from "./crierTypes";
+import {
+  BoardChangeKind,
+  CrierStatus,
+  DeliveryMethod,
+  UpdateOrigin,
+  deliverTaskType,
+} from "./crierTypes";
 import { dispatchCriers, recoverCriers } from "./dispatchCriers";
 import { createCrierWorld } from "./testCrierWorld";
 import type { CrierTestWorld } from "./testCrierWorld";
 import { townCrierComponent } from "./townCrierComponent";
+import { requireBoard } from "../jobs/jobBoards";
+import { JobBoardMode } from "../jobs/jobTypes";
+import type { EntityId } from "../ecs/Entity";
 
 function post(world: CrierTestWorld, cellIndex = 15) {
   return queueBoardUpdate(
@@ -19,6 +28,25 @@ function post(world: CrierTestWorld, cellIndex = 15) {
       jobTypeId: "fell.trees",
       mapId: world.mapId,
       cellIndex,
+      entityId: null,
+      materialId: null,
+      priority: null,
+      urgent: false,
+      wage: null,
+    },
+    UpdateOrigin.Player,
+  );
+}
+
+function postOn(world: CrierTestWorld, boardId: EntityId) {
+  return queueBoardUpdate(
+    world.engine,
+    boardId,
+    {
+      kind: BoardChangeKind.Add,
+      jobTypeId: "fell.trees",
+      mapId: world.mapId,
+      cellIndex: 15,
       entityId: null,
       materialId: null,
       priority: null,
@@ -85,6 +113,29 @@ describe("dispatchCriers", () => {
     dispatchCriers(world.engine, 2);
     world.run(1);
     expect(abandoned).toEqual([{ updateId: 1, boardId: world.boardId, reason: "board_gone" }]);
+  });
+});
+
+describe("dispatchCriers with a Notice Post", () => {
+  it("sends one crier to the post with the updates of every board it serves", () => {
+    const world = createCrierWorld({ width: 20, height: 20 });
+    const second = world.spawn("job_board", 5);
+    requireBoard(world.engine, second.id).data.mode = JobBoardMode.UserManaged;
+    const crier = world.spawnCrier(250);
+    const post = world.spawn("chest", 200);
+    getCrierService(world.engine).setRouter(() => ({
+      destinationId: post.id,
+      via: DeliveryMethod.NoticePost,
+    }));
+    postOn(world, world.boardId);
+    postOn(world, second.id);
+    dispatchCriers(world.engine, 4);
+    expect(getComponent(crier, townCrierComponent)).toEqual({
+      status: CrierStatus.Traveling,
+      boardQueue: [post.id],
+      carrying: [1, 2],
+    });
+    expect(deliverTaskOf(world.engine, crier.id)?.data).toEqual({ boardId: post.id });
   });
 });
 

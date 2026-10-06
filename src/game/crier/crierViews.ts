@@ -107,7 +107,8 @@ export function buildPendingUpdateViews(engine: GameEngine): PendingUpdateView[]
     .updates()
     .map((update) => {
       const crier = update.crierId === null ? undefined : engine.store.get(update.crierId);
-      const trip = crier === undefined ? null : tripToBoard(engine, crier, update.boardId);
+      const destinationId = getCrierService(engine).route(update.boardId).destinationId;
+      const trip = crier === undefined ? null : tripToBoard(engine, crier, destinationId);
       const done =
         trip === null || update.startCost === 0
           ? 0
@@ -129,7 +130,7 @@ export function buildPendingUpdateViews(engine: GameEngine): PendingUpdateView[]
         etaTicks: trip === null ? null : trip.ticks,
         remainingCost: trip === null ? null : trip.cost,
         progressPermille: done,
-        waitingFor: update.crierId === null ? waitingReasonOf(engine, update.boardId) : null,
+        waitingFor: update.crierId === null ? waitingReasonOf(engine, destinationId) : null,
       };
     });
 }

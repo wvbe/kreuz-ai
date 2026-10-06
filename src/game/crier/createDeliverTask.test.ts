@@ -5,7 +5,8 @@ import { requireBoard } from "../jobs/jobBoards";
 import { positionComponent } from "../map/positionComponent";
 import { createDeliverTask } from "./createDeliverTask";
 import { deliverTaskOf } from "./crierQueries";
-import { CrierStatus, deliverTaskType } from "./crierTypes";
+import { getCrierService } from "./crierServiceRegistry";
+import { CrierStatus, DeliveryMethod, deliverTaskType } from "./crierTypes";
 import { createCrierWorld } from "./testCrierWorld";
 import type { CrierTestWorld } from "./testCrierWorld";
 import { townCrierComponent } from "./townCrierComponent";
@@ -95,5 +96,45 @@ describe("createDeliverTask", () => {
     expect(abandoned).toHaveLength(1);
     expect(abandoned[0]).toMatchObject({ reason: "board_gone" });
     expect(getComponent(crier, townCrierComponent)?.status).toBe(CrierStatus.Available);
+  });
+
+  it("walks to a Notice Post that serves the board and applies the update there", () => {
+    const world = createCrierWorld({ boardCell: 0, width: 30, height: 30 });
+    const post = world.spawn("chest", 400);
+    getCrierService(world.engine).setRouter(() => ({
+      destinationId: post.id,
+      via: DeliveryMethod.NoticePost,
+    }));
+    const crier = world.spawnCrier(405);
+    const applied = listen(world, "jobboard.update.applied");
+    postFrom(world, 15);
+    world.run(1);
+    expect(getComponent(crier, townCrierComponent)?.boardQueue).toEqual([post.id]);
+    world.run(60);
+    expect(requireBoard(world.engine, world.boardId).data.postings).toHaveLength(1);
+    expect(getComponent(crier, positionComponent)?.cellIndex).toBe(400);
+    expect(applied[0]).toMatchObject({ boardId: world.boardId, via: "NoticePost" });
+    expect(getComponent(crier, townCrierComponent)?.status).toBe(CrierStatus.Available);
+  });
+
+  it("hands the update back to the queue when the Notice Post vanishes on the way", () => {
+    const world = createCrierWorld({ boardCell: 0, width: 30, height: 30 });
+    const post = world.spawn("chest", 400);
+    const service = getCrierService(world.engine);
+    service.setRouter(() =>
+      world.engine.store.get(post.id) === undefined
+        ? null
+        : { destinationId: post.id, via: DeliveryMethod.NoticePost },
+    );
+    const crier = world.spawnCrier(899);
+    const abandoned = listen(world, "jobboard.update.abandoned");
+    postFrom(world, 15);
+    world.run(3);
+    world.engine.store.requestDelete(post.id);
+    world.run(3);
+    expect(abandoned).toEqual([]);
+    world.run(600);
+    expect(getComponent(crier, townCrierComponent)?.status).toBe(CrierStatus.Available);
+    expect(requireBoard(world.engine, world.boardId).data.postings).toHaveLength(1);
   });
 });

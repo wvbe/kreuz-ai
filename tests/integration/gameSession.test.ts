@@ -369,7 +369,7 @@ describe("GameSession end to end", () => {
                             ? { mapId: 1, from: 0 }
                             : name === "members-of"
                               ? { factionId: 1 }
-                              : name === "order"
+                              : name === "order" || name === "standing-order"
                                 ? { orderId: 1 }
                                 : name === "recipes-for"
                                   ? { workstationId: 1 }

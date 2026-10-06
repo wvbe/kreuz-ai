@@ -4,8 +4,8 @@ import type { EntityId } from "../ecs/Entity";
 import type { JsonValue } from "../engine/EventBus";
 import { SaveSectionLocation } from "../save/SaveSectionRegistry";
 import type { SaveSection } from "../save/SaveSectionRegistry";
-import { BoardChangeKind, UpdateOrigin } from "./crierTypes";
-import type { BoardChange, PendingBoardUpdate } from "./crierTypes";
+import { BoardChangeKind, DeliveryMethod, UpdateOrigin } from "./crierTypes";
+import type { BoardChange, DeliveryRoute, PendingBoardUpdate } from "./crierTypes";
 
 const idSchema = z.number().int().min(1);
 const tickSchema = z.number().int().min(0);
@@ -25,6 +25,7 @@ const changeSchema = z.discriminatedUnion("kind", [
     })
     .strict(),
   z.object({ kind: z.literal(BoardChangeKind.Remove), postingId: idSchema }).strict(),
+  z.object({ kind: z.literal(BoardChangeKind.Run), runId: idSchema }).strict(),
   z
     .object({
       kind: z.literal(BoardChangeKind.Modify),
@@ -72,6 +73,68 @@ const sectionSchema = z
 export class CrierService {
   private updateList: PendingBoardUpdate[] = [];
   private nextId = 1;
+  private router: (boardId: EntityId) => DeliveryRoute | null = () => null;
+  private runApplier: (runId: number) => boolean = () => false;
+  private exclusion: (entityId: EntityId) => boolean = () => false;
+
+  /**
+   * Installs the routing of spec 026 FR-021 (called by the Steward system): it names the Notice
+   * Post that serves a board, or null when the board is served by a crier walking to it.
+   *
+   * @param router - Board id to route, or null for the board itself.
+   */
+  setRouter(router: (boardId: EntityId) => DeliveryRoute | null): void {
+    this.router = router;
+  }
+
+  /**
+   * Where a crier walks to deliver the updates of a board: the Notice Post that serves it, else
+   * the board itself.
+   *
+   * @param boardId - The board.
+   * @returns The destination entity and the delivery method.
+   */
+  route(boardId: EntityId): DeliveryRoute {
+    return this.router(boardId) ?? { destinationId: boardId, via: DeliveryMethod.TownCrier };
+  }
+
+  /**
+   * Installs what a delivered Steward run does (spec 026: it becomes a production order).
+   *
+   * @param applier - Returns false when the run can no longer be started.
+   */
+  setRunApplier(applier: (runId: number) => boolean): void {
+    this.runApplier = applier;
+  }
+
+  /**
+   * Applies a delivered Steward run.
+   *
+   * @param runId - The run named by the change.
+   * @returns False when it was refused.
+   */
+  applyRun(runId: number): boolean {
+    return this.runApplier(runId);
+  }
+
+  /**
+   * Installs the rule that keeps an entity from being a Town Crier (the Steward cannot be one).
+   *
+   * @param exclusion - True for an entity that must not be appointed.
+   */
+  setExclusion(exclusion: (entityId: EntityId) => boolean): void {
+    this.exclusion = exclusion;
+  }
+
+  /**
+   * Whether an entity is barred from being a Town Crier.
+   *
+   * @param entityId - The entity.
+   * @returns True when the exclusion rule names it.
+   */
+  isExcluded(entityId: EntityId): boolean {
+    return this.exclusion(entityId);
+  }
 
   /**
    * Queues a new update for a board.

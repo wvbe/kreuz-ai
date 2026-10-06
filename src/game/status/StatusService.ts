@@ -32,6 +32,21 @@ export class StatusService {
   }
 
   /**
+   * Replaces the provider of a kind, or registers it when the kind has none yet; the position in
+   * the visiting order stays. Test worlds use it to swap in synthetic subjects.
+   *
+   * @param provider - The new provider.
+   */
+  replaceProvider(provider: StatusProvider): void {
+    const index = this.list.findIndex((existing) => existing.kind === provider.kind);
+    if (index < 0) {
+      this.list.push(provider);
+    } else {
+      this.list[index] = provider;
+    }
+  }
+
+  /**
    * The registered providers in registration order.
    *
    * @returns A copy of the list.

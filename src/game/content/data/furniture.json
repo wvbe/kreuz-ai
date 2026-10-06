@@ -204,5 +204,51 @@
       }
     ],
     "unlockTier": "hamlet"
+  },
+  {
+    "id": "notice_post",
+    "name": "Notice post",
+    "tags": ["notice_post"],
+    "constructionMaterials": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 3
+      },
+      {
+        "materialId": "nails",
+        "quantity": 2
+      }
+    ],
+    "constructionTicks": 18,
+    "deconstructionYield": [
+      {
+        "materialId": "oak_plank",
+        "quantity": 1
+      }
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "church_bell",
+    "name": "Church bell",
+    "tags": ["church_bell"],
+    "constructionMaterials": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 4
+      },
+      {
+        "materialId": "oak_plank",
+        "quantity": 4
+      }
+    ],
+    "constructionTicks": 48,
+    "deconstructionYield": [
+      {
+        "materialId": "iron_ingot",
+        "quantity": 2
+      }
+    ],
+    "unlockTier": "market_town"
   }
 ]

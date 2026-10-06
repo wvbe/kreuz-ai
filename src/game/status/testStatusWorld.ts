@@ -17,9 +17,10 @@ export type SeenStatusEvent = {
 };
 
 /**
- * A construction test world plus a synthetic status provider for the kind `StandingOrder` (no
- * built-in provider exists for it before task 4.3): the test decides which synthetic subjects
- * exist and what their status is, so the settle machinery can be tested without a game.
+ * A construction test world plus a synthetic status provider for the kind `StandingOrder` (it
+ * replaces the real provider of task 4.3, which this world's tests do not use): the test decides
+ * which synthetic subjects exist and what their status is, so the settle machinery can be tested
+ * without a game.
  */
 export type StatusTestWorld = ConstructionTestWorld & {
   /**
@@ -50,7 +51,7 @@ export type StatusTestWorld = ConstructionTestWorld & {
 export function createStatusWorld(options: JobTestWorldOptions = {}): StatusTestWorld {
   const world = createConstructionWorld(options);
   const synthetic = new Map<number, SubjectStatus>();
-  getStatusService(world.engine).registerProvider({
+  getStatusService(world.engine).replaceProvider({
     kind: StatusSubjectKind.StandingOrder,
     subjects: () =>
       [...synthetic.keys()].map((id) => ({ kind: StatusSubjectKind.StandingOrder, id })),

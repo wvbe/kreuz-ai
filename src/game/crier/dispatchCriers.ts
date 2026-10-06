@@ -15,10 +15,17 @@ import {
 import type { CrierDispatched, PendingBoardUpdate } from "./crierTypes";
 import { townCrierComponent } from "./townCrierComponent";
 
-function groupByBoard(updates: readonly PendingBoardUpdate[]): Map<EntityId, number[]> {
+// Groups the waiting updates by the entity a crier walks to (the board, or the Notice Post that
+// serves it, spec 026 FR-021); the group of the oldest update comes first.
+function groupByDestination(
+  engine: GameEngine,
+  updates: readonly PendingBoardUpdate[],
+): Map<EntityId, number[]> {
+  const service = getCrierService(engine);
   const groups = new Map<EntityId, number[]>();
   for (const update of updates) {
-    groups.set(update.boardId, [...(groups.get(update.boardId) ?? []), update.updateId]);
+    const { destinationId } = service.route(update.boardId);
+    groups.set(destinationId, [...(groups.get(destinationId) ?? []), update.updateId]);
   }
   return groups;
 }
@@ -44,8 +51,10 @@ function nearestCrier(
  * to the available crier with the cheapest path to the board (ties: lowest id), who takes all of
  * the board's waiting updates at once and gets a `towncrier.deliver` task at priority 80. A
  * crier that is already walking never takes more: new changes wait for the next free one (finite
- * fleet). Updates for a board that no longer exists are abandoned (`board_gone`); updates nobody
- * can reach or no crier is free for simply wait. Queues `towncrier.dispatched`.
+ * fleet). A board served by a Notice Post (`CrierService.route`) is delivered by walking to the
+ * post, and the updates of every board that post serves go in one trip. Updates for a board that
+ * no longer exists are abandoned (`board_gone`); updates nobody can reach or no crier is free for
+ * simply wait. Queues `towncrier.dispatched`.
  *
  * @param engine - The engine.
  * @param tick - The current tick.
@@ -54,13 +63,15 @@ export function dispatchCriers(engine: GameEngine, tick: number): void {
   const service = getCrierService(engine);
   const waiting = service.updates().filter((update) => update.crierId === null);
   let free = availableCriers(engine);
-  for (const [boardId, updateIds] of groupByBoard(waiting)) {
-    if (getBoard(engine, boardId) === null) {
-      for (const updateId of updateIds) {
-        abandonUpdate(engine, updateId, boardGoneReason);
-      }
-      continue;
+  const live: PendingBoardUpdate[] = [];
+  for (const update of waiting) {
+    if (getBoard(engine, update.boardId) === null) {
+      abandonUpdate(engine, update.updateId, boardGoneReason);
+    } else {
+      live.push(update);
     }
+  }
+  for (const [boardId, updateIds] of groupByDestination(engine, live)) {
     const choice = nearestCrier(engine, free, boardId);
     if (choice === null) {
       continue;

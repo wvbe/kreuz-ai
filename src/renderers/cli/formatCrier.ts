@@ -5,6 +5,7 @@ const changeSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("add"), jobTypeId: z.string(), cellIndex: z.number() }),
   z.object({ kind: z.literal("remove"), postingId: z.number() }),
   z.object({ kind: z.literal("modify"), postingId: z.number() }),
+  z.object({ kind: z.literal("run"), runId: z.number() }),
 ]);
 
 const updateSchema = z.object({
@@ -37,6 +38,8 @@ function describeChange(change: ChangeView): string {
       return `remove posting #${change.postingId}`;
     case "modify":
       return `change posting #${change.postingId}`;
+    case "run":
+      return `start standing-order run #${change.runId}`;
   }
 }
 

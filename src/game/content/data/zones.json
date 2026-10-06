@@ -90,5 +90,21 @@
         }
       ]
     ]
+  },
+  {
+    "id": "bell_tower",
+    "name": "Bell tower",
+    "requiresRoom": false,
+    "minTiles": 1,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "church_bell",
+          "count": 1
+        }
+      ]
+    ],
+    "unlockTier": "market_town"
   }
 ]

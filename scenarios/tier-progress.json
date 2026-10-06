@@ -62,7 +62,7 @@
         },
         "path": "length",
         "op": "eq",
-        "value": 3
+        "value": 6
       }
     },
     {

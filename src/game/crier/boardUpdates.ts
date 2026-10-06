@@ -64,6 +64,8 @@ export function queueBoardUpdate(
       entityId: change.entityId,
       materialId: change.materialId,
     });
+  } else if (change.kind === BoardChangeKind.Run) {
+    // A Steward run needs no posting yet: the applier starts the production order on delivery.
   } else if (!data.postings.some((posting) => posting.id === change.postingId)) {
     throw new JobError(
       JobErrorKind.UnknownPosting,
@@ -156,6 +158,10 @@ function applyChange(engine: GameEngine, boardId: EntityId, change: BoardChange)
     );
   } else if (change.kind === BoardChangeKind.Remove) {
     cancelPosting(engine, change.postingId, "removed_by_player", tick);
+  } else if (change.kind === BoardChangeKind.Run) {
+    if (!getCrierService(engine).applyRun(change.runId)) {
+      throw new JobError(JobErrorKind.InvalidStatus, `run ${change.runId} can no longer start`);
+    }
   } else {
     modifyPosting(engine, change.postingId, {
       ...(change.priority === null ? {} : { priority: change.priority }),

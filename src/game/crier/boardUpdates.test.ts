@@ -222,3 +222,41 @@ describe("detachFromCrier", () => {
     detachFromCrier(world.engine, 9999, 1);
   });
 });
+
+describe("Steward runs", () => {
+  it("queues a run on a user-managed board and starts it through the applier on delivery", () => {
+    const world = createCrierWorld();
+    const started: number[] = [];
+    getCrierService(world.engine).setRunApplier((runId) => {
+      started.push(runId);
+      return true;
+    });
+    const update = queueBoardUpdate(
+      world.engine,
+      world.boardId,
+      { kind: BoardChangeKind.Run, runId: 4 },
+      UpdateOrigin.Steward,
+    );
+    expect(update.changes).toEqual([{ kind: BoardChangeKind.Run, runId: 4 }]);
+    expect(applyBoardUpdate(world.engine, update.updateId, DeliveryMethod.BellTower)).toBe(true);
+    expect(started).toEqual([4]);
+    expect(getCrierService(world.engine).find(update.updateId)).toBeNull();
+  });
+
+  it("abandons the update when the run can no longer start", () => {
+    const world = createCrierWorld();
+    getCrierService(world.engine).setRunApplier(() => false);
+    const abandoned = listen(world, "jobboard.update.abandoned");
+    const update = queueBoardUpdate(
+      world.engine,
+      world.boardId,
+      { kind: BoardChangeKind.Run, runId: 4 },
+      UpdateOrigin.Steward,
+    );
+    expect(applyBoardUpdate(world.engine, update.updateId, DeliveryMethod.TownCrier)).toBe(false);
+    world.run(1);
+    expect(abandoned).toEqual([
+      { updateId: update.updateId, boardId: world.boardId, reason: "change_rejected" },
+    ]);
+  });
+});

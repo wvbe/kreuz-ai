@@ -53,6 +53,11 @@ export enum BoardChangeKind {
   Add = "add",
   Remove = "remove",
   Modify = "modify",
+  /**
+   * A Steward run (spec 026): on delivery the run becomes a production order (the applier of
+   * `CrierService.setRunApplier`).
+   */
+  Run = "run",
 }
 
 /**
@@ -64,8 +69,8 @@ export enum UpdateOrigin {
 }
 
 /**
- * How an update reached its board (spec 017 FR-015 `via`); notice posts and bell towers belong to
- * task 4.3. The enum value is the event payload.
+ * How an update reached its board (spec 017 FR-015 `via`, spec 026 FR-023). The enum value is the
+ * event payload.
  */
 export enum DeliveryMethod {
   TownCrier = "TownCrier",
@@ -94,7 +99,8 @@ export type BoardChange =
       postingId: number;
       priority: number | null;
       wage: number | null;
-    };
+    }
+  | { kind: BoardChangeKind.Run; runId: number };
 
 /**
  * A queued set of changes for one user-managed board (DECISIONS D-12), waiting for a crier.
@@ -135,6 +141,18 @@ export type TownCrierData = {
    * Ids of the pending updates on board.
    */
   carrying: number[];
+};
+
+/**
+ * Where a crier must walk so that the updates of a board are applied, and how that is called in
+ * `jobboard.update.applied` (spec 026 FR-021: a Notice Post serves the boards around it).
+ */
+export type DeliveryRoute = {
+  /**
+   * The entity the crier walks to: the board itself or the Notice Post that serves it.
+   */
+  destinationId: EntityId;
+  via: DeliveryMethod;
 };
 
 /**
