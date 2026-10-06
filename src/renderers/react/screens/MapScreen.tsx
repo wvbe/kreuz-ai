@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { MapEntityView } from "../../../game/api/Views";
 import type { CropView } from "../../../game/gathering/gatheringTypes";
 import type { ZoneView } from "../../../game/zones/zoneTypes";
@@ -13,7 +13,9 @@ import type { CropCell } from "../map/instanceLayout";
 import type { PlacementGhost, ZoneOverlay } from "../map/MapCanvasProps";
 import { buildMapScene } from "../map/mapScene";
 import { MapViewport } from "../map/MapViewport";
-import type { MapBadge } from "../map/MapViewport";
+import type { MapBadge, MapStrokeTool } from "../map/MapViewport";
+import { commitStroke } from "../command/commitStroke";
+import { StrokeMode } from "../command/strokeMath";
 import { ToolMode } from "../selection/ToolStore";
 import { SelectionDock } from "./SelectionDock";
 import type { MapGeometryView } from "../../../game/api/Views";
@@ -64,6 +66,29 @@ export function MapScreen() {
   const cropRows = dataOf(useQuery<readonly CropView[]>("crops", {})) ?? [];
   const blockedRows = dataOf(useQuery<readonly BlockedRow[]>("idle-blocked", {})) ?? [];
 
+  const [preview, setPreview] = useState<readonly number[]>([]);
+  const stroke = useMemo((): MapStrokeTool | null => {
+    if (tool.mode !== ToolMode.Paint && tool.mode !== ToolMode.Walls) {
+      return null;
+    }
+    return {
+      mode: tool.mode === ToolMode.Paint ? StrokeMode.Paint : StrokeMode.Rectangle,
+      onPreview: setPreview,
+      onCommit: (cells) => {
+        if (activeMapId !== null) {
+          commitStroke(host.commands, tool, activeMapId, cells, (cell) => {
+            const check = host.store.query("validate-placement", {
+              prototypeId: tool.prototypeId ?? "wall",
+              mapId: activeMapId,
+              cellIndex: cell,
+            });
+            return check.ok && (check.data as PlacementCheck).valid;
+          });
+        }
+      },
+    };
+  }, [host, tool, activeMapId]);
+
   const terrainKey = map === null ? "" : map.terrain.join("|");
   const scene = useMemo(
     () => (map === null || geometry === null ? null : buildMapScene(map, geometry)),
@@ -84,6 +109,15 @@ export function MapScreen() {
     cells: zone.tiles,
     active: zone.active,
   }));
+  if (preview.length > 0) {
+    // The stroke in progress is drawn like a zone of the type being designated.
+    zones.push({
+      zoneId: 0,
+      zoneTypeId: tool.zoneTypeId ?? tool.prototypeId ?? "preview",
+      cells: preview,
+      active: true,
+    });
+  }
   const prefs = host.getPrefs();
   const badges: MapBadge[] = prefs.showBadges
     ? blockedRows
@@ -150,6 +184,7 @@ export function MapScreen() {
           showZones={prefs.showZones}
           badges={badges}
           ghost={ghost}
+          stroke={stroke}
           hoverLabel={hoverLabel}
           onPrimaryClick={(cell, entityId) => {
             if (tool.mode === ToolMode.Place && tool.prototypeId !== null) {

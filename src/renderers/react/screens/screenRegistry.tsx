@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { GovernmentScreen } from "../command/GovernmentScreen";
 import { Screen } from "../navigation/Screen";
 import { ContentScreen } from "./ContentScreen";
 import { MapScreen } from "./MapScreen";
@@ -46,11 +47,7 @@ export const screenRegistry: readonly ScreenDefinition[] = [
     label: "Idle and blocked",
     render: () => <IdleBlockedScreen />,
   },
-  {
-    screen: Screen.StandingOrders,
-    label: "Standing orders",
-    render: () => <PlaceholderScreen title="Standing orders" task="6.4" />,
-  },
+  { screen: Screen.StandingOrders, label: "Government", render: () => <GovernmentScreen /> },
   { screen: Screen.Progress, label: "Settlement", render: () => <SettlementScreen /> },
   { screen: Screen.NewGame, label: "New game", render: () => <NewGameScreen /> },
   { screen: Screen.Settings, label: "Settings", render: () => <SettingsScreen /> },

@@ -13,6 +13,7 @@ It drives the game only through `src/game/api` (`GameSession`, its views and `cr
 - `navigation/` - the `Screen` enum and the navigation store.
 - `selection/` - selection and tool stores (the API for panels).
 - `prefs/` - renderer preferences and the colour tables (not game state).
+- `command/` - the command interface: build menu, zone tools, construction queue, pending list and the government screen.
 - `screens/` - the screens, the screen registry and the side-panel registry.
 - `map/` - camera math, picking, buffers, the three.js layers and the interactive viewport.
 - `panels/` - the inspection panels and the why-popover (docked beside the map).

@@ -1,4 +1,8 @@
 import type { ComponentType } from "react";
+import { BuildMenuPanel } from "../command/BuildMenuPanel";
+import { ConstructionPanel } from "../command/ConstructionPanel";
+import { PendingPanel } from "../command/PendingPanel";
+import { ZonePanel } from "../command/ZonePanel";
 import { InspectionPanel } from "../panels/InspectionPanel";
 import { SettlementProgressPanel } from "../views/SettlementProgressPanel";
 
@@ -22,4 +26,8 @@ export type SidePanel = {
 export const sidePanels: readonly SidePanel[] = [
   { id: "inspection", title: "Inspection", component: InspectionPanel },
   { id: "settlement-progress", title: "Settlement", component: SettlementProgressPanel },
+  { id: "build-menu", title: "Build", component: BuildMenuPanel },
+  { id: "zones", title: "Zones", component: ZonePanel },
+  { id: "construction", title: "Construction", component: ConstructionPanel },
+  { id: "pending-commands", title: "Pending commands", component: PendingPanel },
 ];

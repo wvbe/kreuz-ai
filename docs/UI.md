@@ -67,9 +67,24 @@ The Content screen searches live across every content registry (`content-registr
 
 Building blocks for other panels (`src/renderers/react/ui`): `NeedBar` (labelled meter), `StackList` (stacks with quantity, weight, capacity), `KeyValueList`, `Checklist`, `Tabs`, `Link` and `EntityLink` (select and focus). `panels/PrimaryStatus` and `panels/WhyPopover` take an entity id (or a posting or order id with its kind) and can be dropped into any list; `panels/reasonText.ts` turns reasons into sentences.
 
+## Command interface (plan 6.4)
+
+Side panels beside the map (`src/renderers/react/command/`):
+- **Build**: the `build-menu` query grouped by category (Structure, Workstations, Storage, Comfort and beds, Religion, Utility), a search box, locked entries greyed with "Unlocks at <Tier>". Choose an entry to place it: the map shows the ghost, the panel lists why the hovered cell is refused (`validate-placement`), a click sends `PlaceFurniture` or `PlaceDoor`. The Wall entry starts the rectangle tool: drag a box, release, `QueueWalls` is sent for the cells of the box that accept a wall. Escape or Cancel leaves the tool.
+- **Zones**: pick a zone type (locked ones greyed), drag over cells, release: `DesignateZone`. Click a zone's cell to see its status and gaps, then Add tiles or Remove tiles (drag again), Delete zone, or set its material filter (`SetZoneMaterialFilter`; comma-separated categories and material ids). Merge offers (`zone-merge-offers`) show Merge and Keep apart (`ConfirmZoneMerge`).
+- **Construction**: the `construction-queue` with pause, priority, to front and cancel per job. Select a built piece on the map and press Deconstruct (`QueueDeconstruction`).
+- **Pending commands**: the `pending-updates` a Town Crier still carries, with ETA, progress and Cancel (`CancelPendingBoardUpdate`).
+
+The **Government** screen (menu entry "Government") has tabs: Job boards (pause or resume, postings with change priority and remove, post a custom job), Pending commands, Production orders (create from the recipes of a workstation, pause, priority, cancel), Standing orders (list, edit, pause, delete, and the "Keep in stock..." form; `StandingOrderForm` takes `initialMaterialId` so other screens can offer a prefilled form), Steward and Town Crier, Diplomacy (factions with both attitudes, gift and envoy forms, directives with cancel, proposals with Accept, Reject, Counter) and Trade (treasury, traders present, sell or buy with a live `trade-quote`, orders, refined credit). There is no trade-policy screen.
+
+Rules for these panels: every command goes through `host.commands.send` (the host raises the error toast; the form also shows the structured error beside the field, `useSender`); commands are queued and applied on the next tick, so a result appears after the next step; locked content cannot be chosen.
+
+Map tools: `ToolStore` modes `Place`, `Paint` (`PaintAction.Designate|AddTiles|RemoveTiles`) and `Walls`; a tool that strokes passes a `stroke` prop (`MapStrokeTool`) to `MapViewport`, which collects cells (`command/strokeMath.ts`) and calls `onCommit`; `MapScreen` sends them with `commitStroke`.
+
 ## Testing
 
 - Pure map math (camera, picking, buffers, layout, colours) is plain vitest.
 - Stores, `EngineHost` (fake scheduler), hooks and screens run in jsdom (`// @vitest-environment jsdom` at the top of the file) with Testing Library.
 - The three.js layers run under `@react-three/test-renderer`; `MapCanvas` itself needs WebGL and is replaced by a stub through `AppServices.mapCanvas`.
+- `testing/mapGestures.ts` hovers, clicks and drags cells of the rendered map; the command panels are tested by driving the UI and asserting the queries after `host.step(1)`.
 - `testing/runScenarioThroughHost.test.ts` runs the checkpoint C command list through the host and requires the CLI's state hash.
