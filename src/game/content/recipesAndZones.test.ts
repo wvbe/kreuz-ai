@@ -1,32 +1,37 @@
 import { readFileSync } from "node:fs";
+import { z } from "zod";
 import { describe, expect, it } from "vitest";
 import { loadContent } from "./ContentLoader";
 import { recipeSchema, zoneTypeSchema } from "./schemas/economySchemas";
 
 /** The deferred queue of plan task 5.2 (`docs/content-pending-5.2.json`). */
-const pending = JSON.parse(
-  readFileSync(new URL("../../../docs/content-pending-5.2.json", import.meta.url), "utf8"),
-) as { recipes: unknown[]; zones: unknown[] };
+const pending = z
+  .object({ recipes: z.array(recipeSchema), zones: z.array(zoneTypeSchema) })
+  .parse(
+    JSON.parse(
+      readFileSync(new URL("../../../docs/content-pending-5.2.json", import.meta.url), "utf8"),
+    ),
+  );
 
-const SPEC_RECIPES = 59;
-const SPEC_ZONES = 39;
+const specRecipes = 59;
+const specZones = 39;
 
 describe("recipes and zone types against spec 022 (task 5.2, D-80)", () => {
   const content = loadContent();
 
   it("holds each spec recipe and zone either in the pack or in the pending queue, never both", () => {
-    const pendingRecipes = pending.recipes.map((entry) => recipeSchema.parse(entry));
-    const pendingZones = pending.zones.map((entry) => zoneTypeSchema.parse(entry));
+    const pendingRecipes = pending.recipes;
+    const pendingZones = pending.zones;
     for (const recipe of pendingRecipes) {
       expect(content.recipes.ids()).not.toContain(recipe.id);
     }
     for (const zone of pendingZones) {
       expect(content.zones.ids()).not.toContain(zone.id);
     }
-    expect(new Set(pendingRecipes.map((r) => r.id)).size).toBe(pendingRecipes.length);
-    expect(new Set(pendingZones.map((z) => z.id)).size).toBe(pendingZones.length);
-    expect(content.recipes.ids().length + pendingRecipes.length).toBe(SPEC_RECIPES);
-    expect(content.zones.ids().length + pendingZones.length).toBe(SPEC_ZONES);
+    expect(new Set(pendingRecipes.map((recipe) => recipe.id)).size).toBe(pendingRecipes.length);
+    expect(new Set(pendingZones.map((zone) => zone.id)).size).toBe(pendingZones.length);
+    expect(content.recipes.ids().length + pendingRecipes.length).toBe(specRecipes);
+    expect(content.zones.ids().length + pendingZones.length).toBe(specZones);
   });
 
   it("gives the open-air and production zone types their activity unlock", () => {
@@ -57,22 +62,22 @@ describe("recipes and zone types against spec 022 (task 5.2, D-80)", () => {
   it("makes every recipe input available: produced by a recipe, a job, a crop, a harvest or a raw material", () => {
     const producible = new Set<string>();
     for (const recipe of content.recipes.all()) {
-      recipe.outputs.forEach((o) => producible.add(o.materialId));
+      recipe.outputs.forEach((output) => producible.add(output.materialId));
     }
     for (const job of content.jobs.all()) {
-      job.outputs.forEach((o) => producible.add(o.materialId));
+      job.outputs.forEach((output) => producible.add(output.materialId));
     }
     for (const zone of content.zones.all()) {
-      zone.cropOutputs.forEach((o) => producible.add(o.materialId));
+      zone.cropOutputs.forEach((output) => producible.add(output.materialId));
     }
     for (const terrain of content.terrainContent.all()) {
-      terrain.harvestable.forEach((o) => producible.add(o.materialId));
+      terrain.harvestable.forEach((output) => producible.add(output.materialId));
     }
     const unreachable: string[] = [];
     for (const recipe of content.recipes.all()) {
       for (const input of recipe.inputs) {
         const material = content.materials.require(input.materialId);
-        if (!producible.has(input.materialId) && material.categoryId !== "raw") {
+        if (!producible.has(input.materialId) && !material.categories.includes("raw")) {
           unreachable.push(`${recipe.id}:${input.materialId}`);
         }
       }
