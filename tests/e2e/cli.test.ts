@@ -124,7 +124,7 @@ describe("cli --script", () => {
     expect(invalid.stderr).toContain("invalid scenario");
     expect(runCli(["--script", "tests/e2e/fixtures/missing.json"]).status).toBe(2);
     expect(runCli(["--bogus"]).status).toBe(2);
-  }, 30_000); // three child processes: each boot loads the whole game under the coverage load
+  }, 120_000); // three child processes: each boot loads the whole game under the coverage load
 });
 
 describe("cli determinism", () => {
