@@ -2,7 +2,10 @@ import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+// Child processes start slowly on a loaded machine (D-114).
+vi.setConfig({ testTimeout: 300_000 });
 
 // Child-process e2e: spawns the real CLI with the local vite-node (no browser, no network).
 
@@ -24,7 +27,7 @@ function runCli(args: string[], input = ""): Ran {
     cwd: root,
     input,
     encoding: "utf8",
-    timeout: 180_000,
+    timeout: 300_000,
   });
   return { status: ran.status, stdout: ran.stdout, stderr: ran.stderr };
 }

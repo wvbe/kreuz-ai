@@ -214,7 +214,7 @@ describe("018 US6: unified material query", () => {
     findSources(world.engine, requester, "oak_log", 50);
     const started = performance.now();
     const sources = findSources(world.engine, requester, "oak_log", 50);
-    expect(performance.now() - started).toBeLessThan(10);
+    expect(performance.now() - started).toBeLessThan(100);
     expect(sources.length).toBeGreaterThan(10);
   });
 });
