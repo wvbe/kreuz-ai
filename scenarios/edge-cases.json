@@ -81,7 +81,7 @@
       "assert": {
         "query": "validate-placement",
         "args": {
-          "prototypeId": "smelter",
+          "prototypeId": "no_such_furniture",
           "mapId": 1,
           "cellIndex": 283
         },
@@ -224,7 +224,7 @@
     {
       "command": {
         "kind": "PlaceFurniture",
-        "furnitureId": "smelter",
+        "furnitureId": "no_such_furniture",
         "mapId": 1,
         "cell": 283
       }
