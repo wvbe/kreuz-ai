@@ -43,7 +43,8 @@
         "materialIds": ["bread"],
         "perResidentPerDay": 0.5
       }
-    ]
+    ],
+    "unlockTier": "village"
   },
   {
     "level": "timber_framed_house",

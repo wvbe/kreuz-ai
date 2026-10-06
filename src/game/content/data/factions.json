@@ -12,6 +12,30 @@
     "masterSkillThreshold": 60
   },
   {
+    "id": "guild_masons",
+    "name": "Masons' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Mason",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "masonry",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
+    "id": "guild_carpenters",
+    "name": "Carpenters' guild",
+    "factionType": "occupational",
+    "leaderTitle": "Master Carpenter",
+    "disposition": "mercantile",
+    "membership": {
+      "skillId": "carpentry",
+      "minLevel": 15
+    },
+    "masterSkillThreshold": 60
+  },
+  {
     "id": "merchant_caravans",
     "name": "Travelling merchants",
     "factionType": "mercantile",

@@ -24,6 +24,8 @@ import { productionOrdersComponent } from "../production/productionOrdersCompone
 import { zoneComponent } from "../zones/zoneComponent";
 import { merchantComponent } from "../trade/merchantComponent";
 import { envoyComponent } from "../diplomacy/envoyComponent";
+import { settlementChronicleComponent } from "../settlement/settlementChronicleComponent";
+import { settlementProgressComponent } from "../settlement/settlementProgressComponent";
 import { traderComponent } from "../trade/traderComponent";
 import { loadContent } from "./ContentLoader";
 
@@ -52,6 +54,8 @@ function components(): ComponentRegistry {
     merchantComponent,
     traderComponent,
     envoyComponent,
+    settlementProgressComponent,
+    settlementChronicleComponent,
   ]) {
     registry.register(definition);
   }

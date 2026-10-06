@@ -11,7 +11,9 @@
       "Inventory": {
         "slotCount": 8,
         "queryable": false
-      }
+      },
+      "SettlementProgress": {},
+      "SettlementChronicle": {}
     }
   },
   {

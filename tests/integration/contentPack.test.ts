@@ -4,6 +4,8 @@ import { BehaviorHandlerRegistry } from "../../src/game/behavior/BehaviorHandler
 import { NodeStatus } from "../../src/game/behavior/behaviorTypes";
 import { merchantComponent } from "../../src/game/trade/merchantComponent";
 import { envoyComponent } from "../../src/game/diplomacy/envoyComponent";
+import { settlementChronicleComponent } from "../../src/game/settlement/settlementChronicleComponent";
+import { settlementProgressComponent } from "../../src/game/settlement/settlementProgressComponent";
 import { traderComponent } from "../../src/game/trade/traderComponent";
 import { loadContent } from "../../src/game/content/ContentLoader";
 import { ComponentRegistry } from "../../src/game/ecs/ComponentRegistry";
@@ -69,6 +71,8 @@ describe("content pack v0 with the kernel", () => {
       merchantComponent,
       traderComponent,
       envoyComponent,
+      settlementProgressComponent,
+      settlementChronicleComponent,
     ]) {
       components.register(definition);
     }
@@ -89,6 +93,8 @@ describe("content pack v0 with the kernel", () => {
     expect(Object.keys(store.spawn("government_faction").components)).toEqual([
       "Faction",
       "Inventory",
+      "SettlementChronicle",
+      "SettlementProgress",
     ]);
     expect(store.size).toBe(5);
   });
@@ -127,6 +133,8 @@ describe("content pack v0 with the kernel", () => {
     components.register(merchantComponent);
     components.register(traderComponent);
     components.register(envoyComponent);
+    components.register(settlementProgressComponent);
+    components.register(settlementChronicleComponent);
     const prototypesA = first.createPrototypeRegistry(components);
     const prototypesB = second.createPrototypeRegistry(components);
     expect(prototypesA).not.toBe(prototypesB);

@@ -1,0 +1,26 @@
+# src/game/settlement
+
+Settlement tiers, milestones and the unlock table (spec 027, DECISIONS D-16 and D-57, plan task 4.4). The engine registers it for itself (`registerSettlement` in the `GameEngine` constructor, after diplomacy). The tier it keeps is the one tier source of the whole game: `JobService.setTierSource` is wired to it, and job eligibility and postings, zone designation, production orders, construction placement, the build menu and status all read the tier through the job service.
+
+- `settlementTypes.ts` - the system id, the events `settlement.tier.reached` / `settlement.milestone.reached`, the housing event the milestones listen to, `LockedContentKind`, the data types `SettlementProgressData`, `MilestoneRecord`, `SettlementChronicleData`, and the view types `RequirementProgress`, `TierEvaluation`, `SettlementProgressView`, `UnlockView`.
+- `settlementProgressComponent.ts` - the `SettlementProgress` component on the government faction: tier, `tierReachedAtTick`, milestones, evaluation counters. `settlementChronicleComponent.ts` - the `SettlementChronicle` placeholder (Major moments, finest table, next moment id) that the chronicle task (4.6) fills. Both live in the entities save section.
+- `SettlementService.ts` / `settlementServiceRegistry.ts` - per engine: the cached tier in force and the dwelling counter hook (`setDwellingCounter`, `countDwellingsAtOrAbove`). Not saved.
+- `settlementProgressOf.ts` - the live `SettlementProgress` data of the government.
+- `tierOrder.ts` - `orderedTiers`, `tierRank`, `nextTierOf`, `hasReachedTier`.
+- `foundedGuilds.ts` - `foundedGuilds` (occupational factions with a leader and at least `minFoundingMembers` settlement members).
+- `evaluateRequirement.ts` - `evaluateRequirement` (status of one authored requirement now), `settlementPopulation`.
+- `evaluateTier.ts` - `evaluateTier`, the pure evaluation of the next tier's requirements. `runTierEvaluation.ts` - the daily check that counts, evaluates and promotes by at most one tier.
+- `recordMilestone.ts` - `recordMilestone` (once per game, idempotent). `subscribeMilestones.ts` - the event-driven detectors.
+- `unlocks.ts` - `buildUnlockViews`, `isUnlocked`, `getUnlockedAt` over furniture, zone types, recipes, job types and dwelling levels.
+- `settlementViews.ts` - the views of the queries `settlement-progress` and `milestones`.
+- `validateTierReachability.ts` - the content check of FR-010/FR-011 and the owner decision on iron (see below).
+- `registerSettlement.ts` - components, init, the job service's tier source, the detectors, the slot-15 system and the queries. `testSettlementWorld.ts` - test helper: a trade world with settlers, a dwelling hook and day stepping.
+
+## Rules
+
+- **Tiers** are Hamlet, Village, Market Town and Chartered Town (`settlement-tiers.json`: requirements and the `settlementNoun`). Requirement kinds: population (members of the government faction), dwellings at a level or above (through the 4.5 hook), active zone of one of the listed types, founded guilds, milestone reached.
+- **Evaluation** happens on the first tick of each game day (`tickOfDay == 0`, tick above 0, slot 15, after the previous day's housing). All requirements of the next tier met: exactly one promotion, `tierReachedAtTick` is stored, the cached tier changes at once (so a command in the same tick sees the unlock) and `settlement.tier.reached {tier, previousTier, tick}` is queued. A tier is never lost and a reached tier is never re-checked. Requirement progress is always derived (`evaluateTier`), never stored.
+- **Unlocks**: content without `unlockTier` is Hamlet. The gates reject with `content-locked` (construction `TierLocked` with the text `Unlocks at <Tier>`, production `LockedByTier`, zones, job postings). Locked content stays registered and browsable (`unlocks` query).
+- **Milestones** (`MilestoneKind`, seven) are recorded once in `SettlementProgress.milestones`, from events at the tick they happen: `zone.requirements.met` (throne room; chapel or church; market), `faction.membership.changed` / `faction.leader.changed` (a guild becomes founded), `identity.title.changed` to Master (settlement members only), `diplomacy.agreement.formed` (involving the government), `housing.dwelling.upgraded` (task 4.5 emits it). `startingTier` records none.
+- **startingTier**: the tier and every lower one are reached at tick 0; no tier event, no milestone. **Difficulty** changes only decay, need decay and NPC hostility (the inventory, AI and diplomacy systems read the multipliers of the game's difficulty); map, entities and every bootstrap draw are the same for all difficulties.
+- **Reachability** (`validateTierReachability(content)`, a content-pack test): for every tier above Hamlet each requirement must be satisfiable with content unlocked below it. Zone types, their furniture, construction materials and recipe inputs must be gatherable by an unlocked job, bought from a trader, crafted at an unlocked workstation and room, or obtained through a trader's refined-credit rule (ore sold, iron ingots bought). Smelter and Forge stay at Village, so nothing before Village may need their output directly; the founders' kit breaks the planks-and-sawmill cycle. It also reports recipes that unlock below their workstation or room (FR-011) and refine rules whose raw material has no source or is not bought.
