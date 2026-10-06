@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { InspectionPanel } from "../panels/InspectionPanel";
+import { SettlementProgressPanel } from "../views/SettlementProgressPanel";
 
 /**
  * A panel docked beside the map. It reads the selection with `useStore(host.selection)` and its
@@ -20,4 +21,5 @@ export type SidePanel = {
  */
 export const sidePanels: readonly SidePanel[] = [
   { id: "inspection", title: "Inspection", component: InspectionPanel },
+  { id: "settlement-progress", title: "Settlement", component: SettlementProgressPanel },
 ];

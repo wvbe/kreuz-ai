@@ -9,6 +9,7 @@ export enum Screen {
   Flow = "flow",
   IdleBlocked = "idle-blocked",
   StandingOrders = "standing-orders",
+  Progress = "progress",
   NewGame = "new-game",
   Settings = "settings",
 }

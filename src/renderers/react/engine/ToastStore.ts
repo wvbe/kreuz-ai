@@ -21,6 +21,11 @@ export type Toast = {
    * expire with game time, never with a real timer, so a paused game keeps them readable.
    */
   expiresAtTick: number | null;
+  /**
+   * What clicking the toast does (focus its subject, open the chronicle); null for a toast that
+   * is only text.
+   */
+  onActivate: (() => void) | null;
 };
 
 /**
@@ -50,13 +55,42 @@ export class ToastStore extends StoreBase<ToastState> {
    * @param kind - Severity.
    * @param text - Message.
    * @param expiresAtTick - Game tick after which it disappears, or null (default) for never.
+   * @param onActivate - Called when the player clicks the toast (it then shows as a button).
    * @returns The id, for {@link ToastStore.dismiss}.
    */
-  push(kind: ToastKind, text: string, expiresAtTick: number | null = null): number {
+  push(
+    kind: ToastKind,
+    text: string,
+    expiresAtTick: number | null = null,
+    onActivate: (() => void) | null = null,
+  ): number {
     const id = this.nextId;
     this.nextId += 1;
-    this.replace({ toasts: [...this.getSnapshot().toasts, { id, kind, text, expiresAtTick }] });
+    this.replace({
+      toasts: [...this.getSnapshot().toasts, { id, kind, text, expiresAtTick, onActivate }],
+    });
     return id;
+  }
+
+  /**
+   * Changes the text (and optionally the expiry) of a toast that is still shown, for toasts that
+   * count something up ("3 subjects blocked"); unknown ids are ignored.
+   *
+   * @param id - The id `push` returned.
+   * @param text - The new message.
+   * @param expiresAtTick - The new expiry; leave out to keep the old one.
+   */
+  update(id: number, text: string, expiresAtTick?: number | null): void {
+    const toasts = this.getSnapshot().toasts;
+    if (toasts.some((toast) => toast.id === id)) {
+      this.replace({
+        toasts: toasts.map((toast) =>
+          toast.id === id
+            ? { ...toast, text, expiresAtTick: expiresAtTick ?? toast.expiresAtTick }
+            : toast,
+        ),
+      });
+    }
   }
 
   /**

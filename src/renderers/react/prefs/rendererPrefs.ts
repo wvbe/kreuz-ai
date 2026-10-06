@@ -14,6 +14,11 @@ export type RendererPrefs = {
    */
   toastBurstLimit: number;
   /**
+   * Reason kinds (`MissingInput`, ...) whose `status.blocked` toasts the player turned off
+   * (spec 024 FR-028).
+   */
+  mutedBlockedReasons: string[];
+  /**
    * Draw the blocked/idle badges over the map.
    */
   showBadges: boolean;
@@ -29,6 +34,7 @@ export type RendererPrefs = {
 export const defaultRendererPrefs: RendererPrefs = {
   autosaveEveryTicks: 288,
   toastBurstLimit: 3,
+  mutedBlockedReasons: [],
   showBadges: true,
   showZones: true,
 };
@@ -50,6 +56,7 @@ const prefsSchema = z
   .object({
     autosaveEveryTicks: z.number().int().min(0).max(1_000_000),
     toastBurstLimit: z.number().int().min(0).max(100),
+    mutedBlockedReasons: z.array(z.string()),
     showBadges: z.boolean(),
     showZones: z.boolean(),
   })

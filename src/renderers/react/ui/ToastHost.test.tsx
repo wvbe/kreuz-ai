@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, cleanup, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { ToastKind } from "../engine/ToastStore";
 import { renderApp } from "../testing/renderApp";
@@ -20,5 +20,16 @@ describe("ToastHost", () => {
     });
     expect(screen.queryByText("careful")).toBeNull();
     expect(screen.getByText("kept")).toBeTruthy();
+  });
+
+  it("renders a toast with an action as a button that runs it", () => {
+    const app = renderApp();
+    app.start();
+    const clicked: string[] = [];
+    act(() => {
+      app.host.toasts.push(ToastKind.Info, "Go there", null, () => clicked.push("go"));
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Go there" }));
+    expect(clicked).toEqual(["go"]);
   });
 });

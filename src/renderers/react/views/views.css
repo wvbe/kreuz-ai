@@ -1,0 +1,94 @@
+/* Styles of the views of plan task 6.5: idle and blocked, flow, chronicle, settlement. */
+
+.kv-view .kv-rows,
+.kv-progress .kv-rows,
+.kv-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kv-group {
+  margin-bottom: 12px;
+}
+
+.kv-row-button {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.kv-row-detail {
+  opacity: 0.8;
+}
+
+.kv-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.kv-badge {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 0.8em;
+  background: var(--kv-panel);
+  border: 1px solid currentcolor;
+}
+
+.kv-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.kv-table th,
+.kv-table td {
+  padding: 3px 8px;
+  text-align: left;
+}
+
+.kv-deficit th,
+.kv-deficit td:nth-child(4) {
+  color: #d94040;
+}
+
+.kv-moments {
+  padding-left: 18px;
+}
+
+.kv-moments li[data-prominence="major"] {
+  font-weight: 600;
+}
+
+.kv-filters {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.kv-checklist li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 6px;
+  margin-bottom: 4px;
+}
+
+.kv-checklist progress {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.kv-toast-action {
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}

@@ -23,4 +23,17 @@ describe("ToastStore", () => {
     store.expire(10);
     expect(store.getSnapshot().toasts.map((toast) => toast.text)).toEqual(["sticky"]);
   });
+
+  it("updates the text of a shown toast and keeps its action", () => {
+    const store = new ToastStore();
+    const act = (): void => undefined;
+    const id = store.push(ToastKind.Info, "one", 5, act);
+    store.update(id, "two");
+    store.update(99, "ignored");
+    expect(store.getSnapshot().toasts).toMatchObject([
+      { text: "two", expiresAtTick: 5, onActivate: act },
+    ]);
+    store.update(id, "three", 9);
+    expect(store.getSnapshot().toasts[0]?.expiresAtTick).toBe(9);
+  });
 });

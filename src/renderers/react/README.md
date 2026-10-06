@@ -18,3 +18,4 @@ It drives the game only through `src/game/api` (`GameSession`, its views and `cr
 - `panels/` - the inspection panels and the why-popover (docked beside the map).
 - `ui/` - small shared components (time bar, toasts, save and load, error boundary).
 - `testing/` - helpers for tests: fake scheduler, test scenes, `renderApp`, `runScenarioThroughHost`.
+- `views/` - idle and blocked, flow, chronicle and settlement screens; `notifications/` - events to toasts.

@@ -1,5 +1,6 @@
 import { useEngineHost } from "../engine/useEngineHost";
 import { useGameVersion } from "../engine/useGameState";
+import { ToastSettings } from "../notifications/ToastSettings";
 import { SaveLoadMenu } from "../ui/SaveLoadMenu";
 
 /**
@@ -58,6 +59,7 @@ export function SettingsScreen() {
           Show zones
         </label>
       </div>
+      <ToastSettings />
       <h3>Save and load</h3>
       <SaveLoadMenu />
     </section>

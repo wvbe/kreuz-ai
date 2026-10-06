@@ -7,4 +7,4 @@
 - `SettingsScreen.tsx` - preferences and save or load.
 - `SelectionDock.tsx` - the side dock; its first panel is the inspection panel (`../panels`).
 - `ContentScreen.tsx` - the content browser: live search over the `content-registries` query, interlinked entries, `Unlocks at <Tier>` from `unlocks`.
-- `PlaceholderScreen.tsx` - stand-in for screens of tasks 6.3 to 6.5.
+- `PlaceholderScreen.tsx` - stand-in for screens of task 6.4 not yet built.

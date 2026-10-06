@@ -5,6 +5,10 @@ import { MapScreen } from "./MapScreen";
 import { NewGameScreen } from "./NewGameScreen";
 import { PlaceholderScreen } from "./PlaceholderScreen";
 import { SettingsScreen } from "./SettingsScreen";
+import { ChronicleScreen } from "../views/ChronicleScreen";
+import { FlowScreen } from "../views/FlowScreen";
+import { IdleBlockedScreen } from "../views/IdleBlockedScreen";
+import { SettlementScreen } from "../views/SettlementScreen";
 
 /**
  * One entry of the shell: the screen id, its menu label and what it renders.
@@ -30,23 +34,24 @@ export const screenRegistry: readonly ScreenDefinition[] = [
   {
     screen: Screen.Chronicle,
     label: "Chronicle",
-    render: () => <PlaceholderScreen title="Chronicle" task="6.5" />,
+    render: () => <ChronicleScreen />,
   },
   {
     screen: Screen.Flow,
     label: "Flow",
-    render: () => <PlaceholderScreen title="Production flow" task="6.5" />,
+    render: () => <FlowScreen />,
   },
   {
     screen: Screen.IdleBlocked,
     label: "Idle and blocked",
-    render: () => <PlaceholderScreen title="Idle and blocked" task="6.5" />,
+    render: () => <IdleBlockedScreen />,
   },
   {
     screen: Screen.StandingOrders,
     label: "Standing orders",
     render: () => <PlaceholderScreen title="Standing orders" task="6.4" />,
   },
+  { screen: Screen.Progress, label: "Settlement", render: () => <SettlementScreen /> },
   { screen: Screen.NewGame, label: "New game", render: () => <NewGameScreen /> },
   { screen: Screen.Settings, label: "Settings", render: () => <SettingsScreen /> },
 ];
