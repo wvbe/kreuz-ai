@@ -1,0 +1,388 @@
+{
+  "name": "trade-ore-for-iron",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 338
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    {
+      "step": 3
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "length",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "assert": {
+        "query": "construction-queue",
+        "path": "jobs.length",
+        "op": "gt",
+        "value": 5
+      }
+    },
+    {
+      "step": 97
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 4
+      }
+    },
+    {
+      "step": 700
+    },
+    {
+      "assert": {
+        "query": "workstations",
+        "path": "length",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "3.status",
+        "op": "eq",
+        "value": "active"
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "grind_flour",
+        "quantity": 60
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 120
+      }
+    },
+    {
+      "step": 120
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.phase",
+        "op": "eq",
+        "value": "Present"
+      }
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.entityId",
+        "op": "eq",
+        "value": 39
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeSell",
+        "traderId": 39,
+        "materialId": "iron_ore",
+        "quantity": 8
+      }
+    },
+    {
+      "step": 400
+    },
+    {
+      "assert": {
+        "query": "trade-orders",
+        "path": "0.status",
+        "op": "eq",
+        "value": "Done"
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "0.creditMilli",
+        "op": "eq",
+        "value": 4000
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "0.units",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeBuy",
+        "traderId": 39,
+        "materialId": "iron_ingot",
+        "quantity": 5
+      }
+    },
+    {
+      "step": 2
+    },
+    {
+      "assert": {
+        "query": "trade-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 1
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeBuy",
+        "traderId": 39,
+        "materialId": "iron_ingot",
+        "quantity": 3
+      }
+    },
+    {
+      "step": 200
+    },
+    {
+      "assert": {
+        "query": "trade-orders",
+        "path": "1.status",
+        "op": "eq",
+        "value": "Done"
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "0.creditMilli",
+        "op": "eq",
+        "value": 1000
+      }
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "path": "total",
+        "op": "eq",
+        "value": 3,
+        "args": {
+          "materialId": "iron_ingot"
+        }
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 500
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "0.units",
+        "op": "eq",
+        "value": 1
+      }
+    },
+    {
+      "step": 1350
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.phase",
+        "op": "eq",
+        "value": "Present"
+      }
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.entityId",
+        "op": "eq",
+        "value": 40
+      }
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.stock.2.materialId",
+        "op": "eq",
+        "value": "iron_ingot"
+      }
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.stock.2.quantity",
+        "op": "eq",
+        "value": 1
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeBuy",
+        "traderId": 40,
+        "materialId": "iron_ingot",
+        "quantity": 1
+      }
+    },
+    {
+      "step": 300
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "path": "total",
+        "op": "eq",
+        "value": 4,
+        "args": {
+          "materialId": "iron_ingot"
+        }
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assertHash": {
+        "label": "after-second-visit"
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}
