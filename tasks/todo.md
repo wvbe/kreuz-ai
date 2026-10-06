@@ -62,8 +62,8 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
   - [x] 5.4a Pending queue landed (59 recipes, 39 zone types), strict conformance test in `src/game/content/contentTypes.test.ts`, source gaps in `docs/content-crossrefs-5.4.md` (D-120..D-123)
 
 ## Phase 6 — React renderer (024)
-- [ ] 6.1 Shell: EngineHost (owns clock), store/hooks, Vite app, new/save/load
-- [ ] 6.2 Map canvas, camera, picking, entity primitives, overlays
+- [x] 6.1 Shell: EngineHost (owns clock), store/hooks, Vite app, new/save/load
+- [x] 6.2 Map canvas, camera, picking, entity primitives, overlays
 - [ ] 6.3 Inspection panels, why-popover, citizen/journal
 - [ ] 6.4 Command UIs (build, zones, walls, boards, standing orders, steward, directives, pending list)
 - [ ] 6.5 Views (content browser, flow, idle/blocked, chronicle, progress, toasts)
