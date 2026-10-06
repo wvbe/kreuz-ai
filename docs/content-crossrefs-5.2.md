@@ -1,6 +1,6 @@
 # Content crossrefs of task 5.2 (recipes and zone types)
 
-Work queue for the conformance task 5.4. Task 5.2 landed what resolves against the pack at its base commit; the rest is authored in full in `docs/content-pending-5.2.json` (`recipes` and `zones` in the loader's own record shape, validated by `src/game/content/recipesAndZones.test.ts`) and waits for the ids below, owned by task 5.1 (materials, furniture) or the skills task (skills). When an id exists, move the record from the JSON into `src/game/content/data/recipes.json` / `zones.json`, then the pending test count shrinks by itself.
+Work queue for the conformance task 5.4. Task 5.2 landed what resolves against the pack at its base commit; the rest is authored in full in `docs/content-pending-5.2.json` (`recipes` and `zones` in the loader's own record shape, validated by `src/game/content/contentTypes.test.ts`) and waits for the ids below, owned by task 5.1 (materials, furniture) or the skills task (skills). When an id exists, move the record from the JSON into `src/game/content/data/recipes.json` / `zones.json`, then the pending test count shrinks by itself.
 
 Landed (spec 022 total in brackets): recipes 4 of 59 (`saw_oak_planks`, `cut_stone_block`, `grind_flour`, `bake_bread`, all v0 ids, values untouched, D-80); zone types 19 of 39 (v0: `stockpile`, `pantry`, `farm_field`, `bakery`, `bedroom`, `dwelling`, `throne_room`, `bell_tower`; new: `carpentry`, `dormitory`, `warehouse`, `guard_post`, `market`, `orchard`, `herb_garden`, `vineyard`, `quarry`, `fishing_dock`, `cemetery`).
 
