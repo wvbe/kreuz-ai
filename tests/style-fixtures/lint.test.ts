@@ -123,9 +123,18 @@ describe("023 lint rules fire on fixtures", () => {
     expect(await rulesFired(code, gamePath)).toContain("no-restricted-imports");
   });
 
-  it("renderers may import the game", async () => {
-    const code = "import { Prng } from '../../game/engine/Prng';\nPrng.create({ seed: 1 });\n";
-    expect(await rulesFired(code, "src/renderers/react/Fixture.ts")).toEqual([]);
+  it("the React renderer may import the game api and game types only", async () => {
+    const reactPath = "src/renderers/react/Fixture.ts";
+    const api = "import { GameSession } from '../../game/api/GameSession';\nnew GameSession();\n";
+    expect(await rulesFired(api, reactPath)).toEqual([]);
+    const typeOnly =
+      "import type { Prng } from '../../game/engine/Prng';\n" +
+      documented("export type Rng = Prng;\n");
+    expect(await rulesFired(typeOnly, reactPath)).toEqual([]);
+    const value = "import { Prng } from '../../game/engine/Prng';\nPrng.create({ seed: 1 });\n";
+    expect(await rulesFired(value, reactPath)).toContain(
+      "@typescript-eslint/no-restricted-imports",
+    );
   });
 });
 
