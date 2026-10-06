@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import ReactThreeTestRenderer from "@react-three/test-renderer";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { worldToScreen } from "../map/cameraMath";
+import { EntityLayer } from "../map/EntityLayer";
+import { visualKinds } from "../map/entityVisuals";
 import { classifyEntity, VisualKind, wildAnimalMarker } from "../map/entityVisuals";
 import { renderApp } from "../testing/renderApp";
 import type { RenderedApp } from "../testing/renderApp";
@@ -197,5 +200,65 @@ describe("MapScreen", () => {
     const center = app.canvas.last?.scene.centers[100];
     expect(app.canvas.last?.camera.centerX).toBeCloseTo(center?.x ?? -1);
     expect(app.canvas.last?.camera.centerZ).toBeCloseTo(center?.z ?? -1);
+  });
+
+  // Performance proxies for 024:SC-001 and 024:SC-006: a frame rate and a cold start need a real
+  // browser and GPU (docs/UI.md, "Performance"); what can be bounded without one is the amount of
+  // work handed to the GPU and the number of queries one render costs.
+  describe("performance proxies", () => {
+    /**
+     * Documented bounds: one draw call per visual kind plus one for the crops, and at most this many
+     * queries for the first render of the map screen and for one tick of a running game.
+     */
+    const firstRenderQueryBound = 40;
+    const perTickQueryBound = 32;
+
+    // @covers 024:SC-001
+    it("draws the Small map with one instanced mesh per kind and every entity at most once", async () => {
+      const app = startGame();
+      act(() => {
+        app.host.step(50);
+      });
+      const props = app.canvas.last;
+      expect(props).not.toBeNull();
+      if (props === null) {
+        return;
+      }
+      const renderer = await ReactThreeTestRenderer.create(
+        <EntityLayer
+          scene={props.scene}
+          camera={props.camera}
+          viewport={props.viewport}
+          entities={props.entities}
+          crops={props.crops}
+        />,
+      );
+      const meshes = (renderer.scene.children[0]?.allChildren ?? []).map(
+        (child) => child.instance as { name: string; count: number },
+      );
+      const drawCalls = meshes.length;
+      const instances = meshes.reduce((total, mesh) => total + mesh.count, 0);
+      // draw calls grow with the number of visual kinds, never with the number of entities
+      expect(drawCalls).toBeLessThanOrEqual(visualKinds.length + 1);
+      expect(instances).toBeLessThanOrEqual(props.entities.length + props.crops.length);
+      expect(instances).toBeGreaterThan(0);
+      await renderer.unmount();
+    });
+
+    // @covers 024:SC-001 024:SC-006
+    it("runs a bounded number of queries for the first render and for a tick", () => {
+      const app = renderApp();
+      const run = vi.spyOn(app.host.session.query, "run");
+      app.start();
+      expect(app.canvas.last).not.toBeNull();
+      const first = run.mock.calls.length;
+      expect(first).toBeLessThanOrEqual(firstRenderQueryBound);
+      run.mockClear();
+      act(() => {
+        app.host.step(1);
+      });
+      expect(run.mock.calls.length).toBeLessThanOrEqual(perTickQueryBound);
+      run.mockRestore();
+    });
   });
 });
