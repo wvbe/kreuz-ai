@@ -16,21 +16,24 @@ import type { SkillContentView } from "./skillTypes";
  * @param content - Content with the trait table.
  * @param stream - The `content.traits` stream.
  * @param traitSlots - Most traits the prototype allows, 1..3.
+ * @param includeExtended - Whether `extended` traits are in the pool (D-91); false keeps the pool
+ *   (and so every draw) of the original traits.
  * @returns Trait ids, ascending.
  */
 export function drawTraitIds(
   content: SkillContentView,
   stream: PrngStream,
   traitSlots: number,
+  includeExtended = false,
 ): string[] {
   const wanted = Math.min(stream.weighted([1, 2, 3], traitCountWeights), traitSlots);
   const chosen: string[] = [];
   for (let drawn = 0; drawn < wanted; drawn += 1) {
     const candidates = content.traits.ids().filter((id) => {
-      if (chosen.includes(id)) {
+      const candidate = content.traits.require(id);
+      if (chosen.includes(id) || (candidate.extended && !includeExtended)) {
         return false;
       }
-      const candidate = content.traits.require(id);
       return !chosen.some(
         (other) =>
           candidate.conflictsWith.includes(other) ||
@@ -68,6 +71,7 @@ export function initializeCharacter(engine: GameEngine, entityId: number): void 
       engine.content,
       engine.prng.stream(traitStreamName),
       humanoid.traitSlots,
+      humanoid.drawExtendedTraits,
     );
   }
   for (const trait of traitsOf(engine.content, entity)) {

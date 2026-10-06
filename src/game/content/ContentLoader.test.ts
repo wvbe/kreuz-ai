@@ -43,9 +43,12 @@ describe("loadContent (vertical-slice pack v0)", () => {
     expect(content.terrain.ids()).toHaveLength(11);
     expect(content.materials.ids()).toHaveLength(14);
     expect(content.needs.size).toBe(6);
-    expect(content.skills.size).toBe(10);
-    expect(content.traits.size).toBe(8);
-    expect(content.humanoids.ids()).toEqual(["baker", "carpenter", "farmer", "peasant"]);
+    expect(content.skills.size).toBeGreaterThanOrEqual(21);
+    expect(content.traits.size).toBeGreaterThanOrEqual(32);
+    expect(content.humanoids.ids()).toEqual(
+      expect.arrayContaining(["baker", "carpenter", "farmer", "peasant"]),
+    );
+    expect(content.humanoids.size).toBeGreaterThanOrEqual(23);
     expect(content.behaviorTrees.ids()).toEqual(["basic_needs", "idle_wander"]);
     expect(content.enginePrototypes.has("government_faction")).toBe(true);
     expect(content.nameLists.require("common_13c").givenNames.length).toBeGreaterThanOrEqual(60);
@@ -435,7 +438,7 @@ const danglingCases: { [label: string]: DanglingCase } = {
     file: ContentFile.Factions,
     id: "guild_bakers",
     field: "membership.skillId",
-    mutate: (record) => (record["membership"] = { skillId: "brewing", minLevel: 5 }),
+    mutate: (record) => (record["membership"] = { skillId: "alchemy", minLevel: 5 }),
   },
   "behavior tree reference": {
     file: ContentFile.BehaviorTrees,

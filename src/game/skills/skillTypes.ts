@@ -91,6 +91,11 @@ export const skillOutputStreamName = "skill.output";
 export const tradingSkillId = "trading";
 
 /**
+ * Skill id whose `faith_bonus` effect raises the faith a preacher gives (D-90).
+ */
+export const preachingSkillId = "preaching";
+
+/**
  * Weights for the procedural trait draw: one, two or three traits with the
  * permille weights 50 / 35 / 15 (DECISIONS D-20).
  */

@@ -128,6 +128,15 @@ export enum SkillEffectKind {
   MaxSpeedBonus = "max_speed_bonus",
   OutputBonus = "output_bonus",
   QualityBonus = "quality_bonus",
+  /**
+   * Faith percent points the skill adds at level 100 when it works on someone's faith (preaching,
+   * D-90).
+   */
+  FaithBonus = "faith_bonus",
+  /**
+   * Permille added to the trade margin rate of a seller at level 100 (trading, D-90).
+   */
+  TradeMargin = "trade_margin",
 }
 
 /**

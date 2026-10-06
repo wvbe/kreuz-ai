@@ -39,6 +39,12 @@ export const percentSchema = fixedPointSchema(FixedUnit.Milli).pipe(
 export const permilleSchema = fixedPointSchema(FixedUnit.Permille).pipe(z.number().int().min(0));
 
 /**
+ * Authored ratio of either sign converted to permille (x1000), e.g. an additive output bonus of
+ * `-0.3`.
+ */
+export const signedPermilleSchema = fixedPointSchema(FixedUnit.Permille).pipe(z.number().int());
+
+/**
  * Ratio in `0..1` authored as a decimal and stored as permille `0..1000`.
  */
 export const fractionSchema = fixedPointSchema(FixedUnit.Permille).pipe(

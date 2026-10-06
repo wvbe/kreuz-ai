@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { ContentTable } from "../content/ContentTable";
+import { PerformanceStat, TraitModifierKind } from "../content/contentTypes";
 import { Prng } from "../engine/Prng";
 import { expectedOutputBonusMilli, rollOutputBonus } from "./outputBonus";
 import { skillOutputStreamName } from "./skillTypes";
@@ -19,6 +21,36 @@ describe("expectedOutputBonusMilli", () => {
     expect(expectedOutputBonusMilli(content, entity, baking)).toBe(1500);
     expect(expectedOutputBonusMilli(content, entity, { skillId: "hauling" })).toBe(0);
     expect(expectedOutputBonusMilli(content, entity, { skillId: null })).toBe(0);
+  });
+
+  it("never goes below 0 when a negative trait total cancels the skill bonus (D-92)", () => {
+    const clumsy = {
+      ...content,
+      traits: new ContentTable(
+        "traits",
+        [
+          {
+            id: "clumsy",
+            name: "Clumsy",
+            modifiers: [
+              {
+                kind: TraitModifierKind.Performance as const,
+                skill: "ALL_CRAFTING",
+                stat: PerformanceStat.OutputBonus,
+                value: -300,
+              },
+            ],
+            conflictsWith: [],
+            extended: true,
+          },
+        ],
+        (record) => record.id,
+      ),
+    };
+    const entity = (level: number) => createTestCharacter({ baking: level }, ["clumsy"]);
+    expect(expectedOutputBonusMilli(clumsy, entity(100), baking)).toBe(700);
+    expect(expectedOutputBonusMilli(clumsy, entity(10), baking)).toBe(0);
+    expect(expectedOutputBonusMilli(clumsy, entity(0), baking)).toBe(0);
   });
 
   it("is 0 for skills without an output effect", () => {

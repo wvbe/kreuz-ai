@@ -9,7 +9,8 @@ import { traitPerformance } from "./traitModifiers";
 /**
  * Expected extra output units of a piece of work in milli-units (D-20):
  * `floor(maxExtraMilli * level / 100)` from the skill's `output_bonus` effect plus the additive
- * `output_bonus` trait modifiers (permille == milli-units).
+ * `output_bonus` trait modifiers (permille == milli-units). A negative trait total (Clumsy) cancels
+ * skill bonuses but never drops below 0 (D-92).
  *
  * @param content - Content with skill, trait and recipe tables.
  * @param entity - The worker.
@@ -32,7 +33,10 @@ export function expectedOutputBonusMilli(
     }
     expected = Math.floor((maxExtra * skillLevel(entity, work.skillId)) / maxSkillLevel);
   }
-  return expected + traitPerformance(content, entity, work.skillId, PerformanceStat.OutputBonus);
+  return Math.max(
+    0,
+    expected + traitPerformance(content, entity, work.skillId, PerformanceStat.OutputBonus),
+  );
 }
 
 /**

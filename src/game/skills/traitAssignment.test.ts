@@ -33,6 +33,30 @@ describe("drawTraitIds", () => {
     expect(counts[3]).toBeLessThan(600);
   });
 
+  it("draws extended traits only on request, keeping the original pool otherwise (D-91)", () => {
+    const withExtended = {
+      ...content,
+      traits: new ContentTable(
+        "traits",
+        [...testTraits, { ...testTraits[0]!, id: "zealous", extended: true }],
+        (record) => record.id,
+      ),
+    };
+    const plainRolls = stream(5);
+    const plain = Array.from({ length: 300 }, () => drawTraitIds(withExtended, plainRolls, 3));
+    expect(plain.flat()).not.toContain("zealous");
+    const extendedRolls = stream(5);
+    const extended = Array.from({ length: 300 }, () =>
+      drawTraitIds(withExtended, extendedRolls, 3, true),
+    );
+    expect(extended.flat()).toContain("zealous");
+    const original = stream(9);
+    const withPool = stream(9);
+    for (let draw = 0; draw < 50; draw += 1) {
+      expect(drawTraitIds(withExtended, withPool, 3)).toEqual(drawTraitIds(content, original, 3));
+    }
+  });
+
   it("never exceeds the prototype's trait slots", () => {
     const rolls = stream(2);
     for (let draw = 0; draw < 200; draw += 1) {

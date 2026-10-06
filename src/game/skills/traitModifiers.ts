@@ -1,7 +1,13 @@
 import { getComponent } from "../ecs/Entity";
 import type { Entity } from "../ecs/Entity";
-import { PerformanceStat, SkillWildcard, TraitModifierKind } from "../content/contentTypes";
+import {
+  PerformanceStat,
+  SkillEffectKind,
+  SkillWildcard,
+  TraitModifierKind,
+} from "../content/contentTypes";
 import type { TraitContent } from "../content/schemas/characterSchemas";
+import { skillEffectMilli } from "./skillEffects";
 import { traitsComponent } from "./skillsComponent";
 import { tradingSkillId } from "./skillTypes";
 import type { SkillContentView } from "./skillTypes";
@@ -136,15 +142,19 @@ export function traitPerformance(
 }
 
 /**
- * Permille added to a trade's minimum margin rate by the entity's traits (Greedy: +50), the hook
- * of DECISIONS D-12 (`marginRate = minimumMarginRate + traitMarginAdd`).
+ * Permille added to a trade's minimum margin rate by the entity's traits (Greedy: +50) and by its
+ * `trade_margin` trading skill effect (D-90), the hook of DECISIONS D-12
+ * (`marginRate = minimumMarginRate + traitMarginAdd`).
  *
  * @param content - Content with trait and recipe tables.
  * @param entity - Trading entity.
  * @returns Permille to add, 0 without margin traits.
  */
 export function marginAddPermille(content: SkillContentView, entity: Entity): number {
-  return traitPerformance(content, entity, tradingSkillId, PerformanceStat.MarginAdd);
+  return (
+    traitPerformance(content, entity, tradingSkillId, PerformanceStat.MarginAdd) +
+    skillEffectMilli(content, entity, tradingSkillId, SkillEffectKind.TradeMargin)
+  );
 }
 
 /**

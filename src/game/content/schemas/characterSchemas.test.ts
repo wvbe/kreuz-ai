@@ -37,6 +37,20 @@ describe("skillSchema", () => {
     titleNoun: "Baker",
   };
 
+  it("accepts the faith_bonus and trade_margin effects (D-90)", () => {
+    const parsed = skillSchema.parse({
+      ...skill,
+      outcomeEffects: [
+        { kind: "faith_bonus", value: 5 },
+        { kind: "trade_margin", value: 0.05 },
+      ],
+    });
+    expect(parsed.outcomeEffects).toEqual([
+      { kind: "faith_bonus", value: 5000 },
+      { kind: "trade_margin", value: 50 },
+    ]);
+  });
+
   it("converts growth and factors and demands an effect and a title noun", () => {
     expect(skillSchema.parse(skill)).toMatchObject({
       baseGrowthPerCompletion: 2000,
@@ -66,6 +80,22 @@ describe("traitSchema", () => {
     expect(trait.modifiers[2]).toMatchObject({ decayRateMultiplier: 1000, moodBonus: 5000 });
   });
 
+  it("allows negative values on additive stats only and defaults extended to false (D-91, D-92)", () => {
+    const base = { id: "clumsy", name: "Clumsy" };
+    const performance = (stat: string, value: number) => ({
+      ...base,
+      modifiers: [{ kind: "performance", skill: "ALL_CRAFTING", stat, value }],
+    });
+    const parsed = traitSchema.parse(performance("output_bonus", -0.3));
+    expect(parsed.modifiers[0]).toMatchObject({ value: -300 });
+    expect(parsed.extended).toBe(false);
+    expect(
+      traitSchema.parse({ ...performance("margin_add", -0.05), extended: true }).extended,
+    ).toBe(true);
+    expect(traitSchema.safeParse(performance("multiplier", -0.3)).success).toBe(false);
+    expect(traitSchema.safeParse(performance("speed_multiplier", -1)).success).toBe(false);
+  });
+
   it("rejects unknown kinds, wildcards in aptitudes beyond ALL and empty lists", () => {
     const base = { id: "bad", name: "Bad" };
     expect(traitSchema.safeParse({ ...base, modifiers: [] }).success).toBe(false);
@@ -91,6 +121,7 @@ describe("humanoidPrototypeSchema", () => {
       nameListId: "common_13c",
       inventorySlots: 8,
       sellsItems: false,
+      drawExtendedTraits: false,
     });
     expect(humanoidPrototypeSchema.safeParse({ ...humanoid, traitSlots: 0 }).success).toBe(false);
     expect(

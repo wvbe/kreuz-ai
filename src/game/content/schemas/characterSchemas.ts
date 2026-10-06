@@ -19,6 +19,7 @@ import {
   percentSchema,
   permilleSchema,
   positiveSchema,
+  signedPermilleSchema,
 } from "./fieldSchemas";
 
 /**
@@ -89,9 +90,19 @@ const traitModifierSchema = z.discriminatedUnion("kind", [
       kind: z.literal(TraitModifierKind.Performance),
       skill: skillRefSchema,
       stat: z.enum(PerformanceStat),
-      value: permilleSchema,
+      value: signedPermilleSchema,
     })
-    .strict(),
+    .strict()
+    .refine(
+      (modifier) =>
+        modifier.value >= 0 ||
+        modifier.stat === PerformanceStat.OutputBonus ||
+        modifier.stat === PerformanceStat.MarginAdd,
+      {
+        message: "only additive stats (output_bonus, margin_add) may be negative",
+        path: ["value"],
+      },
+    ),
   z
     .object({
       kind: z.literal(TraitModifierKind.NeedModifier),
@@ -106,6 +117,7 @@ const traitModifierSchema = z.discriminatedUnion("kind", [
 /**
  * Authored trait (spec 022 trait record, DECISIONS D-37): a list of modifiers of three kinds and
  * the ids of traits it never shares a character with (the procedural draw skips them, D-20).
+ * `extended` traits are drawn only for prototypes with `drawExtendedTraits` (D-91).
  */
 export const traitSchema = z
   .object({
@@ -113,6 +125,7 @@ export const traitSchema = z
     name: z.string().min(1),
     modifiers: z.array(traitModifierSchema).min(1),
     conflictsWith: z.array(contentIdSchema).default([]),
+    extended: z.boolean().default(false),
   })
   .strict();
 
@@ -139,6 +152,7 @@ export const humanoidPrototypeSchema = z
     defaultFactionIds: z.array(contentIdSchema).default([]),
     defaultTraitIds: z.array(contentIdSchema).default([]),
     traitSlots: z.number().int().min(1).max(3).default(2),
+    drawExtendedTraits: z.boolean().default(false),
     needPriority: z.array(contentIdSchema).optional(),
     sellsItems: z.boolean().default(false),
     nameListId: contentIdSchema.default("common_13c"),

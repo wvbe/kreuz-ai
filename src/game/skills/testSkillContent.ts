@@ -52,6 +52,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "quick_learner",
@@ -65,6 +66,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "slow_learner",
@@ -78,6 +80,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: ["quick_learner"],
+    extended: false,
   },
   {
     id: "heavy_handed",
@@ -91,6 +94,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "strong",
@@ -104,6 +108,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "fast_hands",
@@ -117,6 +122,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "greedy",
@@ -130,6 +136,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "crafty",
@@ -143,6 +150,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
   {
     id: "hearty",
@@ -157,6 +165,7 @@ export const testTraits: readonly TraitContent[] = [
       },
     ],
     conflictsWith: [],
+    extended: false,
   },
 ];
 
