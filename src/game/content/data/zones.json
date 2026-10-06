@@ -28,7 +28,8 @@
         "quantity": 4
       }
     ],
-    "skillAffinityId": "farming"
+    "skillAffinityId": "farming",
+    "activityUnlocks": ["farming"]
   },
   {
     "id": "bakery",
@@ -44,7 +45,8 @@
         }
       ]
     ],
-    "skillAffinityId": "baking"
+    "skillAffinityId": "baking",
+    "activityUnlocks": ["baking"]
   },
   {
     "id": "bedroom",
@@ -106,5 +108,137 @@
       ]
     ],
     "unlockTier": "market_town"
+  },
+  {
+    "id": "carpentry",
+    "name": "Carpentry",
+    "requiresRoom": true,
+    "minTiles": 6,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "sawmill",
+          "count": 1
+        }
+      ],
+      [
+        {
+          "kind": "tag",
+          "ref": "workbench",
+          "count": 1
+        }
+      ]
+    ],
+    "activityUnlocks": ["woodworking"]
+  },
+  {
+    "id": "dormitory",
+    "name": "Dormitory",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "bed",
+          "count": 3
+        }
+      ]
+    ]
+  },
+  {
+    "id": "warehouse",
+    "name": "Warehouse",
+    "requiresRoom": true,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "id",
+          "ref": "chest",
+          "count": 2
+        }
+      ]
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "guard_post",
+    "name": "Guard Post",
+    "requiresRoom": false,
+    "minTiles": 2,
+    "effects": [
+      {
+        "modifierId": "safety.bonus",
+        "value": 10.0
+      }
+    ]
+  },
+  {
+    "id": "market",
+    "name": "Market",
+    "requiresRoom": false,
+    "minTiles": 8,
+    "furnitureRequirements": [
+      [
+        {
+          "kind": "tag",
+          "ref": "table",
+          "count": 1
+        }
+      ]
+    ],
+    "unlockTier": "village"
+  },
+  {
+    "id": "orchard",
+    "name": "Orchard",
+    "requiresRoom": false,
+    "minTiles": 9,
+    "activityUnlocks": ["orcharding"],
+    "unlockTier": "village"
+  },
+  {
+    "id": "herb_garden",
+    "name": "Herb Garden",
+    "requiresRoom": false,
+    "minTiles": 6,
+    "activityUnlocks": ["herbalism"]
+  },
+  {
+    "id": "vineyard",
+    "name": "Vineyard",
+    "requiresRoom": false,
+    "minTiles": 9,
+    "activityUnlocks": ["viticulture"],
+    "unlockTier": "market_town"
+  },
+  {
+    "id": "quarry",
+    "name": "Quarry",
+    "requiresRoom": false,
+    "minTiles": 6,
+    "activityUnlocks": ["quarrying"]
+  },
+  {
+    "id": "fishing_dock",
+    "name": "Fishing Dock",
+    "requiresRoom": false,
+    "minTiles": 4,
+    "activityUnlocks": ["fishing"]
+  },
+  {
+    "id": "cemetery",
+    "name": "Cemetery",
+    "requiresRoom": false,
+    "minTiles": 6,
+    "effects": [
+      {
+        "modifierId": "faith.bonus",
+        "value": 3.0
+      }
+    ],
+    "unlockTier": "village"
   }
 ]

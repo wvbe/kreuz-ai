@@ -432,7 +432,7 @@ const danglingCases: { [label: string]: DanglingCase } = {
     file: ContentFile.Jobs,
     id: "farm.sow",
     field: "zoneContext.ref",
-    mutate: (record) => (record["zoneContext"] = { kind: "zone", ref: "orchard" }),
+    mutate: (record) => (record["zoneContext"] = { kind: "zone", ref: "mill_pond" }),
   },
   "faction skill": {
     file: ContentFile.Factions,

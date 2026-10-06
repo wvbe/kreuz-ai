@@ -146,7 +146,8 @@ const furnitureAlternativeSchema = z
  * alternatives (OR); the entries are combined with AND. An alternative with `perTiles` is a
  * density: it needs `count` pieces for every started `perTiles` tiles of the zone (at least
  * `count`). `requiresJobBoard` makes a job board inside the zone a requirement (spec 017 FR-018).
- * `cropOutputs` are the harvest yields of a farm field (DECISIONS D-15).
+ * `cropOutputs` are the harvest yields of a farm field (DECISIONS D-15). `activityUnlocks` are the
+ * spec 022 `activity.unlock` effects (data only, DECISIONS D-80).
  */
 export const zoneTypeSchema = z
   .object({
@@ -159,6 +160,7 @@ export const zoneTypeSchema = z
     effects: z.array(effectSchema).default([]),
     skillAffinityId: contentIdSchema.optional(),
     cropOutputs: z.array(materialAmountSchema).default([]),
+    activityUnlocks: z.array(contentIdSchema).default([]),
     unlockTier: unlockTierSchema,
   })
   .strict();
