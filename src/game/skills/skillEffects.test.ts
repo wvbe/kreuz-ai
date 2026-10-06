@@ -30,14 +30,14 @@ const content = {
 
 describe("skillEffectMilli", () => {
   it("scales the effect linearly with the level and floors", () => {
-    const at = (level: number) =>
+    const faithAt = (level: number) =>
       skillEffectMilli(
         content,
         createTestCharacter({ preaching: level }),
         "preaching",
         SkillEffectKind.FaithBonus,
       );
-    expect([0, 1, 50, 100].map(at)).toEqual([0, 50, 2500, 5000]);
+    expect([0, 1, 50, 100].map(faithAt)).toEqual([0, 50, 2500, 5000]);
   });
 
   it("is 0 for another effect kind and for a skill the pack lacks", () => {
