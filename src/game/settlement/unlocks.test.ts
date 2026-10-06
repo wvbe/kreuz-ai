@@ -49,9 +49,9 @@ describe("unlocks", () => {
   it("lists what a tier unlocks", () => {
     const world = createSettlementWorld({ content: loadVillageBakeryContent() });
     const village = getUnlockedAt(world.engine, SettlementTier.Village).map((row) => row.contentId);
-    // the bundled pack grows with content tasks: the v0 rows stay, in this order
-    const v0 = ["oven", "notice_post", "bakery", "bake_bread", "cottage"];
-    expect(village.filter((id) => v0.includes(id))).toEqual(v0);
+    // the bundled pack grows with content tasks: the shippedIds rows stay, in this order
+    const shippedIds = ["oven", "notice_post", "bakery", "bake_bread", "cottage"];
+    expect(village.filter((id) => shippedIds.includes(id))).toEqual(shippedIds);
     expect(
       getUnlockedAt(world.engine, SettlementTier.CharteredTown).map((row) => row.contentId),
     ).not.toContain("notice_post");
