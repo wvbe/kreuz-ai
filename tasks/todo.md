@@ -52,7 +52,7 @@ Definition of Done for every task: lint + typecheck clean, a co-located test per
 - [ ] **Checkpoint D (complete headless):** `hamlet-to-village` and `harsh-survival` scenarios pass via CLI `--script`; every FR covered by a test. Open: `hamlet-to-village` passes (4.5, with its chronicle in 4.6) and the Phase 4 systems are all in; `harsh-survival.json` does not exist yet and the FR traceability audit is 7.2
 
 ## Phase 5 — Content to full spec (022), parallelizable
-- [x] 5.1 Terrain / materials / furniture - 23 terrain types (the 21 of spec 022 plus the v0 `iron_ore_deposit` and `cave_floor`), 88 materials, 66 furniture records (the 64 of the spec plus `wall` and `door`), 42 item categories, engine prototypes for the new workstations and storage, ASCII glyphs, `worldContentPack.test.ts`, `docs/content-crossrefs-5.1.md`, D-70..D-75
+- [x] 5.1 Terrain / materials / furniture - 23 terrain types (the 21 of spec 022 plus the v0 `iron_ore_deposit` and `cave_floor`), 88 materials, 66 furniture records (the 64 of the spec plus `wall` and `door`), 42 item categories, engine prototypes for the new workstations and storage, ASCII glyphs, `tests/integration/worldContentPack.test.ts`, `docs/content-crossrefs-5.1.md`, D-70..D-75
 - [x] 5.2 Recipes / jobs / zones (recipes and zones: 4 of 59 recipes and 19 of 39 zone types resolve at the base pack, the rest is a queue in `docs/content-crossrefs-5.2.md` and `docs/content-pending-5.2.json` for 5.4, D-80; jobs were not in this slice)
 - [ ] 5.3 Humanoids / animals / skills / traits / needs / behaviors / factions / names
   - [x] part 1: skills (21), traits (32), needs, humanoids (23), factions (15), name list (D-90..D-92; open ids in `docs/content-crossrefs-5.3.md`)

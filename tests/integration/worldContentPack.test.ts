@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { loadContent } from "./ContentLoader";
-import { SettlementTier } from "./contentTypes";
+import { loadContent } from "../../src/game/content/ContentLoader";
+import { SettlementTier } from "../../src/game/content/contentTypes";
 
 const content = loadContent();
 
