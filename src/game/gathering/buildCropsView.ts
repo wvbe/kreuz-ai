@@ -3,14 +3,15 @@ import type { EntityId } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { zoneComponent } from "../zones/zoneComponent";
 import { getZoneService } from "../zones/zoneServiceRegistry";
-import { cropGrowthMilli, cropOfZoneType, fertileCellsOf } from "./cropPlots";
+import { cropCellsOf, cropGrowthMilli, cropOfZoneType, isCropZoneType } from "./cropPlots";
 import { getGatheringService } from "./gatheringServiceRegistry";
-import { CropStage, farmFieldZoneTypeId } from "./gatheringTypes";
+import { CropStage } from "./gatheringTypes";
 import type { CropView } from "./gatheringTypes";
 
 /**
- * The cells of the field zones with their crop state (query `crops {zoneId?}`): every fertile
- * cell of every `farm_field` zone (or of one zone), ascending by zone id then cell; a cell without
+ * The cells of the field zones with their crop state (query `crops {zoneId?}`): every crop
+ * cell of every crop zone (farm, flax, barley and rye fields, vegetable garden, orchard, vineyard,
+ * herb garden; or of one zone), ascending by zone id then cell; a cell without
  * a plot is `Fallow`. Cells of a field painted over other terrain are not listed (nothing grows
  * there).
  *
@@ -20,19 +21,19 @@ import type { CropView } from "./gatheringTypes";
  */
 export function buildCropsView(engine: GameEngine, zoneId?: EntityId): CropView[] {
   const service = getGatheringService(engine);
-  const needed = cropGrowthMilli(engine);
   const views: CropView[] = [];
   for (const zone of getZoneService(engine).zones()) {
     const data = getComponent(zone, zoneComponent);
     if (
       data === undefined ||
-      data.zoneTypeId !== farmFieldZoneTypeId ||
+      !isCropZoneType(engine, data.zoneTypeId) ||
       (zoneId !== undefined && zone.id !== zoneId)
     ) {
       continue;
     }
     const crop = cropOfZoneType(engine, data.zoneTypeId);
-    for (const cellIndex of fertileCellsOf(engine, zone.id)) {
+    const needed = cropGrowthMilli(engine, data.zoneTypeId);
+    for (const cellIndex of cropCellsOf(engine, zone.id)) {
       const plot = service.plotAt(data.mapId, cellIndex);
       const growth = plot?.growthMilli ?? 0;
       views.push({

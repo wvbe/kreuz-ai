@@ -66,4 +66,16 @@ describe("postCellJobs", () => {
     const empty = createGatheringWorld();
     expect(postCellJobs(empty.engine, 12, { jobTypeId, isCandidate: isOre })).toEqual([]);
   });
+
+  it("skips a job type that the settlement tier still locks", () => {
+    const world = oreWorld();
+    world.setTier("hamlet");
+    expect(
+      postCellJobs(world.engine, 12, { jobTypeId: "gather.grapes", isCandidate: isOre }),
+    ).toEqual([]);
+    world.setTier("market_town");
+    expect(
+      postCellJobs(world.engine, 12, { jobTypeId: "gather.grapes", isCandidate: isOre }).length,
+    ).toBeGreaterThan(0);
+  });
 });

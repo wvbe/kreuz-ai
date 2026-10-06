@@ -53,3 +53,24 @@ describe("takeCharge", () => {
     expect(takeCharge(world.engine, 99, 3)).toBe(false);
   });
 });
+
+describe("deposits of terrain gathering jobs", () => {
+  it("uses the job's charges: clay has 4, a pine forest 1, and sand never runs out", () => {
+    const world = createGatheringWorld();
+    world.terrain(12, "clay_deposit");
+    world.terrain(13, "forest_pine");
+    world.terrain(14, "sand");
+    expect(chargesLeft(world.engine, world.mapId, 12)).toBe(4);
+    expect(chargesLeft(world.engine, world.mapId, 13)).toBe(1);
+    for (let charge = 0; charge < 4; charge += 1) {
+      expect(takeCharge(world.engine, world.mapId, 12)).toBe(true);
+    }
+    expect(world.engine.maps.require(world.mapId).terrainAt(12)).toBe("grassland");
+    expect(takeCharge(world.engine, world.mapId, 13)).toBe(true);
+    expect(world.engine.maps.require(world.mapId).terrainAt(13)).toBe("grassland");
+    for (let charge = 0; charge < 10; charge += 1) {
+      expect(takeCharge(world.engine, world.mapId, 14)).toBe(true);
+    }
+    expect(world.engine.maps.require(world.mapId).terrainAt(14)).toBe("sand");
+  });
+});

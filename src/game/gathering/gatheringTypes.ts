@@ -90,6 +90,57 @@ export const gatheringMaxActivePostings = 4;
 export const depositMaxActivePostings = 4;
 
 /**
+ * Base work time of one charge of a terrain gathering job (pine, birch, clay, sand, granite,
+ * metal veins; DECISIONS D-130), ticks.
+ */
+export const terrainJobBaseTicks = 30;
+
+/**
+ * Most active postings of one terrain gathering job type over all boards.
+ */
+export const terrainJobMaxActivePostings = 2;
+
+/**
+ * Job type id of fishing at a dock (`jobs.json`).
+ */
+export const fishCatchJobId = "fish.catch";
+
+/**
+ * Zone type id of the fishing dock (`zones.json`).
+ */
+export const fishingDockZoneTypeId = "fishing_dock";
+
+/**
+ * Terrain a fishing dock fishes in: a dock cell needs a neighbouring cell of it.
+ */
+export const fishingWaterTerrainId = "water_shallow";
+
+/**
+ * Base work time of one catch, ticks.
+ */
+export const fishBaseTicks = 24;
+
+/**
+ * Job type id of handing bread to a hungry citizen (`jobs.json`, DECISIONS D-130).
+ */
+export const charityDistributeJobId = "charity.distribute";
+
+/**
+ * Food the charity job hands out.
+ */
+export const charityFoodMaterialId = "bread";
+
+/**
+ * Most active `charity.distribute` postings over all boards.
+ */
+export const charityMaxActivePostings = 2;
+
+/**
+ * Base work time of one distribution, ticks.
+ */
+export const charityBaseTicks = 6;
+
+/**
  * Cells further than this path cost from a board are not posted (about 40 normal cells).
  */
 export const gatheringRadiusCost = 400;

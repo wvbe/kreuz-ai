@@ -1,10 +1,13 @@
 import type { GameEngine } from "../engine/GameEngine";
 import { getGatheringService } from "./gatheringServiceRegistry";
 import { depositDepletedEvent, oreTerrainId, stoneTerrainId } from "./gatheringTypes";
+import { terrainJobAt } from "./terrainJobTypes";
 
 /**
  * How many times a deposit of a terrain can be worked before it is exhausted: `oreDepositCharges`
- * for iron ore deposits, `stoneDepositCharges` for stone deposits (content constants).
+ * for iron ore deposits, `stoneDepositCharges` for stone deposits (content constants), the `charges`
+ * of the job for the terrain of any other terrain gathering job (clay, ore veins, forests; D-130).
+ * Terrain without `clearsTo` (sand) never runs out: its charges start again.
  *
  * @param engine - The engine.
  * @param terrainId - Terrain id of the cell.
@@ -17,7 +20,7 @@ export function depositCharges(engine: GameEngine, terrainId: string): number | 
   if (terrainId === stoneTerrainId) {
     return engine.content.constants.stoneDepositCharges;
   }
-  return null;
+  return terrainJobAt(engine, terrainId)?.charges ?? null;
 }
 
 /**

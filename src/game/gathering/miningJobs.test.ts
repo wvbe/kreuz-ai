@@ -5,7 +5,7 @@ import { chargesLeft } from "./deposits";
 import { getGatheringService } from "./gatheringServiceRegistry";
 import { depositMaxActivePostings, mineOreJobId, quarryStoneJobId } from "./gatheringTypes";
 import { materialStock } from "./materialStock";
-import { postMineJobs, postQuarryJobs, registerMiningJobs } from "./miningJobs";
+import { postMineJobs, postQuarryJobs, registerDepositJob, registerMiningJobs } from "./miningJobs";
 import { createGatheringWorld } from "./testGatheringWorld";
 
 describe("postMineJobs", () => {
@@ -85,5 +85,13 @@ describe("registerMiningJobs", () => {
     const limit = world.engine.content.constants.stoneLowStock;
     expect(world.count("limestone")).toBeGreaterThanOrEqual(limit);
     expect(world.count("limestone")).toBeLessThan(limit + 3 * 2 * depositMaxActivePostings);
+  });
+});
+
+describe("registerDepositJob", () => {
+  it("registers one deposit job type once per engine", () => {
+    const world = createGatheringWorld();
+    expect(() => registerDepositJob(world.engine, "dig.clay", 30, "clay_deposit")).toThrow();
+    expect(() => registerDepositJob(world.engine, mineOreJobId, 36, "iron_ore_deposit")).toThrow();
   });
 });

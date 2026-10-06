@@ -2,6 +2,7 @@ import { getAiService } from "../ai/aiServiceRegistry";
 import { getComponent } from "../ecs/Entity";
 import type { GameEngine } from "../engine/GameEngine";
 import { activePostingsOfType, isBoardPaused, listBoards } from "../jobs/jobBoards";
+import { JobError, JobErrorKind } from "../jobs/JobError";
 import { jobBoardComponent } from "../jobs/jobBoardComponent";
 import { postJob } from "../jobs/jobPostings";
 import type { GameMap } from "../map/GameMap";
@@ -36,7 +37,8 @@ export type CellPosterOptions = {
  * in ascending id order, it posts the candidate cells nearest to the board (path cost at most
  * {@link gatheringRadiusCost}; ties lowest cell index) while fewer than `maxActive` (default
  * {@link gatheringMaxActivePostings}) postings of the type are active over all boards, never
- * twice for a cell that already has an active posting of the type.
+ * twice for a cell that already has an active posting of the type. A job type that the settlement
+ * tier still locks is simply not posted.
  *
  * @param engine - The engine.
  * @param tick - The tick being processed.
@@ -76,22 +78,29 @@ export function postCellJobs(
       )
       .slice(0, room);
     for (const entry of cells) {
-      created.push(
-        postJob(
-          engine,
-          board.id,
-          {
-            jobTypeId: options.jobTypeId,
-            target: {
-              mapId: place.mapId,
-              cellIndex: entry.cell,
-              entityId: null,
-              materialId: null,
+      try {
+        created.push(
+          postJob(
+            engine,
+            board.id,
+            {
+              jobTypeId: options.jobTypeId,
+              target: {
+                mapId: place.mapId,
+                cellIndex: entry.cell,
+                entityId: null,
+                materialId: null,
+              },
             },
-          },
-          tick,
-        ).id,
-      );
+            tick,
+          ).id,
+        );
+      } catch (error) {
+        if (error instanceof JobError && error.kind === JobErrorKind.ContentLocked) {
+          return created;
+        }
+        throw error;
+      }
     }
   }
   return created;

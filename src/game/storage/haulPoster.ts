@@ -38,7 +38,8 @@ export type LooseGoods = {
 
 /**
  * The materials that count as products to haul: every output of a job type (logs from felling,
- * wheat from harvesting ...). Personal belongings of citizens (food, tools, coins, building
+ * wheat from harvesting ...) and every crop of a zone type (`cropOutputs`: flax, barley, rye,
+ * vegetables of the crop zones, which the shared harvest job yields, DECISIONS D-130). Personal belongings of citizens (food, tools, coins, building
  * supplies of the starting kit) are not outputs, so they are never taken from their owner.
  *
  * @param engine - The engine with the content.
@@ -48,6 +49,11 @@ export function haulableMaterialIds(engine: GameEngine): string[] {
   const ids = new Set<string>();
   for (const jobType of engine.content.jobs.all()) {
     for (const output of jobType.outputs) {
+      ids.add(output.materialId);
+    }
+  }
+  for (const zoneType of engine.content.zones.all()) {
+    for (const output of zoneType.cropOutputs) {
       ids.add(output.materialId);
     }
   }

@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { activePostingsOfType } from "../jobs/jobBoards";
 import { skillValueMilli } from "../skills/skillLevels";
 import { cropStageAt, sowCell } from "./cropPlots";
-import { postHarvestJobs, postSowJobs, registerCropJobs } from "./cropJobs";
+import { harvestJobTypeIds, postHarvestJobs, postSowJobs, registerCropJobs } from "./cropJobs";
 import { getGatheringService } from "./gatheringServiceRegistry";
 import { CropStage, gatheringMaxActivePostings, harvestJobId, sowJobId } from "./gatheringTypes";
+import { materialStock } from "./materialStock";
 import { createGatheringWorld } from "./testGatheringWorld";
 
 describe("postSowJobs", () => {
@@ -94,5 +95,60 @@ describe("registerCropJobs", () => {
     const [novice, master] = yields;
     expect(novice ?? 0).toBeGreaterThan(0);
     expect(master ?? 0).toBeGreaterThan(novice ?? 0);
+  });
+});
+
+describe("harvestJobTypeIds", () => {
+  it("is farm.harvest plus the harvest job of every crop zone type", () => {
+    expect(harvestJobTypeIds(createGatheringWorld().engine)).toEqual([
+      "farm.harvest",
+      "gather.fruit",
+      "gather.herbs",
+      "gather.grapes",
+    ]);
+  });
+});
+
+describe("crops beyond wheat", () => {
+  it("posts sowing for a flax field and harvests flax into the farmer's hands", () => {
+    const world = createGatheringWorld();
+    world.zoneOver("flax_field", world.rect(2, 2, 2, 2), "fertile_soil");
+    expect(postSowJobs(world.engine, 12)).toHaveLength(4);
+    world.give(world.farmer(5), "bread", 8);
+    world.run(1400);
+    expect(world.count("flax")).toBeGreaterThanOrEqual(3);
+    expect(world.count("wheat")).toBe(0);
+  });
+
+  it("does not post sowing for a perennial garden, and gathers herbs only while stock is low", () => {
+    const world = createGatheringWorld();
+    world.zoneOver("herb_garden", world.rect(2, 2, 3, 2), "fertile_soil");
+    expect(postSowJobs(world.engine, 12)).toEqual([]);
+    for (const plot of getGatheringService(world.engine).plots()) {
+      plot.stage = CropStage.Ripe;
+    }
+    expect(postHarvestJobs(world.engine, 12)).toHaveLength(gatheringMaxActivePostings);
+    expect(activePostingsOfType(world.engine, "gather.herbs")).toHaveLength(
+      gatheringMaxActivePostings,
+    );
+    const full = createGatheringWorld();
+    full.zoneOver("herb_garden", full.rect(2, 2, 3, 2), "fertile_soil");
+    for (const plot of getGatheringService(full.engine).plots()) {
+      plot.stage = CropStage.Ripe;
+    }
+    full.give(full.chest(8), "herbs", full.engine.content.constants.zoneGatherLowStock);
+    expect(postHarvestJobs(full.engine, 12)).toEqual([]);
+  });
+
+  it("gathers herbs, replants and stops at the stock cap", () => {
+    const world = createGatheringWorld();
+    world.zoneOver("herb_garden", world.rect(2, 2, 3, 2), "fertile_soil");
+    for (const cell of [5, 6]) {
+      world.give(world.spawn("peasant", cell), "bread", 8);
+    }
+    world.run(1500);
+    const cap = world.engine.content.constants.zoneGatherLowStock;
+    expect(materialStock(world.engine, "herbs")).toBeGreaterThanOrEqual(3);
+    expect(materialStock(world.engine, "herbs")).toBeLessThan(cap + 4 * 3);
   });
 });

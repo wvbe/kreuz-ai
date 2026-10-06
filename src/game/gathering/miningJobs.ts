@@ -59,7 +59,18 @@ export function postQuarryJobs(engine: GameEngine, tick: number): number[] {
   });
 }
 
-function registerDepositJob(
+/**
+ * Registers the executor of one deposit job: the worker walks to a cell of the terrain, works
+ * `baseTicks` (scaled by `workDuration`), one charge of the deposit is used up and the job's
+ * `outputs` plus the skill output bonus go into the worker's inventory. A cell that is no
+ * deposit of the terrain any more fails the posting with `target_invalid`.
+ *
+ * @param engine - The engine.
+ * @param jobTypeId - Job type id.
+ * @param baseTicks - Work time at skill 0, ticks.
+ * @param terrainId - The deposit terrain.
+ */
+export function registerDepositJob(
   engine: GameEngine,
   jobTypeId: string,
   baseTicks: number,

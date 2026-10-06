@@ -4,7 +4,11 @@ import {
   cropGrowthMilli,
   cropOfZoneType,
   cropStageAt,
-  fertileCellsOf,
+  cropTerrainOf,
+  harvestJobOf,
+  isCropZoneType,
+  plantPerennials,
+  cropCellsOf,
   fieldCellAt,
   growCrops,
   harvestCell,
@@ -56,14 +60,14 @@ describe("isWorkingField", () => {
   });
 });
 
-describe("fertileCellsOf", () => {
+describe("cropCellsOf", () => {
   it("lists only the fertile tiles of the zone, ascending", () => {
     const world = createGatheringWorld();
     const cells = world.rect(2, 2, 3, 2);
     const zoneId = world.field(cells);
     world.terrain(23, "grassland");
-    expect(fertileCellsOf(world.engine, zoneId)).toEqual([22, 24, 32, 33, 34]);
-    expect(fertileCellsOf(world.engine, 9999)).toEqual([]);
+    expect(cropCellsOf(world.engine, zoneId)).toEqual([22, 24, 32, 33, 34]);
+    expect(cropCellsOf(world.engine, 9999)).toEqual([]);
   });
 });
 
@@ -149,5 +153,78 @@ describe("growCrops", () => {
     world.run(2);
     growCrops(world.engine);
     expect(getGatheringService(world.engine).plotAt(world.mapId, 22)?.growthMilli).toBe(0);
+  });
+});
+
+describe("per-crop zone data", () => {
+  it("cropTerrainOf, harvestJobOf and isCropZoneType read the zone type", () => {
+    const { engine } = createGatheringWorld();
+    expect(cropTerrainOf(engine, "farm_field")).toBe("fertile_soil");
+    expect(cropTerrainOf(engine, "orchard")).toBe("orchard_soil");
+    expect(cropTerrainOf(engine, "vineyard")).toBe("vineyard_soil");
+    expect(harvestJobOf(engine, "farm_field")).toBe("farm.harvest");
+    expect(harvestJobOf(engine, "flax_field")).toBe("farm.harvest");
+    expect(harvestJobOf(engine, "orchard")).toBe("gather.fruit");
+    expect(harvestJobOf(engine, "herb_garden")).toBe("gather.herbs");
+    expect(isCropZoneType(engine, "rye_field")).toBe(true);
+    expect(isCropZoneType(engine, "fishing_dock")).toBe(false);
+  });
+
+  it("gives every crop its own growth time and yield", () => {
+    const { engine } = createGatheringWorld();
+    expect(cropGrowthMilli(engine, "flax_field")).toBe(432_000);
+    expect(cropGrowthMilli(engine, "vegetable_garden")).toBe(288_000);
+    expect(cropGrowthMilli(engine, "farm_field")).toBe(576_000);
+    expect(cropOfZoneType(engine, "barley_field")).toEqual({ materialId: "barley", quantity: 4 });
+    expect(cropOfZoneType(engine, "flax_field")).toEqual({ materialId: "flax", quantity: 3 });
+  });
+
+  it("ripens a flax field after the flax growth time, not the wheat time", () => {
+    const world = createGatheringWorld();
+    const zoneId = world.zoneOver("flax_field", world.rect(2, 2, 2, 2), "fertile_soil");
+    expect(cropCellsOf(world.engine, zoneId)).toHaveLength(4);
+    expect(sowCell(world.engine, world.mapId, 22)).toMatchObject({ materialId: "flax" });
+    for (let tick = 0; tick < 431; tick += 1) {
+      growCrops(world.engine);
+    }
+    expect(cropStageAt(world.engine, world.mapId, 22)).toBe(CropStage.Sown);
+    growCrops(world.engine);
+    expect(cropStageAt(world.engine, world.mapId, 22)).toBe(CropStage.Ripe);
+  });
+});
+
+describe("plantPerennials", () => {
+  it("plants every cell of a working herb garden, and replants after the harvest", () => {
+    const world = createGatheringWorld();
+    world.zoneOver("herb_garden", world.rect(2, 2, 3, 2), "fertile_soil");
+    plantPerennials(world.engine);
+    const service = getGatheringService(world.engine);
+    expect(service.plots()).toHaveLength(6);
+    expect(service.plotAt(world.mapId, 22)).toMatchObject({
+      materialId: "herbs",
+      stage: CropStage.Sown,
+    });
+    for (let tick = 0; tick < 288; tick += 1) {
+      growCrops(world.engine);
+    }
+    expect(cropStageAt(world.engine, world.mapId, 22)).toBe(CropStage.Ripe);
+    expect(harvestCell(world.engine, world.mapId, 22)).not.toBeNull();
+    growCrops(world.engine);
+    expect(cropStageAt(world.engine, world.mapId, 22)).toBe(CropStage.Sown);
+  });
+
+  it("plants an orchard only on orchard soil and leaves annual fields alone", () => {
+    const world = createGatheringWorld();
+    world.zoneOver("orchard", world.rect(2, 2, 3, 3), "grassland");
+    plantPerennials(world.engine);
+    expect(getGatheringService(world.engine).plots()).toEqual([]);
+    world.zoneOver("farm_field", world.rect(6, 6, 2, 2), "fertile_soil");
+    plantPerennials(world.engine);
+    expect(getGatheringService(world.engine).plots()).toEqual([]);
+    for (const cell of world.rect(2, 2, 3, 3)) {
+      world.terrain(cell, "orchard_soil");
+    }
+    plantPerennials(world.engine);
+    expect(getGatheringService(world.engine).plots()).toHaveLength(9);
   });
 });

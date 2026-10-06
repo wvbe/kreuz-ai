@@ -36,8 +36,18 @@ describe("haulableMaterialIds", () => {
     const ids = haulableMaterialIds(world.engine);
     expect(ids).toContain("oak_log");
     expect(ids).toContain("wheat");
+    expect(ids).toContain("raw_fish");
     expect(ids).not.toContain("bread");
     expect(ids).not.toContain("nails");
+  });
+});
+
+describe("haulableMaterialIds crops", () => {
+  it("includes the crops of the crop zone types, which no job lists as output", () => {
+    const ids = haulableMaterialIds(createStorageWorld().engine);
+    for (const crop of ["flax", "barley", "rye", "vegetables"]) {
+      expect(ids).toContain(crop);
+    }
   });
 });
 
