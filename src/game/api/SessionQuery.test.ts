@@ -57,6 +57,7 @@ describe("SessionQuery", () => {
       "needs-of",
       "order",
       "pending-commands",
+      "pending-routes",
       "pending-updates",
       "production-orders",
       "proposals",

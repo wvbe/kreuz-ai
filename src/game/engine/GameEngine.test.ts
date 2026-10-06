@@ -436,6 +436,7 @@ describe("GameEngine registerSystem", () => {
       "moments-since",
       "needs-of",
       "order",
+      "pending-routes",
       "pending-updates",
       "production-orders",
       "proposals",
