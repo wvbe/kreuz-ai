@@ -10,6 +10,7 @@ The REPL commands, one file per verb group. A verb is `{name, usage, summary, ru
 - `zoneVerbs.ts` - `zones [mapId]`, `zone <id>`, `zone designate <type> <mapId> <cell>...`, `zone delete <id>` (the `zones` and `zone` queries, formatted by `../formatZones.ts`).
 - `productionVerbs.ts` - `orders [workstationId]`, `order <id>`, `order create <recipeId> <quantity> [workstationId] [priority]`, `order cancel|pause|resume <id>`, `order priority <id> <0-100>`, `order interrupt <workstationId>` (the `production-orders` and `order` queries, formatted by `../formatProduction.ts`; the changes queue the commands of D-10).
 - `statusVerbs.ts` - `why <entityId>|posting <id>|order <id>`, `idle [all]`, `flow [materialId]` (the `explain`, `idle-blocked`, `flow` and `flow-of` queries, formatted by `../formatStatus.ts`).
+- `gatheringVerbs.ts` - `fields [zoneId]` (the `crops` query, formatted by `../formatCrops.ts`).
 - `metaVerbs.ts` - `help, quit`.
 - `verbRegistry.ts` - `verbGroups` (the list of groups) and `createVerbRegistry` (flattens, rejects duplicate names).
 

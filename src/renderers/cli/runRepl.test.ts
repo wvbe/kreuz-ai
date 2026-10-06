@@ -179,7 +179,9 @@ describe("executeReplLine", () => {
     expect(listBefore).toMatch(/\[hunger \d+% rest \d+% mood \d+% \| .+\]/);
     expect(listAfter).toMatch(/\[hunger 7\d% rest 7\d% mood \d+% \| .+\]/);
     const detail = run(context, "inspect 3");
-    expect(detail).toMatch(/ {2}action: (move to cell \d+|stand around|idle)/);
+    expect(detail).toMatch(
+      / {2}action: (move to cell \d+|stand around|idle|[a-z]+\.[a-z]+ \(\w+\))/,
+    );
     expect(detail).toContain("  priorities: hunger > rest > safety > social > comfort > faith");
   });
 
