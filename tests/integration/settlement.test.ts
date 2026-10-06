@@ -228,7 +228,7 @@ describe("settlement tiers: locked content is rejected at every gate and opens w
     const locked = session.query.run("unlocks", { lockedOnly: true });
     expect(
       locked.ok && (locked.data as { contentId: string }[]).map((row) => row.contentId),
-    ).toEqual(["church_bell", "bell_tower", "timber_framed_house", "burgher_house"]);
+    ).toEqual(["church_bell", "bell_tower", "vineyard", "timber_framed_house", "burgher_house"]);
     const milestones = session.query.run("milestones", {});
     expect(
       milestones.ok && (milestones.data as { reached: boolean }[]).some((row) => row.reached),
