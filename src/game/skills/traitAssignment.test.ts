@@ -15,6 +15,7 @@ function stream(seed: number) {
   return Prng.create({ seed }).stream(traitStreamName);
 }
 
+// @covers 020:FR-004 020:FR-010 020:SC-002
 describe("drawTraitIds", () => {
   it("draws 1 to 3 distinct ascending traits weighted 50/35/15", () => {
     const rolls = stream(1);

@@ -75,6 +75,7 @@ const specGuilds = [
 
 const specReligious = ["parish_church", "monastic_order", "mendicant_friars"];
 
+// @covers 020:FR-001 020:FR-003 020:FR-011 020:SC-003
 describe("skills (spec 022 FR-006)", () => {
   it("has the 21 spec skills, each with growth, an effect and a title noun", () => {
     expect(content.skills.ids()).toEqual(expect.arrayContaining(specSkills));

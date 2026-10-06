@@ -17,6 +17,7 @@ import { createTestCharacter, createTestSkillContent, testSkills } from "./testS
 
 const content = createTestSkillContent();
 
+// @covers 020:FR-005 020:FR-006 020:SC-002 020:SC-004 020:SC-007
 describe("growthDeltaMilli", () => {
   it("is the base growth below the threshold (2 points at level 10)", () => {
     expect(growthDeltaMilli(content, createTestCharacter({ baking: 10 }), "baking")).toBe(2000);

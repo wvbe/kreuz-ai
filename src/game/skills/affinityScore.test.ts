@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { affinityScore, familiarityBucket, familiarityBucketWidth } from "./affinityScore";
 import { createTestCharacter } from "./testSkillContent";
 
+// @covers 020:FR-009 020:SC-001
 describe("familiarityBucket", () => {
   it("is floor(level / 10)", () => {
     const entity = createTestCharacter({ baking: 80, construction: 9, hauling: 100 });

@@ -12,6 +12,7 @@ function trait(id: string) {
   return found;
 }
 
+// @covers 020:FR-012
 describe("formatPermille", () => {
   it("prints integers without floats", () => {
     expect([1500, 800, 1000, 50, 0, -250, 10_000, 1234].map(formatPermille)).toEqual([

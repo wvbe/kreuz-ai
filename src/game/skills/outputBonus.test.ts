@@ -9,6 +9,7 @@ import { createTestCharacter, createTestSkillContent } from "./testSkillContent"
 const content = createTestSkillContent();
 const baking = { skillId: "baking" };
 
+// @covers 020:FR-007 020:FR-008
 describe("expectedOutputBonusMilli", () => {
   it("scales the skill's maxExtra with the level", () => {
     const atLevel = (level: number) =>

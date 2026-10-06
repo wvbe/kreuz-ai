@@ -33,6 +33,7 @@ function skillValue(engine: GameEngine, entityId: number, skillId: string): numb
   return getComponent(engine.store.require(entityId), skillsComponent)?.values[skillId] ?? 0;
 }
 
+// @covers 020:FR-004 020:FR-005 020:FR-012 020:FR-013 020:SC-002 020:SC-006
 describe("registerSkills", () => {
   it("is part of every engine and idempotent", () => {
     const engine = new GameEngine(loadContent(), { entropy: () => 1 });

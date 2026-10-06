@@ -6,6 +6,7 @@ import {
   traitsDataSchema,
 } from "./skillsComponent";
 
+// @covers 020:FR-002 020:FR-012 020:SC-006
 describe("skillsComponent", () => {
   it("defaults to no skills", () => {
     expect(skillsComponent.name).toBe("Skills");

@@ -6,6 +6,7 @@ import {
   testTraits,
 } from "./testSkillContent";
 
+// @covers 020:FR-011 020:SC-003
 describe("createTestSkillContent", () => {
   it("builds independent tables with the bundled recipes", () => {
     const first = createTestSkillContent();

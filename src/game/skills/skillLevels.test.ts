@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { dominantSkill, levelOfMilli, skillLevel, skillValueMilli } from "./skillLevels";
 import { createTestCharacter } from "./testSkillContent";
 
+// @covers 020:FR-002 020:FR-012
 describe("levelOfMilli", () => {
   it("floors milli-percent to whole levels", () => {
     expect([0, 999, 1000, 35_999, 100_000].map(levelOfMilli)).toEqual([0, 0, 1, 35, 100]);

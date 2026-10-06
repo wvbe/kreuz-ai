@@ -7,6 +7,7 @@ const content = createTestSkillContent();
 const baking = { skillId: "baking" };
 const construction = { skillId: "construction" };
 
+// @covers 020:FR-007 020:FR-008 020:SC-005
 describe("workSpeed", () => {
   it("is the baseline at skill 0 without traits", () => {
     expect(workSpeed(content, createTestCharacter({}), baking)).toEqual({

@@ -28,6 +28,7 @@ const content = {
   ),
 };
 
+// @covers 020:FR-007
 describe("skillEffectMilli", () => {
   it("scales the effect linearly with the level and floors", () => {
     const faithAt = (level: number) =>

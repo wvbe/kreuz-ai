@@ -13,6 +13,7 @@ import { createTestCharacter, createTestSkillContent } from "./testSkillContent"
 
 const content = createTestSkillContent();
 
+// @covers 020:FR-003 020:FR-008 020:FR-011
 describe("traitsOf", () => {
   it("returns the records in stored order and nothing without a component", () => {
     const entity = createTestCharacter({}, ["strong", "greedy"]);
