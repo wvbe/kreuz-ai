@@ -13,6 +13,7 @@ function parsed(): ParsedContent {
   return structuredClone(result.content);
 }
 
+// @covers 014:FR-004
 describe("checkReferences", () => {
   it("accepts the bundled pack", () => {
     expect(checkReferences(parsed())).toEqual([]);

@@ -44,6 +44,8 @@ function balance(world: ProductionTestWorld) {
   return delta;
 }
 
+// @covers 014:FR-003 014:FR-014 014:FR-015 014:FR-017 014:FR-020 014:SC-002 014:SC-006
+// @covers 014:SC-005
 describe("item conservation", () => {
   it("never loses or duplicates an item over 500 ticks of crafting with cancels and interrupts", () => {
     const { world, mill, sawmill, settlers } = build();

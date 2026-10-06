@@ -17,6 +17,8 @@ import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 const kinds = (reasons: { kind: ProductionBlockedKind }[]): ProductionBlockedKind[] =>
   reasons.map((reason) => reason.kind);
 
+// @covers 014:FR-003 014:FR-018 014:FR-021 014:SC-005
+// @covers 014:FR-010
 describe("availableForCraft", () => {
   it("adds the unreserved work inventory to the unreserved storage stock", () => {
     const world = createProductionWorld({ content: loadVillageBakeryContent() });

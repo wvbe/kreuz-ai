@@ -75,6 +75,7 @@ function createHandlers(): BehaviorHandlerRegistry {
   return handlers;
 }
 
+// @covers 014:FR-001 014:FR-002
 describe("content pack v0 with the kernel", () => {
   it("spawns every humanoid prototype with valid components", () => {
     const content = loadContent({ handlers: createHandlers() });

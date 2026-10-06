@@ -24,6 +24,7 @@ function failsWith(
   expect(action).toThrowError(expect.objectContaining({ kind }));
 }
 
+// @covers 014:FR-003 014:FR-005 014:FR-011 014:FR-016 014:FR-017 014:SC-005 014:SC-008
 describe("createProductionOrder", () => {
   it("stores an active order on the workstation and queues production.order.created", () => {
     const world = createProductionWorld({ content: loadVillageBakeryContent() });

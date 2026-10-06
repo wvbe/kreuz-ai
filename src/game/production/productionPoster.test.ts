@@ -30,6 +30,7 @@ function sawWorld(logs = 6, withChest = true) {
   return { world, chest, sawmill };
 }
 
+// @covers 014:FR-016 014:FR-018
 describe("postCraftJobs", () => {
   it("posts one craft job for the order on the interval, naming the workstation", () => {
     const { world, sawmill } = sawWorld();

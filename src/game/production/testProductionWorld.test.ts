@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { contentWithRecipes, createProductionWorld } from "./testProductionWorld";
 
+// @covers 014:SC-004
 describe("createProductionWorld", () => {
   it("builds a world with every tier unlocked, workstations, settlers and a recording of events", () => {
     const world = createProductionWorld();

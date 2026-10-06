@@ -5,6 +5,7 @@ import { destroyWorkstation, workstationDestroyedReason } from "./destroyWorksta
 import { OrderStatus } from "./productionTypes";
 import { createProductionWorld } from "./testProductionWorld";
 
+// @covers 014:FR-013a
 describe("destroyWorkstation", () => {
   it("does nothing for an entity that is no workstation", () => {
     const world = createProductionWorld();

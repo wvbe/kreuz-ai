@@ -38,6 +38,8 @@ function runUntil(world: ProductionTestWorld, done: () => boolean, limit: number
   }
 }
 
+// @covers 014:FR-005 014:FR-006 014:FR-007 014:FR-008 014:FR-009 014:FR-011 014:FR-012
+// @covers 014:FR-013 014:FR-018 014:FR-020 014:SC-001 014:SC-007 014:SC-008 014:SC-009
 describe("craft.produce", () => {
   it("is registered as a job type executor (registering twice is refused)", () => {
     const { world } = setup();

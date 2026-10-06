@@ -15,6 +15,7 @@ import {
 import { createProductionWorld } from "./testProductionWorld";
 import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
+// @covers 014:FR-005 014:SC-005
 describe("workstation lookups", () => {
   it("lists the entities with a ProductionOrders component, ascending", () => {
     const world = createProductionWorld({ content: loadVillageBakeryContent() });

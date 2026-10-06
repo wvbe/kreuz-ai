@@ -19,6 +19,7 @@ function crafting() {
   return { world, sawmill, settler };
 }
 
+// @covers 014:FR-011 014:FR-013 014:FR-013a
 describe("interruptCraft", () => {
   it("does nothing for an idle workstation", () => {
     const world = createProductionWorld();

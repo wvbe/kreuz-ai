@@ -23,6 +23,7 @@ function order(orderId: number, overrides: Partial<ProductionOrder> = {}): Produ
   };
 }
 
+// @covers 014:FR-014 014:FR-015 014:FR-017
 describe("productionOrdersComponent", () => {
   it("defaults to an idle workstation", () => {
     expect(productionOrdersComponent.name).toBe("ProductionOrders");

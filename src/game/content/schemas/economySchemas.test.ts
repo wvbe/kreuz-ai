@@ -9,6 +9,7 @@ import {
   zoneTypeSchema,
 } from "./economySchemas";
 
+// @covers 014:FR-001 014:FR-002
 describe("materialContentSchema", () => {
   const bread = { id: "bread", name: "Bread", categories: ["food"], stackLimit: 20, weight: 0.5 };
 

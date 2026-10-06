@@ -9,6 +9,7 @@ import { OrderStatus, ProductionBlockedKind } from "./productionTypes";
 import { createProductionWorld } from "./testProductionWorld";
 import { loadVillageBakeryContent } from "../content/loadVillageBakeryContent";
 
+// @covers 014:FR-021
 describe("buildOrderViews", () => {
   it("lists the orders of all or one workstation, ascending", () => {
     const world = createProductionWorld({ content: loadVillageBakeryContent() });
