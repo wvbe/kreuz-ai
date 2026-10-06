@@ -1,0 +1,231 @@
+{
+  "name": "harsh-survival",
+  "seed": 42,
+  "options": {
+    "difficulty": "harsh",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "difficulty",
+        "op": "eq",
+        "value": "harsh"
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 338
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    {
+      "step": 200
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "eq",
+        "value": 12
+      }
+    },
+    {
+      "step": 60
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "grind_flour",
+        "quantity": 60,
+        "priority": 90
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 120,
+        "priority": 90
+      }
+    },
+    {
+      "step": 340
+    },
+    {
+      "step": 100
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "crops",
+        "path": "length",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 400
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "flour"
+        },
+        "path": "windowProduced",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "windowProduced",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "step": 1780
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 2880
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "lt",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "args": {
+          "kind": "died"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}

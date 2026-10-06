@@ -27,6 +27,26 @@ describe("scenarios/", () => {
     expect(files).toEqual(expect.arrayContaining(["determinism.json", "kernel-smoke.json"]));
   });
 
+  it("holds the Constitution IV library: early economy, politics, conflict, edge cases, failure modes, Harsh", () => {
+    const library = [
+      "early-economy.json",
+      "mid-game-politics.json",
+      "late-conflict.json",
+      "edge-cases.json",
+      "failure-modes.json",
+      "harsh-survival.json",
+      "hamlet-to-village.json",
+    ];
+    expect(files).toEqual(expect.arrayContaining(library));
+    for (const file of library) {
+      const text = readFileSync(join(scenarioDir, file), "utf8");
+      // player commands only, and invariants rather than a golden hash
+      expect(text, file).not.toContain("debugSpawn");
+      expect(text, file).not.toContain('"equals"');
+      expect(load(join(scenarioDir, file)).steps.length, file).toBeGreaterThan(10);
+    }
+  });
+
   describe.each(files)("%s", (file) => {
     const scenario = load(join(scenarioDir, file));
 

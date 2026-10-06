@@ -1,0 +1,471 @@
+{
+  "name": "mid-game-politics",
+  "seed": 42,
+  "options": {
+    "difficulty": "peaceful",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [215, 216, 234, 235, 240, 263, 267, 286, 289, 312]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 314
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "table",
+        "mapId": 1,
+        "cell": 265
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "throne_room",
+        "mapId": 1,
+        "cells": [236, 237, 238, 239, 264, 265, 266, 287, 288]
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "bread",
+        "targetQuantity": 20,
+        "priority": 80
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "flour",
+        "targetQuantity": 12,
+        "priority": 70
+      }
+    },
+    {
+      "command": {
+        "kind": "AppointSteward",
+        "entityId": 3
+      }
+    },
+    {
+      "step": 100
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "cut_stone_block",
+        "quantity": 8
+      }
+    },
+    {
+      "step": 500
+    },
+    {
+      "assert": {
+        "query": "steward",
+        "path": "stewardEntityId",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "steward",
+        "path": "seatZoneId",
+        "op": "exists"
+      }
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "step": 704
+    },
+    {
+      "assert": {
+        "query": "steward",
+        "path": "lastReviewTick",
+        "op": "gte",
+        "value": 648
+      }
+    },
+    {
+      "assertHash": {
+        "label": "day-4"
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 280
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "gte",
+        "value": 7
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "gte",
+        "value": 7
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "gte",
+        "value": 7
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "gte",
+        "value": 7
+      }
+    },
+    {
+      "step": 288
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "gte",
+        "value": 7
+      }
+    },
+    {
+      "step": 144
+    },
+    {
+      "assert": {
+        "query": "stock",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "total",
+        "op": "gte",
+        "value": 7
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 2880
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "bread"
+        },
+        "path": "windowProduced",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "flow-of",
+        "args": {
+          "materialId": "flour"
+        },
+        "path": "windowProduced",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "steward",
+        "path": "stewardEntityId",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 13,
+        "gift": {
+          "coins": 300
+        }
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 13,
+        "gift": {
+          "coins": 200
+        }
+      }
+    },
+    {
+      "step": 1
+    },
+    {
+      "assert": {
+        "query": "directives",
+        "path": "length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "step": 460
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.theirStanding",
+        "op": "gte",
+        "value": 20
+      }
+    },
+    {
+      "assert": {
+        "query": "factions-diplomacy",
+        "path": "1.hostile",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "trade-agreement",
+        "targetFactionId": 13
+      }
+    },
+    {
+      "step": 460
+    },
+    {
+      "assert": {
+        "query": "agreements",
+        "path": "length",
+        "op": "eq",
+        "value": 1
+      }
+    },
+    {
+      "assert": {
+        "query": "traders",
+        "path": "traders.0.phase",
+        "op": "eq",
+        "value": "Present"
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeSell",
+        "traderId": 85,
+        "materialId": "iron_ore",
+        "quantity": 4
+      }
+    },
+    {
+      "step": 300
+    },
+    {
+      "assert": {
+        "query": "trade-orders",
+        "path": "0.status",
+        "op": "eq",
+        "value": "Done"
+      }
+    },
+    {
+      "assert": {
+        "query": "trade-ledger",
+        "path": "0.units",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "steward",
+        "path": "stewardEntityId",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 2
+      }
+    },
+    {
+      "assertHash": {
+        "label": "day-14"
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}

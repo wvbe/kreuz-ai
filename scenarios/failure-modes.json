@@ -1,0 +1,248 @@
+{
+  "name": "failure-modes",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "assertHash": {
+        "label": "start"
+      }
+    },
+    {
+      "command": {
+        "kind": "new-game",
+        "options": {
+          "difficulty": "super-hard"
+        }
+      },
+      "expectError": "invalid-options"
+    },
+    {
+      "command": {
+        "kind": "new-game",
+        "options": {
+          "mapSize": 99
+        }
+      },
+      "expectError": "invalid-options"
+    },
+    {
+      "command": {
+        "kind": "load-game",
+        "save": "{ not json"
+      },
+      "expectError": "invalid-save-format"
+    },
+    {
+      "command": {
+        "kind": "load-game",
+        "save": "{}"
+      },
+      "expectError": "invalid-save-format"
+    },
+    {
+      "command": {
+        "kind": "load-game",
+        "save": "{\"version\":999}"
+      },
+      "expectError": "unsupported-save-version"
+    },
+    {
+      "command": {
+        "kind": "step",
+        "ticks": 0
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "command": {
+        "kind": "step",
+        "ticks": 5000000
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "command": {
+        "kind": "set-speed",
+        "speed": "warp"
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "assertHash": {
+        "matches": "start"
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 13,
+        "gift": {
+          "coins": 600
+        }
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 16,
+        "gift": {
+          "coins": 400
+        }
+      }
+    },
+    {
+      "step": 2
+    },
+    {
+      "assert": {
+        "query": "treasury",
+        "path": "balance",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [229, 230, 255, 256, 258, 279, 280]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "farm_field",
+        "mapId": 1,
+        "cells": [370, 421, 397, 440]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 338
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "workbench",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "grinding_mill",
+        "mapId": 1,
+        "cell": 306
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1,
+        "cells": [297, 298, 329, 353, 355, 385]
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceDoor",
+        "mapId": 1,
+        "cell": 325
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "oven",
+        "mapId": 1,
+        "cell": 326
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "bakery",
+        "mapId": 1,
+        "cells": [326, 327, 328, 354]
+      }
+    },
+    {
+      "step": 260
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "grind_flour",
+        "quantity": 60
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 120
+      }
+    },
+    {
+      "step": 340
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 1200
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 1200
+    },
+    {
+      "replay": true
+    }
+  ]
+}

@@ -1,0 +1,601 @@
+{
+  "name": "edge-cases",
+  "seed": 42,
+  "options": {
+    "difficulty": "steady",
+    "mapSize": 0
+  },
+  "steps": [
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "eq",
+        "value": 6
+      }
+    },
+    {
+      "command": {
+        "kind": "Nonexistent"
+      },
+      "expectError": "unknown-command"
+    },
+    {
+      "command": {
+        "kind": "PlaceWall",
+        "mapId": 1
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 1,
+        "cells": []
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "bake_bread",
+        "quantity": 0
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "command": {
+        "kind": "step",
+        "ticks": -1
+      },
+      "expectError": "invalid-payload"
+    },
+    {
+      "assert": {
+        "query": "validate-placement",
+        "args": {
+          "prototypeId": "notice_post",
+          "mapId": 1,
+          "cellIndex": 283
+        },
+        "path": "reasons.0.kind",
+        "op": "eq",
+        "value": "TierLocked"
+      }
+    },
+    {
+      "assert": {
+        "query": "validate-placement",
+        "args": {
+          "prototypeId": "church_bell",
+          "mapId": 1,
+          "cellIndex": 283
+        },
+        "path": "reasons.0.kind",
+        "op": "eq",
+        "value": "TierLocked"
+      }
+    },
+    {
+      "assert": {
+        "query": "validate-placement",
+        "args": {
+          "prototypeId": "smelter",
+          "mapId": 1,
+          "cellIndex": 283
+        },
+        "path": "reasons.0.kind",
+        "op": "eq",
+        "value": "UnknownPrototype"
+      }
+    },
+    {
+      "assert": {
+        "query": "validate-placement",
+        "args": {
+          "prototypeId": "chest",
+          "mapId": 1,
+          "cellIndex": 999999
+        },
+        "path": "reasons.0.kind",
+        "op": "eq",
+        "value": "OutOfBounds"
+      }
+    },
+    {
+      "assert": {
+        "query": "validate-placement",
+        "args": {
+          "prototypeId": "chest",
+          "mapId": 77,
+          "cellIndex": 283
+        },
+        "path": "reasons.0.kind",
+        "op": "eq",
+        "value": "UnknownMap"
+      }
+    },
+    {
+      "assert": {
+        "query": "validate-placement",
+        "args": {
+          "prototypeId": "chest",
+          "mapId": 1,
+          "cellIndex": 283
+        },
+        "path": "valid",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "command": {
+        "kind": "pause"
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "no_such_zone",
+        "mapId": 1,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "DesignateZone",
+        "zoneTypeId": "stockpile",
+        "mapId": 77,
+        "cells": [257]
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateProductionOrder",
+        "recipeId": "no_such_recipe",
+        "quantity": 1
+      }
+    },
+    {
+      "command": {
+        "kind": "CancelProductionOrder",
+        "orderId": 999
+      }
+    },
+    {
+      "command": {
+        "kind": "AppointSteward",
+        "entityId": 99999
+      }
+    },
+    {
+      "command": {
+        "kind": "TradeSell",
+        "traderId": 99999,
+        "materialId": "iron_ore",
+        "quantity": 1
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 99999,
+        "gift": {
+          "coins": 5
+        }
+      }
+    },
+    {
+      "command": {
+        "kind": "IssueDiplomaticAct",
+        "actType": "gift",
+        "targetFactionId": 13,
+        "gift": {
+          "coins": 999999
+        }
+      }
+    },
+    {
+      "command": {
+        "kind": "RenameCitizen",
+        "entityId": 99999,
+        "givenName": "Nobody",
+        "byname": null
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "notice_post",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "church_bell",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "smelter",
+        "mapId": 1,
+        "cell": 283
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 999999
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteZone",
+        "zoneId": 5555
+      }
+    },
+    {
+      "command": {
+        "kind": "CancelConstructionJob",
+        "jobId": 12345
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 1
+      }
+    },
+    {
+      "step": 5
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "pending-commands",
+        "path": "commands.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "construction-queue",
+        "path": "jobs.length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "zones",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "production-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "treasury",
+        "path": "balance",
+        "op": "eq",
+        "value": 1000
+      }
+    },
+    {
+      "assert": {
+        "query": "steward",
+        "path": "stewardEntityId",
+        "op": "eq",
+        "value": null
+      }
+    },
+    {
+      "assert": {
+        "query": "directives",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "PlaceFurniture",
+        "furnitureId": "chest",
+        "mapId": 1,
+        "cell": 335
+      }
+    },
+    {
+      "step": 1
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "construction-queue",
+        "path": "jobs.length",
+        "op": "eq",
+        "value": 1
+      }
+    },
+    {
+      "command": {
+        "kind": "resume"
+      }
+    },
+    {
+      "step": 3
+    },
+    {
+      "assert": {
+        "query": "time",
+        "path": "tick",
+        "op": "eq",
+        "value": 3
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "bread",
+        "targetQuantity": 10,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "flour",
+        "targetQuantity": 11,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "wheat",
+        "targetQuantity": 12,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "stone_block",
+        "targetQuantity": 13,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "oak_plank",
+        "targetQuantity": 14,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "nails",
+        "targetQuantity": 15,
+        "priority": 50
+      }
+    },
+    {
+      "step": 2
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 1
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 2
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 3
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 4
+      }
+    },
+    {
+      "step": 2
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "bread",
+        "targetQuantity": 10,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "flour",
+        "targetQuantity": 11,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "wheat",
+        "targetQuantity": 12,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "stone_block",
+        "targetQuantity": 13,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "oak_plank",
+        "targetQuantity": 14,
+        "priority": 50
+      }
+    },
+    {
+      "command": {
+        "kind": "CreateStandingOrder",
+        "materialId": "nails",
+        "targetQuantity": 15,
+        "priority": 50
+      }
+    },
+    {
+      "step": 2
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 4
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 5
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 6
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 7
+      }
+    },
+    {
+      "command": {
+        "kind": "DeleteStandingOrder",
+        "orderId": 8
+      }
+    },
+    {
+      "step": 2
+    },
+    {
+      "assert": {
+        "query": "standing-orders",
+        "path": "length",
+        "op": "eq",
+        "value": 0
+      }
+    },
+    {
+      "assert": {
+        "query": "construction-queue",
+        "path": "jobs.length",
+        "op": "eq",
+        "value": 1
+      }
+    },
+    {
+      "saveLoad": true
+    },
+    {
+      "step": 3000
+    },
+    {
+      "assert": {
+        "query": "settlement",
+        "path": "population",
+        "op": "lt",
+        "value": 6
+      }
+    },
+    {
+      "assert": {
+        "query": "chronicle",
+        "args": {
+          "kind": "died"
+        },
+        "path": "total",
+        "op": "gt",
+        "value": 0
+      }
+    },
+    {
+      "replay": true
+    }
+  ]
+}
