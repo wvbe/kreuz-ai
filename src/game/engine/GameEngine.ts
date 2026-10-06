@@ -56,6 +56,7 @@ import { registerDiplomacy } from "../diplomacy/registerDiplomacy";
 import { registerSettlement } from "../settlement/registerSettlement";
 import { registerTrade } from "../trade/registerTrade";
 import { registerStatus } from "../status/registerStatus";
+import { registerHousing } from "../housing/registerHousing";
 import { registerZones } from "../zones/registerZones";
 import { zonesSystemId } from "../zones/zoneTypes";
 import { getStorageService } from "../storage/storageServiceRegistry";
@@ -675,6 +676,7 @@ export class GameEngine {
     registerDiplomacy(this);
     registerSettlement(this);
     registerStatus(this);
+    registerHousing(this);
     this.registerSystem({
       id: "world.starting-map",
       dependencies: [

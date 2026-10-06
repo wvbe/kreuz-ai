@@ -45,13 +45,61 @@ export function isStorageEntity(entity: Entity): boolean {
 }
 
 /**
- * All claimable storage entities, ascending by id.
+ * The dwelling whose household owns a storage entity (spec 029 FR-017): the zone that covers its
+ * cell when that zone is a dwelling (the routing hooks of the zones mark it `excluded`).
  *
  * @param engine - The engine.
- * @returns Live entities for which {@link isStorageEntity} holds.
+ * @param entity - A storage entity.
+ * @returns The dwelling zone id, or null for settlement storage.
+ */
+export function householdOwnerOf(engine: GameEngine, entity: Entity): EntityId | null {
+  const place = getComponent(entity, positionComponent);
+  const zone =
+    place === undefined
+      ? null
+      : getStorageService(engine).zoneRouteAt(place.mapId, place.cellIndex);
+  return zone !== null && zone.excluded ? zone.zoneId : null;
+}
+
+/**
+ * All claimable settlement storage entities, ascending by id. Household storage (furniture on the
+ * tiles of a dwelling, spec 029 FR-017) is reserved to the residents and is not settlement stock:
+ * it is left out here (see {@link listStorageFor} for what one citizen may use).
+ *
+ * @param engine - The engine.
+ * @returns Live entities for which {@link isStorageEntity} holds, outside every dwelling.
  */
 export function listStorage(engine: GameEngine): Entity[] {
-  return engine.store.entities().filter((entity) => isStorageEntity(entity));
+  return engine.store
+    .entities()
+    .filter((entity) => isStorageEntity(entity) && householdOwnerOf(engine, entity) === null);
+}
+
+/**
+ * The storage a requester may take from: the settlement storage of {@link listStorage} plus the
+ * household storage of the requester's own dwelling (spec 029 FR-017).
+ *
+ * @param engine - The engine.
+ * @param requester - The entity that wants goods.
+ * @param includeHousehold - False to leave the requester's own household storage out too (the
+ *   fetch chore wants goods from elsewhere).
+ * @returns Storage entities, ascending by id.
+ */
+export function listStorageFor(
+  engine: GameEngine,
+  requester: Entity,
+  includeHousehold: boolean,
+): Entity[] {
+  const home = includeHousehold
+    ? (getComponent(requester, citizenComponent)?.homeDwellingId ?? null)
+    : null;
+  return engine.store.entities().filter((entity) => {
+    if (!isStorageEntity(entity)) {
+      return false;
+    }
+    const owner = householdOwnerOf(engine, entity);
+    return owner === null || owner === home;
+  });
 }
 
 /**
@@ -139,12 +187,15 @@ export function stockOf(engine: GameEngine, materialId: string): StockSummary {
  * list covers the quantity from as many sources as needed (nearest first, ties lowest entity id);
  * each source offers what it holds minus what others reserved, and only storages the requester may
  * take from and can walk to on its own map are listed. When the stock is short the list holds
- * everything that exists, so the caller compares the sum with the request.
+ * everything that exists, so the caller compares the sum with the request. The requester's own
+ * household storage counts (spec 029 FR-017) unless `includeHousehold` is false; other
+ * households' storage never does.
  *
  * @param engine - The engine.
  * @param requester - The entity that wants the goods; it needs a `Position`.
  * @param materialId - Registered material id.
  * @param quantity - Positive quantity wanted.
+ * @param includeHousehold - Whether the requester's own household storage may give (default true).
  * @returns The sources with the quantity each gives and their path cost.
  */
 export function findSources(
@@ -152,6 +203,7 @@ export function findSources(
   requester: Entity,
   materialId: string,
   quantity: number,
+  includeHousehold = true,
 ): StockSource[] {
   const position = getComponent(requester, positionComponent);
   if (position === undefined) {
@@ -159,7 +211,7 @@ export function findSources(
   }
   const reservations = getStorageService(engine).reservations;
   const holders: { entityId: EntityId; quantity: number; mapId: number; cellIndex: number }[] = [];
-  for (const entity of listStorage(engine)) {
+  for (const entity of listStorageFor(engine, requester, includeHousehold)) {
     const place = getComponent(entity, positionComponent);
     const available = reservations.availableTo(entity.id, materialId, requester.id);
     if (

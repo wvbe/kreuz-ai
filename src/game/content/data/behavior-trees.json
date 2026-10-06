@@ -29,6 +29,19 @@
           "children": [
             {
               "type": "condition",
+              "id": "household_needs_goods"
+            },
+            {
+              "type": "action",
+              "id": "fetch_household_goods"
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "children": [
+            {
+              "type": "condition",
               "id": "jobs_available"
             },
             {

@@ -19,6 +19,13 @@ export type ItemAvailability = (
 ) => number;
 
 /**
+ * Decides whether a sleeper may use a bed and how much it likes it (spec 029 FR-017): `null` when
+ * the bed may not be used, otherwise a rank where lower is preferred (the default policy ranks
+ * every bed 0).
+ */
+export type BedPolicy = (engine: GameEngine, sleeper: Entity, bed: Entity) => number | null;
+
+/**
  * Per-engine AI state that is code, not game state: the extension hooks other tasks plug into
  * (need sources, the difficulty multiplier) and the pathfinding service. Nothing here is saved;
  * the hooks are registered when the systems are set up, and `difficulty` is refreshed by the
@@ -30,6 +37,7 @@ export class AiService {
   private decayMultiplierSource: (() => number) | null = null;
   private currentDifficulty: Difficulty | null = null;
   private availabilityHook: ItemAvailability | null = null;
+  private bedPolicyHook: BedPolicy | null = null;
 
   /**
    * Creates the service.
@@ -117,6 +125,28 @@ export class AiService {
     return this.availabilityHook === null || holder.id === consumer.id
       ? held
       : this.availabilityHook(engine, holder, consumer, materialId);
+  }
+
+  /**
+   * Replaces which beds a sleeper may use and which it prefers (the housing task installs its
+   * household rules here); `null` restores the default, every bed at rank 0.
+   *
+   * @param hook - The policy, or null.
+   */
+  setBedPolicy(hook: BedPolicy | null): void {
+    this.bedPolicyHook = hook;
+  }
+
+  /**
+   * The rank of a bed for a sleeper: `null` when it may not use it, else lower is better.
+   *
+   * @param engine - The engine.
+   * @param sleeper - The entity that wants to sleep.
+   * @param bed - The bed entity.
+   * @returns The rank or null.
+   */
+  bedRank(engine: GameEngine, sleeper: Entity, bed: Entity): number | null {
+    return this.bedPolicyHook === null ? 0 : this.bedPolicyHook(engine, sleeper, bed);
   }
 
   /**

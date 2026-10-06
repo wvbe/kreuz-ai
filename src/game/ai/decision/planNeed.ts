@@ -7,6 +7,7 @@ import { inventoryComponent } from "../../inventory/inventoryComponent";
 import { getTotal } from "../../inventory/inventoryQueries";
 import type { GameEngine } from "../../engine/GameEngine";
 import { positionComponent } from "../../map/positionComponent";
+import { furnitureComponent } from "../../storage/furnitureComponent";
 import { PathResultKind } from "../../pathfinding/pathTypes";
 import { getAiService } from "../aiServiceRegistry";
 import { NeedPlanKind } from "./needPlanTypes";
@@ -21,14 +22,21 @@ function findNearestBed(
   if (position === undefined) {
     return null;
   }
-  const pathfinding = getAiService(engine).pathfinding;
-  let best: { bedId: number; cellIndex: number; cost: number } | null = null;
+  const ai = getAiService(engine);
+  const pathfinding = ai.pathfinding;
+  let best: { bedId: number; cellIndex: number; cost: number; rank: number } | null = null;
   for (const candidate of engine.store.entities()) {
-    if (candidate.prototype !== prototypeId) {
+    // Built furniture is a `furniture_piece` whose `Furniture.furnitureId` names the content
+    // record (DECISIONS D-50), so a bed matches by prototype or by furniture id.
+    if (
+      candidate.prototype !== prototypeId &&
+      getComponent(candidate, furnitureComponent)?.furnitureId !== prototypeId
+    ) {
       continue;
     }
     const bedPosition = getComponent(candidate, positionComponent);
-    if (bedPosition === undefined || bedPosition.mapId !== position.mapId) {
+    const rank = ai.bedRank(engine, entity, candidate);
+    if (rank === null || bedPosition === undefined || bedPosition.mapId !== position.mapId) {
       continue;
     }
     const path = pathfinding.findPath(position.mapId, position.cellIndex, bedPosition.cellIndex);
@@ -38,8 +46,11 @@ function findNearestBed(
         : path.kind === PathResultKind.AlreadyThere
           ? 0
           : null;
-    if (cost !== null && (best === null || cost < best.cost)) {
-      best = { bedId: candidate.id, cellIndex: bedPosition.cellIndex, cost };
+    if (
+      cost !== null &&
+      (best === null || rank < best.rank || (rank === best.rank && cost < best.cost))
+    ) {
+      best = { bedId: candidate.id, cellIndex: bedPosition.cellIndex, cost, rank };
     }
   }
   return best === null ? null : { bedId: best.bedId, cellIndex: best.cellIndex };
@@ -50,8 +61,9 @@ function findNearestBed(
  * then known sources"). The authored `satisfactionMethods` are tried in order:
  * - `Item`: the entity's own inventory first; otherwise the registered need source finders (see
  *   `AiService.registerNeedSource`), first plan wins.
- * - `Furniture`: the nearest reachable entity of that prototype (a bed) on the same map; ties go
- *   to the lowest entity id.
+ * - `Furniture`: the nearest reachable entity of that prototype (a bed) on the same map that the
+ *   bed policy allows (household beds belong to their residents, who prefer them, spec 029
+ *   FR-017); ties go to the lowest entity id.
  * - `Zone`: not supported yet.
  *
  * A need with a furniture method and no reachable furniture falls back to sleeping on the ground
