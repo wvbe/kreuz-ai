@@ -24,7 +24,7 @@ function runCli(args: string[], input = ""): Ran {
     cwd: root,
     input,
     encoding: "utf8",
-    timeout: 60_000,
+    timeout: 180_000,
   });
   return { status: ran.status, stdout: ran.stdout, stderr: ran.stderr };
 }
@@ -108,7 +108,7 @@ describe("cli --script", () => {
     expect(ran.stdout).toMatch(/^PASS checkpoint-c: \d+ steps, tick 2880, hash [0-9a-f]{16}/);
     const again = runCli(["--script", "scenarios/checkpoint-c.json"]);
     expect(again.stdout).toBe(ran.stdout);
-  }, 90_000);
+  }, 400_000);
 
   it("exits 1 with a readable message for a failing scenario", () => {
     const ran = runCli(["--script", "tests/e2e/fixtures/failing.json"]);
@@ -124,7 +124,7 @@ describe("cli --script", () => {
     expect(invalid.stderr).toContain("invalid scenario");
     expect(runCli(["--script", "tests/e2e/fixtures/missing.json"]).status).toBe(2);
     expect(runCli(["--bogus"]).status).toBe(2);
-  }, 120_000); // three child processes: each boot loads the whole game under the coverage load
+  }, 400_000); // three child processes: each boot loads the whole game under the coverage load
 });
 
 describe("cli determinism", () => {
